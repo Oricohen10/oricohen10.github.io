@@ -1161,50 +1161,58 @@ i.ph,i.ph-bold,i.ph-fill,i.ph-light{line-height:1;display:flex;align-items:cente
 
 
       <!-- ── ROUND RESULT ── -->
-      <div id="px-result" style="display:none;flex-direction:column;align-items:center;justify-content:center;flex:1;padding:18px 20px;gap:14px;text-align:center">
-        <div style="font-family:'Press Start 2P',monospace;font-size:11px;color:#00F5FF;text-shadow:0 0 10px #00F5FF;letter-spacing:1px">ROUND RESULT</div>
-        <!-- 3 containers -->
-        <div style="display:flex;gap:8px;width:100%">
-          <!-- MY RATIO -->
-          <div style="flex:1;padding:14px 8px;background:#0E0E22;border:2px solid #1A1A3A;display:flex;flex-direction:column;align-items:center;gap:8px">
-            <div style="font-family:'Press Start 2P',monospace;font-size:5px;color:#7878AA;letter-spacing:.5px">MY RATIO</div>
-            <div id="px-r-ratio" style="font-family:'Press Start 2P',monospace;font-size:14px;color:#FFD700;line-height:1"></div>
-            <div style="font-family:'Press Start 2P',monospace;font-size:4px;color:#3A3A6A">TARGET 4.5:1</div>
+      <div id="px-result" style="display:none;flex-direction:column;flex:1">
+        <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:18px 16px 8px;gap:14px;text-align:center">
+          <div style="font-family:'Press Start 2P',monospace;font-size:11px;color:#00F5FF;text-shadow:0 0 10px #00F5FF;letter-spacing:1px">ROUND RESULT</div>
+          <!-- 3 containers -->
+          <div style="display:flex;gap:8px;width:100%">
+            <!-- MY RATIO -->
+            <div style="flex:1;padding:14px 8px;background:#0E0E22;border:2px solid #1A1A3A;display:flex;flex-direction:column;align-items:center;gap:8px">
+              <div style="font-family:'Press Start 2P',monospace;font-size:5px;color:#7878AA;letter-spacing:.5px">MY RATIO</div>
+              <div id="px-r-ratio" style="font-family:'Press Start 2P',monospace;font-size:14px;color:#FFD700;line-height:1"></div>
+              <div style="font-family:'Press Start 2P',monospace;font-size:4px;color:#3A3A6A">TARGET 4.5:1</div>
+            </div>
+            <!-- DIFF -->
+            <div style="flex:1;padding:14px 8px;background:#0E0E22;border:2px solid #1A1A3A;display:flex;flex-direction:column;align-items:center;gap:8px">
+              <div style="font-family:'Press Start 2P',monospace;font-size:5px;color:#7878AA;letter-spacing:.5px">DIFF</div>
+              <div id="px-r-diff" style="font-family:'Press Start 2P',monospace;font-size:14px;line-height:1"></div>
+            </div>
+            <!-- SCORE big -->
+            <div style="flex:1.2;padding:14px 8px;background:#0A1F12;border:2px solid #00FF7F;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px">
+              <div style="font-family:'Press Start 2P',monospace;font-size:5px;color:#00BB55;letter-spacing:.5px">SCORE</div>
+              <div id="px-r-pts" style="font-family:'Press Start 2P',monospace;font-size:22px;color:#00FF7F;text-shadow:0 0 12px #00FF7F;line-height:1"></div>
+              <div style="font-family:'Press Start 2P',monospace;font-size:5px;color:#00BB55">PTS</div>
+            </div>
           </div>
-          <!-- DIFF -->
-          <div style="flex:1;padding:14px 8px;background:#0E0E22;border:2px solid #1A1A3A;display:flex;flex-direction:column;align-items:center;gap:8px">
-            <div style="font-family:'Press Start 2P',monospace;font-size:5px;color:#7878AA;letter-spacing:.5px">DIFF</div>
-            <div id="px-r-diff" style="font-family:'Press Start 2P',monospace;font-size:14px;line-height:1"></div>
-          </div>
-          <!-- SCORE big -->
-          <div style="flex:1.2;padding:14px 8px;background:#0A1F12;border:2px solid #00FF7F;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px">
-            <div style="font-family:'Press Start 2P',monospace;font-size:5px;color:#00BB55;letter-spacing:.5px">SCORE</div>
-            <div id="px-r-pts" style="font-family:'Press Start 2P',monospace;font-size:22px;color:#00FF7F;text-shadow:0 0 12px #00FF7F;line-height:1"></div>
-            <div style="font-family:'Press Start 2P',monospace;font-size:5px;color:#00BB55">PTS</div>
-          </div>
+          <!-- Running total -->
+          <div id="px-r-total" style="font-family:'Press Start 2P',monospace;font-size:7px;color:#9292C8">TOTAL: <span style="color:#FFD700">0</span> PTS</div>
         </div>
-        <!-- Running total -->
-        <div id="px-r-total" style="font-family:'Press Start 2P',monospace;font-size:7px;color:#9292C8">TOTAL: <span style="color:#FFD700">0</span> PTS</div>
-        <button id="px-next-btn" style="width:100%;font-family:'Press Start 2P',monospace;font-size:9px;padding:12px;background:#00F5FF;color:#080816;border:none;cursor:pointer;letter-spacing:1px;box-shadow:4px 4px 0 #006677" onmousedown="this.style.transform='translate(2px,2px)';this.style.boxShadow='2px 2px 0 #006677'" onmouseup="this.style.transform='';this.style.boxShadow='4px 4px 0 #006677'"></button>
+        <!-- Action button anchored to bottom — same position as LOCK IN -->
+        <div style="flex-shrink:0;padding:0 16px 14px">
+          <button id="px-next-btn" style="width:100%;font-family:'Press Start 2P',monospace;font-size:9px;padding:12px;background:#00F5FF;color:#080816;border:none;cursor:pointer;letter-spacing:1px;box-shadow:4px 4px 0 #006677" onmousedown="this.style.transform='translate(2px,2px)';this.style.boxShadow='2px 2px 0 #006677'" onmouseup="this.style.transform='';this.style.boxShadow='4px 4px 0 #006677'"></button>
+        </div>
       </div>
 
             <!-- ── END SCREEN ── -->
       <div id="px-end" style="display:none;flex-direction:column;flex:1;position:relative;overflow:hidden">
         <canvas id="px-cvc" style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:0"></canvas>
         <div style="position:relative;z-index:1;display:flex;flex-direction:column;flex:1;padding:20px 22px 22px;text-align:center;overflow-y:auto">
+          <!-- Back button top-right -->
+          <button onclick="pxGoTitle()" style="position:absolute;top:12px;right:12px;z-index:3;font-family:'Press Start 2P',monospace;font-size:6px;padding:6px 10px;background:transparent;color:#7878AA;border:1px solid #2A2A4A;cursor:pointer">← HOME</button>
           <!-- Top: avatar + score -->
-          <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;flex:1;gap:12px">
-            <!-- Avatar + name -->
-            <div style="display:flex;flex-direction:column;align-items:center;gap:8px">
-              <div id="px-end-av" style="width:64px;height:64px;border-radius:50%;display:flex;align-items:center;justify-content:center;border:3px solid #1A1A3A;background:#0A0A1A;overflow:hidden;flex-shrink:0"></div>
-              <div id="px-end-name" style="font-family:'Press Start 2P',monospace;font-size:8px;color:#9292C8;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:100%"></div>
+          <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;flex:1;gap:14px">
+            <!-- Crown + Avatar + name -->
+            <div style="display:flex;flex-direction:column;align-items:center;gap:0">
+              <div style="font-size:28px;line-height:1;filter:drop-shadow(0 0 8px rgba(255,215,0,.7))">👑</div>
+              <div id="px-end-av" style="width:64px;height:64px;border-radius:50%;display:flex;align-items:center;justify-content:center;border:3px solid #FFD700;background:#0A0A1A;overflow:hidden;flex-shrink:0;margin-top:-4px"></div>
+              <div id="px-end-name" style="font-family:'Press Start 2P',monospace;font-size:8px;color:#9292C8;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:100%;margin-top:8px"></div>
             </div>
             <!-- Score -->
-            <div style="display:flex;flex-direction:column;align-items:center;gap:6px">
+            <div style="display:flex;flex-direction:column;align-items:center;gap:8px">
               <div style="font-family:'Press Start 2P',monospace;font-size:7px;color:#9292C8;letter-spacing:2px">FINAL SCORE</div>
-              <div style="display:flex;align-items:baseline;gap:6px">
-                <div id="px-end-score" style="font-family:'Press Start 2P',monospace;font-size:52px;color:#FFD700;text-shadow:0 0 20px #FFD700,6px 6px 0 #4A3800;letter-spacing:3px;line-height:1">0</div>
-                <div style="font-family:'Press Start 2P',monospace;font-size:8px;color:#9292C8">/ 300</div>
+              <div style="display:flex;align-items:baseline;gap:8px">
+                <div id="px-end-score" style="font-family:'Press Start 2P',monospace;font-size:62px;color:#FFD700;text-shadow:0 0 24px #FFD700,7px 7px 0 #4A3800;letter-spacing:4px;line-height:1">0</div>
+                <div style="font-family:'Press Start 2P',monospace;font-size:9px;color:#9292C8">/ 300</div>
               </div>
             </div>
           </div>
@@ -1212,7 +1220,6 @@ i.ph,i.ph-bold,i.ph-fill,i.ph-light{line-height:1;display:flex;align-items:cente
           <div style="display:flex;flex-direction:column;gap:8px;width:100%">
             <button onclick="pxStartGame()" style="width:100%;font-family:'Press Start 2P',monospace;font-size:9px;padding:14px;background:#FF00FF;color:#080816;border:none;cursor:pointer;letter-spacing:1px;box-shadow:3px 3px 0 #660066" onmousedown="this.style.transform='translate(2px,2px)';this.style.boxShadow='1px 1px 0 #660066'" onmouseup="this.style.transform='';this.style.boxShadow='3px 3px 0 #660066'">PLAY AGAIN</button>
             <button onclick="pxShowBoard()" style="width:100%;font-family:'Press Start 2P',monospace;font-size:8px;padding:11px;background:transparent;color:#FFD700;border:2px solid #FFD700;cursor:pointer;letter-spacing:1px" onmousedown="this.style.opacity='.7'" onmouseup="this.style.opacity='1'">LEADERBOARD</button>
-            <button onclick="pxGoTitle()" style="width:100%;font-family:'Press Start 2P',monospace;font-size:7px;padding:9px;background:transparent;color:#7878AA;border:1px solid #2A2A4A;cursor:pointer">BACK TO MENU</button>
           </div>
         </div>
       </div>
@@ -1259,9 +1266,9 @@ i.ph,i.ph-bold,i.ph-fill,i.ph-light{line-height:1;display:flex;align-items:cente
               <div>
                 <div class="wf-badge"><div class="wf-bdot"></div>Design Team Lead · Tel Aviv</div>
                 <div class="wf-name">Ori Cohen</div>
-                <div class="wf-role">Product Design Team Lead · Art Director · Verint</div>
+                <div class="wf-role">Product Design Lead · Verint</div>
                 <div class="wf-line"></div>
-                <p class="wf-bio">Enterprise software is only as good as the trust it builds. I work across the full stack of design — from the micro-interaction that feels just right, to the system architecture that makes it all hold together.</p>
+                <p class="wf-bio">5+ years shipping enterprise SaaS at scale. Systems thinker, hands-on maker — the person who closes the gap between design and engineering.</p>
                 <p class="wf-hint">↓ Use the toolbar below to explore</p>
                 <div class="wf-ctas">
                   <button class="wf-btn p" onclick="openWin('projects')">View Projects</button>
@@ -2135,7 +2142,7 @@ const TERM = [
   {h:'<span class="t-login">Last login: Wed Jul 22 11:42:33 on ttys003</span>'},
   {h:''},
   {h:'<span class="t-prompt">ori@portfolio</span> <span class="t-grey">~</span> <span class="t-prompt">%</span> <span class="t-cmd">cat about.txt</span>', pause:120},
-  {h:'<span style="font-size:20px;font-weight:700;letter-spacing:2px;color:#E0E0FF">ORI COHEN</span>'},
+  {h:'<span style="font-size:23px;font-weight:700;letter-spacing:2px;color:var(--ttx)">ORI COHEN</span>'},
   {h:''},
   {h:'Product Design Lead with <span class="t-num">5+</span> years shipping enterprise SaaS at scale.'},
   {h:'Systems thinker, hands-on maker - the person who closes'},
