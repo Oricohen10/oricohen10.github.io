@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-<title>Ori Cohen — Product Designer</title>
+<title>Ori Cohen · Product Designer</title>
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%237B61FF'/%3E%3Ctext x='16' y='22' font-family='Arial' font-weight='700' font-size='15' fill='white' text-anchor='middle'%3EOC%3C/text%3E%3C/svg%3E"/>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Press+Start+2P&display=swap" rel="stylesheet"/>
 <script src="https://unpkg.com/@phosphor-icons/web@2.1.1/src/index.js" defer></script>
@@ -1191,20 +1191,27 @@ i.ph,i.ph-bold,i.ph-fill,i.ph-light{line-height:1;display:flex;align-items:cente
             <!-- ── END SCREEN ── -->
       <div id="px-end" style="display:none;flex-direction:column;flex:1;position:relative;overflow:hidden">
         <canvas id="px-cvc" style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:0"></canvas>
-        <div style="position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;justify-content:center;flex:1;padding:14px 22px;gap:10px;text-align:center;overflow-y:auto">
-          <!-- Avatar circle -->
-          <div id="px-end-av" style="width:72px;height:72px;border-radius:50%;display:flex;align-items:center;justify-content:center;border:3px solid #1A1A3A;background:#0A0A1A;overflow:hidden;flex-shrink:0"></div>
-          <!-- Name -->
-          <div id="px-end-name" style="font-family:'Press Start 2P',monospace;font-size:9px;color:#E0E0FF;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:100%"></div>
-          <!-- Score -->
-          <div style="display:flex;align-items:baseline;gap:6px">
-            <div id="px-end-score" style="font-family:'Press Start 2P',monospace;font-size:44px;color:#FFD700;text-shadow:0 0 20px #FFD700,6px 6px 0 #4A3800;letter-spacing:3px;line-height:1">0</div>
-            <div style="font-family:'Press Start 2P',monospace;font-size:8px;color:#9292C8">/ 300</div>
+        <div style="position:relative;z-index:1;display:flex;flex-direction:column;flex:1;padding:20px 22px 22px;text-align:center;overflow-y:auto">
+          <!-- Top: avatar + score -->
+          <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;flex:1;gap:12px">
+            <!-- Avatar + name -->
+            <div style="display:flex;flex-direction:column;align-items:center;gap:8px">
+              <div id="px-end-av" style="width:64px;height:64px;border-radius:50%;display:flex;align-items:center;justify-content:center;border:3px solid #1A1A3A;background:#0A0A1A;overflow:hidden;flex-shrink:0"></div>
+              <div id="px-end-name" style="font-family:'Press Start 2P',monospace;font-size:8px;color:#9292C8;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:100%"></div>
+            </div>
+            <!-- Score -->
+            <div style="display:flex;flex-direction:column;align-items:center;gap:6px">
+              <div style="font-family:'Press Start 2P',monospace;font-size:7px;color:#9292C8;letter-spacing:2px">FINAL SCORE</div>
+              <div style="display:flex;align-items:baseline;gap:6px">
+                <div id="px-end-score" style="font-family:'Press Start 2P',monospace;font-size:52px;color:#FFD700;text-shadow:0 0 20px #FFD700,6px 6px 0 #4A3800;letter-spacing:3px;line-height:1">0</div>
+                <div style="font-family:'Press Start 2P',monospace;font-size:8px;color:#9292C8">/ 300</div>
+              </div>
+            </div>
           </div>
-
-          <!-- Actions -->
-          <div style="display:flex;flex-direction:column;gap:6px;width:100%">
-            <button onclick="pxStartGame()" style="width:100%;font-family:'Press Start 2P',monospace;font-size:9px;padding:13px;background:#FF00FF;color:#080816;border:none;cursor:pointer;letter-spacing:1px;box-shadow:3px 3px 0 #660066" onmousedown="this.style.transform='translate(2px,2px)';this.style.boxShadow='1px 1px 0 #660066'" onmouseup="this.style.transform='';this.style.boxShadow='3px 3px 0 #660066'">PLAY AGAIN</button>
+          <!-- Bottom: actions -->
+          <div style="display:flex;flex-direction:column;gap:8px;width:100%">
+            <button onclick="pxStartGame()" style="width:100%;font-family:'Press Start 2P',monospace;font-size:9px;padding:14px;background:#FF00FF;color:#080816;border:none;cursor:pointer;letter-spacing:1px;box-shadow:3px 3px 0 #660066" onmousedown="this.style.transform='translate(2px,2px)';this.style.boxShadow='1px 1px 0 #660066'" onmouseup="this.style.transform='';this.style.boxShadow='3px 3px 0 #660066'">PLAY AGAIN</button>
+            <button onclick="pxShowBoard()" style="width:100%;font-family:'Press Start 2P',monospace;font-size:8px;padding:11px;background:transparent;color:#FFD700;border:2px solid #FFD700;cursor:pointer;letter-spacing:1px" onmousedown="this.style.opacity='.7'" onmouseup="this.style.opacity='1'">LEADERBOARD</button>
             <button onclick="pxGoTitle()" style="width:100%;font-family:'Press Start 2P',monospace;font-size:7px;padding:9px;background:transparent;color:#7878AA;border:1px solid #2A2A4A;cursor:pointer">BACK TO MENU</button>
           </div>
         </div>
@@ -2128,41 +2135,27 @@ const TERM = [
   {h:'<span class="t-login">Last login: Wed Jul 22 11:42:33 on ttys003</span>'},
   {h:''},
   {h:'<span class="t-prompt">ori@portfolio</span> <span class="t-grey">~</span> <span class="t-prompt">%</span> <span class="t-cmd">cat about.txt</span>', pause:120},
-  {h:'<span class="t-comment">/**</span>'},
-  {h:'<span class="t-comment"> * about.ts · Product Design Lead</span>'},
-  {h:'<span class="t-comment"> * Systems thinker. Hands-on maker.</span>'},
-  {h:'<span class="t-comment"> * Closes the gap between design and engineering.</span>'},
-  {h:'<span class="t-comment"> */</span>'},
+  {h:'Product Design Lead with <span class="t-num">5+</span> years shipping enterprise SaaS.'},
+  {h:'Systems thinker, hands-on maker — the person who closes'},
+  {h:'the gap between design and engineering.'},
   {h:''},
-  {h:'<span class="t-key">const</span> <span class="t-prop">designer</span> = {'},
-  {h:'  <span class="t-prop">role</span>:       <span class="t-str">"Product Design Lead"</span>,'},
-  {h:'  <span class="t-prop">stack</span>:      <span class="t-str">"Enterprise SaaS · contact center agents"</span>,'},
-  {h:'  <span class="t-prop">superpower</span>: <span class="t-str">"Closing the gap between design and engineering"</span>,'},
-  {h:'};'},
+  {h:'The users I design for are contact center agents making'},
+  {h:'hundreds of decisions every day. That context makes every'},
+  {h:'interaction worth getting right.'},
   {h:''},
-  {h:'<span class="t-comment">// Built LUX 2.0 at Verint from scratch</span>'},
-  {h:'<span class="t-key">const</span> <span class="t-prop">lux2</span>: <span class="t-dir">DesignSystem</span> = {'},
-  {h:'  <span class="t-prop">products</span>:  <span class="t-str">"40+ Verint products"</span>,'},
-  {h:'  <span class="t-prop">customers</span>: <span class="t-str">"10,000+ worldwide"</span>,'},
-  {h:'  <span class="t-prop">pipeline</span>:  <span class="t-str">"Figma → Storybook in &lt;60s"</span>,'},
-  {h:'  <span class="t-prop">terminal</span>:  <span class="t-key">false</span>,  <span class="t-comment">// No terminal. No developer needed.</span>'},
-  {h:'};'},
+  {h:'I built LUX 2.0 at Verint from scratch: a design system'},
+  {h:'running across <span class="t-num">40+</span> products, used by <span class="t-num">10,000+</span> customers,'},
+  {h:'with a Figma-to-Storybook pipeline that ships to production'},
+  {h:'in under <span class="t-num">60 seconds</span>. No terminal. No developer needed.'},
+  {h:'Today I lead a team of <span class="t-num">4</span>, build internal Figma plugins,'},
+  {h:'and use AI workflows daily to remove manual steps from'},
+  {h:'the design-to-code pipeline.'},
   {h:''},
-  {h:'<span class="t-comment">// How I work today</span>'},
-  {h:'<span class="t-key">function</span> <span class="t-fn">lead</span>() {'},
-  {h:'  <span class="t-fn">manage</span>(<span class="t-str">"team of 4 designers"</span>);'},
-  {h:'  <span class="t-fn">build</span>(<span class="t-str">"internal Figma plugins"</span>);'},
-  {h:'  <span class="t-fn">use</span>(<span class="t-str">"Claude + AI workflows daily"</span>);'},
-  {h:'  <span class="t-comment">// Remove manual steps from design → code</span>'},
-  {h:'}'},
-  {h:''},
-  {h:'<span class="t-comment">// The interesting part is never just the screens.</span>'},
-  {h:'<span class="t-comment">// It\'s the system underneath — the token logic,</span>'},
-  {h:'<span class="t-comment">// the component relationships, the structure</span>'},
-  {h:'<span class="t-comment">// that holds everything together.</span>'},
-  {h:'<span class="t-comment">//</span>'},
-  {h:'<span class="t-comment">// A prototype clicking into place is satisfying.</span>'},
-  {h:'<span class="t-comment">// One that holds up in production is the real thing.</span>'},
+  {h:'The interesting part is never just the screens. It\'s the'},
+  {h:'system underneath — the token logic, the component'},
+  {h:'relationships, the structure that holds everything together.'},
+  {h:'A prototype clicking into place is satisfying.'},
+  {h:'One that holds up in production is the real thing.'},
   {h:''},
   {h:'<span class="t-prompt">ori@portfolio</span> <span class="t-grey">~</span> <span class="t-prompt">%</span> <span class="t-cmd">cat background.txt</span>', pause:90},
   {h:'── Chapter 01 · 2013–2016 ─────────────────────────'},
