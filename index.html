@@ -392,6 +392,12 @@ i.ph,i.ph-bold,i.ph-fill,i.ph-light{line-height:1;display:flex;align-items:cente
 .tlink{color:var(--tlink);text-decoration:none}
 .tlink:hover{text-decoration:underline}
 .tcur{display:inline-block;width:7px;height:13px;background:var(--tprompt);vertical-align:text-bottom;animation:blink .9s step-end infinite;margin-left:1px}
+.t-comment{color:#5A7A4E}
+[data-theme="dark"] .t-comment{color:#6A9955}
+.t-prop{color:#1571B5}
+[data-theme="dark"] .t-prop{color:#9CDCFE}
+.t-fn{color:#795E26}
+[data-theme="dark"] .t-fn{color:#DCDCAA}
 @keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
 .t-login{color:var(--tgrey);font-size:12px}
 
@@ -1124,7 +1130,7 @@ i.ph,i.ph-bold,i.ph-fill,i.ph-light{line-height:1;display:flex;align-items:cente
               5. +100 PERFECT · −5 PER 0.1 OFF
             </div>
           </div>
-          <button onclick="pxStartGame()" style="width:100%;font-family:'Press Start 2P',monospace;font-size:11px;padding:15px;background:#00F5FF;color:#080816;border:none;cursor:pointer;letter-spacing:1px;box-shadow:5px 5px 0 #006677;display:flex;align-items:center;justify-content:center;gap:8px" onmousedown="this.style.transform='translate(2px,2px)';this.style.boxShadow='2px 2px 0 #006677'" onmouseup="this.style.transform='';this.style.boxShadow='5px 5px 0 #006677'"><span>▶</span><span>PLAY</span></button>
+          <button onclick="pxStartGame()" style="width:100%;font-family:'Press Start 2P',monospace;font-size:11px;padding:15px;background:#00F5FF;color:#080816;border:none;cursor:pointer;letter-spacing:1px;box-shadow:5px 5px 0 #006677;display:flex;align-items:center;justify-content:center;gap:8px" onmousedown="this.style.transform='translate(2px,2px)';this.style.boxShadow='2px 2px 0 #006677'" onmouseup="this.style.transform='';this.style.boxShadow='5px 5px 0 #006677'">PLAY</button>
         </div>
       </div>
 
@@ -1190,20 +1196,16 @@ i.ph,i.ph-bold,i.ph-fill,i.ph-light{line-height:1;display:flex;align-items:cente
           <div id="px-end-av" style="width:72px;height:72px;border-radius:50%;display:flex;align-items:center;justify-content:center;border:3px solid #1A1A3A;background:#0A0A1A;overflow:hidden;flex-shrink:0"></div>
           <!-- Name -->
           <div id="px-end-name" style="font-family:'Press Start 2P',monospace;font-size:9px;color:#E0E0FF;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:100%"></div>
-          <!-- Rank badge -->
-          <div id="px-rank-badge" style="font-family:'Press Start 2P',monospace;font-size:8px;letter-spacing:2px;padding:7px 18px;border-width:3px;border-style:solid;text-shadow:0 0 12px currentColor;box-shadow:0 0 14px rgba(255,255,255,.1)"></div>
           <!-- Score -->
           <div style="display:flex;align-items:baseline;gap:6px">
             <div id="px-end-score" style="font-family:'Press Start 2P',monospace;font-size:44px;color:#FFD700;text-shadow:0 0 20px #FFD700,6px 6px 0 #4A3800;letter-spacing:3px;line-height:1">0</div>
             <div style="font-family:'Press Start 2P',monospace;font-size:8px;color:#9292C8">/ 300</div>
           </div>
 
-          <!-- Rank message -->
-          <div id="px-rank-msg" style="font-family:'Press Start 2P',monospace;font-size:7px;color:#E0E0FF;line-height:2;width:100%;padding:10px 14px;background:#0E0E22;border:2px solid #1A1A3A;letter-spacing:.5px"></div>
           <!-- Actions -->
           <div style="display:flex;flex-direction:column;gap:6px;width:100%">
-            <button onclick="pxStartGame()" style="width:100%;font-family:'Press Start 2P',monospace;font-size:9px;padding:13px;background:#FF00FF;color:#080816;border:none;cursor:pointer;letter-spacing:1px;box-shadow:3px 3px 0 #660066" onmousedown="this.style.transform='translate(2px,2px)';this.style.boxShadow='1px 1px 0 #660066'" onmouseup="this.style.transform='';this.style.boxShadow='3px 3px 0 #660066'">↺ PLAY AGAIN</button>
-            <button onclick="pxGoTitle()" style="width:100%;font-family:'Press Start 2P',monospace;font-size:7px;padding:9px;background:transparent;color:#7878AA;border:1px solid #2A2A4A;cursor:pointer">↩ BACK TO MENU</button>
+            <button onclick="pxStartGame()" style="width:100%;font-family:'Press Start 2P',monospace;font-size:9px;padding:13px;background:#FF00FF;color:#080816;border:none;cursor:pointer;letter-spacing:1px;box-shadow:3px 3px 0 #660066" onmousedown="this.style.transform='translate(2px,2px)';this.style.boxShadow='1px 1px 0 #660066'" onmouseup="this.style.transform='';this.style.boxShadow='3px 3px 0 #660066'">PLAY AGAIN</button>
+            <button onclick="pxGoTitle()" style="width:100%;font-family:'Press Start 2P',monospace;font-size:7px;padding:9px;background:transparent;color:#7878AA;border:1px solid #2A2A4A;cursor:pointer">BACK TO MENU</button>
           </div>
         </div>
       </div>
@@ -1212,7 +1214,7 @@ i.ph,i.ph-bold,i.ph-fill,i.ph-light{line-height:1;display:flex;align-items:cente
       <div id="px-board" style="display:none;flex-direction:column;flex:1">
         <div style="display:flex;align-items:center;justify-content:space-between;padding:0 16px;height:44px;flex-shrink:0;background:#0E0E22;border-bottom:2px solid #FFD700">
           <span style="font-family:'Press Start 2P',monospace;font-size:9px;color:#FFD700;text-shadow:0 0 10px #FFD700">🏆 LEADERBOARD</span>
-          <button onclick="pxGoTitle()" style="font-family:'Press Start 2P',monospace;font-size:6px;padding:6px 10px;background:transparent;color:#9292C8;border:2px solid #1A1A3A;cursor:pointer">↩ BACK</button>
+          <button onclick="pxGoTitle()" style="font-family:'Press Start 2P',monospace;font-size:6px;padding:6px 10px;background:transparent;color:#9292C8;border:2px solid #1A1A3A;cursor:pointer">BACK</button>
         </div>
         <div id="px-board-list" style="flex:1;overflow-y:auto;padding:10px;display:flex;flex-direction:column;gap:6px"></div>
       </div>
@@ -2126,15 +2128,41 @@ const TERM = [
   {h:'<span class="t-login">Last login: Wed Jul 22 11:42:33 on ttys003</span>'},
   {h:''},
   {h:'<span class="t-prompt">ori@portfolio</span> <span class="t-grey">~</span> <span class="t-prompt">%</span> <span class="t-cmd">cat about.txt</span>', pause:120},
-  {h:'Product Designer and Design Team Lead with 5+ years of'},
-  {h:'experience building enterprise products end-to-end.'},
+  {h:'<span class="t-comment">/**</span>'},
+  {h:'<span class="t-comment"> * about.ts · Product Design Lead</span>'},
+  {h:'<span class="t-comment"> * Systems thinker. Hands-on maker.</span>'},
+  {h:'<span class="t-comment"> * Closes the gap between design and engineering.</span>'},
+  {h:'<span class="t-comment"> */</span>'},
   {h:''},
-  {h:'I own the full design process — from discovery and user'},
-  {h:'research to final delivery — and bring the same level of'},
-  {h:'care to strategy and execution.'},
+  {h:'<span class="t-key">const</span> <span class="t-prop">designer</span> = {'},
+  {h:'  <span class="t-prop">role</span>:       <span class="t-str">"Product Design Lead"</span>,'},
+  {h:'  <span class="t-prop">stack</span>:      <span class="t-str">"Enterprise SaaS · contact center agents"</span>,'},
+  {h:'  <span class="t-prop">superpower</span>: <span class="t-str">"Closing the gap between design and engineering"</span>,'},
+  {h:'};'},
   {h:''},
-  {h:'Comfortable with ambiguity. Fan of refined simplicity.'},
-  {h:'Good with people, great with constraints.'},
+  {h:'<span class="t-comment">// Built LUX 2.0 at Verint from scratch</span>'},
+  {h:'<span class="t-key">const</span> <span class="t-prop">lux2</span>: <span class="t-dir">DesignSystem</span> = {'},
+  {h:'  <span class="t-prop">products</span>:  <span class="t-str">"40+ Verint products"</span>,'},
+  {h:'  <span class="t-prop">customers</span>: <span class="t-str">"10,000+ worldwide"</span>,'},
+  {h:'  <span class="t-prop">pipeline</span>:  <span class="t-str">"Figma → Storybook in &lt;60s"</span>,'},
+  {h:'  <span class="t-prop">terminal</span>:  <span class="t-key">false</span>,  <span class="t-comment">// No terminal. No developer needed.</span>'},
+  {h:'};'},
+  {h:''},
+  {h:'<span class="t-comment">// How I work today</span>'},
+  {h:'<span class="t-key">function</span> <span class="t-fn">lead</span>() {'},
+  {h:'  <span class="t-fn">manage</span>(<span class="t-str">"team of 4 designers"</span>);'},
+  {h:'  <span class="t-fn">build</span>(<span class="t-str">"internal Figma plugins"</span>);'},
+  {h:'  <span class="t-fn">use</span>(<span class="t-str">"Claude + AI workflows daily"</span>);'},
+  {h:'  <span class="t-comment">// Remove manual steps from design → code</span>'},
+  {h:'}'},
+  {h:''},
+  {h:'<span class="t-comment">// The interesting part is never just the screens.</span>'},
+  {h:'<span class="t-comment">// It\'s the system underneath — the token logic,</span>'},
+  {h:'<span class="t-comment">// the component relationships, the structure</span>'},
+  {h:'<span class="t-comment">// that holds everything together.</span>'},
+  {h:'<span class="t-comment">//</span>'},
+  {h:'<span class="t-comment">// A prototype clicking into place is satisfying.</span>'},
+  {h:'<span class="t-comment">// One that holds up in production is the real thing.</span>'},
   {h:''},
   {h:'<span class="t-prompt">ori@portfolio</span> <span class="t-grey">~</span> <span class="t-prompt">%</span> <span class="t-cmd">cat background.txt</span>', pause:90},
   {h:'── Chapter 01 · 2013–2016 ─────────────────────────'},
@@ -2805,8 +2833,8 @@ setTimeout(initGhosts, 2000);
     if(totalEl)totalEl.innerHTML=`TOTAL: <span style="color:#FFD700">${ST.score}</span> PTS`;
     const btn=document.getElementById('px-next-btn');
     if(btn){
-      if(ST.round>=2){btn.textContent='▶ SEE RESULTS';btn.onclick=pxShowEnd;}
-      else{btn.textContent=`▶ ROUND ${ST.round+2}`;btn.onclick=pxNextRound;}
+      if(ST.round>=2){btn.textContent='SEE RESULTS';btn.onclick=pxShowEnd;}
+      else{btn.textContent=`ROUND ${ST.round+2}`;btn.onclick=pxNextRound;}
     }
     show('px-result');
   }
@@ -2815,18 +2843,11 @@ setTimeout(initGhosts, 2000);
 
   window.pxShowEnd=function(){
     const s=ST.score;
-    const [,,rank,col,msg]=RANKS.find(([lo,hi])=>s>=lo&&s<hi)||RANKS[RANKS.length-1];
     const u=getUser()||{name:'PLAYER ONE',avatarId:0};
     const d=avData(u.avatarId);
 
-    const badge=document.getElementById('px-rank-badge');
-    if(badge){badge.textContent=rank;badge.style.color=col;badge.style.borderColor=col;}
-
     const scoreEl=document.getElementById('px-end-score');
     if(scoreEl)scoreEl.textContent='0';
-
-    const msgEl=document.getElementById('px-rank-msg');
-    if(msgEl)msgEl.innerHTML=msg;
 
     const endAv=document.getElementById('px-end-av');
     if(endAv){
