@@ -33,7 +33,7 @@ html,body,*{cursor:none!important}
 [data-theme="dark"]{
   --panel:#2C2C2C;--canvas:#1E1E1E;--dot:rgba(255,255,255,.04);
   --bd:rgba(255,255,255,.1);--bd2:rgba(255,255,255,.16);--bd3:rgba(255,255,255,.06);
-  --tx:#E5E5E5;--tx2:#A0A0A0;--tx3:#666;
+  --tx:#F0F0F0;--tx2:#C8C8C8;--tx3:#999;
   --hov:rgba(255,255,255,.05);--act:rgba(24,160,251,.12);
   --inp:#222;--frm:#252525;
   --wbg:#2C2C2C;--whdr:#323232;--wbd:rgba(255,255,255,.08);
@@ -392,7 +392,7 @@ i.ph,i.ph-bold,i.ph-fill,i.ph-light{line-height:1;display:flex;align-items:cente
 .tlink{color:var(--tlink);text-decoration:none}
 .tlink:hover{text-decoration:underline}
 .tcur{display:inline-block;width:7px;height:13px;background:var(--tprompt);vertical-align:text-bottom;animation:blink .9s step-end infinite;margin-left:1px}
-.t-comment{color:#5A7A4E}
+.t-comment{color:#4A6B3E}
 [data-theme="dark"] .t-comment{color:#6A9955}
 .t-prop{color:#1571B5}
 [data-theme="dark"] .t-prop{color:#9CDCFE}
@@ -1198,22 +1198,19 @@ i.ph,i.ph-bold,i.ph-fill,i.ph-light{line-height:1;display:flex;align-items:cente
         <canvas id="px-cvc" style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:0"></canvas>
         <div style="position:relative;z-index:1;display:flex;flex-direction:column;flex:1;padding:20px 22px 22px;text-align:center;overflow-y:auto">
           <!-- Back button top-right -->
-          <button onclick="pxGoTitle()" style="position:absolute;top:12px;right:12px;z-index:3;font-family:'Press Start 2P',monospace;font-size:6px;padding:6px 10px;background:transparent;color:#7878AA;border:1px solid #2A2A4A;cursor:pointer">← HOME</button>
-          <!-- Top: avatar + score -->
-          <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;flex:1;gap:14px">
-            <!-- Crown + Avatar + name -->
-            <div style="display:flex;flex-direction:column;align-items:center;gap:0">
-              <div style="font-size:28px;line-height:1;filter:drop-shadow(0 0 8px rgba(255,215,0,.7))">👑</div>
-              <div id="px-end-av" style="width:64px;height:64px;border-radius:50%;display:flex;align-items:center;justify-content:center;border:3px solid #FFD700;background:#0A0A1A;overflow:hidden;flex-shrink:0;margin-top:-4px"></div>
-              <div id="px-end-name" style="font-family:'Press Start 2P',monospace;font-size:8px;color:#9292C8;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:100%;margin-top:8px"></div>
-            </div>
-            <!-- Score -->
-            <div style="display:flex;flex-direction:column;align-items:center;gap:8px">
-              <div style="font-family:'Press Start 2P',monospace;font-size:7px;color:#9292C8;letter-spacing:2px">FINAL SCORE</div>
-              <div style="display:flex;align-items:baseline;gap:8px">
-                <div id="px-end-score" style="font-family:'Press Start 2P',monospace;font-size:62px;color:#FFD700;text-shadow:0 0 24px #FFD700,7px 7px 0 #4A3800;letter-spacing:4px;line-height:1">0</div>
-                <div style="font-family:'Press Start 2P',monospace;font-size:9px;color:#9292C8">/ 300</div>
-              </div>
+          <button onclick="pxGoTitle()" style="position:absolute;top:12px;right:12px;z-index:3;font-family:'Press Start 2P',monospace;font-size:7px;padding:7px 12px;background:transparent;color:#7878AA;border:1px solid #2A2A4A;cursor:pointer;display:flex;align-items:center;gap:6px">🏠 HOME</button>
+          <!-- Top: avatar + name -->
+          <div style="display:flex;flex-direction:column;align-items:center;padding-top:32px;gap:0;flex-shrink:0">
+            <div style="font-size:28px;line-height:1;filter:drop-shadow(0 0 8px rgba(255,215,0,.7))">👑</div>
+            <div id="px-end-av" style="width:64px;height:64px;border-radius:50%;display:flex;align-items:center;justify-content:center;border:3px solid #FFD700;background:#0A0A1A;overflow:hidden;flex-shrink:0;margin-top:-4px"></div>
+            <div id="px-end-name" style="font-family:'Press Start 2P',monospace;font-size:8px;color:#9292C8;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:100%;margin-top:8px"></div>
+          </div>
+          <!-- Center: score — fills remaining space, truly centered -->
+          <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px">
+            <div style="font-family:'Press Start 2P',monospace;font-size:7px;color:#9292C8;letter-spacing:2px">FINAL SCORE</div>
+            <div style="display:flex;align-items:baseline;gap:8px">
+              <div id="px-end-score" style="font-family:'Press Start 2P',monospace;font-size:62px;color:#FFD700;text-shadow:0 0 24px #FFD700,7px 7px 0 #4A3800;letter-spacing:4px;line-height:1">0</div>
+              <div style="font-family:'Press Start 2P',monospace;font-size:9px;color:#9292C8">/ 300</div>
             </div>
           </div>
           <!-- Bottom: actions -->
@@ -1266,9 +1263,9 @@ i.ph,i.ph-bold,i.ph-fill,i.ph-light{line-height:1;display:flex;align-items:cente
               <div>
                 <div class="wf-badge"><div class="wf-bdot"></div>Design Team Lead · Tel Aviv</div>
                 <div class="wf-name">Ori Cohen</div>
-                <div class="wf-role">Product Design Lead · Verint</div>
+                <div class="wf-role">Product Design Team Lead · Art Director · Verint</div>
                 <div class="wf-line"></div>
-                <p class="wf-bio">5+ years shipping enterprise SaaS at scale. Systems thinker, hands-on maker — the person who closes the gap between design and engineering.</p>
+                <p class="wf-bio">Enterprise software is only as good as the trust it builds. I work across the full stack of design — from the micro-interaction that feels just right, to the system architecture that makes it all hold together.</p>
                 <p class="wf-hint">↓ Use the toolbar below to explore</p>
                 <div class="wf-ctas">
                   <button class="wf-btn p" onclick="openWin('projects')">View Projects</button>
@@ -2142,7 +2139,7 @@ const TERM = [
   {h:'<span class="t-login">Last login: Wed Jul 22 11:42:33 on ttys003</span>'},
   {h:''},
   {h:'<span class="t-prompt">ori@portfolio</span> <span class="t-grey">~</span> <span class="t-prompt">%</span> <span class="t-cmd">cat about.txt</span>', pause:120},
-  {h:'<span style="font-size:23px;font-weight:700;letter-spacing:2px;color:var(--ttx)">ORI COHEN</span>'},
+  {h:'<span style="font-size:28px;font-weight:700;letter-spacing:3px;color:var(--ttx)">ORI COHEN</span>'},
   {h:''},
   {h:'Product Design Lead with <span class="t-num">5+</span> years shipping enterprise SaaS at scale.'},
   {h:'Systems thinker, hands-on maker - the person who closes'},
@@ -2950,7 +2947,7 @@ function closeSiteMenu() {
 }
 
 function sharePortfolio(el) {
-  const url = 'https://oricohen10.github.io/portfolio/';
+  const url = 'https://oricohen.co/';
   const doShare = () => {
     const savedHTML = el.innerHTML;
     el.classList.add('share-copied');
