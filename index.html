@@ -217,7 +217,7 @@ i.ph,i.ph-bold,i.ph-fill,i.ph-light{line-height:1;display:flex;align-items:cente
 ════════════════════════════════════ */
 #bottombar{
   position:fixed;bottom:18px;left:50%;transform:translateX(-50%);
-  z-index:500;display:flex;align-items:center;gap:4px;
+  z-index:500;display:flex;align-items:center;justify-content:space-between;gap:4px;
   background:var(--glass);border:1px solid var(--glass-bd);border-radius:14px;
   padding:7px 10px;
   box-shadow:0 8px 32px rgba(0,0,0,.12),0 1px 0 rgba(255,255,255,.5) inset;
@@ -232,7 +232,7 @@ i.ph,i.ph-bold,i.ph-fill,i.ph-light{line-height:1;display:flex;align-items:cente
 .bb-btn.inactive{opacity:.28;pointer-events:none}
 .bb-btn svg{width:16px;height:16px;display:block}
 .bb-right{display:flex;align-items:center;gap:3px}
-#tb-clock{font-size:11px;color:var(--tx2);font-variant-numeric:tabular-nums;white-space:nowrap}
+#tb-clock{font-size:11px;color:var(--tx2);font-variant-numeric:tabular-nums;white-space:nowrap;position:absolute;left:50%;transform:translateX(-50%)}
 #theme-btn,#bb-zoom{
   height:30px;display:flex;align-items:center;justify-content:center;
   border-radius:7px;background:transparent;border:1px solid var(--bd);
@@ -1198,7 +1198,7 @@ i.ph,i.ph-bold,i.ph-fill,i.ph-light{line-height:1;display:flex;align-items:cente
         <canvas id="px-cvc" style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:0"></canvas>
         <div style="position:relative;z-index:1;display:flex;flex-direction:column;flex:1;padding:20px 22px 22px;text-align:center;overflow-y:auto">
           <!-- Back button top-right -->
-          <button onclick="pxGoTitle()" style="position:absolute;top:12px;right:12px;z-index:3;font-family:'Press Start 2P',monospace;font-size:7px;padding:7px 12px;background:transparent;color:#7878AA;border:1px solid #2A2A4A;cursor:pointer;display:flex;align-items:center;gap:6px">🏠 HOME</button>
+          <button onclick="pxGoTitle()" style="position:absolute;top:12px;right:12px;z-index:3;font-family:'Press Start 2P',monospace;font-size:7px;padding:7px 12px;background:transparent;color:#7878AA;border:none;cursor:pointer;display:flex;align-items:center;gap:6px"><i class="ph ph-house" style="font-size:14px"></i> HOME</button>
           <!-- Top: avatar + name -->
           <div style="display:flex;flex-direction:column;align-items:center;padding-top:32px;gap:0;flex-shrink:0">
             <div style="font-size:28px;line-height:1;filter:drop-shadow(0 0 8px rgba(255,215,0,.7))">👑</div>
@@ -1206,7 +1206,7 @@ i.ph,i.ph-bold,i.ph-fill,i.ph-light{line-height:1;display:flex;align-items:cente
             <div id="px-end-name" style="font-family:'Press Start 2P',monospace;font-size:8px;color:#9292C8;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:100%;margin-top:8px"></div>
           </div>
           <!-- Center: score — fills remaining space, truly centered -->
-          <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px">
+          <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:22px">
             <div style="font-family:'Press Start 2P',monospace;font-size:7px;color:#9292C8;letter-spacing:2px">FINAL SCORE</div>
             <div style="display:flex;align-items:baseline;gap:8px">
               <div id="px-end-score" style="font-family:'Press Start 2P',monospace;font-size:62px;color:#FFD700;text-shadow:0 0 24px #FFD700,7px 7px 0 #4A3800;letter-spacing:4px;line-height:1">0</div>
@@ -1265,7 +1265,7 @@ i.ph,i.ph-bold,i.ph-fill,i.ph-light{line-height:1;display:flex;align-items:cente
                 <div class="wf-name">Ori Cohen</div>
                 <div class="wf-role">Product Design Team Lead · Art Director · Verint</div>
                 <div class="wf-line"></div>
-                <p class="wf-bio">Enterprise software is only as good as the trust it builds. I work across the full stack of design — from the micro-interaction that feels just right, to the system architecture that makes it all hold together.</p>
+                <p class="wf-bio">Enterprise software is only as good as the trust it builds. I work across the full stack of design - from the micro-interaction that feels just right, to the system architecture that makes it all hold together.</p>
                 <p class="wf-hint">↓ Use the toolbar below to explore</p>
                 <div class="wf-ctas">
                   <button class="wf-btn p" onclick="openWin('projects')">View Projects</button>
@@ -1355,10 +1355,8 @@ i.ph,i.ph-bold,i.ph-fill,i.ph-light{line-height:1;display:flex;align-items:cente
         <i class="ph ph-x-square"></i>
       </button>
     </div>
-    <!-- Center: clock (true-centered via flex spacers) -->
-    <div style="flex:1"></div>
+    <!-- Center: clock (absolutely centered) -->
     <div id="tb-clock">--:--</div>
-    <div style="flex:1"></div>
     <!-- Right: theme + zoom -->
     <div class="bb-right">
       <button id="theme-btn" data-tip="Toggle theme" onclick="toggleTheme()">
@@ -1416,7 +1414,7 @@ i.ph,i.ph-bold,i.ph-fill,i.ph-light{line-height:1;display:flex;align-items:cente
       <div class="mv-nm">Ori Cohen</div>
       <div class="mv-role">Product Design Team Lead · Art Director · Verint</div>
       <div class="mv-line"></div>
-      <p class="mv-bio">Enterprise software is only as good as the trust it builds. I work across the full stack of design — from the micro-interaction that feels just right, to the system architecture that makes it all hold together.</p>
+      <p class="mv-bio">Enterprise software is only as good as the trust it builds. I work across the full stack of design - from the micro-interaction that feels just right, to the system architecture that makes it all hold together.</p>
       <div class="mv-btns">
         <button class="mv-btn-p" onclick="window.open('case-lux.html','_self')">View Case Studies</button>
         <a class="mv-btn-g" href="mailto:oricohenw@gmail.com">Contact</a>
