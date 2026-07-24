@@ -4,6 +4,14 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no"/>
 <title>Ori Cohen · Product Designer</title>
+<!-- Google Analytics — replace G-XXXXXXXXXX with your Measurement ID from analytics.google.com -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+<script>
+  window.dataLayer=window.dataLayer||[];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js',new Date());
+  gtag('config','G-XXXXXXXXXX');
+</script>
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%237B61FF'/%3E%3Ctext x='16' y='22' font-family='Arial' font-weight='700' font-size='15' fill='white' text-anchor='middle'%3EOC%3C/text%3E%3C/svg%3E"/>
 <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet"/>
 <link rel="stylesheet" href="tokens.css"/>
@@ -1187,16 +1195,18 @@ i.ph,i.ph-bold,i.ph-fill,i.ph-light{line-height:1;display:flex;align-items:cente
           </div>
           <button onclick="pxShowBoard()" style="font-family:'Press Start 2P',monospace;font-size:7px;padding:6px 10px;background:transparent;color:#FFD700;border:2px solid #FFD700;cursor:pointer;letter-spacing:.5px;box-shadow:3px 3px 0 #4A3800" onmousedown="this.style.transform='translate(2px,2px)';this.style.boxShadow='1px 1px 0 #4A3800'" onmouseup="this.style.transform='';this.style.boxShadow='3px 3px 0 #4A3800'">🏆</button>
         </div>
-        <!-- Center content -->
-        <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;flex:1;padding:14px 24px;gap:12px;text-align:center">
+        <!-- Title — vertically centered in its own flex section -->
+        <div style="flex:1;display:flex;align-items:center;justify-content:center;text-align:center">
           <div>
-            <div style="font-family:'Press Start 2P',monospace;font-size:22px;color:#00F5FF;text-shadow:0 0 12px #00F5FF,4px 4px 0 #005566;letter-spacing:2px">CONTRAST</div>
-            <div style="font-family:'Press Start 2P',monospace;font-size:22px;color:#FF00FF;text-shadow:0 0 12px #FF00FF,4px 4px 0 #550055;letter-spacing:2px">QUEST</div>
-            <div style="font-family:'Press Start 2P',monospace;font-size:6px;color:#9292C8;margin-top:6px;letter-spacing:3px">A11Y EDITION</div>
+            <div style="font-family:'Press Start 2P',monospace;font-size:36px;color:#00F5FF;text-shadow:0 0 20px #00F5FF,5px 5px 0 #005566;letter-spacing:3px;line-height:1.2">CONTRAST</div>
+            <div style="font-family:'Press Start 2P',monospace;font-size:36px;color:#FF00FF;text-shadow:0 0 20px #FF00FF,5px 5px 0 #550055;letter-spacing:3px;line-height:1.2">QUEST</div>
+            <div style="font-family:'Press Start 2P',monospace;font-size:7px;color:#9292C8;margin-top:10px;letter-spacing:4px">A11Y EDITION</div>
           </div>
+        </div>
 
-          <!-- How to play -->
-          <div style="background:#0E0E22;border:2px solid #1A1A3A;padding:12px 16px;text-align:left;width:100%;box-sizing:border-box">
+        <!-- Content — how to play + play button pinned to bottom -->
+        <div style="padding:0 24px 20px;display:flex;flex-direction:column;gap:12px">
+          <div style="background:#0E0E22;border:2px solid #1A1A3A;padding:12px 16px;text-align:left">
             <div style="font-family:'Press Start 2P',monospace;font-size:7px;color:#00FF7F;margin-bottom:10px;letter-spacing:1px">HOW TO PLAY</div>
             <div style="font-family:'Press Start 2P',monospace;font-size:7px;color:#C0C0E8;line-height:2.4;letter-spacing:.3px">
               1. BG COLOR APPEARS — MOVE SLIDER<br>
@@ -1206,7 +1216,7 @@ i.ph,i.ph-bold,i.ph-fill,i.ph-light{line-height:1;display:flex;align-items:cente
               5. +100 PERFECT · −5 PER 0.1 OFF
             </div>
           </div>
-          <button onclick="pxStartGame()" style="width:100%;font-family:'Press Start 2P',monospace;font-size:11px;padding:15px;background:#00F5FF;color:#080816;border:none;cursor:pointer;letter-spacing:1px;box-shadow:5px 5px 0 #006677;display:flex;align-items:center;justify-content:center;gap:8px" onmousedown="this.style.transform='translate(2px,2px)';this.style.boxShadow='2px 2px 0 #006677'" onmouseup="this.style.transform='';this.style.boxShadow='5px 5px 0 #006677'">PLAY</button>
+          <button onclick="pxStartGame()" style="width:100%;font-family:'Press Start 2P',monospace;font-size:11px;padding:15px;background:#00F5FF;color:#080816;border:none;cursor:pointer;letter-spacing:1px;box-shadow:5px 5px 0 #006677;display:flex;align-items:center;justify-content:center" onmousedown="this.style.transform='translate(2px,2px)';this.style.boxShadow='2px 2px 0 #006677'" onmouseup="this.style.transform='';this.style.boxShadow='5px 5px 0 #006677'">PLAY</button>
         </div>
       </div>
 
@@ -2648,8 +2658,11 @@ function timeAgo(ts) {
   return Math.floor(d/86400000) + 'd ago';
 }
 
-/* User comments live in memory for the session — simple, no localStorage edge cases */
-const _userCmts = [];
+/* User comments — persisted in localStorage, max 50, no TTL */
+const LS_CMTS = 'ori-comments-v2';
+function _loadCmts()  { try { return JSON.parse(localStorage.getItem(LS_CMTS)||'[]'); } catch(e){ return []; } }
+function _saveCmts(a) { try { localStorage.setItem(LS_CMTS, JSON.stringify(a.slice(-50))); } catch(e){} }
+const _userCmts = _loadCmts();
 
 function renderComments() {
   const cl = document.getElementById('rp-cl'); if (!cl) return;
@@ -2685,12 +2698,24 @@ function postComment() {
   const ta = document.getElementById('rp-ta');
   const txt = ta.value.trim(); if (!txt) return;
   const name = (ctagEl ? ctagEl.textContent.trim() : '') || 'Visitor';
-  _userCmts.push({ id:'u'+Date.now(), name, color:'#DD2590', face:null,
-    initials:name.slice(0,2).toUpperCase(), text:txt, ts:Date.now() });
+  const cmt = { id:'u'+Date.now(), name, color:'#DD2590', face:null,
+    initials:name.slice(0,2).toUpperCase(), text:txt, ts:Date.now() };
+  _userCmts.push(cmt);
+  _saveCmts(_userCmts);
   ta.value = ''; ta.style.height = '';
   syncSendBtn();
   renderComments();
   showToast('Comment posted 💬');
+  /* Email notification — fire-and-forget, silent on error */
+  fetch('https://formsubmit.co/ajax/Ori.Cohen10@verint.com', {
+    method:'POST',
+    headers:{'Content-Type':'application/json','Accept':'application/json'},
+    body: JSON.stringify({
+      _subject: 'New portfolio comment from ' + name,
+      name, message: txt,
+      _captcha: 'false'
+    })
+  }).catch(()=>{});
 }
 
 function syncSendBtn() {
