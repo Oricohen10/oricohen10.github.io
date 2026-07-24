@@ -2592,8 +2592,8 @@ function initGhosts() {
     layer.appendChild(el);
     g.el = el;
 
-    /* Kick off drifting — stagger start times */
-    setTimeout(() => driftGhost(g), 600 + i * 900);
+    /* Kick off drifting — immediate, tiny stagger */
+    setTimeout(() => driftGhost(g), i * 80);
   });
 }
 
@@ -2618,21 +2618,27 @@ function driftGhost(g) {
    COMMENTS  — seed + localStorage
 ════════════════════════════════════ */
 const SEED_CMTS = [
-  { id:'s1', name:'Shrek',     color:'#2e7a18', face:'🧅',
-    text:'ok but can you add more swamp vibes to the palette. the gradient is way too polished for my taste 🧅',
+  { id:'s1', name:'Shrek',         color:'#4a7020',
+    text:'This design is like an onion, it has layers! But you know, navigation logic needs layers too. Where is my back garden? Why do I need 5 clicks to reach settings?',
     ts: Date.now() - 2*86400000 },
-  { id:'s2', name:'Donkey',    color:'#b85c10', face:'🐴',
-    text:'THIS IS THE GREATEST PORTFOLIO I HAVE EVER SEEN. I am not even being sarcastic. can we please be best friends??',
+  { id:'s2', name:'Donkey',        color:'#7B6555',
+    text:`I'm talking, I'm talking, I'm talking... just like the copy on this site! Do me a favor and shorten that microcopy, I only breathe once a day!`,
     ts: Date.now() - 2*86400000 + 360000 },
-  { id:'s3', name:'Shrek',     color:'#2e7a18', face:'🧅',
-    text:'the cursor is suspiciously green-tinted. I\'m watching you 👁',
+  { id:'s3', name:'Fiona',         color:'#A03060',
+    text:'By day it looks professional, by night it turns into a monster, just like your Dark Mode that breaks on mobile. Fix it before someone discovers the black magic.',
     ts: Date.now() - 86400000 },
-  { id:'s4', name:'Donkey',    color:'#b85c10', face:'🐴',
-    text:'we need a waffles section. waffles = engagement. i have data. i will NOT be sharing the data',
+  { id:'s4', name:'Puss in Boots', color:'#D07020',
+    text:`My big innocent eyes can't find the CTA button. You hid it too well, señor, almost like my sword, pretty but unclear how to draw.`,
     ts: Date.now() - 8*3600000 },
-  { id:'s5', name:'Ori Cohen', color:'#7B61FF', face:null, initials:'OC',
-    text:'filed under: valid feedback. will revisit in Q3.',
+  { id:'s5', name:'Lord Farquaad', color:'#8B0000',
+    text:`I'm small but ambitious, just like the buttons on this site, too small and too ambitious for the functions they need to perform. Increase the tap target, please!`,
     ts: Date.now() - 6*3600000 },
+  { id:'s6', name:'Gingy',         color:'#C87941',
+    text:'Not the gumdrop button! Why do you break my legs on every page load? Your loading time makes me crumble just like I do.',
+    ts: Date.now() - 4*3600000 },
+  { id:'s7', name:'Ori Cohen',     color:'#7B61FF', initials:'OC',
+    text:'filed under: valid feedback. will revisit in Q3.',
+    ts: Date.now() - 2*3600000 },
 ];
 
 function timeAgo(ts) {
@@ -2666,7 +2672,7 @@ function renderComments() {
   all.forEach((c, i) => {
     const div = document.createElement('div');
     div.className = 'rpc';
-    const portraitKey = {shrek:'shrek', donkey:'donkey', 'ori cohen':'ori'}[c.name.toLowerCase()];
+    const portraitKey = {shrek:'shrek',donkey:'donkey','ori cohen':'ori',fiona:'fiona','puss in boots':'puss','lord farquaad':'farquaad',gingy:'gingy',fairy:'fairy',dragon:'dragon',pino:'pino',humpty:'humpty'}[c.name.toLowerCase()];
     let facePart;
     if (portraitKey === 'ori') {
       facePart = `<img src="${ORI_PHOTO}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;display:block" alt="Ori Cohen">`;
@@ -2782,14 +2788,13 @@ function addVisitorPresence(name, avatarId) {
   if (cnt) cnt.textContent = parseInt(cnt.textContent||3) + 1;
 }
 
+/* Ghosts start immediately — no delay */
+initGhosts();
+
 window.addEventListener('load', () => {
   initPortraitAvatars();
   initComments();
-  /* initGhosts has its own dual-init below */
-  setTimeout(initGhosts, 400);
 });
-/* Direct fallback — fires even if load event was missed */
-setTimeout(initGhosts, 2000);
 
 /* ════════════════════════════════════
    CONTRAST QUEST v2 — PIXEL EDITION
