@@ -1402,7 +1402,7 @@ i.ph,i.ph-bold,i.ph-fill,i.ph-light{line-height:1;display:flex;align-items:cente
               </svg>
             </button>
             <!-- Send button -->
-            <button class="rp-sb" id="rp-sb" disabled title="Post (⌘↵)">
+            <button class="rp-sb" id="rp-sb" disabled title="Post (⌘↵)" onclick="postComment()">
               <i class="ph ph-arrow-right" style="font-size:15px"></i>
             </button>
           </div>
@@ -3063,15 +3063,13 @@ window.addEventListener('load', () => {
     winEl._iframeListeners = true;
     const c = () => document.getElementById('cursor');
 
-    winEl.addEventListener('mousemove', e => {
-      const r = iframe.getBoundingClientRect();
-      const over = e.clientX >= r.left && e.clientX <= r.right &&
-                   e.clientY >= r.top  && e.clientY <= r.bottom;
-      const el = c(); if (!el) return;
-      el.style.visibility = over ? 'hidden' : '';
+    /* Use mouseenter/leave on the iframe element itself — fires even when
+       the mouse moves directly from outside the window into the iframe,
+       which mousemove on the parent misses entirely. */
+    iframe.addEventListener('mouseenter', () => {
+      const el = c(); if (el) el.style.visibility = 'hidden';
     });
-
-    winEl.addEventListener('mouseleave', () => {
+    iframe.addEventListener('mouseleave', () => {
       const el = c(); if (el) el.style.visibility = '';
     });
   }
