@@ -1832,7 +1832,7 @@ if (isDesktop) setTimeout(() => {
   const u = getPortfolioUser();
   if(u){
     siteAv = (u.avatarId !== null && u.avatarId !== undefined) ? u.avatarId : 0;
-    return; /* already set up — skip modal */
+    if(u.name && u.name !== 'Recruiter'){ nIn.value = u.name; bGo.disabled=false; bGo.classList.add('ready'); }
   }
   buildModalAvGrid();
   mBg.classList.add('show');
