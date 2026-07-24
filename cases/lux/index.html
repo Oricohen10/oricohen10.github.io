@@ -342,376 +342,53 @@ button{cursor:pointer;font-family:inherit}
 
     <!-- Slide 1: Token Architecture -->
     <div class="carousel-slide" onclick="openLightbox(0)" title="Click to expand">
-      <svg viewBox="0 0 960 420" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
-        <rect width="960" height="420" fill="#F4F2FF"/>
-        <!-- Grid lines -->
-        <line x1="0" y1="60" x2="960" y2="60" stroke="#E8E3FF" stroke-width="1"/>
-        <line x1="0" y1="360" x2="960" y2="360" stroke="#E8E3FF" stroke-width="1"/>
-        <!-- Title area -->
-        <rect x="40" y="24" width="180" height="20" rx="4" fill="#D0C7FF"/>
-        <rect x="40" y="80" width="80" height="10" rx="3" fill="#B0A0FF" opacity=".6"/>
-        <!-- Token rows -->
-        <!-- Primitive row -->
-        <rect x="40" y="108" width="60" height="8" rx="2" fill="#7B61FF" opacity=".25"/>
-        <rect x="40" y="124" width="26" height="26" rx="4" fill="#121213"/>
-        <rect x="72" y="124" width="26" height="26" rx="4" fill="#2C2C2C"/>
-        <rect x="104" y="124" width="26" height="26" rx="4" fill="#595959"/>
-        <rect x="136" y="124" width="26" height="26" rx="4" fill="#BFBFBF"/>
-        <rect x="168" y="124" width="26" height="26" rx="4" fill="#F5F5F5"/>
-        <rect x="200" y="124" width="26" height="26" rx="4" fill="#FFFFFF" stroke="#E8E3FF" stroke-width="1"/>
-        <rect x="40" y="158" width="50" height="6" rx="2" fill="#B0A0FF" opacity=".5"/>
-        <!-- Purple scale -->
-        <rect x="40" y="176" width="26" height="26" rx="4" fill="#2A1F7A"/>
-        <rect x="72" y="176" width="26" height="26" rx="4" fill="#4D35C8"/>
-        <rect x="104" y="176" width="26" height="26" rx="4" fill="#7B61FF"/>
-        <rect x="136" y="176" width="26" height="26" rx="4" fill="#9F8AFF"/>
-        <rect x="168" y="176" width="26" height="26" rx="4" fill="#D0C7FF"/>
-        <rect x="200" y="176" width="26" height="26" rx="4" fill="#F4F2FF"/>
-        <!-- Arrow to semantic -->
-        <path d="M 280 200 L 340 200" stroke="#9F8AFF" stroke-width="2" stroke-dasharray="4 3" marker-end="url(#arrowhead)"/>
-        <defs>
-          <marker id="arrowhead" markerWidth="6" markerHeight="4" refX="6" refY="2" orient="auto">
-            <polygon points="0 0, 6 2, 0 4" fill="#9F8AFF"/>
-          </marker>
-        </defs>
-        <!-- Semantic tokens panel -->
-        <rect x="360" y="88" width="240" height="264" rx="10" fill="#fff" stroke="#E8E3FF" stroke-width="1"/>
-        <rect x="376" y="104" width="100" height="8" rx="2" fill="#D0C7FF"/>
-        <rect x="376" y="120" width="60" height="8" rx="2" fill="#EBEBEB"/>
-        <!-- Token rows in semantic -->
-        <rect x="376" y="140" width="208" height="1" fill="#F0EDFF"/>
-        <rect x="376" y="148" width="70" height="8" rx="2" fill="#B0A0FF" opacity=".6"/>
-        <rect x="376" y="162" width="120" height="8" rx="2" fill="#EBEBEB"/>
-        <rect x="376" y="178" width="208" height="1" fill="#F0EDFF"/>
-        <rect x="376" y="186" width="80" height="8" rx="2" fill="#B0A0FF" opacity=".6"/>
-        <rect x="376" y="200" width="100" height="8" rx="2" fill="#EBEBEB"/>
-        <rect x="376" y="216" width="208" height="1" fill="#F0EDFF"/>
-        <rect x="376" y="224" width="65" height="8" rx="2" fill="#B0A0FF" opacity=".6"/>
-        <rect x="376" y="238" width="140" height="8" rx="2" fill="#EBEBEB"/>
-        <rect x="376" y="254" width="208" height="1" fill="#F0EDFF"/>
-        <rect x="376" y="262" width="90" height="8" rx="2" fill="#B0A0FF" opacity=".6"/>
-        <rect x="376" y="276" width="80" height="8" rx="2" fill="#EBEBEB"/>
-        <rect x="376" y="292" width="208" height="1" fill="#F0EDFF"/>
-        <rect x="376" y="300" width="75" height="8" rx="2" fill="#B0A0FF" opacity=".6"/>
-        <rect x="376" y="314" width="110" height="8" rx="2" fill="#EBEBEB"/>
-        <!-- Arrow to component -->
-        <path d="M 616 200 L 660 200" stroke="#9F8AFF" stroke-width="2" stroke-dasharray="4 3" marker-end="url(#arrowhead)"/>
-        <!-- Component preview -->
-        <rect x="680" y="140" width="220" height="52" rx="8" fill="#7B61FF"/>
-        <rect x="698" y="157" width="60" height="8" rx="2" fill="#fff" opacity=".9"/>
-        <rect x="698" y="171" width="38" height="6" rx="2" fill="#fff" opacity=".5"/>
-        <rect x="680" y="210" width="220" height="40" rx="8" fill="#fff" stroke="#E8E3FF" stroke-width="1"/>
-        <rect x="698" y="222" width="50" height="8" rx="2" fill="#2C2C2C"/>
-        <rect x="698" y="236" width="80" height="6" rx="2" fill="#BFBFBF"/>
-        <rect x="680" y="264" width="100" height="32" rx="8" fill="#F4F2FF" stroke="#D0C7FF" stroke-width="1"/>
-        <rect x="698" y="276" width="62" height="8" rx="2" fill="#7B61FF"/>
-        <rect x="792" y="264" width="100" height="32" rx="8" fill="#7B61FF"/>
-        <rect x="808" y="276" width="62" height="8" rx="2" fill="#fff" opacity=".9"/>
-        <!-- Stats bottom -->
-        <rect x="40" y="310" width="880" height="50" rx="8" fill="#fff" stroke="#E8E3FF" stroke-width="1"/>
-        <rect x="60" y="325" width="50" height="8" rx="2" fill="#7B61FF"/>
-        <rect x="60" y="339" width="80" height="7" rx="2" fill="#BFBFBF"/>
-        <rect x="300" y="325" width="50" height="8" rx="2" fill="#7B61FF"/>
-        <rect x="300" y="339" width="70" height="7" rx="2" fill="#BFBFBF"/>
-        <rect x="540" y="325" width="50" height="8" rx="2" fill="#7B61FF"/>
-        <rect x="540" y="339" width="90" height="7" rx="2" fill="#BFBFBF"/>
-        <rect x="780" y="325" width="50" height="8" rx="2" fill="#7B61FF"/>
-        <rect x="780" y="339" width="75" height="7" rx="2" fill="#BFBFBF"/>
+      <svg viewBox="0 0 960 420" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%;background:#f0f0f0">
+        <rect width="960" height="420" fill="#EBEBEB"/>
+        <g transform="translate(480,210)" fill="none" stroke="#BFBFBF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="-28" y="-22" width="56" height="44" rx="4"/>
+          <circle cx="-9" cy="-5" r="7"/>
+          <polyline points="28,22 10,-4 -14,22"/>
+          <polyline points="-14,22 -22,10 -28,22"/>
+        </g>
       </svg>
     </div>
 
     <!-- Slide 2: Component Library -->
     <div class="carousel-slide" onclick="openLightbox(1)" title="Click to expand">
-      <svg viewBox="0 0 960 420" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
-        <rect width="960" height="420" fill="#FAFAFA"/>
-        <!-- Top bar -->
-        <rect width="960" height="52" fill="#fff" stroke-width="0"/>
-        <line x1="0" y1="52" x2="960" y2="52" stroke="#EBEBEB" stroke-width="1"/>
-        <rect x="20" y="18" width="90" height="16" rx="4" fill="#EBEBEB"/>
-        <rect x="130" y="18" width="70" height="16" rx="4" fill="#F4F2FF"/>
-        <rect x="210" y="18" width="70" height="16" rx="4" fill="#F5F5F5"/>
-        <rect x="290" y="18" width="70" height="16" rx="4" fill="#F5F5F5"/>
-        <rect x="860" y="16" width="80" height="20" rx="6" fill="#7B61FF"/>
-        <!-- Component cards grid -->
-        <!-- Row 1 -->
-        <rect x="20" y="72" width="200" height="100" rx="10" fill="#fff" stroke="#EBEBEB" stroke-width="1"/>
-        <rect x="36" y="88" width="60" height="28" rx="6" fill="#7B61FF"/>
-        <rect x="104" y="88" width="60" height="28" rx="6" fill="#F4F2FF" stroke="#D0C7FF" stroke-width="1"/>
-        <rect x="172" y="88" width="32" height="28" rx="6" fill="#F5F5F5" stroke="#EBEBEB" stroke-width="1"/>
-        <rect x="36" y="126" width="40" height="6" rx="2" fill="#BFBFBF"/>
-        <rect x="36" y="138" width="100" height="6" rx="2" fill="#EBEBEB"/>
-        <rect x="36" y="150" width="80" height="6" rx="2" fill="#EBEBEB"/>
-
-        <rect x="232" y="72" width="200" height="100" rx="10" fill="#fff" stroke="#EBEBEB" stroke-width="1"/>
-        <rect x="248" y="88" width="168" height="32" rx="6" fill="#F5F5F5" stroke="#D9D9D9" stroke-width="1"/>
-        <rect x="262" y="100" width="80" height="8" rx="2" fill="#BFBFBF"/>
-        <rect x="248" y="126" width="40" height="6" rx="2" fill="#BFBFBF"/>
-        <rect x="248" y="138" width="120" height="6" rx="2" fill="#EBEBEB"/>
-        <rect x="248" y="150" width="90" height="6" rx="2" fill="#EBEBEB"/>
-
-        <rect x="444" y="72" width="200" height="100" rx="10" fill="#fff" stroke="#EBEBEB" stroke-width="1"/>
-        <!-- Checkbox group -->
-        <rect x="460" y="90" width="14" height="14" rx="3" fill="#7B61FF"/>
-        <rect x="482" y="93" width="60" height="8" rx="2" fill="#3D3D3D"/>
-        <rect x="460" y="112" width="14" height="14" rx="3" fill="#fff" stroke="#D9D9D9" stroke-width="1.5"/>
-        <rect x="482" y="115" width="80" height="8" rx="2" fill="#BFBFBF"/>
-        <rect x="460" y="134" width="14" height="14" rx="3" fill="#fff" stroke="#D9D9D9" stroke-width="1.5"/>
-        <rect x="482" y="137" width="70" height="8" rx="2" fill="#BFBFBF"/>
-        <rect x="460" y="155" width="40" height="6" rx="2" fill="#BFBFBF"/>
-
-        <rect x="656" y="72" width="200" height="100" rx="10" fill="#fff" stroke="#EBEBEB" stroke-width="1"/>
-        <!-- Tag chips -->
-        <rect x="672" y="90" width="48" height="20" rx="10" fill="#F4F2FF" stroke="#D0C7FF" stroke-width="1"/>
-        <rect x="726" y="90" width="60" height="20" rx="10" fill="#EEF6FF" stroke="#D0E8FE" stroke-width="1"/>
-        <rect x="792" y="90" width="52" height="20" rx="10" fill="#F5F5F5" stroke="#EBEBEB" stroke-width="1"/>
-        <rect x="672" y="118" width="72" height="20" rx="10" fill="#7B61FF"/>
-        <rect x="750" y="118" width="40" height="20" rx="10" fill="#F4F2FF" stroke="#D0C7FF" stroke-width="1"/>
-        <rect x="672" y="150" width="40" height="6" rx="2" fill="#BFBFBF"/>
-
-        <!-- Row 2 -->
-        <rect x="20" y="188" width="200" height="100" rx="10" fill="#fff" stroke="#EBEBEB" stroke-width="1"/>
-        <!-- Toggle switch -->
-        <rect x="36" y="205" width="44" height="22" rx="11" fill="#7B61FF"/>
-        <circle cx="58" cy="216" r="9" fill="#fff"/>
-        <rect x="36" y="237" width="44" height="22" rx="11" fill="#EBEBEB"/>
-        <circle cx="47" cy="248" r="9" fill="#fff" stroke="#BFBFBF" stroke-width=".5"/>
-        <rect x="36" y="270" width="40" height="6" rx="2" fill="#BFBFBF"/>
-
-        <rect x="232" y="188" width="200" height="100" rx="10" fill="#fff" stroke="#EBEBEB" stroke-width="1"/>
-        <!-- Slider -->
-        <rect x="248" y="216" width="168" height="4" rx="2" fill="#EBEBEB"/>
-        <rect x="248" y="216" width="100" height="4" rx="2" fill="#7B61FF"/>
-        <circle cx="348" cy="218" r="8" fill="#7B61FF" stroke="#fff" stroke-width="2"/>
-        <rect x="248" y="234" width="40" height="6" rx="2" fill="#BFBFBF"/>
-        <rect x="248" y="246" width="120" height="6" rx="2" fill="#EBEBEB"/>
-        <rect x="248" y="270" width="40" height="6" rx="2" fill="#BFBFBF"/>
-
-        <rect x="444" y="188" width="200" height="100" rx="10" fill="#fff" stroke="#EBEBEB" stroke-width="1"/>
-        <!-- Toast / Alert -->
-        <rect x="460" y="205" width="168" height="36" rx="8" fill="#F4F2FF" stroke="#D0C7FF" stroke-width="1"/>
-        <rect x="472" y="217" width="8" height="8" rx="2" fill="#7B61FF"/>
-        <rect x="488" y="219" width="80" height="6" rx="2" fill="#4D35C8"/>
-        <rect x="460" y="249" width="168" height="36" rx="8" fill="#FFFBEB" stroke="#FDE68A" stroke-width="1"/>
-        <rect x="472" y="261" width="8" height="8" rx="2" fill="#D97706"/>
-        <rect x="488" y="263" width="60" height="6" rx="2" fill="#92400E"/>
-        <rect x="460" y="270" width="40" height="6" rx="2" fill="#BFBFBF"/>
-
-        <rect x="656" y="188" width="200" height="100" rx="10" fill="#fff" stroke="#EBEBEB" stroke-width="1"/>
-        <!-- Data table row -->
-        <rect x="672" y="205" width="168" height="24" rx="0" fill="#F4F2FF"/>
-        <rect x="680" y="212" width="50" height="8" rx="2" fill="#4D35C8"/>
-        <rect x="750" y="212" width="40" height="8" rx="2" fill="#4D35C8"/>
-        <rect x="808" y="212" width="24" height="8" rx="2" fill="#4D35C8"/>
-        <rect x="672" y="229" width="168" height="1" fill="#EBEBEB"/>
-        <rect x="680" y="236" width="60" height="7" rx="2" fill="#595959"/>
-        <rect x="750" y="236" width="30" height="7" rx="2" fill="#595959"/>
-        <rect x="808" y="236" width="20" height="7" rx="2" fill="#7B61FF"/>
-        <rect x="672" y="249" width="168" height="1" fill="#EBEBEB"/>
-        <rect x="680" y="256" width="45" height="7" rx="2" fill="#595959"/>
-        <rect x="750" y="256" width="40" height="7" rx="2" fill="#595959"/>
-        <rect x="808" y="256" width="20" height="7" rx="2" fill="#BFBFBF"/>
-        <rect x="672" y="270" width="40" height="6" rx="2" fill="#BFBFBF"/>
-
-        <!-- Stats bar -->
-        <rect x="20" y="308" width="920" height="80" rx="12" fill="#fff" stroke="#EBEBEB" stroke-width="1"/>
-        <!-- Stat 1 -->
-        <text x="70" y="346" font-family="-apple-system,sans-serif" font-size="30" font-weight="900" fill="#7B61FF" text-anchor="middle">80+</text>
-        <text x="70" y="364" font-family="-apple-system,sans-serif" font-size="10" fill="#8D9296" text-anchor="middle">components</text>
-        <!-- Stat 2 -->
-        <text x="290" y="346" font-family="-apple-system,sans-serif" font-size="30" font-weight="900" fill="#7B61FF" text-anchor="middle">40+</text>
-        <text x="290" y="364" font-family="-apple-system,sans-serif" font-size="10" fill="#8D9296" text-anchor="middle">products</text>
-        <!-- Stat 3 -->
-        <text x="510" y="346" font-family="-apple-system,sans-serif" font-size="30" font-weight="900" fill="#7B61FF" text-anchor="middle">10K+</text>
-        <text x="510" y="364" font-family="-apple-system,sans-serif" font-size="10" fill="#8D9296" text-anchor="middle">daily users</text>
-        <!-- Stat 4 -->
-        <text x="730" y="346" font-family="-apple-system,sans-serif" font-size="30" font-weight="900" fill="#7B61FF" text-anchor="middle">0</text>
-        <text x="730" y="364" font-family="-apple-system,sans-serif" font-size="10" fill="#8D9296" text-anchor="middle">hardcoded values</text>
+      <svg viewBox="0 0 960 420" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%;background:#f0f0f0">
+        <rect width="960" height="420" fill="#EBEBEB"/>
+        <g transform="translate(480,210)" fill="none" stroke="#BFBFBF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="-28" y="-22" width="56" height="44" rx="4"/>
+          <circle cx="-9" cy="-5" r="7"/>
+          <polyline points="28,22 10,-4 -14,22"/>
+          <polyline points="-14,22 -22,10 -28,22"/>
+        </g>
       </svg>
     </div>
 
     <!-- Slide 3: Dark Mode - first in Verint history -->
     <div class="carousel-slide" onclick="openLightbox(2)" title="Click to expand">
-      <svg viewBox="0 0 960 420" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
-        <!-- Split: dark left, light right -->
-        <rect width="480" height="420" fill="#1E1E1E"/>
-        <rect x="480" width="480" height="420" fill="#F5F5F5"/>
-        <!-- Split line -->
-        <line x1="480" y1="0" x2="480" y2="420" stroke="#7B61FF" stroke-width="2.5"/>
-        <!-- DARK SIDE - App chrome -->
-        <rect x="0" y="0" width="480" height="44" fill="#2C2C2C"/>
-        <rect x="16" y="14" width="80" height="16" rx="4" fill="#595959"/>
-        <rect x="108" y="14" width="60" height="16" rx="4" fill="#3D3D3D"/>
-        <rect x="180" y="14" width="60" height="16" rx="4" fill="#3D3D3D"/>
-        <circle cx="442" cy="22" r="9" fill="#4D35C8"/>
-        <!-- Dark sidebar -->
-        <rect x="0" y="44" width="56" height="376" fill="#222222"/>
-        <rect x="12" y="64" width="32" height="32" rx="8" fill="#3D3D3D"/>
-        <rect x="12" y="108" width="32" height="32" rx="8" fill="#7B61FF"/>
-        <rect x="12" y="152" width="32" height="32" rx="8" fill="#3D3D3D"/>
-        <rect x="12" y="196" width="32" height="32" rx="8" fill="#3D3D3D"/>
-        <!-- Dark content area -->
-        <rect x="56" y="44" width="424" height="376" fill="#1E1E1E"/>
-        <!-- Dark card 1 -->
-        <rect x="72" y="64" width="200" height="100" rx="10" fill="#2C2C2C"/>
-        <rect x="88" y="80" width="80" height="10" rx="3" fill="#595959"/>
-        <rect x="88" y="98" width="120" height="8" rx="2" fill="#3D3D3D"/>
-        <rect x="88" y="112" width="100" height="8" rx="2" fill="#3D3D3D"/>
-        <rect x="88" y="134" width="60" height="20" rx="6" fill="#7B61FF"/>
-        <!-- Dark card 2 -->
-        <rect x="288" y="64" width="176" height="100" rx="10" fill="#2C2C2C"/>
-        <rect x="304" y="80" width="60" height="8" rx="2" fill="#595959"/>
-        <rect x="304" y="96" width="40" height="26" rx="4" fill="#7B61FF"/>
-        <rect x="304" y="130" width="80" height="7" rx="2" fill="#3D3D3D"/>
-        <!-- Dark table -->
-        <rect x="72" y="180" width="392" height="130" rx="10" fill="#2C2C2C"/>
-        <rect x="72" y="180" width="392" height="32" rx="10" fill="#3D3D3D"/>
-        <rect x="88" y="190" width="60" height="8" rx="2" fill="#595959"/>
-        <rect x="240" y="190" width="50" height="8" rx="2" fill="#595959"/>
-        <rect x="380" y="190" width="50" height="8" rx="2" fill="#595959"/>
-        <rect x="88" y="224" width="80" height="7" rx="2" fill="#595959"/>
-        <rect x="240" y="224" width="40" height="7" rx="2" fill="#595959"/>
-        <rect x="380" y="224" width="60" height="7" rx="2" fill="#7B61FF"/>
-        <rect x="72" y="242" width="392" height="1" fill="#3D3D3D"/>
-        <rect x="88" y="250" width="70" height="7" rx="2" fill="#595959"/>
-        <rect x="240" y="250" width="50" height="7" rx="2" fill="#595959"/>
-        <rect x="380" y="250" width="40" height="7" rx="2" fill="#595959"/>
-        <!-- Dark badge bottom -->
-        <rect x="72" y="330" width="150" height="32" rx="8" fill="#3D3D3D"/>
-        <rect x="88" y="341" width="80" height="8" rx="2" fill="#9F8AFF"/>
-
-        <!-- LIGHT SIDE - identical layout -->
-        <rect x="480" y="0" width="480" height="44" fill="#FFFFFF"/>
-        <rect x="496" y="14" width="80" height="16" rx="4" fill="#EBEBEB"/>
-        <rect x="588" y="14" width="60" height="16" rx="4" fill="#F5F5F5"/>
-        <rect x="660" y="14" width="60" height="16" rx="4" fill="#F5F5F5"/>
-        <circle cx="922" cy="22" r="9" fill="#7B61FF"/>
-        <!-- Light sidebar -->
-        <rect x="480" y="44" width="56" height="376" fill="#F5F5F5"/>
-        <rect x="492" y="64" width="32" height="32" rx="8" fill="#EBEBEB"/>
-        <rect x="492" y="108" width="32" height="32" rx="8" fill="#F4F2FF" stroke="#D0C7FF" stroke-width="1"/>
-        <rect x="492" y="152" width="32" height="32" rx="8" fill="#EBEBEB"/>
-        <rect x="492" y="196" width="32" height="32" rx="8" fill="#EBEBEB"/>
-        <!-- Light content area -->
-        <rect x="536" y="44" width="424" height="376" fill="#FAFAFA"/>
-        <!-- Light card 1 -->
-        <rect x="552" y="64" width="200" height="100" rx="10" fill="#fff" stroke="#EBEBEB" stroke-width="1"/>
-        <rect x="568" y="80" width="80" height="10" rx="3" fill="#BFBFBF"/>
-        <rect x="568" y="98" width="120" height="8" rx="2" fill="#EBEBEB"/>
-        <rect x="568" y="112" width="100" height="8" rx="2" fill="#EBEBEB"/>
-        <rect x="568" y="134" width="60" height="20" rx="6" fill="#7B61FF"/>
-        <!-- Light card 2 -->
-        <rect x="768" y="64" width="176" height="100" rx="10" fill="#fff" stroke="#EBEBEB" stroke-width="1"/>
-        <rect x="784" y="80" width="60" height="8" rx="2" fill="#BFBFBF"/>
-        <rect x="784" y="96" width="40" height="26" rx="4" fill="#7B61FF"/>
-        <rect x="784" y="130" width="80" height="7" rx="2" fill="#EBEBEB"/>
-        <!-- Light table -->
-        <rect x="552" y="180" width="392" height="130" rx="10" fill="#fff" stroke="#EBEBEB" stroke-width="1"/>
-        <rect x="552" y="180" width="392" height="32" rx="10" fill="#F5F5F5"/>
-        <rect x="568" y="190" width="60" height="8" rx="2" fill="#BFBFBF"/>
-        <rect x="720" y="190" width="50" height="8" rx="2" fill="#BFBFBF"/>
-        <rect x="860" y="190" width="50" height="8" rx="2" fill="#BFBFBF"/>
-        <rect x="568" y="224" width="80" height="7" rx="2" fill="#595959"/>
-        <rect x="720" y="224" width="40" height="7" rx="2" fill="#595959"/>
-        <rect x="860" y="224" width="60" height="7" rx="2" fill="#7B61FF"/>
-        <rect x="552" y="242" width="392" height="1" fill="#EBEBEB"/>
-        <rect x="568" y="250" width="70" height="7" rx="2" fill="#595959"/>
-        <rect x="720" y="250" width="50" height="7" rx="2" fill="#595959"/>
-        <rect x="860" y="250" width="40" height="7" rx="2" fill="#595959"/>
-        <!-- Light badge -->
-        <rect x="552" y="330" width="150" height="32" rx="8" fill="#F4F2FF"/>
-        <rect x="568" y="341" width="80" height="8" rx="2" fill="#7B61FF"/>
-        <!-- Label -->
-        <rect x="355" y="380" width="260" height="26" rx="13" fill="#7B61FF"/>
-        <text x="485" y="397" font-family="-apple-system,sans-serif" font-size="10" font-weight="700" fill="#fff" text-anchor="middle">First dark mode in Verint history</text>
+      <svg viewBox="0 0 960 420" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%;background:#f0f0f0">
+        <rect width="960" height="420" fill="#EBEBEB"/>
+        <g transform="translate(480,210)" fill="none" stroke="#BFBFBF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="-28" y="-22" width="56" height="44" rx="4"/>
+          <circle cx="-9" cy="-5" r="7"/>
+          <polyline points="28,22 10,-4 -14,22"/>
+          <polyline points="-14,22 -22,10 -28,22"/>
+        </g>
       </svg>
     </div>
 
     <!-- Slide 4: Motion Library -->
     <div class="carousel-slide" onclick="openLightbox(3)" title="Click to expand">
-      <svg viewBox="0 0 960 420" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
-        <rect width="960" height="420" fill="#121213"/>
-        <!-- Title -->
-        <rect x="40" y="32" width="140" height="12" rx="3" fill="#3D3D3D"/>
-        <rect x="40" y="52" width="80" height="8" rx="2" fill="#595959"/>
-        <!-- Easing curves panel -->
-        <rect x="40" y="80" width="260" height="200" rx="12" fill="#1E1E1E" stroke="#3D3D3D" stroke-width="1"/>
-        <rect x="56" y="96" width="80" height="8" rx="2" fill="#595959"/>
-        <!-- Ease in/out curve -->
-        <path d="M 64 260 C 64 180, 90 168, 220 168 C 290 168 286 180, 286 130" stroke="#7B61FF" stroke-width="2" fill="none"/>
-        <!-- Ease standard -->
-        <path d="M 64 260 C 80 260, 100 168, 286 130" stroke="#9F8AFF" stroke-width="1.5" fill="none" stroke-dasharray="4 3"/>
-        <!-- Control points -->
-        <circle cx="64" cy="260" r="4" fill="#7B61FF"/>
-        <circle cx="286" cy="130" r="4" fill="#7B61FF"/>
-        <circle cx="90" cy="168" r="3" fill="#D0C7FF" opacity=".7"/>
-        <circle cx="220" cy="168" r="3" fill="#D0C7FF" opacity=".7"/>
-        <!-- Labels -->
-        <rect x="56" y="274" width="60" height="7" rx="2" fill="#3D3D3D"/>
-        <rect x="56" y="287" width="90" height="7" rx="2" fill="#3D3D3D"/>
-
-        <!-- Duration tokens -->
-        <rect x="320" y="80" width="260" height="200" rx="12" fill="#1E1E1E" stroke="#3D3D3D" stroke-width="1"/>
-        <rect x="336" y="96" width="80" height="8" rx="2" fill="#595959"/>
-        <!-- Duration bars -->
-        <rect x="336" y="120" width="30" height="8" rx="2" fill="#7B61FF" opacity=".4"/>
-        <rect x="372" y="118" width="7" height="12" rx="2" fill="#7B61FF"/>
-        <rect x="336" y="138" width="50" height="8" rx="2" fill="#7B61FF" opacity=".6"/>
-        <rect x="392" y="136" width="7" height="12" rx="2" fill="#7B61FF"/>
-        <rect x="336" y="156" width="90" height="8" rx="2" fill="#7B61FF" opacity=".8"/>
-        <rect x="432" y="154" width="7" height="12" rx="2" fill="#7B61FF"/>
-        <rect x="336" y="174" width="160" height="8" rx="2" fill="#7B61FF"/>
-        <rect x="502" y="172" width="7" height="12" rx="2" fill="#7B61FF"/>
-        <rect x="336" y="196" width="60" height="7" rx="2" fill="#3D3D3D"/>
-        <rect x="336" y="209" width="80" height="7" rx="2" fill="#3D3D3D"/>
-        <rect x="336" y="222" width="50" height="7" rx="2" fill="#3D3D3D"/>
-        <rect x="336" y="238" width="70" height="7" rx="2" fill="#3D3D3D"/>
-        <rect x="336" y="260" width="60" height="7" rx="2" fill="#3D3D3D"/>
-        <rect x="336" y="273" width="90" height="7" rx="2" fill="#3D3D3D"/>
-
-        <!-- Micro-animations panel -->
-        <rect x="600" y="80" width="320" height="200" rx="12" fill="#1E1E1E" stroke="#3D3D3D" stroke-width="1"/>
-        <rect x="616" y="96" width="100" height="8" rx="2" fill="#595959"/>
-        <!-- Animation preview boxes -->
-        <!-- Fade -->
-        <rect x="616" y="116" width="60" height="48" rx="8" fill="#2C2C2C"/>
-        <rect x="626" y="130" width="40" height="8" rx="2" fill="#7B61FF" opacity=".6"/>
-        <rect x="626" y="144" width="28" height="6" rx="2" fill="#595959"/>
-        <rect x="616" y="170" width="60" height="6" rx="2" fill="#3D3D3D"/>
-        <!-- Slide up -->
-        <rect x="692" y="116" width="60" height="48" rx="8" fill="#2C2C2C"/>
-        <rect x="702" y="134" width="40" height="8" rx="2" fill="#7B61FF" opacity=".8"/>
-        <rect x="702" y="148" width="28" height="6" rx="2" fill="#595959"/>
-        <rect x="692" y="170" width="60" height="6" rx="2" fill="#3D3D3D"/>
-        <!-- Scale -->
-        <rect x="768" y="116" width="60" height="48" rx="8" fill="#2C2C2C"/>
-        <rect x="780" y="128" width="36" height="24" rx="6" fill="#7B61FF"/>
-        <rect x="768" y="170" width="60" height="6" rx="2" fill="#3D3D3D"/>
-        <!-- Bounce -->
-        <rect x="844" y="116" width="60" height="48" rx="8" fill="#2C2C2C"/>
-        <circle cx="874" cy="148" r="12" fill="#7B61FF"/>
-        <rect x="844" y="170" width="60" height="6" rx="2" fill="#3D3D3D"/>
-        <!-- Figma plugin badge -->
-        <rect x="616" y="196" width="180" height="28" rx="8" fill="#3D3D3D"/>
-        <rect x="628" y="206" width="100" height="8" rx="2" fill="#9F8AFF"/>
-
-        <!-- Token list -->
-        <rect x="40" y="298" width="880" height="90" rx="12" fill="#1E1E1E" stroke="#3D3D3D" stroke-width="1"/>
-        <rect x="60" y="318" width="60" height="8" rx="2" fill="#595959"/>
-        <rect x="60" y="332" width="100" height="7" rx="2" fill="#3D3D3D"/>
-        <rect x="60" y="345" width="80" height="7" rx="2" fill="#3D3D3D"/>
-        <rect x="60" y="360" width="50" height="8" rx="2" fill="#7B61FF" opacity=".6"/>
-        <rect x="240" y="318" width="60" height="8" rx="2" fill="#595959"/>
-        <rect x="240" y="332" width="120" height="7" rx="2" fill="#3D3D3D"/>
-        <rect x="240" y="345" width="90" height="7" rx="2" fill="#3D3D3D"/>
-        <rect x="240" y="360" width="70" height="8" rx="2" fill="#7B61FF" opacity=".6"/>
-        <rect x="480" y="318" width="60" height="8" rx="2" fill="#595959"/>
-        <rect x="480" y="332" width="100" height="7" rx="2" fill="#3D3D3D"/>
-        <rect x="480" y="345" width="80" height="7" rx="2" fill="#3D3D3D"/>
-        <rect x="480" y="360" width="60" height="8" rx="2" fill="#7B61FF" opacity=".6"/>
-        <rect x="720" y="318" width="60" height="8" rx="2" fill="#595959"/>
-        <rect x="720" y="332" width="80" height="7" rx="2" fill="#3D3D3D"/>
-        <rect x="720" y="345" width="100" height="7" rx="2" fill="#3D3D3D"/>
-        <rect x="720" y="360" width="55" height="8" rx="2" fill="#7B61FF" opacity=".6"/>
+      <svg viewBox="0 0 960 420" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%;background:#f0f0f0">
+        <rect width="960" height="420" fill="#EBEBEB"/>
+        <g transform="translate(480,210)" fill="none" stroke="#BFBFBF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="-28" y="-22" width="56" height="44" rx="4"/>
+          <circle cx="-9" cy="-5" r="7"/>
+          <polyline points="28,22 10,-4 -14,22"/>
+          <polyline points="-14,22 -22,10 -28,22"/>
+        </g>
       </svg>
     </div>
 

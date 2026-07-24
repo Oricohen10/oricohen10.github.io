@@ -32,7 +32,7 @@ body{font-family:var(--f);background:var(--canvas);color:var(--tx)}
 #flabel{cursor:move!important}
 
 /* ── Custom cursor — Ori's exact Figma cursor ── */
-#cursor{position:fixed;top:0;left:0;pointer-events:none;z-index:9999;will-change:transform}
+#cursor{position:fixed;top:0;left:0;pointer-events:none;z-index:99999;will-change:transform}
 /* Label: sharp-cornered Figma label, hot pink, no border-radius */
 #ctag{
   position:absolute;left:18px;top:18px;
@@ -1394,7 +1394,7 @@ i.ph,i.ph-bold,i.ph-fill,i.ph-light{line-height:1;display:flex;align-items:cente
       <!-- Add comment -->
       <div class="rp-input-wrap">
         <div class="rp-chatbox">
-          <textarea class="rp-ta" id="rp-ta" placeholder="Leave a comment…" rows="2"></textarea>
+          <textarea class="rp-ta" id="rp-ta" placeholder="Leave a comment…" rows="2" oninput="syncSendBtn()" onkeyup="syncSendBtn()"></textarea>
           <div class="rp-actions">
             <!-- Mic / waveform button -->
             <button class="rp-mic-btn" id="rp-mic-btn" title="Record voice" onclick="toggleRecording()">
@@ -2713,13 +2713,19 @@ function postComment() {
   showToast('Comment posted 💬');
 }
 
+function syncSendBtn() {
+  const ta = document.getElementById('rp-ta');
+  const sb = document.getElementById('rp-sb');
+  if (ta && sb) sb.disabled = ta.value.trim().length === 0;
+}
+
 function initComments() {
   renderComments();
   const ta = document.getElementById('rp-ta');
   const sb = document.getElementById('rp-sb');
   if (!ta||!sb) return;
   ta.addEventListener('input', () => {
-    sb.disabled = ta.value.trim().length === 0;
+    syncSendBtn();
     ta.style.height = 'auto';
     ta.style.height = Math.min(ta.scrollHeight, 72) + 'px';
   });
