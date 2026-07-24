@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://oricohen.co/sitemap.xml

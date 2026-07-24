@@ -4,6 +4,17 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no"/>
 <title>Ori Cohen · Product Designer</title>
+<meta name="description" content="Ori Cohen — Product Design Team Lead & Art Director at Verint. Enterprise design systems, AI product design, and the details that hold them together."/>
+<link rel="canonical" href="https://oricohen.co/"/>
+<meta property="og:type" content="website"/>
+<meta property="og:title" content="Ori Cohen · Product Designer"/>
+<meta property="og:description" content="Product Design Team Lead & Art Director at Verint. Enterprise design systems, AI product design, and the details that hold them together."/>
+<meta property="og:url" content="https://oricohen.co/"/>
+<meta property="og:image" content="https://oricohen.co/Assets/Media/general/og-image.png"/>
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:title" content="Ori Cohen · Product Designer"/>
+<meta name="twitter:description" content="Product Design Team Lead & Art Director at Verint. Enterprise design systems, AI product design, and the details that hold them together."/>
+<meta name="twitter:image" content="https://oricohen.co/Assets/Media/general/og-image.png"/>
 <!-- Google Analytics — replace G-XXXXXXXXXX with your Measurement ID from analytics.google.com -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
 <script>
@@ -13,9 +24,12 @@
   gtag('config','G-XXXXXXXXXX');
 </script>
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%237B61FF'/%3E%3Ctext x='16' y='22' font-family='Arial' font-weight='700' font-size='15' fill='white' text-anchor='middle'%3EOC%3C/text%3E%3C/svg%3E"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link rel="preconnect" href="https://unpkg.com"/>
 <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet"/>
 <link rel="stylesheet" href="tokens.css"/>
-<script src="https://unpkg.com/@phosphor-icons/web@2.1.1/src/index.js" defer></script>
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/regular/style.css"/>
 <style>
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
 html,body{width:100%;height:100%;overflow:hidden}
@@ -393,6 +407,14 @@ i.ph,i.ph-bold,i.ph-fill,i.ph-light{line-height:1;display:flex;align-items:cente
 .pg-card-desc{font-size:11px;color:var(--tx2);line-height:1.5;margin-bottom:8px}
 .pg-type{display:inline-block;font-size:9px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--tx2);border:1px solid var(--bd2);padding:3px 7px;border-radius:4px;background:transparent;transition:background .1s,border-color .1s}
 .pg-card:hover .pg-type{border-color:var(--tx);color:var(--tx)}
+.pg-card.pg-card-soon{cursor:default}
+.pg-card.pg-card-soon:hover .pg-card-thumb{transform:none;box-shadow:0 4px 16px rgba(0,0,0,.08)}
+.pg-card-thumb.pg-thumb-soon{
+  background:transparent;border:1.5px dashed var(--bd2);box-shadow:none;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;color:var(--tx3);
+}
+.pg-thumb-soon i{font-size:22px}
+.pg-thumb-soon span{font-size:11px;font-weight:600}
 
 /* LIST view */
 #view-list{padding:16px 20px}
@@ -690,7 +712,7 @@ i.ph,i.ph-bold,i.ph-fill,i.ph-light{line-height:1;display:flex;align-items:cente
     </div>
   </div>
   <div class="wib">
-    <div class="wib-title">Projects</div>
+    <h2 class="wib-title">Projects</h2>
   </div>
 
   <!-- GRID VIEW -->
@@ -846,6 +868,16 @@ i.ph,i.ph-bold,i.ph-fill,i.ph-light{line-height:1;display:flex;align-items:cente
         <span class="pg-type">Dashboard</span>
       </div>
     </div>
+    <div class="pg-card pg-card-soon" tabindex="-1">
+      <div class="pg-card-thumb pg-thumb-soon">
+        <i class="ph ph-plus-circle"></i>
+        <span>More coming soon</span>
+      </div>
+      <div class="pg-card-body">
+        <div class="pg-card-name">In progress</div>
+        <div class="pg-card-desc">More case studies are on the way.</div>
+      </div>
+    </div>
   </div>
 
   <!-- LIST VIEW -->
@@ -924,7 +956,7 @@ i.ph,i.ph-bold,i.ph-fill,i.ph-light{line-height:1;display:flex;align-items:cente
     <span class="wt">My Verint — Case Study</span>
     <div class="wrc"></div>
   </div>
-  <div class="wib"><div class="wib-title">My Verint</div></div>
+  <div class="wib"><h2 class="wib-title">My Verint</h2></div>
   <div class="proj-placeholder">
     <div class="proj-ph-thumb">
       <svg viewBox="0 0 360 225" xmlns="http://www.w3.org/2000/svg">
@@ -971,7 +1003,7 @@ i.ph,i.ph-bold,i.ph-fill,i.ph-light{line-height:1;display:flex;align-items:cente
     <span class="wt">Verint Copilot — Case Study</span>
     <div class="wrc"></div>
   </div>
-  <div class="wib"><div class="wib-title">Verint Copilot</div></div>
+  <div class="wib"><h2 class="wib-title">Verint Copilot</h2></div>
   <div class="proj-placeholder">
     <div class="proj-ph-thumb">
       <svg viewBox="0 0 360 225" xmlns="http://www.w3.org/2000/svg">
@@ -1013,7 +1045,7 @@ i.ph,i.ph-bold,i.ph-fill,i.ph-light{line-height:1;display:flex;align-items:cente
     <span class="wt">LUX Plugins — Case Study</span>
     <div class="wrc"></div>
   </div>
-  <div class="wib"><div class="wib-title">LUX Plugins</div></div>
+  <div class="wib"><h2 class="wib-title">LUX Plugins</h2></div>
   <div class="proj-placeholder">
     <div class="proj-ph-thumb">
       <svg viewBox="0 0 360 225" xmlns="http://www.w3.org/2000/svg">
@@ -1056,7 +1088,7 @@ i.ph,i.ph-bold,i.ph-fill,i.ph-light{line-height:1;display:flex;align-items:cente
     <span class="wt">Supervisor Hub — Case Study</span>
     <div class="wrc"></div>
   </div>
-  <div class="wib"><div class="wib-title">Supervisor Hub</div></div>
+  <div class="wib"><h2 class="wib-title">Supervisor Hub</h2></div>
   <div class="proj-placeholder">
     <div class="proj-ph-thumb">
       <svg viewBox="0 0 360 225" xmlns="http://www.w3.org/2000/svg">
@@ -1120,7 +1152,7 @@ i.ph,i.ph-bold,i.ph-fill,i.ph-light{line-height:1;display:flex;align-items:cente
       <div style="position:relative;display:inline-block">
         <div style="width:72px;height:72px;border-radius:50%;overflow:hidden;border:2.5px solid var(--bd2);background:var(--inp);display:flex;align-items:center;justify-content:center">
           <!-- Drop ori-photo.jpg next to the HTML to display here -->
-          <img id="contact-photo" src="Assets/Media/general/Ori's Profile Picture .jpeg" alt="Ori Cohen"
+          <img id="contact-photo" src="Assets/Media/general/ori-profile.webp" alt="Ori Cohen"
             style="width:100%;height:100%;object-fit:cover;display:block"
             onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
           <svg style="display:none;width:44px;height:44px;flex-shrink:0" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -1326,7 +1358,7 @@ i.ph,i.ph-bold,i.ph-fill,i.ph-light{line-height:1;display:flex;align-items:cente
   <div id="workspace">
     <!-- Figma-style title pill (desktop) -->
     <div id="title-pill" onclick="toggleSiteMenu(this)">
-      <img src="Assets/Media/general/Ori's Profile Picture .jpeg" width="26" height="26" style="border-radius:50%;object-fit:cover;flex-shrink:0;border:1.5px solid rgba(255,255,255,.15)">
+      <img src="Assets/Media/general/ori-profile.webp" width="26" height="26" alt="Ori Cohen" style="border-radius:50%;object-fit:cover;flex-shrink:0;border:1.5px solid rgba(255,255,255,.15)">
       <span id="title-pill-name">Ori's Portfolio</span>
       <i class="ph ph-caret-down tp-chevron-ph"></i>
     </div>
@@ -1348,7 +1380,7 @@ i.ph,i.ph-bold,i.ph-fill,i.ph-light{line-height:1;display:flex;align-items:cente
             <div id="welcome">
               <div>
                 <div class="wf-badge"><div class="wf-bdot"></div>Available for the right work</div>
-                <div class="wf-name">Ori Cohen</div>
+                <h1 class="wf-name">Ori Cohen</h1>
                 <div class="wf-role">Product Design Team Lead · Art Director · Verint</div>
 
                 <p class="wf-bio">Enterprise software is only as good as the trust it builds. I work across the full stack of design - from the micro-interaction that feels just right, to the system architecture that makes it all hold together.</p>
@@ -1457,7 +1489,7 @@ i.ph,i.ph-bold,i.ph-fill,i.ph-light{line-height:1;display:flex;align-items:cente
 <!-- Site action menu (shared desktop + mobile) -->
 <div id="site-menu" role="menu">
   <div id="site-menu-head">
-    <img id="site-menu-photo" src="Assets/Media/general/Ori's Profile Picture .jpeg" width="30" height="30" style="border-radius:50%;object-fit:cover;flex-shrink:0;border:1.5px solid rgba(255,255,255,.15)">
+    <img id="site-menu-photo" src="Assets/Media/general/ori-profile.webp" width="30" height="30" alt="Ori Cohen" style="border-radius:50%;object-fit:cover;flex-shrink:0;border:1.5px solid rgba(255,255,255,.15)">
     <div>
       <div id="site-menu-head-name">Ori Cohen</div>
       <div id="site-menu-head-sub">Product Design Team Lead</div>
@@ -1484,7 +1516,7 @@ i.ph,i.ph-bold,i.ph-fill,i.ph-light{line-height:1;display:flex;align-items:cente
   <!-- Top bar: favicon + site name left · hamburger right -->
   <div id="mv-bar">
     <div id="mv-logo-trigger" class="mv-logo-grp" onclick="toggleSiteMenu(this)">
-      <img src="Assets/Media/general/Ori's Profile Picture .jpeg" width="26" height="26" style="border-radius:50%;object-fit:cover;flex-shrink:0;border:1.5px solid rgba(255,255,255,.15)">
+      <img src="Assets/Media/general/ori-profile.webp" width="26" height="26" alt="Ori Cohen" style="border-radius:50%;object-fit:cover;flex-shrink:0;border:1.5px solid rgba(255,255,255,.15)">
       <span class="mv-site-nm">Ori's Portfolio</span>
       <i class="ph ph-caret-down tp-chevron-ph"></i>
     </div>
@@ -1497,7 +1529,7 @@ i.ph,i.ph-bold,i.ph-fill,i.ph-light{line-height:1;display:flex;align-items:cente
   <div id="mv-canvas">
     <div id="mv-welcome">
       <div class="wf-badge"><div class="wf-bdot"></div>Available for the right work</div>
-      <div class="wf-name">Ori Cohen</div>
+      <h1 class="wf-name">Ori Cohen</h1>
       <div class="wf-role">Product Design Team Lead · Art Director · Verint</div>
       <div class="wf-line"></div>
       <p class="wf-bio">Enterprise software is only as good as the trust it builds. I work across the full stack of design - from the micro-interaction that feels just right, to the system architecture that makes it all hold together.</p>
@@ -2523,7 +2555,7 @@ function startTerm() {
 /* ════════════════════════════════════
    PORTRAIT SVGs — 28×28 illustrated faces
 ════════════════════════════════════ */
-const ORI_PHOTO = "Assets/Media/general/Ori's Profile Picture .jpeg";
+const ORI_PHOTO = "Assets/Media/general/ori-profile.webp";
 const PORTRAITS = {
   ori: `<svg width="28" height="28" viewBox="0 0 28 28" xmlns="http://www.w3.org/2000/svg">
     <ellipse cx="14" cy="9" rx="11.5" ry="8.5" fill="#1C1208"/>
@@ -2784,7 +2816,7 @@ function attachJTip(el, text) {
 function initPortraitAvatars() {
   const container = document.getElementById('rp-avatars');
   if (!container) return;
-  const ORI_PHOTO = "Assets/Media/general/Ori's Profile Picture .jpeg";
+  const ORI_PHOTO = "Assets/Media/general/ori-profile.webp";
   const members = [
     { id:'ori',    name:'Ori Cohen', color:'#7B61FF', portrait:`<img src="${ORI_PHOTO}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;display:block" alt="Ori Cohen" onerror="this.style.display='none'">` },
     { id:'shrek',  name:'Shrek',     color:'#2e7a18', portrait: PORTRAITS.shrek  },
@@ -3188,6 +3220,25 @@ document.addEventListener('click', function(e) {
     closeSiteMenu();
   }
 }, true);
+
+/* ── Keyboard accessibility for primary clickable UI ──
+   Window chrome, toolbar buttons, project cards/rows, and view toggles are
+   plain divs with onclick — this makes them reachable and operable by keyboard
+   without changing their markup/styling. */
+(function () {
+  const SELECTOR = '.wc, .bb-btn, .pg-card, .pl-row, #vt-grid, #vt-list';
+  document.querySelectorAll(SELECTOR).forEach(function (el) {
+    if (!el.hasAttribute('tabindex')) el.setAttribute('tabindex', '0');
+    if (!el.hasAttribute('role') && el.hasAttribute('onclick')) el.setAttribute('role', 'button');
+  });
+  document.addEventListener('keydown', function (e) {
+    if (e.key !== 'Enter' && e.key !== ' ') return;
+    const el = e.target.closest(SELECTOR);
+    if (!el) return;
+    e.preventDefault();
+    el.click();
+  });
+})();
 </script>
 </body>
 </html>
