@@ -540,6 +540,11 @@ window.addEventListener('message', function(e) {
   }
 });
 
+/* ── Relay mousemove to parent so the portfolio's custom cursor tracks inside this iframe ── */
+document.addEventListener('mousemove', function(e) {
+  try { window.parent.postMessage({type:'iframe-mm', x:e.clientX, y:e.clientY}, '*'); } catch(err){}
+}, { passive: true });
+
 /* ── Carousel ──────────────────────────────────────────── */
 let carIdx = 0;
 const CAR_TOTAL = 4;

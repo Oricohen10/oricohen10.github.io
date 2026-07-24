@@ -3049,12 +3049,8 @@ window.addEventListener('load', () => {
     winEl._iframeListeners = true;
     const c = () => document.getElementById('cursor');
 
-    /* Use mouseenter/leave on the iframe element itself — fires even when
-       the mouse moves directly from outside the window into the iframe,
-       which mousemove on the parent misses entirely. */
-    iframe.addEventListener('mouseenter', () => {
-      const el = c(); if (el) el.style.visibility = 'hidden';
-    });
+    /* The iframe relays mousemove via postMessage (see IFRAME MOUSEMOVE handler below).
+       On mouseleave restore visibility in case it was hidden by any other path. */
     iframe.addEventListener('mouseleave', () => {
       const el = c(); if (el) el.style.visibility = '';
     });
@@ -3070,6 +3066,28 @@ window.addEventListener('load', () => {
     if (w) setupIframeCursor(w);
   };
 })();
+
+/* ════════════════════════════════════
+   IFRAME MOUSEMOVE — keep custom cursor alive inside project iframes
+   The iframe sends its local clientX/Y; we offset by the iframe's
+   bounding rect to get absolute coordinates in the parent viewport.
+════════════════════════════════════ */
+window.addEventListener('message', function(e) {
+  if (!e.data || e.data.type !== 'iframe-mm') return;
+  /* Find which iframe sent the message */
+  const iframes = document.querySelectorAll('.proj-iframe');
+  let src = null;
+  for (const f of iframes) { try { if (f.contentWindow === e.source) { src = f; break; } } catch(_){} }
+  if (!src) return;
+  const r = src.getBoundingClientRect();
+  const absX = r.left + e.data.x;
+  const absY = r.top  + e.data.y;
+  const el = document.getElementById('cursor');
+  if (!el) return;
+  el.style.visibility = '';
+  const [ox, oy] = CUR_OFFSET[curState] || [4, 4];
+  el.style.transform = `translate(${absX - ox}px,${absY - oy}px)`;
+});
 
 /* ════════════════════════════════════
    SITE MENU DROPDOWN
