@@ -2,7 +2,7 @@
 <html lang="en" data-theme="light">
 <head>
 <meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
 <title>Ori Cohen · Product Designer</title>
 <meta name="description" content="Ori Cohen — Product Design Team Lead & Art Director at Verint. Enterprise design systems, AI product design, and the details that hold them together."/>
 <link rel="canonical" href="https://oricohen.co/"/>
@@ -32,12 +32,16 @@
   --dot:rgba(0,0,0,.05);--tbg:#fff;--ttx:#1a1a1a;--tgrey:#999;--thdr:#f5f5f5;--thdr-bd:rgba(0,0,0,.1);
   --tprompt:#3DAD38;--tkey:#881391;--tstr:#C41A16;--tdir:#0066CC;--tlink:#0066CC;
   --r-md:8px;--r-full:9999px;
-}</style>
+}
+.skip-nav{position:absolute;top:-100%;left:0;z-index:99999;padding:8px 16px;background:var(--figma);color:#fff;font-size:14px;font-weight:600;border-radius:0 0 8px 0;text-decoration:none;transition:top .1s}
+.skip-nav:focus{top:0}</style>
 <link rel="stylesheet" href="tokens.css"/>
 <link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/regular/style.css"/>
 <link rel="stylesheet" href="styles.css"/>
 </head>
 <body>
+
+<a href="#main-content" class="skip-nav">Skip to main content</a>
 
 <!-- Cursor — 3 states: arrow (default) · hand (space) · grab (space+drag) -->
 <div id="cursor">
@@ -98,7 +102,8 @@
 <!-- ══════════ FLOATING WINDOWS ══════════ -->
 
 <!-- Projects -->
-<div class="win" id="win-projects" style="width:860px;height:760px">
+<span id="main-content" tabindex="-1" style="position:absolute;top:0;left:0;width:0;height:0;overflow:hidden"></span>
+<div class="win" id="win-projects" role="dialog" aria-modal="true" aria-label="Projects" tabindex="-1" style="width:860px;height:760px">
   <div class="wh" onmousedown="startDrag(event,'win-projects')">
     <div class="wcs">
       <div class="wc cl" onclick="closeWin('projects')">×</div>
@@ -121,7 +126,7 @@
 
   <!-- GRID VIEW -->
   <div class="wb" id="view-grid">
-    <div class="pg-card" onclick="openWin('proj-lux')">
+    <div class="pg-card" role="button" tabindex="0" onclick="openWin('proj-lux')" onkeydown="if(event.key==='Enter'||event.key===' ')openWin('proj-lux')">
       <div class="pg-card-thumb">
         <svg viewBox="0 0 320 200" xmlns="http://www.w3.org/2000/svg">
           <rect width="320" height="200" fill="#EEF5FF"/>
@@ -157,7 +162,7 @@
         <span class="pg-type">Design System</span>
       </div>
     </div>
-    <div class="pg-card" onclick="openWin('proj-myverint')">
+    <div class="pg-card" role="button" tabindex="0" onclick="openWin('proj-myverint')" onkeydown="if(event.key==='Enter'||event.key===' ')openWin('proj-myverint')">
       <div class="pg-card-thumb">
         <svg viewBox="0 0 320 200" xmlns="http://www.w3.org/2000/svg">
           <rect width="320" height="200" fill="#F0F4FF"/>
@@ -190,7 +195,7 @@
         <span class="pg-type">Product</span>
       </div>
     </div>
-    <div class="pg-card" onclick="openWin('proj-copilot')">
+    <div class="pg-card" role="button" tabindex="0" onclick="openWin('proj-copilot')" onkeydown="if(event.key==='Enter'||event.key===' ')openWin('proj-copilot')">
       <div class="pg-card-thumb">
         <svg viewBox="0 0 320 200" xmlns="http://www.w3.org/2000/svg">
           <rect width="320" height="200" fill="#F0FAF5"/>
@@ -217,7 +222,7 @@
         <span class="pg-type">AI / Product</span>
       </div>
     </div>
-    <div class="pg-card" onclick="openWin('proj-plugins')">
+    <div class="pg-card" role="button" tabindex="0" onclick="openWin('proj-plugins')" onkeydown="if(event.key==='Enter'||event.key===' ')openWin('proj-plugins')">
       <div class="pg-card-thumb">
         <svg viewBox="0 0 320 200" xmlns="http://www.w3.org/2000/svg">
           <rect width="320" height="200" fill="#F3F0FF"/>
@@ -243,7 +248,7 @@
         <span class="pg-type">Figma Plugin</span>
       </div>
     </div>
-    <div class="pg-card" onclick="openWin('proj-supervisor')">
+    <div class="pg-card" role="button" tabindex="0" onclick="openWin('proj-supervisor')" onkeydown="if(event.key==='Enter'||event.key===' ')openWin('proj-supervisor')">
       <div class="pg-card-thumb">
         <svg viewBox="0 0 320 200" xmlns="http://www.w3.org/2000/svg">
           <rect width="320" height="200" fill="#FFF7F0"/>
@@ -339,7 +344,7 @@
 <!-- ═══ PROJECT DETAIL WINDOWS ═══ -->
 
 <!-- LUX 2.0: loads case study in iframe -->
-<div class="win" id="win-proj-lux" style="width:960px;height:660px">
+<div class="win" id="win-proj-lux" role="dialog" aria-modal="true" aria-label="LUX 2.0 Case Study" style="width:960px;height:660px">
   <div class="wh" onmousedown="startDrag(event,'win-proj-lux')">
     <div class="wcs">
       <div class="wc cl" onclick="closeWin('proj-lux')">×</div>
@@ -351,7 +356,7 @@
 </div>
 
 <!-- My Verint: placeholder -->
-<div class="win" id="win-proj-myverint" style="width:700px">
+<div class="win" id="win-proj-myverint" role="dialog" aria-modal="true" aria-label="My Verint Case Study" style="width:700px">
   <div class="wh" onmousedown="startDrag(event,'win-proj-myverint')">
     <div class="wcs">
       <div class="wc cl" onclick="closeWin('proj-myverint')">×</div>
@@ -398,7 +403,7 @@
 </div>
 
 <!-- Verint Copilot: placeholder -->
-<div class="win" id="win-proj-copilot" style="width:700px">
+<div class="win" id="win-proj-copilot" role="dialog" aria-modal="true" aria-label="Verint Copilot Case Study" style="width:700px">
   <div class="wh" onmousedown="startDrag(event,'win-proj-copilot')">
     <div class="wcs">
       <div class="wc cl" onclick="closeWin('proj-copilot')">×</div>
@@ -440,7 +445,7 @@
 </div>
 
 <!-- LUX Plugins: placeholder -->
-<div class="win" id="win-proj-plugins" style="width:700px">
+<div class="win" id="win-proj-plugins" role="dialog" aria-modal="true" aria-label="LUX Plugins Case Study" style="width:700px">
   <div class="wh" onmousedown="startDrag(event,'win-proj-plugins')">
     <div class="wcs">
       <div class="wc cl" onclick="closeWin('proj-plugins')">×</div>
@@ -483,7 +488,7 @@
 </div>
 
 <!-- Supervisor Hub: placeholder -->
-<div class="win" id="win-proj-supervisor" style="width:700px">
+<div class="win" id="win-proj-supervisor" role="dialog" aria-modal="true" aria-label="Supervisor Hub Case Study" style="width:700px">
   <div class="wh" onmousedown="startDrag(event,'win-proj-supervisor')">
     <div class="wcs">
       <div class="wc cl" onclick="closeWin('proj-supervisor')">×</div>
@@ -542,7 +547,7 @@
 </div>
 
 <!-- Contact -->
-<div class="win" id="win-contact" style="width:340px">
+<div class="win" id="win-contact" role="dialog" aria-modal="true" aria-label="Contact" style="width:340px">
   <div class="wh" onmousedown="startDrag(event,'win-contact')">
     <div class="wcs">
       <div class="wc cl" onclick="closeWin('contact')">×</div>
@@ -601,7 +606,7 @@
 </div>
 
 <!-- Contrast Quest v2 — Pixel Edition -->
-<div class="win" id="win-a11y" style="width:460px" data-no-resize>
+<div class="win" id="win-a11y" role="dialog" aria-modal="true" aria-label="A11y Game" style="width:460px" data-no-resize>
   <div class="wh" onmousedown="startDrag(event,'win-a11y')">
     <div class="wcs">
       <div class="wc cl" onclick="closeWin('a11y')">×</div>
@@ -961,19 +966,19 @@
       <div class="mv-mi on">
         <i class="ph ph-house-simple"></i>Home
       </div>
-      <div class="mv-mi" onclick="mvPageOpen('portfolio')">
+      <div class="mv-mi" role="button" tabindex="0" onclick="mvPageOpen('portfolio')" onkeydown="if(event.key==='Enter'||event.key===' ')mvPageOpen('portfolio')">
         <i class="ph ph-squares-four"></i>Projects
       </div>
-      <div class="mv-mi" onclick="mvPageOpen('about')">
+      <div class="mv-mi" role="button" tabindex="0" onclick="mvPageOpen('about')" onkeydown="if(event.key==='Enter'||event.key===' ')mvPageOpen('about')">
         <i class="ph ph-user-circle"></i>About
       </div>
-      <div class="mv-mi" onclick="mvPageOpen('contact')">
+      <div class="mv-mi" role="button" tabindex="0" onclick="mvPageOpen('contact')" onkeydown="if(event.key==='Enter'||event.key===' ')mvPageOpen('contact')">
         <i class="ph ph-envelope-simple"></i>Contact
       </div>
       <!-- Theme toggle — pinned to bottom -->
       <div style="flex:1;min-height:16px"></div>
       <div class="mv-mi-sep"></div>
-      <div class="mv-mi" onclick="toggleTheme()">
+      <div class="mv-mi" role="button" tabindex="0" onclick="toggleTheme()" onkeydown="if(event.key==='Enter'||event.key===' ')toggleTheme()">
         <i class="ph ph-moon" id="mv-icon-moon"></i>
         <i class="ph ph-sun" id="mv-icon-sun" style="display:none"></i>
         <span id="mv-theme-text">Dark mode</span>
