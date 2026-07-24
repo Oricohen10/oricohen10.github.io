@@ -2659,17 +2659,28 @@ function timeAgo(ts) {
   return Math.floor(d/86400000) + 'd ago';
 }
 
-/* User comments — in-memory array, persisted to localStorage */
+/* User comments — in-memory array, persisted to localStorage.
+   Comments expire after 1 hour (TTL_CMTS). */
 const _userCmts = [];
-const LS_CMTS = 'ori-comments-v2';
+const LS_CMTS   = 'ori-comments-v3';
+const TTL_CMTS  = 60 * 60 * 1000; /* 1 hour in ms */
 (function(){
   try {
     const saved = JSON.parse(localStorage.getItem(LS_CMTS) || '[]');
-    if (Array.isArray(saved)) saved.forEach(c => _userCmts.push(c));
+    const now = Date.now();
+    if (Array.isArray(saved)) {
+      const fresh = saved.filter(c => now - c.ts < TTL_CMTS);
+      fresh.forEach(c => _userCmts.push(c));
+      /* write back immediately so stale entries are pruned from storage */
+      localStorage.setItem(LS_CMTS, JSON.stringify(fresh));
+    }
   } catch(e) {}
 })();
 function _saveCmts() {
-  try { localStorage.setItem(LS_CMTS, JSON.stringify(_userCmts.slice(-50))); } catch(e) {}
+  try {
+    const now = Date.now();
+    localStorage.setItem(LS_CMTS, JSON.stringify(_userCmts.filter(c => now - c.ts < TTL_CMTS).slice(-50)));
+  } catch(e) {}
 }
 
 function renderComments() {
