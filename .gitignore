@@ -4,3 +4,5 @@ Thumbs.db
 .env
 node_modules/
 .cowork-sync.sh
+*.tmp
+.~lock.*
