@@ -457,7 +457,7 @@ i.ph,i.ph-bold,i.ph-fill,i.ph-light{line-height:1;display:flex;align-items:cente
 .t-login{color:var(--tgrey);font-size:12px}
 
 /* ── Ghost cursors — below windows & modal ── */
-#ghost-layer{position:fixed;top:0;left:0;width:100vw;height:100vh;pointer-events:none;z-index:1999;overflow:hidden}
+#ghost-layer{position:fixed;top:0;left:0;width:100vw;height:100vh;pointer-events:none;z-index:50;overflow:hidden}
 .gcur{position:absolute;pointer-events:none;transition-property:left,top;transition-timing-function:cubic-bezier(0.25,0.46,0.45,0.94);transition-duration:3s}
 .gcur svg{display:block;filter:drop-shadow(0 1px 2px rgba(0,0,0,.25))}
 .gtag{position:absolute;left:18px;top:18px;font-size:12px;font-weight:600;font-family:var(--f);line-height:1;padding:6px 10px;border-radius:0;white-space:nowrap;color:#fff}
@@ -1713,10 +1713,18 @@ function _startRecording() {
 }
 
 function _stopRecording() {
-  if (_speechRecog) { try { _speechRecog.stop(); } catch(e){} _speechRecog = null; }
+  if (_speechRecog) {
+    _speechRecog.onresult = null; /* prevent stale final event from disabling submit */
+    try { _speechRecog.stop(); } catch(e){}
+    _speechRecog = null;
+  }
   _isRecording = false;
   const btn = document.getElementById('rp-mic-btn');
   if (btn) btn.classList.remove('recording');
+  /* sync submit button with current textarea content */
+  const ta = document.getElementById('rp-ta');
+  const sb = document.getElementById('rp-sb');
+  if (ta && sb) sb.disabled = ta.value.trim().length === 0;
 }
 
 /* ── Theme ── */
