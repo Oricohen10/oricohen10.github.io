@@ -103,7 +103,7 @@
   --text-primary:   var(--vg-950);       /* #121213 — headings, body (text.neutral.main) */
   --text-secondary: var(--vg-750);       /* #585b5e — labels, captions (text.neutral.subtext) */
   --text-tertiary:  var(--vg-700);       /* #6a6d70 — placeholders, metadata (text.neutral.placeholder) */
-  --text-brand:     var(--blue-600);     /* #0882d4 — brand/link text (text.brand.regular) */
+  --text-brand:     var(--blue-700);     /* #0664a8 — brand/link text, AA compliant 6.18:1 (text.brand.regular) */
   --text-disabled:  var(--vg-500);       /* #b0b6bb — disabled state (text.common.disabled) */
   --text-inverse:   var(--vg-50);        /* #f7f8f8 — text on dark bg (text.common.inverse) */
 
