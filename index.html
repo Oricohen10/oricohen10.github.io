@@ -457,7 +457,7 @@ i.ph,i.ph-bold,i.ph-fill,i.ph-light{line-height:1;display:flex;align-items:cente
 .t-login{color:var(--tgrey);font-size:12px}
 
 /* ── Ghost cursors — below windows & modal ── */
-#ghost-layer{position:fixed;top:0;left:0;width:100vw;height:100vh;pointer-events:none;z-index:1999;overflow:hidden}
+#ghost-layer{position:fixed;top:0;left:0;width:100vw;height:100vh;pointer-events:none;z-index:150;overflow:hidden}
 .gcur{position:absolute;pointer-events:none;transition-property:left,top;transition-timing-function:cubic-bezier(0.25,0.46,0.45,0.94);transition-duration:3s}
 .gcur svg{display:block;filter:drop-shadow(0 1px 2px rgba(0,0,0,.25))}
 .gtag{position:absolute;left:18px;top:18px;font-size:12px;font-weight:600;font-family:var(--f);line-height:1;padding:6px 10px;border-radius:0;white-space:nowrap;color:#fff}
@@ -2619,10 +2619,10 @@ function driftGhost(g) {
 ════════════════════════════════════ */
 const SEED_CMTS = [
   { id:'s1', name:'Shrek',         color:'#4a7020',
-    text:'This design is like an onion, it has layers! But you know, navigation logic needs layers too. Where is my back garden? Why do I need 5 clicks to reach settings?',
+    text:`Told the dev team 'get out of my swamp' about that bug for 3 sprints. Still there. Ogres are patient, but not THAT patient.`,
     ts: Date.now() - 2*86400000 },
   { id:'s2', name:'Donkey',        color:'#7B6555',
-    text:`I'm talking, I'm talking, I'm talking... just like the copy on this site! Do me a favor and shorten that microcopy, I only breathe once a day!`,
+    text:`Pick me! Pick me! I asked the developer if this was feasible and he just stared at me like I asked him to fly.`,
     ts: Date.now() - 2*86400000 + 360000 },
   { id:'s3', name:'Fiona',         color:'#A03060',
     text:'By day it looks professional, by night it turns into a monster, just like your Dark Mode that breaks on mobile. Fix it before someone discovers the black magic.',
@@ -2631,10 +2631,10 @@ const SEED_CMTS = [
     text:`My big innocent eyes can't find the CTA button. You hid it too well, señor, almost like my sword, pretty but unclear how to draw.`,
     ts: Date.now() - 8*3600000 },
   { id:'s5', name:'Lord Farquaad', color:'#8B0000',
-    text:`I'm small but ambitious, just like the buttons on this site, too small and too ambitious for the functions they need to perform. Increase the tap target, please!`,
+    text:`Some of you may die, but that's a sacrifice I'm willing to make for one more feature by Friday. The PM added 'quick fix' to the sprint. There is no such thing as a quick fix.`,
     ts: Date.now() - 6*3600000 },
   { id:'s6', name:'Gingy',         color:'#C87941',
-    text:'Not the gumdrop button! Why do you break my legs on every page load? Your loading time makes me crumble just like I do.',
+    text:`NOT THE GUMDROP BUTTONS! Also not another 'small change' from the PM that turned into a full redesign. I'm basically a scope-creep survivor at this point.`,
     ts: Date.now() - 4*3600000 },
   { id:'s7', name:'Ori Cohen',     color:'#7B61FF', initials:'OC',
     text:'filed under: valid feedback. will revisit in Q3.',
