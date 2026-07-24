@@ -2658,11 +2658,18 @@ function timeAgo(ts) {
   return Math.floor(d/86400000) + 'd ago';
 }
 
-/* User comments — persisted in localStorage, max 50, no TTL */
+/* User comments — in-memory array, persisted to localStorage */
+const _userCmts = [];
 const LS_CMTS = 'ori-comments-v2';
-function _loadCmts()  { try { return JSON.parse(localStorage.getItem(LS_CMTS)||'[]'); } catch(e){ return []; } }
-function _saveCmts(a) { try { localStorage.setItem(LS_CMTS, JSON.stringify(a.slice(-50))); } catch(e){} }
-const _userCmts = _loadCmts();
+(function(){
+  try {
+    const saved = JSON.parse(localStorage.getItem(LS_CMTS) || '[]');
+    if (Array.isArray(saved)) saved.forEach(c => _userCmts.push(c));
+  } catch(e) {}
+})();
+function _saveCmts() {
+  try { localStorage.setItem(LS_CMTS, JSON.stringify(_userCmts.slice(-50))); } catch(e) {}
+}
 
 function renderComments() {
   const cl = document.getElementById('rp-cl'); if (!cl) return;
@@ -2701,13 +2708,13 @@ function postComment() {
   const cmt = { id:'u'+Date.now(), name, color:'#DD2590', face:null,
     initials:name.slice(0,2).toUpperCase(), text:txt, ts:Date.now() };
   _userCmts.push(cmt);
-  _saveCmts(_userCmts);
+  _saveCmts();
   ta.value = ''; ta.style.height = '';
   syncSendBtn();
   renderComments();
   showToast('Comment posted 💬');
   /* Email notification — fire-and-forget, silent on error */
-  fetch('https://formsubmit.co/ajax/Ori.Cohen10@verint.com', {
+  fetch('https://formsubmit.co/ajax/oricohenw@gmail.com', {
     method:'POST',
     headers:{'Content-Type':'application/json','Accept':'application/json'},
     body: JSON.stringify({
