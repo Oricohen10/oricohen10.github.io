@@ -56,7 +56,7 @@ body{font-family:var(--f);background:var(--canvas);color:var(--tx)}
 #modal-bg{position:fixed;inset:0;z-index:2000;display:flex;align-items:center;justify-content:center;background:var(--mbg);backdrop-filter:blur(14px);opacity:0;transition:opacity .3s,background .15s}
 #modal-bg.show{opacity:1}
 #modal-bg.hide{opacity:0;pointer-events:none}
-#modal-box{background:var(--mbox);border:1px solid var(--mbd);border-radius:16px;padding:28px 28px 24px;width:480px;box-shadow:0 32px 80px rgba(0,0,0,.22),0 0 0 1px rgba(0,0,0,.04);transform:scale(.92) translateY(20px);transition:transform .4s cubic-bezier(.34,1.56,.64,1),background .15s,border-color .15s}
+#modal-box{background:var(--mbox);border:1px solid var(--mbd);border-radius:16px;padding:28px 28px 24px;width:400px;box-shadow:0 32px 80px rgba(0,0,0,.22),0 0 0 1px rgba(0,0,0,.04);transform:scale(.92) translateY(20px);transition:transform .4s cubic-bezier(.34,1.56,.64,1),background .15s,border-color .15s}
 #modal-bg.show #modal-box{transform:scale(1) translateY(0)}
 .m-badge{display:flex;align-items:center;gap:6px;font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--figma);margin-bottom:12px}
 .m-dot{width:6px;height:6px;background:var(--figma);border-radius:50%;animation:pulse 1.8s infinite}
@@ -94,7 +94,7 @@ textarea.field{resize:none;overflow-y:auto}
 /* Skip uses .btn.btn-tertiary — override to match #btn-go height: */
 #btn-skip{width:100%;justify-content:center;font-size:12px;padding:12px 18px}
 .m-av-label{font-size:11px;font-weight:500;color:var(--tx3);margin-bottom:8px}
-.m-av-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-bottom:20px;padding:0 10%}
+.m-av-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-bottom:20px}
 .m-av-opt{display:flex;align-items:stretch;cursor:pointer;border-radius:12px;border:2px solid transparent;overflow:hidden;aspect-ratio:1;transition:border-color .15s,box-shadow .15s,transform .12s;user-select:none;-webkit-tap-highlight-color:transparent}
 .m-av-opt:hover:not(.sel){border-color:var(--bd2);transform:translateY(-1px) scale(1.04)}
 .m-av-opt.sel{border-color:var(--purple-500);box-shadow:0 0 0 4px rgba(123,97,255,.18),0 6px 24px rgba(123,97,255,.28);animation:av-glow 2.4s ease-in-out infinite;transform:translateY(-2px)}
@@ -649,7 +649,7 @@ i.ph,i.ph-bold,i.ph-fill,i.ph-light{line-height:1;display:flex;align-items:cente
 <!-- Modal -->
 <div id="modal-bg"><div id="modal-box">
   <div class="m-badge"><div class="m-dot"></div>Ori Cohen · Portfolio</div>
-  <p class="m-q">Set up your profile</p>
+  <p class="m-q">What should I call you while you're here?</p>
   <div class="m-av-label">My name</div>
   <input type="text" id="name-input" class="field" placeholder="Recruiter (hopefully)" maxlength="20" autocomplete="off"/>
   <div class="m-av-label">Pick your character</div>
