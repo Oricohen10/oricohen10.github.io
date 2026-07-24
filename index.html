@@ -902,11 +902,6 @@ i.ph,i.ph-bold,i.ph-fill,i.ph-light{line-height:1;display:flex;align-items:cente
       <div class="wc mx" onclick="maximizeWin('proj-lux')">+</div>
     </div>
     <span class="wt">Verint Design System 2.0 — Case Study</span>
-    <div class="wrc">
-      <button class="wrc-btn" data-tip="Open full page" onclick="window.open('cases/lux/','_blank')">
-        <i class="ph ph-arrow-square-out"></i>
-      </button>
-    </div>
   </div>
   <iframe class="proj-iframe" src="cases/lux/index.html" title="Verint Design System 2.0 Case Study"></iframe>
 </div>
@@ -1385,7 +1380,7 @@ i.ph,i.ph-bold,i.ph-fill,i.ph-light{line-height:1;display:flex;align-items:cente
       <!-- Comments header -->
       <div class="rp-sh" style="border-bottom:1px solid var(--bd)">
         Comments
-        <span id="rp-cc" style="font-size:10px;font-weight:600;color:var(--blue);background:var(--act);padding:2px 6px;border-radius:10px;margin-left:auto">6</span>
+        <span id="rp-cc" style="font-size:10px;font-weight:600;color:var(--blue);background:var(--act);padding:2px 6px;border-radius:10px;margin-left:auto">5</span>
       </div>
 
       <!-- Comment list -->
@@ -1745,6 +1740,8 @@ let dark = false;
 function toggleTheme() {
   dark = !dark;
   document.documentElement.setAttribute('data-theme', dark ? 'dark' : 'light');
+  /* sync case study iframe */
+  document.querySelectorAll('.proj-iframe').forEach(f=>{try{f.contentWindow.postMessage({type:'theme',dark},'*');}catch(e){}});
   document.getElementById('icon-moon').style.display = dark ? 'none' : 'block';
   document.getElementById('icon-sun').style.display  = dark ? 'block' : 'none';
   /* sync mobile theme icons */
@@ -2638,9 +2635,6 @@ const SEED_CMTS = [
   { id:'s4', name:'Puss in Boots', color:'#D07020',
     text:`My big innocent eyes can't find the CTA button. You hid it too well, señor, almost like my sword, pretty but unclear how to draw.`,
     ts: Date.now() - 8*3600000 },
-  { id:'s6', name:'Gingy',         color:'#C87941',
-    text:`NOT THE GUMDROP BUTTONS! Also not another 'small change' from the PM that turned into a full redesign. I'm basically a scope-creep survivor at this point.`,
-    ts: Date.now() - 4*3600000 },
   { id:'s7', name:'Ori Cohen',     color:'#7B61FF', initials:'OC',
     text:'filed under: valid feedback. will revisit in Q3.',
     ts: Date.now() - 2*3600000 },
@@ -2691,7 +2685,6 @@ function renderComments() {
         <div class="rpc-av" style="background:${c.color}">${facePart}</div>
         <span class="rpc-author">${c.name}</span>
         <span class="rpc-time">${timeAgo(c.ts)}</span>
-        <span class="rpc-num">#${i+1}</span>
       </div>
       <div class="rpc-text">${c.text.replace(/</g,'&lt;')}</div>`;
     cl.appendChild(div);
