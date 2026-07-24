@@ -457,7 +457,7 @@ i.ph,i.ph-bold,i.ph-fill,i.ph-light{line-height:1;display:flex;align-items:cente
 .t-login{color:var(--tgrey);font-size:12px}
 
 /* ── Ghost cursors — below windows & modal ── */
-#ghost-layer{position:fixed;top:0;left:0;width:100vw;height:100vh;pointer-events:none;z-index:150;overflow:hidden}
+#ghost-layer{position:fixed;top:0;left:0;width:100vw;height:100vh;pointer-events:none;z-index:1999;overflow:hidden}
 .gcur{position:absolute;pointer-events:none;transition-property:left,top;transition-timing-function:cubic-bezier(0.25,0.46,0.45,0.94);transition-duration:3s}
 .gcur svg{display:block;filter:drop-shadow(0 1px 2px rgba(0,0,0,.25))}
 .gtag{position:absolute;left:18px;top:18px;font-size:12px;font-weight:600;font-family:var(--f);line-height:1;padding:6px 10px;border-radius:0;white-space:nowrap;color:#fff}
@@ -489,10 +489,10 @@ i.ph,i.ph-bold,i.ph-fill,i.ph-light{line-height:1;display:flex;align-items:cente
 [data-theme="dark"] .rp-chatbox:focus-within{border-color:var(--purple-400);box-shadow:0 0 0 3px rgba(123,97,255,.15)}
 /* rp-ta — lives inside .rp-chatbox which owns the border/focus ring,
    so this is borderless. Sizing overrides only. */
-.rp-ta{width:100%;background:transparent;border:none;color:var(--tx);font-family:var(--f);font-size:12px;outline:none;resize:none;min-height:52px;max-height:90px;line-height:1.55;overflow-y:auto;padding:10px 12px 10px;display:block;transition:color .15s}
+.rp-ta{width:100%;background:transparent;border:none;color:var(--tx);font-family:var(--f);font-size:12px;outline:none;resize:none;min-height:52px;max-height:90px;line-height:1.55;overflow-y:auto;padding:10px 12px 10px;display:block;transition:color .15s;cursor:text!important}
 .rp-ta::placeholder{color:var(--tx3)}
 .rp-actions{display:flex;align-items:center;justify-content:space-between;padding:4px 8px 10px 10px}
-.rp-mic-btn{width:28px;height:28px;border-radius:7px;background:none;border:1px solid var(--bd);color:var(--tx3);display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;transition:border-color .1s,color .1s,background .1s}
+.rp-mic-btn{width:28px;height:28px;border-radius:7px;background:none;border:1px solid var(--bd);color:var(--tx3);display:flex;align-items:center;justify-content:center;cursor:pointer!important;flex-shrink:0;transition:border-color .1s,color .1s,background .1s}
 .rp-mic-btn:hover{border-color:var(--tx2);color:var(--tx)}
 .rp-mic-btn.recording{border-color:#ef4444;color:#ef4444;background:rgba(239,68,68,.07)}
 .rp-mic-btn svg{width:14px;height:14px;display:block}
@@ -502,7 +502,7 @@ i.ph,i.ph-bold,i.ph-fill,i.ph-light{line-height:1;display:flex;align-items:cente
 .rp-mic-btn.recording .wb:nth-child(4){animation-delay:.28s}
 .rp-mic-btn.recording .wb:nth-child(5){animation-delay:.38s}
 @keyframes wavebounce{0%{transform:scaleY(.25)}100%{transform:scaleY(1)}}
-.rp-sb{width:30px;height:30px;border-radius:8px;background:linear-gradient(135deg,var(--purple-500) 0%,var(--purple-700) 100%);border:none;color:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;transition:background .12s,box-shadow .12s;box-shadow:0 2px 8px rgba(98,72,232,.28)}
+.rp-sb{width:30px;height:30px;border-radius:8px;background:linear-gradient(135deg,var(--purple-500) 0%,var(--purple-700) 100%);border:none;color:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer!important;flex-shrink:0;transition:background .12s,box-shadow .12s;box-shadow:0 2px 8px rgba(98,72,232,.28)}
 .rp-sb:hover:not(:disabled){background:linear-gradient(135deg,var(--purple-400) 0%,var(--purple-600) 100%);box-shadow:0 3px 12px rgba(98,72,232,.38)}
 .rp-sb:active:not(:disabled){background:linear-gradient(135deg,var(--purple-700) 0%,var(--purple-900) 100%);box-shadow:0 1px 4px rgba(98,72,232,.2)}
 .rp-sb:disabled{opacity:.22;pointer-events:none}
@@ -1385,7 +1385,7 @@ i.ph,i.ph-bold,i.ph-fill,i.ph-light{line-height:1;display:flex;align-items:cente
       <!-- Comments header -->
       <div class="rp-sh" style="border-bottom:1px solid var(--bd)">
         Comments
-        <span id="rp-cc" style="font-size:10px;font-weight:600;color:var(--blue);background:var(--act);padding:2px 6px;border-radius:10px;margin-left:auto">5</span>
+        <span id="rp-cc" style="font-size:10px;font-weight:600;color:var(--blue);background:var(--act);padding:2px 6px;border-radius:10px;margin-left:auto">6</span>
       </div>
 
       <!-- Comment list -->
