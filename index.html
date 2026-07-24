@@ -1795,7 +1795,7 @@ const nIn  = document.getElementById('name-input');
 const bGo  = document.getElementById('btn-go');
 
 const PORTFOLIO_KEY = 'portfolio_v1';
-let siteAv = null;   /* null = no character (default) */
+let siteAv = 0;   /* 0 = Shrek (default) */
 
 function getPortfolioUser(){try{return JSON.parse(localStorage.getItem(PORTFOLIO_KEY)||'null');}catch{return null;}}
 
@@ -1830,7 +1830,10 @@ window.pickSiteAv = function(id){ siteAv=(siteAv===id)?null:id; buildModalAvGrid
 
 if (isDesktop) setTimeout(() => {
   const u = getPortfolioUser();
-  if(u){ siteAv = u.avatarId!==undefined ? u.avatarId : null; }
+  if(u){
+    siteAv = (u.avatarId !== null && u.avatarId !== undefined) ? u.avatarId : 0;
+    return; /* already set up — skip modal */
+  }
   buildModalAvGrid();
   mBg.classList.add('show');
   nIn.focus();
@@ -1855,7 +1858,7 @@ function doName() {
 function closeModal(cb) { mBg.classList.add('hide'); setTimeout(() => { mBg.style.display='none'; if(cb) cb(); startIdleDemo(); }, 280); }
 window.reopenModal = function(){
   const u = getPortfolioUser();
-  if(u){ siteAv = u.avatarId!==undefined ? u.avatarId : null; }
+  if(u){ siteAv = (u.avatarId !== null && u.avatarId !== undefined) ? u.avatarId : 0; }
   buildModalAvGrid();
   mBg.style.display = '';
   requestAnimationFrame(()=>{ mBg.classList.remove('hide'); mBg.classList.add('show'); if(nIn) nIn.focus(); });
@@ -2547,8 +2550,8 @@ const SITE_AVATARS=[
   {key:'gingy',    name:'Gingy',    color:'#C87941', bg:'#FFF3E0'},
   {key:'fairy',    name:'Fairy GM', color:'#C050A0', bg:'#FFE8F5'},
   {key:'dragon',   name:'Dragon',   color:'#8B0090', bg:'#F5E8FF'},
-  {key:'pino',     name:'Pino',     color:'#CC2020', bg:'#FFFDE0'},
-  {key:'humpty',   name:'Humpty',   color:'#C8A000', bg:'#FFFBE8'},
+  {key:'pino',     name:'Pino',     color:'#CC2020', bg:'#DCF0FF'},
+  {key:'humpty',   name:'Humpty',   color:'#C8A000', bg:'#E8F5EE'},
 ];
 
 /* ════════════════════════════════════
