@@ -2648,23 +2648,12 @@ function timeAgo(ts) {
   return Math.floor(d/86400000) + 'd ago';
 }
 
-const CMT_TTL = 3600000; /* 1 hour in ms */
-function loadUserCmts() {
-  try {
-    const all = JSON.parse(localStorage.getItem('ori-portfolio-cmts') || '[]');
-    return all.filter(c => (Date.now() - c.ts) < CMT_TTL);
-  } catch(e) { return []; }
-}
-function saveUserCmts(arr) {
-  try {
-    const valid = arr.filter(c => (Date.now() - c.ts) < CMT_TTL);
-    localStorage.setItem('ori-portfolio-cmts', JSON.stringify(valid));
-  } catch(e) {}
-}
+/* User comments live in memory for the session — simple, no localStorage edge cases */
+const _userCmts = [];
 
 function renderComments() {
   const cl = document.getElementById('rp-cl'); if (!cl) return;
-  const all = [...SEED_CMTS, ...loadUserCmts()].sort((a,b)=>a.ts-b.ts);
+  const all = [...SEED_CMTS, ..._userCmts].sort((a,b)=>a.ts-b.ts);
   const cc  = document.getElementById('rp-cc');
   if (cc) cc.textContent = all.length;
   cl.innerHTML = '';
@@ -2695,13 +2684,11 @@ function renderComments() {
 function postComment() {
   const ta = document.getElementById('rp-ta');
   const txt = ta.value.trim(); if (!txt) return;
-  const name = ctagEl.textContent || 'Visitor';
-  const arr = loadUserCmts();
-  arr.push({ id:'u'+Date.now(), name, color:'#DD2590', face:null,
-             initials:name.slice(0,2).toUpperCase(), text:txt, ts:Date.now() });
-  saveUserCmts(arr);
+  const name = (ctagEl ? ctagEl.textContent.trim() : '') || 'Visitor';
+  _userCmts.push({ id:'u'+Date.now(), name, color:'#DD2590', face:null,
+    initials:name.slice(0,2).toUpperCase(), text:txt, ts:Date.now() });
   ta.value = ''; ta.style.height = '';
-  document.getElementById('rp-sb').disabled = true;
+  syncSendBtn();
   renderComments();
   showToast('Comment posted 💬');
 }
@@ -2725,7 +2712,6 @@ function initComments() {
   ta.addEventListener('keydown', e => {
     if ((e.metaKey||e.ctrlKey) && e.key==='Enter' && !sb.disabled) { e.preventDefault(); postComment(); }
   });
-  sb.addEventListener('click', postComment);
 }
 
 /* ── JS tooltip (works inside overflow:hidden panels) ── */
