@@ -294,11 +294,37 @@ button{cursor:pointer;font-family:inherit}
   .cs-reveal.is-visible{opacity:1;transform:translateY(0)}
 }
 
+/* ── Back nav ─────────────────────────────────────────── */
+.back-nav{
+  display:none;
+  align-items:center;gap:6px;
+  padding:14px 18px;
+  font-size:13px;font-weight:600;
+  color:var(--text-secondary);
+  text-decoration:none;
+  border-bottom:1px solid var(--border-subtle);
+  background:var(--surface-base);
+}
+.back-nav svg{flex-shrink:0;color:var(--text-tertiary)}
+.back-nav:hover{color:var(--text-primary)}
+
+/* ── Carousel dot tap target ──────────────────────────── */
+.carousel-dot{
+  padding:5px;
+  margin:-5px;
+  box-sizing:content-box;
+}
+
 /* ── Responsive ───────────────────────────────────────── */
 @media(max-width:720px){
-  .cs-body{grid-template-columns:1fr;gap:28px}
+  .back-nav{display:flex}
+  .cs-body{grid-template-columns:1fr;gap:28px;padding:24px 18px 80px}
+  .carousel-shell{padding:20px 18px 0}
   .sidebar{position:static}
   .cs-hero h1{font-size:24px}
+  .cs-hero-sub{font-size:16px}
+  .cs-section p{font-size:16px}
+  .ai-text{font-size:16px}
   .impact-grid{grid-template-columns:1fr 1fr}
   .impact-grid .impact-card:last-child{grid-column:1/-1}
 }
@@ -308,6 +334,9 @@ button{cursor:pointer;font-family:inherit}
   .lbx-btn,.lbx-prev,.lbx-next{display:none}
   .impact-grid{grid-template-columns:1fr}
   .impact-grid .impact-card:last-child{grid-column:auto}
+  .ai-box{flex-direction:column;gap:10px}
+  .cs-body{padding:20px 16px 80px}
+  .carousel-shell{padding:16px 16px 0}
 }
 </style>
 <script type="application/ld+json">
@@ -344,6 +373,11 @@ button{cursor:pointer;font-family:inherit}
 </head>
 <body>
 
+<!-- Back nav (mobile only) -->
+<a href="/" class="back-nav" aria-label="Back to portfolio">
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+  Back to portfolio
+</a>
 
 <!-- Carousel -->
 <div class="carousel-shell">
@@ -352,54 +386,22 @@ button{cursor:pointer;font-family:inherit}
 
     <!-- Slide 1: Token Architecture -->
     <div class="carousel-slide" onclick="openLightbox(0)" title="Click to expand">
-      <svg viewBox="0 0 960 420" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%;background:#f0f0f0">
-        <rect width="960" height="420" fill="#EBEBEB"/>
-        <g transform="translate(480,210)" fill="none" stroke="#BFBFBF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
-          <rect x="-28" y="-22" width="56" height="44" rx="4"/>
-          <circle cx="-9" cy="-5" r="7"/>
-          <polyline points="28,22 10,-4 -14,22"/>
-          <polyline points="-14,22 -22,10 -28,22"/>
-        </g>
-      </svg>
+      <img src="images/slide-tokens.svg" width="960" height="420" alt="LUX 2.0 color tokens — primary, secondary, and neutral scales with the type and radius scale"/>
     </div>
 
     <!-- Slide 2: Component Library -->
     <div class="carousel-slide" onclick="openLightbox(1)" title="Click to expand">
-      <svg viewBox="0 0 960 420" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%;background:#f0f0f0">
-        <rect width="960" height="420" fill="#EBEBEB"/>
-        <g transform="translate(480,210)" fill="none" stroke="#BFBFBF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
-          <rect x="-28" y="-22" width="56" height="44" rx="4"/>
-          <circle cx="-9" cy="-5" r="7"/>
-          <polyline points="28,22 10,-4 -14,22"/>
-          <polyline points="-14,22 -22,10 -28,22"/>
-        </g>
-      </svg>
+      <img src="images/slide-components.svg" width="960" height="420" alt="LUX 2.0 component library — cards, tags, buttons, and form inputs"/>
     </div>
 
     <!-- Slide 3: Dark Mode - first in Verint history -->
     <div class="carousel-slide" onclick="openLightbox(2)" title="Click to expand">
-      <svg viewBox="0 0 960 420" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%;background:#f0f0f0">
-        <rect width="960" height="420" fill="#EBEBEB"/>
-        <g transform="translate(480,210)" fill="none" stroke="#BFBFBF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
-          <rect x="-28" y="-22" width="56" height="44" rx="4"/>
-          <circle cx="-9" cy="-5" r="7"/>
-          <polyline points="28,22 10,-4 -14,22"/>
-          <polyline points="-14,22 -22,10 -28,22"/>
-        </g>
-      </svg>
+      <img src="images/slide-darkmode.svg" width="960" height="420" alt="LUX 2.0 in dark mode — the same component library restyled for dark theme"/>
     </div>
 
     <!-- Slide 4: Motion Library -->
     <div class="carousel-slide" onclick="openLightbox(3)" title="Click to expand">
-      <svg viewBox="0 0 960 420" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%;background:#f0f0f0">
-        <rect width="960" height="420" fill="#EBEBEB"/>
-        <g transform="translate(480,210)" fill="none" stroke="#BFBFBF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
-          <rect x="-28" y="-22" width="56" height="44" rx="4"/>
-          <circle cx="-9" cy="-5" r="7"/>
-          <polyline points="28,22 10,-4 -14,22"/>
-          <polyline points="-14,22 -22,10 -28,22"/>
-        </g>
-      </svg>
+      <img src="images/slide-motion.svg" width="960" height="420" alt="LUX 2.0 motion library — easing curves and duration tokens"/>
     </div>
 
   </div><!-- /track -->

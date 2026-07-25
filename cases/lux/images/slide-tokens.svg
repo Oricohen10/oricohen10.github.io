@@ -1,0 +1,67 @@
+<svg viewBox="0 0 960 420" xmlns="http://www.w3.org/2000/svg" font-family="-apple-system,BlinkMacSystemFont,'Helvetica Neue',sans-serif">
+  <rect width="960" height="420" fill="#FFFFFF"/>
+
+  <!-- divider -->
+  <line x1="624" y1="48" x2="624" y2="372" stroke="#D9D9D9" stroke-width="1"/>
+
+  <!-- ── Left: color tokens ── -->
+  <text x="48" y="44" font-size="10" font-weight="800" letter-spacing="1.4" fill="#6a6d70">PRIMARY</text>
+  <g>
+    <rect x="48"  y="58" width="56" height="56" rx="10" fill="#F4F2FF"/>
+    <rect x="118" y="58" width="56" height="56" rx="10" fill="#D0C7FF"/>
+    <rect x="188" y="58" width="56" height="56" rx="10" fill="#9F8AFF"/>
+    <rect x="258" y="58" width="56" height="56" rx="10" fill="#7B61FF"/>
+    <rect x="328" y="58" width="56" height="56" rx="10" fill="#4D35C8"/>
+    <rect x="398" y="58" width="56" height="56" rx="10" fill="#2A1F7A"/>
+  </g>
+
+  <text x="48" y="150" font-size="10" font-weight="800" letter-spacing="1.4" fill="#6a6d70">SECONDARY</text>
+  <g>
+    <rect x="48"  y="164" width="56" height="56" rx="10" fill="#EEF6FF"/>
+    <rect x="118" y="164" width="56" height="56" rx="10" fill="#A8D4FD"/>
+    <rect x="188" y="164" width="56" height="56" rx="10" fill="#4DAEFB"/>
+    <rect x="258" y="164" width="56" height="56" rx="10" fill="#18A0FB"/>
+    <rect x="328" y="164" width="56" height="56" rx="10" fill="#0664A8"/>
+    <rect x="398" y="164" width="56" height="56" rx="10" fill="#054880"/>
+  </g>
+
+  <text x="48" y="256" font-size="10" font-weight="800" letter-spacing="1.4" fill="#6a6d70">NEUTRAL</text>
+  <g>
+    <rect x="48"  y="270" width="56" height="56" rx="10" fill="#FFFFFF" stroke="#D9D9D9" stroke-width="1.5"/>
+    <rect x="118" y="270" width="56" height="56" rx="10" fill="#EBEBEB"/>
+    <rect x="188" y="270" width="56" height="56" rx="10" fill="#BFBFBF"/>
+    <rect x="258" y="270" width="56" height="56" rx="10" fill="#737373"/>
+    <rect x="328" y="270" width="56" height="56" rx="10" fill="#3D3D3D"/>
+    <rect x="398" y="270" width="56" height="56" rx="10" fill="#1A1A1A"/>
+  </g>
+
+  <text x="48" y="352" font-size="12" fill="#585b5e">Primitives → semantics → components. One source of truth.</text>
+
+  <!-- ── Right: type scale + radius ── -->
+  <text x="650" y="44" font-size="10" font-weight="800" letter-spacing="1.4" fill="#6a6d70">TYPE SCALE</text>
+
+  <text x="650" y="96"  font-size="32" font-weight="800" fill="#121213">Aa</text>
+  <text x="710" y="93"  font-size="11" fill="#6a6d70">32 / 800</text>
+
+  <text x="650" y="140" font-size="26" font-weight="700" fill="#121213">Aa</text>
+  <text x="710" y="137" font-size="11" fill="#6a6d70">24 / 700</text>
+
+  <text x="650" y="180" font-size="20" font-weight="600" fill="#121213">Aa</text>
+  <text x="710" y="177" font-size="11" fill="#6a6d70">18 / 600</text>
+
+  <text x="650" y="216" font-size="16" font-weight="500" fill="#121213">Aa</text>
+  <text x="710" y="213" font-size="11" fill="#6a6d70">15 / 500</text>
+
+  <text x="650" y="248" font-size="13" font-weight="400" fill="#121213">Aa</text>
+  <text x="710" y="245" font-size="11" fill="#6a6d70">12 / 400</text>
+
+  <text x="650" y="300" font-size="10" font-weight="800" letter-spacing="1.4" fill="#6a6d70">RADIUS</text>
+  <rect x="650" y="314" width="32" height="32" rx="2"  fill="none" stroke="#7B61FF" stroke-width="2"/>
+  <rect x="694" y="314" width="32" height="32" rx="8"  fill="none" stroke="#7B61FF" stroke-width="2"/>
+  <rect x="738" y="314" width="32" height="32" rx="12" fill="none" stroke="#7B61FF" stroke-width="2"/>
+  <rect x="782" y="314" width="32" height="32" rx="16" fill="none" stroke="#7B61FF" stroke-width="2"/>
+  <text x="650" y="362" font-size="10" fill="#6a6d70">2</text>
+  <text x="694" y="362" font-size="10" fill="#6a6d70">8</text>
+  <text x="738" y="362" font-size="10" fill="#6a6d70">12</text>
+  <text x="782" y="362" font-size="10" fill="#6a6d70">16</text>
+</svg>

@@ -1,0 +1,59 @@
+<svg viewBox="0 0 960 420" xmlns="http://www.w3.org/2000/svg" font-family="-apple-system,BlinkMacSystemFont,'Helvetica Neue',sans-serif">
+  <rect width="960" height="420" fill="#FFFFFF"/>
+
+  <text x="48" y="34" font-size="10" font-weight="800" letter-spacing="1.4" fill="#6a6d70">EASING CURVES</text>
+
+  <!-- chart -->
+  <rect x="48" y="48" width="420" height="240" rx="8" fill="none" stroke="#D9D9D9"/>
+  <line x1="48" y1="132" x2="468" y2="132" stroke="#EBEBEB"/>
+  <line x1="48" y1="216" x2="468" y2="216" stroke="#EBEBEB"/>
+
+  <path d="M48,288 L468,48" fill="none" stroke="#18A0FB" stroke-width="2.5"/>
+  <path d="M48,288 C120,120 190,88 468,80" fill="none" stroke="#7B61FF" stroke-width="2.5"/>
+  <path d="M48,288 C150,264 250,40 330,74 C372,92 400,80 468,80" fill="none" stroke="#999999" stroke-width="2.5"/>
+
+  <circle cx="468" cy="48" r="4" fill="#18A0FB"/>
+  <circle cx="468" cy="80" r="4" fill="#7B61FF"/>
+  <circle cx="468" cy="80" r="4" fill="#999999"/>
+
+  <g font-size="12" font-weight="600">
+    <circle cx="52" cy="332" r="5" fill="#7B61FF"/>
+    <text x="64" y="337" fill="#585b5e">Ease out</text>
+    <circle cx="176" cy="332" r="5" fill="#18A0FB"/>
+    <text x="188" y="337" fill="#585b5e">Linear</text>
+    <circle cx="278" cy="332" r="5" fill="#999999"/>
+    <text x="290" y="337" fill="#585b5e">Spring</text>
+  </g>
+
+  <line x1="524" y1="40" x2="524" y2="372" stroke="#D9D9D9" stroke-width="1"/>
+
+  <text x="560" y="34" font-size="10" font-weight="800" letter-spacing="1.4" fill="#6a6d70">DURATION TOKENS</text>
+
+  <g font-size="12">
+    <text x="560" y="66" font-weight="700" fill="#121213">100ms</text>
+    <text x="612" y="66" fill="#6a6d70">tap feedback</text>
+    <rect x="560" y="74" width="50" height="10" rx="5" fill="#D0C7FF"/>
+
+    <text x="560" y="110" font-weight="700" fill="#121213">150ms</text>
+    <text x="612" y="110" fill="#6a6d70">micro-interaction</text>
+    <rect x="560" y="118" width="75" height="10" rx="5" fill="#B0A0FF"/>
+
+    <text x="560" y="154" font-weight="700" fill="#121213">200ms</text>
+    <text x="612" y="154" fill="#6a6d70">hover state</text>
+    <rect x="560" y="162" width="100" height="10" rx="5" fill="#9F8AFF"/>
+
+    <text x="560" y="198" font-weight="700" fill="#121213">300ms</text>
+    <text x="612" y="198" fill="#6a6d70">transition</text>
+    <rect x="560" y="206" width="150" height="10" rx="5" fill="#7B61FF"/>
+
+    <text x="560" y="242" font-weight="700" fill="#121213">450ms</text>
+    <text x="612" y="242" fill="#6a6d70">modal enter</text>
+    <rect x="560" y="250" width="225" height="10" rx="5" fill="#6248E8"/>
+
+    <text x="560" y="286" font-weight="700" fill="#121213">600ms</text>
+    <text x="612" y="286" fill="#6a6d70">page enter</text>
+    <rect x="560" y="294" width="300" height="10" rx="5" fill="#4D35C8"/>
+  </g>
+
+  <text x="48" y="400" font-size="12" fill="#585b5e">One motion language — every product, every interaction state.</text>
+</svg>
