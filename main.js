@@ -2,19 +2,40 @@ const isDesktop = window.innerWidth >= 768;
 if (!isDesktop) document.getElementById('app').style.display = 'none';
 
 /* ── Mobile menu ── */
+function _hamSet(expanded) {
+  const btn = document.getElementById('mv-ham');
+  if (!btn) return;
+  btn.setAttribute('aria-expanded', expanded ? 'true' : 'false');
+  btn.setAttribute('aria-label', expanded ? 'Close' : 'Open menu');
+}
 function mvMenuOpen()  {
   document.getElementById('mv-menu').classList.add('open');
-  const btn = document.getElementById('mv-ham');
-  if (btn) btn.setAttribute('aria-expanded', 'true');
+  _hamSet(true);
 }
 function mvMenuClose() {
   document.getElementById('mv-menu').classList.remove('open');
-  const btn = document.getElementById('mv-ham');
-  if (btn) btn.setAttribute('aria-expanded', 'false');
+  _hamSet(false);
 }
-function mvPageOpen(id)  { mvMenuClose(); document.getElementById('mv-page-' + id).classList.add('open'); }
-function mvPageClose(id) { document.getElementById('mv-page-' + id).classList.remove('open'); }
-function mvCloseAll()    { ['portfolio','about','contact'].forEach(id => mvPageClose(id)); }
+function mvPageOpen(id) {
+  mvMenuClose();
+  document.getElementById('mv-page-' + id).classList.add('open');
+  _hamSet(true);
+}
+function mvPageClose(id) {
+  document.getElementById('mv-page-' + id).classList.remove('open');
+  const anyOpen = ['portfolio','about','contact'].some(p => document.getElementById('mv-page-'+p).classList.contains('open'));
+  if (!anyOpen) _hamSet(false);
+}
+function mvCloseAll() {
+  ['portfolio','about','contact'].forEach(id => document.getElementById('mv-page-'+id).classList.remove('open'));
+  _hamSet(false);
+}
+function mvHamClick() {
+  const anyPage = ['portfolio','about','contact'].some(id => document.getElementById('mv-page-'+id).classList.contains('open'));
+  if (anyPage) { mvCloseAll(); return; }
+  if (document.getElementById('mv-menu').classList.contains('open')) { mvMenuClose(); return; }
+  mvMenuOpen();
+}
 
 /* ── Voice recording (SpeechRecognition) ── */
 let _isRecording = false, _speechRecog = null;
