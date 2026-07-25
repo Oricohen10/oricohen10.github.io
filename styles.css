@@ -122,7 +122,7 @@ textarea.field{resize:none;overflow-y:auto}
 
 /* ── Phosphor icon sizing ── */
 i.ph,i.ph-bold,i.ph-fill,i.ph-light{line-height:1;display:flex;align-items:center;justify-content:center}
-.bb-btn i.ph,.bb-btn i.ph-bold{font-size:18px}
+.bb-btn i.ph,.bb-btn i.ph-bold{font-size:21px}
 #theme-btn i.ph,#theme-btn i.ph-bold{font-size:16px}
 .wrc-btn i.ph,.wrc-btn i.ph-bold{font-size:15px}
 .sm-item i.ph,.sm-item i.ph-bold{font-size:16px;color:var(--tx2);flex-shrink:0}
@@ -138,8 +138,15 @@ i.ph,i.ph-bold,i.ph-fill,i.ph-light{line-height:1;display:flex;align-items:cente
    CANVAS  —  pan + zoom
 ════════════════════════════════════ */
 #canvas-area{flex:1;overflow:hidden;position:relative;background:var(--canvas);background-image:radial-gradient(circle,var(--dot) 1px,transparent 1px);background-size:24px 24px;transition:background .15s}
-#cvp{position:absolute;top:0;left:0;transform-origin:0 0;will-change:transform}
-#fw{position:absolute;will-change:transform}
+#cvp{position:absolute;top:0;left:0;transform-origin:0 0}
+#fw{position:absolute}
+/* Force crisp vector rendering at all zoom levels */
+#fw *{
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+  text-rendering:geometricPrecision;
+}
+#fw svg{shape-rendering:geometricPrecision}
 #flabel{position:absolute;bottom:calc(100% + 7px);left:0;font-size:11px;font-weight:600;color:var(--tx-brand);white-space:nowrap;pointer-events:auto;user-select:none;padding:2px 4px}
 #fborder{position:relative;border:2px solid var(--blue);background:var(--frm);transition:background .15s}
 .rh{position:absolute;width:7px;height:7px;background:#fff;border:1.5px solid var(--blue);border-radius:1px;z-index:5;transition:transform .1s}
@@ -259,20 +266,20 @@ i.ph,i.ph-bold,i.ph-fill,i.ph-light{line-height:1;display:flex;align-items:cente
 #bottombar{
   position:fixed;bottom:18px;left:calc(50% - 114px);transform:translateX(-50%);
   z-index:500;display:flex;align-items:center;gap:4px;
-  background:var(--glass);border:1px solid var(--glass-bd);border-radius:14px;
-  padding:7px 10px;
+  background:var(--glass);border:1px solid var(--glass-bd);border-radius:16px;
+  padding:9px 12px;
   box-shadow:0 8px 32px rgba(0,0,0,.12),0 1px 0 rgba(255,255,255,.5) inset;
   backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
   transition:background .15s,border-color .15s;
 }
 .bb-left{display:flex;align-items:center;gap:3px}
-.bb-divider{width:1px;height:18px;background:var(--bd);margin:0 3px;flex-shrink:0}
-.bb-btn{display:flex;align-items:center;justify-content:center;width:32px;height:32px;border-radius:8px;background:transparent;border:none;color:var(--tx2);transition:background .1s,color .1s}
+.bb-divider{width:1px;height:20px;background:var(--bd);margin:0 4px;flex-shrink:0}
+.bb-btn{display:flex;align-items:center;justify-content:center;width:38px;height:38px;border-radius:9px;background:transparent;border:none;color:var(--tx2);transition:background .1s,color .1s}
 .demo-running .bb-btn{pointer-events:none}
 .bb-btn:hover,.bb-btn.demo-hov{background:var(--hov);color:var(--tx)}
 .bb-btn.on{background:var(--figma);color:#fff}
 .bb-btn.inactive{opacity:.28;pointer-events:none}
-.bb-btn svg{width:16px;height:16px;display:block}
+.bb-btn svg{width:18px;height:18px;display:block}
 .bb-right{display:flex;align-items:center;gap:3px}
 #tb-clock{font-size:11px;color:var(--tx2);font-variant-numeric:tabular-nums;white-space:nowrap;flex-shrink:0;margin-right:8px}
 #theme-btn,#bb-zoom{

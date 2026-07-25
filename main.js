@@ -471,22 +471,15 @@ function setZoom(z, cx, cy) {
   applyCanvas();
 }
 
-/* Wheel / trackpad — Figma-identical behaviour:
-   - ctrlKey=true  → pinch-to-zoom (trackpad) or Ctrl+scroll (mouse) = ZOOM
-   - ctrlKey=false → two-finger scroll (trackpad) = PAN                       */
+/* Wheel / trackpad — all scroll = zoom, pan disabled.
+   Space+drag still works for power users. */
 canvasEl.addEventListener('wheel', e => {
   e.preventDefault();
   const r = canvasEl.getBoundingClientRect();
-  if (e.ctrlKey) {
-    /* pinch or Ctrl+scroll → zoom around cursor */
-    const factor = e.deltaY < 0 ? 1.08 : 1/1.08;
-    setZoom(zoom * factor, e.clientX - r.left, e.clientY - r.top);
-  } else {
-    /* two-finger scroll → pan */
-    panX -= e.deltaX;
-    panY -= e.deltaY;
-    applyCanvas();
-  }
+  const factor = e.ctrlKey
+    ? Math.exp(-e.deltaY / 300)           /* smooth pinch-to-zoom */
+    : (e.deltaY < 0 ? 1.08 : 1 / 1.08);  /* mouse wheel / two-finger scroll */
+  setZoom(zoom * factor, e.clientX - r.left, e.clientY - r.top);
 }, { passive: false });
 
 /* Keyboard */
