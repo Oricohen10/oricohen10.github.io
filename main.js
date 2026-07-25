@@ -1212,7 +1212,7 @@ function addVisitorPresence(name, avatarId) {
 }
 
 /* Ghosts only on desktop — touch devices don't need cursor presence */
-if (isDesktop) initGhosts();
+initGhosts();
 
 window.addEventListener('load', () => {
   initPortraitAvatars();

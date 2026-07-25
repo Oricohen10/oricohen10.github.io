@@ -599,8 +599,8 @@ i.ph,i.ph-bold,i.ph-fill,i.ph-light{line-height:1;display:flex;align-items:cente
   #toast{bottom:80px}
   /* Welcome card: tighter on very small screens */
   #mv-welcome{padding:22px 18px}
-  /* Hide desktop-only cursor + ghost presence layer */
-  #cursor,#ghost-layer,.gcur,.gtag{display:none!important}
+  /* Hide only the user's own custom cursor - ghost presence layer stays visible */
+  #cursor{display:none!important}
 }
 /* Tablet (768px-1024px): ensure desktop canvas is usable */
 @media(min-width:768px) and (max-width:1024px){
