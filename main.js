@@ -14,6 +14,7 @@ window.addEventListener('resize', () => {
     mvMenuClose();
   } else {
     app.style.display = 'none';
+    closeAllWins();           // close any open desktop windows
   }
 });
 

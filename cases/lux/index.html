@@ -254,6 +254,29 @@ button{cursor:pointer;font-family:inherit}
 .cs-section p:last-child{margin-bottom:0}
 .cs-section p strong{color:var(--text-primary);font-weight:600}
 
+/* ── Live viewer CTA ──────────────────────────────────── */
+.viewer-cta{
+  display:flex;align-items:center;justify-content:space-between;gap:20px;
+  padding:22px 24px;
+  background:var(--action-primary-subtle);
+  border:1px solid color-mix(in srgb, var(--figma) 18%, transparent);
+  border-radius:12px;
+  text-decoration:none;
+  transition:border-color .15s,transform .15s;
+}
+.viewer-cta:hover{border-color:var(--figma);transform:translateY(-1px)}
+.viewer-cta-title{font-size:16px;font-weight:800;color:var(--text-primary);margin-bottom:4px}
+.viewer-cta-sub{font-size:13px;color:var(--text-secondary);line-height:1.5;max-width:420px}
+.viewer-cta-btn{
+  display:inline-flex;align-items:center;gap:6px;flex-shrink:0;
+  padding:10px 16px;border-radius:999px;
+  background:var(--figma);color:#fff;
+  font-size:13px;font-weight:700;
+  transition:background .15s;
+}
+.viewer-cta:hover .viewer-cta-btn{background:var(--action-primary-hover)}
+.viewer-cta-btn svg{width:14px;height:14px}
+
 /* ── Impact ───────────────────────────────────────────── */
 .impact-grid{
   display:grid;
@@ -324,6 +347,7 @@ button{cursor:pointer;font-family:inherit}
   .cs-hero-sub{font-size:16px}
   .cs-section p{font-size:16px}
   .ai-text{font-size:16px}
+  .viewer-cta{flex-direction:column;align-items:flex-start;gap:16px}
   .impact-grid{grid-template-columns:1fr 1fr}
   .impact-grid .impact-card:last-child{grid-column:1/-1}
 }
@@ -531,6 +555,18 @@ button{cursor:pointer;font-family:inherit}
       <p>I structured the work into 2-week sprints - system architecture first, then tokens, then components and patterns. I didn't run it alone: a core team with weekly committee reviews kept quality consistent and unblocked decisions fast.</p>
       <p>Alongside the component library, we built Verint's first motion design library - easing curves, duration tokens, and micro-animation specs for every interaction state. The pipeline from Figma to Storybook to GitHub runs fully automated - one token change in Figma, one PR, one merge.</p>
     </div>
+
+    <!-- Live viewer CTA -->
+    <a class="viewer-cta cs-reveal" href="https://oricohen.co/portfolio/LUX%202.0/lux-viewer.html" target="_blank" rel="noopener">
+      <div class="viewer-cta-text">
+        <div class="viewer-cta-title">See the real thing</div>
+        <div class="viewer-cta-sub">Every component, every state, light and dark - browse the live LUX 2.0 library.</div>
+      </div>
+      <span class="viewer-cta-btn">
+        Open viewer
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg>
+      </span>
+    </a>
 
     <!-- Impact cards -->
     <div class="impact-grid cs-reveal">
