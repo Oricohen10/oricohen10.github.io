@@ -1180,8 +1180,8 @@ function addVisitorPresence(name, avatarId) {
   if (cnt) cnt.textContent = parseInt(cnt.textContent||3) + 1;
 }
 
-/* Ghosts start immediately — no delay */
-initGhosts();
+/* Ghosts only on desktop — touch devices don't need cursor presence */
+if (isDesktop) initGhosts();
 
 window.addEventListener('load', () => {
   initPortraitAvatars();
