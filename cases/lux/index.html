@@ -95,33 +95,23 @@ button{cursor:pointer;font-family:inherit}
   cursor:pointer;
 }
 .carousel-dot.active{background:#fff;transform:scale(1.25)}
-.carousel-counter{
-  font-size:10.5px;font-weight:700;
-  color:rgba(255,255,255,.7);
-  letter-spacing:.04em;
-  background:rgba(0,0,0,.28);
-  padding:3px 8px;border-radius:20px;
-  pointer-events:none;
-}
 
-/* Zoom icon overlay */
-.carousel-slide::after{
-  content:'';
-  position:absolute;
-  bottom:12px;left:12px;
-  width:30px;height:30px;
-  background:rgba(255,255,255,.88) center/16px no-repeat;
-  background-image:url("data:image/svg+xml,%3Csvg width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%231a1a2e' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='11' cy='11' r='8'/%3E%3Cline x1='21' y1='21' x2='16.65' y2='16.65'/%3E%3Cline x1='11' y1='8' x2='11' y2='14'/%3E%3Cline x1='8' y1='11' x2='14' y2='11'/%3E%3C/svg%3E");
-  border-radius:50%;
+/* Zoom button — fixed to carousel-wrap, not inside scrolling track */
+.carousel-zoom{
+  position:absolute;bottom:14px;left:14px;z-index:10;
+  width:32px;height:32px;
+  display:flex;align-items:center;justify-content:center;
+  background:rgba(255,255,255,.88);
   border:1px solid rgba(0,0,0,.1);
+  border-radius:50%;
   box-shadow:0 1px 4px rgba(0,0,0,.14);
-  pointer-events:none;
+  color:#1a1a2e;
+  transition:background .12s,transform .12s;
 }
-[data-theme="dark"] .carousel-slide::after{
-  background-color:rgba(44,44,44,.88);
-  background-image:url("data:image/svg+xml,%3Csvg width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23f3f4f5' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='11' cy='11' r='8'/%3E%3Cline x1='21' y1='21' x2='16.65' y2='16.65'/%3E%3Cline x1='11' y1='8' x2='11' y2='14'/%3E%3Cline x1='8' y1='11' x2='14' y2='11'/%3E%3C/svg%3E");
-  border-color:rgba(255,255,255,.12);
-}
+.carousel-zoom:hover{background:rgba(255,255,255,1);transform:scale(1.08)}
+.carousel-zoom svg{width:15px;height:15px;display:block}
+[data-theme="dark"] .carousel-zoom{background:rgba(44,44,44,.88);color:#f3f4f5;border-color:rgba(255,255,255,.12)}
+[data-theme="dark"] .carousel-zoom:hover{background:rgba(60,60,60,1)}
 /* ── Lightbox ─────────────────────────────────────────── */
 .lbx{
   display:none;
@@ -254,49 +244,60 @@ button{cursor:pointer;font-family:inherit}
 .cs-section p:last-child{margin-bottom:0}
 .cs-section p strong{color:var(--text-primary);font-weight:600}
 
-/* ── Live viewer CTA ──────────────────────────────────── */
-.viewer-cta{
-  display:flex;align-items:center;justify-content:space-between;gap:20px;
-  padding:22px 24px;
-  background:var(--action-primary-subtle);
-  border:1px solid color-mix(in srgb, var(--figma) 18%, transparent);
-  border-radius:12px;
+/* ── Live viewer CTA — matches the site's .btn/.btn-secondary system ── */
+.sb-cta{
+  display:inline-flex;align-items:center;justify-content:center;gap:6px;
+  width:fit-content;
+  padding:9px 18px;border-radius:var(--r-md);
+  background:transparent;color:var(--purple-600);border:1.5px solid var(--purple-600);
+  font-size:13px;font-weight:600;
   text-decoration:none;
-  transition:border-color .15s,transform .15s;
+  box-shadow:0 0 14px rgba(123,97,255,.28);
+  transition:background .12s,color .12s,border-color .12s,box-shadow .12s;
 }
-.viewer-cta:hover{border-color:var(--figma);transform:translateY(-1px)}
-.viewer-cta-title{font-size:16px;font-weight:800;color:var(--text-primary);margin-bottom:4px}
-.viewer-cta-sub{font-size:13px;color:var(--text-secondary);line-height:1.5;max-width:420px}
-.viewer-cta-btn{
-  display:inline-flex;align-items:center;gap:6px;flex-shrink:0;
-  padding:10px 16px;border-radius:999px;
-  background:var(--figma);color:#fff;
-  font-size:13px;font-weight:700;
-  transition:background .15s;
-}
-.viewer-cta:hover .viewer-cta-btn{background:var(--action-primary-hover)}
-.viewer-cta-btn svg{width:14px;height:14px}
+.sb-cta:hover{background:var(--purple-50);color:var(--purple-700);border-color:var(--purple-700);box-shadow:0 0 20px rgba(98,72,232,.4)}
+.sb-cta:active{background:rgba(98,72,232,.1);color:var(--purple-800);border-color:var(--purple-800)}
+[data-theme="dark"] .sb-cta{color:var(--purple-300);border-color:var(--purple-400);box-shadow:0 0 16px rgba(123,97,255,.4)}
+[data-theme="dark"] .sb-cta:hover{background:rgba(123,97,255,.12);color:var(--purple-200);border-color:var(--purple-300);box-shadow:0 0 22px rgba(123,97,255,.55)}
+.sb-cta svg{width:13px;height:13px;flex-shrink:0}
 
 /* ── Impact ───────────────────────────────────────────── */
 .impact-grid{
   display:grid;
   grid-template-columns:repeat(3,1fr);
-  gap:12px;
+  gap:14px;
 }
 .impact-card{
-  padding:20px 18px;
+  padding:24px 20px 22px;
   background:var(--action-primary-subtle);
-  border:1px solid color-mix(in srgb, var(--figma) 18%, transparent);
-  border-radius:12px;
-  display:flex;flex-direction:column;gap:4px;
+  border:none;
+  border-radius:14px;
+  display:flex;flex-direction:column;gap:0;
+  position:relative;
+  overflow:hidden;
+}
+.impact-card::before{
+  content:'';
+  position:absolute;
+  top:0;left:0;right:0;
+  height:3px;
+  background:var(--action-primary);
+  opacity:.55;
+}
+.impact-eyebrow{
+  font-size:9px;font-weight:800;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--action-primary);
+  opacity:.65;
+  margin-bottom:10px;
 }
 .impact-num{
-  font-size:36px;font-weight:900;
+  font-size:52px;font-weight:900;
   color:var(--action-primary);
-  letter-spacing:-1.5px;line-height:1;
+  letter-spacing:-3px;line-height:.92;
+  margin-bottom:10px;
 }
-.impact-label{font-size:12px;color:var(--text-secondary);line-height:1.5}
-.impact-label strong{color:var(--text-primary);font-weight:600}
+.impact-label{font-size:13.5px;color:var(--text-secondary);line-height:1.55;font-weight:500}
+.impact-label strong{color:var(--text-primary);font-weight:700}
 
 /* ── AI ───────────────────────────────────────────────── */
 .ai-box{
@@ -347,7 +348,6 @@ button{cursor:pointer;font-family:inherit}
   .cs-hero-sub{font-size:16px}
   .cs-section p{font-size:16px}
   .ai-text{font-size:16px}
-  .viewer-cta{flex-direction:column;align-items:flex-start;gap:16px}
   .impact-grid{grid-template-columns:1fr 1fr}
   .impact-grid .impact-card:last-child{grid-column:1/-1}
 }
@@ -469,10 +469,14 @@ button{cursor:pointer;font-family:inherit}
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
   </button>
 
-  <!-- Footer: dots + counter -->
+  <!-- Zoom button — anchored to wrap, not the scrolling track -->
+  <button class="carousel-zoom" aria-label="Expand image" onclick="openLightbox(carIdx)">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg>
+  </button>
+
+  <!-- Footer: dots only -->
   <div class="carousel-footer">
     <div class="carousel-dots" id="car-dots"></div>
-    <div class="carousel-counter" id="car-counter">1 / 4</div>
   </div>
 </div><!-- /carousel-wrap -->
 </div><!-- /carousel-shell -->
@@ -518,6 +522,10 @@ button{cursor:pointer;font-family:inherit}
     </div>
     <div class="sb-div"></div>
     <p class="sb-nut">Rebuilt Verint's design system from scratch - token architecture, dark mode, motion library, and a fully automated Figma-to-code pipeline.</p>
+    <a class="sb-cta" href="https://oricohen.co/portfolio/LUX%202.0/lux-viewer.html" target="_blank" rel="noopener">
+      Open the live viewer
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg>
+    </a>
   </aside>
 
   <!-- Content -->
@@ -556,29 +564,20 @@ button{cursor:pointer;font-family:inherit}
       <p>Alongside the component library, we built Verint's first motion design library - easing curves, duration tokens, and micro-animation specs for every interaction state. The pipeline from Figma to Storybook to GitHub runs fully automated - one token change in Figma, one PR, one merge.</p>
     </div>
 
-    <!-- Live viewer CTA -->
-    <a class="viewer-cta cs-reveal" href="https://oricohen.co/portfolio/LUX%202.0/lux-viewer.html" target="_blank" rel="noopener">
-      <div class="viewer-cta-text">
-        <div class="viewer-cta-title">See the real thing</div>
-        <div class="viewer-cta-sub">Every component, every state, light and dark - browse the live LUX 2.0 library.</div>
-      </div>
-      <span class="viewer-cta-btn">
-        Open viewer
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg>
-      </span>
-    </a>
-
     <!-- Impact cards -->
     <div class="impact-grid cs-reveal">
       <div class="impact-card">
+        <div class="impact-eyebrow">Scale</div>
         <div class="impact-num">40+</div>
         <div class="impact-label">products running on LUX 2.0</div>
       </div>
       <div class="impact-card">
+        <div class="impact-eyebrow">Reach</div>
         <div class="impact-num">10K+</div>
         <div class="impact-label"><strong>daily users</strong> across the platform</div>
       </div>
       <div class="impact-card">
+        <div class="impact-eyebrow">Quality</div>
         <div class="impact-num">0</div>
         <div class="impact-label">hardcoded values anywhere in the system</div>
       </div>
@@ -671,8 +670,6 @@ function carUpdate() {
   document.getElementById('carousel-track').style.transform = 'translateX(-' + (carIdx * 100) + '%)';
   /* dots */
   document.querySelectorAll('.carousel-dot').forEach((d, i) => d.classList.toggle('active', i === carIdx));
-  /* counter */
-  document.getElementById('car-counter').textContent = (carIdx + 1) + ' / ' + CAR_TOTAL;
 }
 
 function carMove(dir) {
