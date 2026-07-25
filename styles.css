@@ -155,10 +155,10 @@ i.ph,i.ph-bold,i.ph-fill,i.ph-light{line-height:1;display:flex;align-items:cente
 .wf-badge{display:inline-flex;align-items:center;gap:7px;font-size:12px;font-weight:500;letter-spacing:-.1px;color:#16A34A;background:rgba(22,163,74,.07);border:1px solid rgba(22,163,74,.22);padding:6px 13px;border-radius:var(--r-full);margin-bottom:20px}
 .wf-bdot{width:7px;height:7px;background:#22C55E;border-radius:50%;animation:pulse 2s infinite;flex-shrink:0}
 [data-theme="dark"] .wf-badge{color:#4ADE80;background:rgba(34,197,94,.1);border-color:rgba(34,197,94,.25)}
-.wf-name{font-size:36px;font-weight:900;color:var(--tx);letter-spacing:-2px;line-height:1;margin-bottom:6px}
-.wf-role{font-size:12.5px;color:var(--tx3);font-weight:400;letter-spacing:.01em;margin-bottom:18px}
-.wf-line{height:1px;background:var(--bd);margin:18px 0}
-.wf-bio{font-size:15px;color:var(--tx);line-height:1.75;margin-bottom:20px}
+.wf-name{font-size:34px;font-weight:900;color:var(--tx);letter-spacing:-1.5px;line-height:1.05;margin-bottom:7px}
+.wf-role{font-size:15px;color:var(--tx2);font-weight:500;letter-spacing:-.01em;line-height:1.4;margin-bottom:20px}
+.wf-line{height:1px;background:var(--bd);margin:20px 0}
+.wf-bio{font-size:13.5px;color:var(--tx2);line-height:1.75;margin-bottom:20px}
 .wf-hint{display:none}
 .wf-ctas{display:flex;gap:10px;flex-wrap:wrap}
 
