@@ -270,22 +270,6 @@ function startIdleDemo() {
   if (!isDesktop || demoDone) return;
   cancelIdleDemo();
 
-  /* read current cursor position from its live transform */
-  let sx, sy;
-  const m = (curEl.style.transform || '').match(/translate\(([^,]+)px,\s*([^p]+)px\)/);
-  if (m) {
-    const [ox, oy] = CUR_OFFSET[curState] || [4, 4];
-    sx = parseFloat(m[1]) + ox;
-    sy = parseFloat(m[2]) + oy;
-  } else {
-    /* cursor never moved — place it at a natural canvas position */
-    sx = window.innerWidth  * 0.38;
-    sy = window.innerHeight * 0.30;
-    const [aox, aoy] = CUR_OFFSET['arrow'];
-    curEl.style.transform = `translate(${sx - aox}px,${sy - aoy}px)`;
-    setCursorState('arrow');
-  }
-
   function onInteract() {
     cancelIdleDemo();
     DEMO_EVENTS.forEach(ev => window.removeEventListener(ev, onInteract, true));
@@ -295,7 +279,7 @@ function startIdleDemo() {
   demoTimer = setTimeout(() => {
     DEMO_EVENTS.forEach(ev => window.removeEventListener(ev, onInteract, true));
     demoDone = true;
-    runDemoAnimation(sx, sy);
+    runGhostScript();
   }, 1000);
 }
 
@@ -1015,10 +999,10 @@ function initGhosts() {
 function driftGhost(g) {
   if (!g.el) return;
   /* New target: random position within safe viewport bounds */
-  const newLeft = 8  + Math.random() * 72; /* 8%–80% */
-  const newTop  = 8  + Math.random() * 68; /* 8%–76% */
-  const dur     = 3  + Math.random() * 4;  /* 3–7 s   */
-  const pause   = 1200 + Math.random() * 3200; /* 1.2–4.4 s pause */
+  const newLeft = 8  + Math.random() * 72; /* 8%-80% */
+  const newTop  = 8  + Math.random() * 68; /* 8%-76% */
+  const dur     = 3  + Math.random() * 4;  /* 3-7 s   */
+  const pause   = 1200 + Math.random() * 3200; /* 1.2-4.4 s pause */
 
   /* Override the CSS transition duration for this move */
   g.el.style.transitionDuration = dur.toFixed(2) + 's';
@@ -1027,6 +1011,122 @@ function driftGhost(g) {
 
   clearTimeout(g._driftTimer);
   g._driftTimer = setTimeout(() => driftGhost(g), dur * 1000 + pause);
+}
+
+/* ── Move a ghost to specific viewport % coords ── */
+function moveGhostTo(g, leftPct, topPct, durSec) {
+  if (!g.el) return;
+  clearTimeout(g._driftTimer);
+  g._driftTimer = null;
+  g.el.style.transitionDuration = durSec.toFixed(2) + 's';
+  g.el.style.left = leftPct.toFixed(1) + '%';
+  g.el.style.top  = topPct.toFixed(1)  + '%';
+}
+
+/* ── Show Figma-style speech bubble on a ghost cursor ── */
+function showGhostChat(g, text) {
+  if (!g.el) return;
+  let chat = g.el.querySelector('.gchat');
+  if (!chat) {
+    chat = document.createElement('div');
+    chat.className = 'gchat';
+    g.el.appendChild(chat);
+  }
+  chat.textContent = '';
+  chat.style.opacity = '1';
+  let i = 0;
+  function typeNext() {
+    if (i <= text.length) {
+      chat.textContent = text.slice(0, i++);
+      chat._tt = setTimeout(typeNext, 38 + Math.random() * 22);
+    }
+  }
+  typeNext();
+}
+
+function hideGhostChat(g) {
+  if (!g.el) return;
+  const chat = g.el.querySelector('.gchat');
+  if (!chat) return;
+  clearTimeout(chat._tt);
+  chat.style.opacity = '0';
+  setTimeout(() => { try { chat.remove(); } catch(e){} }, 250);
+}
+
+/* ════════════════════════════════════
+   GHOST ONBOARDING SCRIPT
+   Replaces the old demo animation.
+   Runs once after 1 s of user inactivity (desktop only).
+   Phase 1 — ghosts drift to toolbar, casually hover nav buttons.
+   Phase 2 — Figma cursor-chat conversation between Shrek + Donkey.
+════════════════════════════════════ */
+function runGhostScript() {
+  const shrek  = GHOST_USERS.find(g => g.id === 'shrek');
+  const donkey = GHOST_USERS.find(g => g.id === 'donkey');
+  if (!shrek?.el || !donkey?.el) return;
+
+  /* Toolbar button positions in viewport % */
+  const IDS = ['nav-contact','nav-about','nav-projects'];
+  const navBtns = IDS.map(id => {
+    const el = document.getElementById(id);
+    if (!el) return null;
+    const r = el.getBoundingClientRect();
+    return {
+      id,
+      lPct: (r.left + r.width  * 0.5) / window.innerWidth  * 100,
+      tPct: (r.top  + r.height * 0.5) / window.innerHeight * 100
+    };
+  }).filter(Boolean);
+  if (navBtns.length < 2) { driftGhost(shrek); driftGhost(donkey); return; }
+
+  const [contact, about, proj] = navBtns;
+  let   cancelled = false;
+  const timers    = [];
+
+  function cancel() {
+    if (cancelled) return;
+    cancelled = true;
+    timers.forEach(clearTimeout);
+    IDS.forEach(id => document.getElementById(id)?.classList.remove('demo-hov'));
+    hideGhostChat(shrek);
+    hideGhostChat(donkey);
+    DEMO_EVENTS.forEach(ev => window.removeEventListener(ev, cancel, true));
+    setTimeout(() => { driftGhost(shrek); driftGhost(donkey); }, 350);
+  }
+
+  DEMO_EVENTS.forEach(ev => window.addEventListener(ev, cancel, { capture: true, passive: true }));
+
+  function after(ms, fn) {
+    const t = setTimeout(() => { if (!cancelled) fn(); }, ms);
+    timers.push(t);
+  }
+
+  function setHov(id, on) {
+    document.getElementById(id)?.classList[on ? 'add' : 'remove']('demo-hov');
+  }
+
+  /* ── Phase 1: drift toward toolbar, hover 2 buttons ── */
+  moveGhostTo(donkey, contact.lPct - 1, contact.tPct - 6, 2.5);
+  after(800,  () => moveGhostTo(shrek, about.lPct + 4, about.tPct - 5, 3.0));
+
+  after(2800, () => { setHov('nav-contact', true);  moveGhostTo(donkey, contact.lPct, contact.tPct - 1, 0.6); });
+  after(4500, () => { setHov('nav-contact', false); moveGhostTo(donkey, about.lPct - 1, about.tPct - 3, 1.5); });
+  after(5300, () => setHov('nav-about', true));
+  after(6800, () => { setHov('nav-about', false);   moveGhostTo(shrek, proj.lPct + 1, proj.tPct - 4, 1.8); });
+  after(7600, () => setHov('nav-projects', true));
+  after(9000, () => setHov('nav-projects', false));
+
+  /* ── Phase 2: cursor chat ── */
+  after(10000, () => showGhostChat(donkey, "anyone know what these buttons do?"));
+  after(13500, () => { hideGhostChat(donkey); showGhostChat(shrek, "bottom bar = navigation 👆"); });
+  after(17000, () => { hideGhostChat(shrek);  showGhostChat(donkey, "oh! let's explore 🐴"); });
+  after(19500, () => {
+    hideGhostChat(donkey);
+    cancelled = true;
+    DEMO_EVENTS.forEach(ev => window.removeEventListener(ev, cancel, true));
+    driftGhost(shrek);
+    driftGhost(donkey);
+  });
 }
 
 /* ════════════════════════════════════
