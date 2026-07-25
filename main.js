@@ -268,19 +268,9 @@ function cancelIdleDemo() {
 
 function startIdleDemo() {
   if (!isDesktop || demoDone) return;
-  cancelIdleDemo();
-
-  function onInteract() {
-    cancelIdleDemo();
-    DEMO_EVENTS.forEach(ev => window.removeEventListener(ev, onInteract, true));
-  }
-  DEMO_EVENTS.forEach(ev => window.addEventListener(ev, onInteract, { capture: true, passive: true }));
-
-  demoTimer = setTimeout(() => {
-    DEMO_EVENTS.forEach(ev => window.removeEventListener(ev, onInteract, true));
-    demoDone = true;
-    runGhostScript();
-  }, 1000);
+  demoDone = true;
+  /* Runs automatically — not gated on user inactivity */
+  demoTimer = setTimeout(runGhostScript, 1200);
 }
 
 function runDemoAnimation(startX, startY) {
@@ -1030,6 +1020,7 @@ function showGhostChat(g, text) {
   if (!chat) {
     chat = document.createElement('div');
     chat.className = 'gchat';
+    chat.style.background = g.color; /* bubble = cursor color */
     g.el.appendChild(chat);
   }
   chat.textContent = '';
@@ -1055,18 +1046,21 @@ function hideGhostChat(g) {
 
 /* ════════════════════════════════════
    GHOST ONBOARDING SCRIPT
-   Replaces the old demo animation.
-   Runs once after 1 s of user inactivity (desktop only).
-   Phase 1 — ghosts drift to toolbar, casually hover nav buttons.
-   Phase 2 — Figma cursor-chat conversation between Shrek + Donkey.
+   Runs once automatically after modal close (desktop only).
+   Phase 1 — Shrek alone drifts to toolbar, casually hovers 2 nav buttons.
+             Donkey keeps drifting randomly in the background.
+   Phase 2 — Figma cursor-chat conversation between Shrek + Donkey,
+             with natural gaps so it feels like a real exchange.
 ════════════════════════════════════ */
 function runGhostScript() {
   const shrek  = GHOST_USERS.find(g => g.id === 'shrek');
   const donkey = GHOST_USERS.find(g => g.id === 'donkey');
   if (!shrek?.el || !donkey?.el) return;
 
+  /* Donkey keeps drifting naturally — only Shrek is scripted */
+
   /* Toolbar button positions in viewport % */
-  const IDS = ['nav-contact','nav-about','nav-projects'];
+  const IDS = ['nav-contact','nav-about'];
   const navBtns = IDS.map(id => {
     const el = document.getElementById(id);
     if (!el) return null;
@@ -1077,56 +1071,42 @@ function runGhostScript() {
       tPct: (r.top  + r.height * 0.5) / window.innerHeight * 100
     };
   }).filter(Boolean);
-  if (navBtns.length < 2) { driftGhost(shrek); driftGhost(donkey); return; }
+  if (!navBtns.length) { driftGhost(shrek); return; }
 
-  const [contact, about, proj] = navBtns;
-  let   cancelled = false;
-  const timers    = [];
-
-  function cancel() {
-    if (cancelled) return;
-    cancelled = true;
-    timers.forEach(clearTimeout);
-    IDS.forEach(id => document.getElementById(id)?.classList.remove('demo-hov'));
-    hideGhostChat(shrek);
-    hideGhostChat(donkey);
-    DEMO_EVENTS.forEach(ev => window.removeEventListener(ev, cancel, true));
-    setTimeout(() => { driftGhost(shrek); driftGhost(donkey); }, 350);
-  }
-
-  DEMO_EVENTS.forEach(ev => window.addEventListener(ev, cancel, { capture: true, passive: true }));
-
-  function after(ms, fn) {
-    const t = setTimeout(() => { if (!cancelled) fn(); }, ms);
-    timers.push(t);
-  }
+  const [contact, about] = navBtns;
 
   function setHov(id, on) {
     document.getElementById(id)?.classList[on ? 'add' : 'remove']('demo-hov');
   }
 
-  /* ── Phase 1: drift toward toolbar, hover 2 buttons ── */
-  moveGhostTo(donkey, contact.lPct - 1, contact.tPct - 6, 2.5);
-  after(800,  () => moveGhostTo(shrek, about.lPct + 4, about.tPct - 5, 3.0));
+  /* ── Phase 1: Shrek drifts to toolbar, hovers Contact then About ── */
+  moveGhostTo(shrek, contact.lPct - 2, contact.tPct - 6, 3.0);
 
-  after(2800, () => { setHov('nav-contact', true);  moveGhostTo(donkey, contact.lPct, contact.tPct - 1, 0.6); });
-  after(4500, () => { setHov('nav-contact', false); moveGhostTo(donkey, about.lPct - 1, about.tPct - 3, 1.5); });
-  after(5300, () => setHov('nav-about', true));
-  after(6800, () => { setHov('nav-about', false);   moveGhostTo(shrek, proj.lPct + 1, proj.tPct - 4, 1.8); });
-  after(7600, () => setHov('nav-projects', true));
-  after(9000, () => setHov('nav-projects', false));
+  setTimeout(() => { setHov('nav-contact', true);  moveGhostTo(shrek, contact.lPct, contact.tPct - 1, 0.7); }, 3200);
+  setTimeout(() => { setHov('nav-contact', false); moveGhostTo(shrek, (about?.lPct ?? contact.lPct + 8), (about?.tPct ?? contact.tPct) - 3, 1.8); }, 5200);
+  setTimeout(() => setHov('nav-about', true),  6200);
+  setTimeout(() => {
+    setHov('nav-about', false);
+    /* Shrek drifts to a mid-screen spot — comfortable chat position */
+    moveGhostTo(shrek, 40, 52, 3.0);
+  }, 8200);
 
-  /* ── Phase 2: cursor chat ── */
-  after(10000, () => showGhostChat(donkey, "anyone know what these buttons do?"));
-  after(13500, () => { hideGhostChat(donkey); showGhostChat(shrek, "bottom bar = navigation 👆"); });
-  after(17000, () => { hideGhostChat(shrek);  showGhostChat(donkey, "oh! let's explore 🐴"); });
-  after(19500, () => {
-    hideGhostChat(donkey);
-    cancelled = true;
-    DEMO_EVENTS.forEach(ev => window.removeEventListener(ev, cancel, true));
-    driftGhost(shrek);
-    driftGhost(donkey);
-  });
+  /* ── Phase 2: Shrek initiates — then Donkey responds from wherever he is ──
+     Longer pauses between messages so it feels like a real conversation      */
+  setTimeout(() => showGhostChat(shrek, "nice portfolio btw 👀"), 12000);
+  setTimeout(() => hideGhostChat(shrek),                          15800);
+
+  setTimeout(() => showGhostChat(donkey, "right? but how do you even navigate it"),  17500);
+  setTimeout(() => hideGhostChat(donkey),                                             22000);
+
+  setTimeout(() => showGhostChat(shrek, "bottom bar 👆"),  23500);
+  setTimeout(() => hideGhostChat(shrek),                   26800);
+
+  setTimeout(() => showGhostChat(donkey, "oh!! 🐴"),  28000);
+  setTimeout(() => hideGhostChat(donkey),              31000);
+
+  /* Script done — Shrek resumes normal drift */
+  setTimeout(() => driftGhost(shrek), 31200);
 }
 
 /* ════════════════════════════════════
