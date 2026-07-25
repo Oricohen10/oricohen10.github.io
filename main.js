@@ -20,6 +20,7 @@ function mvPageOpen(id) {
   mvMenuClose();
   document.getElementById('mv-page-' + id).classList.add('open');
   _hamSet(true);
+  if (id === 'about') startMvTerm();
 }
 function mvPageClose(id) {
   document.getElementById('mv-page-' + id).classList.remove('open');
@@ -859,6 +860,36 @@ function startTerm() {
   window._termStarted = true;
   const con = document.getElementById('tcon');
   const wb  = document.getElementById('term-wb');
+  let i = 0;
+  function next() {
+    if (i >= TERM.length) return;
+    const item = TERM[i++];
+    const div = document.createElement('div');
+    div.className = item.h === '' ? 'tline empty' : 'tline';
+    div.innerHTML = item.h;
+    if (item.final) {
+      const cur = document.createElement('span');
+      cur.className = 'tcur'; div.appendChild(cur);
+    }
+    con.appendChild(div);
+    wb.scrollTop = wb.scrollHeight;
+    const delay = item.h === '' ? 35 : item.pause || 45;
+    setTimeout(next, delay);
+  }
+  setTimeout(next, 300);
+}
+
+/* ════════════════════════════════════
+   MOBILE TERMINAL (About page)
+════════════════════════════════════ */
+window._mvTermStarted = false;
+
+function startMvTerm() {
+  if (window._mvTermStarted) return;
+  window._mvTermStarted = true;
+  const con = document.getElementById('mv-tcon');
+  const wb  = document.getElementById('mv-term');
+  if (!con || !wb) return;
   let i = 0;
   function next() {
     if (i >= TERM.length) return;
