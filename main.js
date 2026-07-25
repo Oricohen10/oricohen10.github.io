@@ -1013,9 +1013,14 @@ function moveGhostTo(g, leftPct, topPct, durSec) {
   g.el.style.top  = topPct.toFixed(1)  + '%';
 }
 
-/* ── Show Figma-style speech bubble on a ghost cursor ── */
+/* ── Show Figma-style speech bubble on a ghost cursor.
+   The bubble replaces the name tag visually — gtag hides while active. ── */
 function showGhostChat(g, text) {
   if (!g.el) return;
+  /* hide name tag while chatting */
+  const tag = g.el.querySelector('.gtag');
+  if (tag) tag.style.opacity = '0';
+
   let chat = g.el.querySelector('.gchat');
   if (!chat) {
     chat = document.createElement('div');
@@ -1041,7 +1046,12 @@ function hideGhostChat(g) {
   if (!chat) return;
   clearTimeout(chat._tt);
   chat.style.opacity = '0';
-  setTimeout(() => { try { chat.remove(); } catch(e){} }, 250);
+  setTimeout(() => {
+    try { chat.remove(); } catch(e){}
+    /* restore name tag */
+    const tag = g.el?.querySelector('.gtag');
+    if (tag) tag.style.opacity = '1';
+  }, 250);
 }
 
 /* ════════════════════════════════════
@@ -1057,10 +1067,10 @@ function runGhostScript() {
   const donkey = GHOST_USERS.find(g => g.id === 'donkey');
   if (!shrek?.el || !donkey?.el) return;
 
-  /* Donkey keeps drifting naturally — only Shrek is scripted */
+  /* Donkey keeps drifting naturally — only Shrek is scripted for Phase 1 */
 
   /* Toolbar button positions in viewport % */
-  const IDS = ['nav-contact','nav-about'];
+  const IDS = ['nav-contact','nav-about','nav-projects'];
   const navBtns = IDS.map(id => {
     const el = document.getElementById(id);
     if (!el) return null;
@@ -1073,40 +1083,47 @@ function runGhostScript() {
   }).filter(Boolean);
   if (!navBtns.length) { driftGhost(shrek); return; }
 
-  const [contact, about] = navBtns;
+  const [contact, about, proj] = navBtns;
 
   function setHov(id, on) {
     document.getElementById(id)?.classList[on ? 'add' : 'remove']('demo-hov');
   }
 
-  /* ── Phase 1: Shrek drifts to toolbar, hovers Contact then About ── */
-  moveGhostTo(shrek, contact.lPct - 2, contact.tPct - 6, 3.0);
+  /* ── Phase 1: Shrek drifts to toolbar — Contact, About, then clicks Projects ── */
+  moveGhostTo(shrek, contact.lPct - 2, contact.tPct - 6, 2.8);
 
-  setTimeout(() => { setHov('nav-contact', true);  moveGhostTo(shrek, contact.lPct, contact.tPct - 1, 0.7); }, 3200);
-  setTimeout(() => { setHov('nav-contact', false); moveGhostTo(shrek, (about?.lPct ?? contact.lPct + 8), (about?.tPct ?? contact.tPct) - 3, 1.8); }, 5200);
-  setTimeout(() => setHov('nav-about', true),  6200);
-  setTimeout(() => {
-    setHov('nav-about', false);
-    /* Shrek drifts to a mid-screen spot — comfortable chat position */
-    moveGhostTo(shrek, 40, 52, 3.0);
-  }, 8200);
+  /* Contact hover */
+  setTimeout(() => { setHov('nav-contact', true);  moveGhostTo(shrek, contact.lPct, contact.tPct - 1, 0.6); }, 3000);
+  setTimeout(() => { setHov('nav-contact', false); moveGhostTo(shrek, (about?.lPct ?? contact.lPct + 8), (about?.tPct ?? contact.tPct) - 3, 1.6); }, 4600);
 
-  /* ── Phase 2: Shrek initiates — then Donkey responds from wherever he is ──
-     Longer pauses between messages so it feels like a real conversation      */
-  setTimeout(() => showGhostChat(shrek, "nice portfolio btw 👀"), 12000);
-  setTimeout(() => hideGhostChat(shrek),                          15800);
+  /* About hover */
+  setTimeout(() => setHov('nav-about', true), 5500);
+  setTimeout(() => { setHov('nav-about', false); moveGhostTo(shrek, (proj?.lPct ?? (about?.lPct ?? 50) + 8), (proj?.tPct ?? contact.tPct) - 4, 1.8); }, 6900);
 
-  setTimeout(() => showGhostChat(donkey, "right? but how do you even navigate it"),  17500);
-  setTimeout(() => hideGhostChat(donkey),                                             22000);
+  /* Projects hover → click */
+  setTimeout(() => setHov('nav-projects', true), 7800);
+  setTimeout(() => setHov('nav-projects', false), 9100);
+  setTimeout(() => document.getElementById('nav-projects')?.click(), 9300);
 
-  setTimeout(() => showGhostChat(shrek, "bottom bar 👆"),  23500);
-  setTimeout(() => hideGhostChat(shrek),                   26800);
+  /* Shrek drifts to comfortable mid-screen chat position */
+  setTimeout(() => moveGhostTo(shrek, 38, 50, 3.2), 9500);
 
-  setTimeout(() => showGhostChat(donkey, "oh!! 🐴"),  28000);
-  setTimeout(() => hideGhostChat(donkey),              31000);
+  /* ── Phase 2: Figma cursor chat — game dialogue ──
+     Natural conversation pace, each message well-spaced  */
+  setTimeout(() => showGhostChat(shrek, "how many points did you score?"),  13000);
+  setTimeout(() => hideGhostChat(shrek),                                    16500);
+
+  setTimeout(() => showGhostChat(donkey, "what?? what game 🤔"),  18000);
+  setTimeout(() => hideGhostChat(donkey),                          21800);
+
+  setTimeout(() => showGhostChat(shrek, "check the bottom bar 👇"),  23500);
+  setTimeout(() => hideGhostChat(shrek),                              27000);
+
+  setTimeout(() => showGhostChat(donkey, "ohhh!! 🐴"),  28500);
+  setTimeout(() => hideGhostChat(donkey),                31500);
 
   /* Script done — Shrek resumes normal drift */
-  setTimeout(() => driftGhost(shrek), 31200);
+  setTimeout(() => driftGhost(shrek), 31700);
 }
 
 /* ════════════════════════════════════
