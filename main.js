@@ -1,6 +1,22 @@
 const isDesktop = window.innerWidth >= 768;
 if (!isDesktop) document.getElementById('app').style.display = 'none';
 
+/* Handle viewport crossing the mobile/desktop breakpoint */
+let _lastBreakpoint = isDesktop ? 'desktop' : 'mobile';
+window.addEventListener('resize', () => {
+  const now = window.innerWidth >= 768 ? 'desktop' : 'mobile';
+  if (now === _lastBreakpoint) return;
+  _lastBreakpoint = now;
+  const app = document.getElementById('app');
+  if (now === 'desktop') {
+    app.style.display = '';   // let CSS take over
+    mvCloseAll();             // close any open mobile pages/menu
+    mvMenuClose();
+  } else {
+    app.style.display = 'none';
+  }
+});
+
 /* ── Mobile menu ── */
 function _hamSet(expanded) {
   const btn = document.getElementById('mv-ham');

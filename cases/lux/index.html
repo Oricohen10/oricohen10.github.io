@@ -197,17 +197,6 @@ button{cursor:pointer;font-family:inherit}
   margin:0 auto;
   padding:28px 28px 0;
 }
-.carousel-cta{margin-top:14px;text-align:center}
-.carousel-cta a{
-  display:inline-flex;align-items:center;gap:6px;
-  padding:6px 4px;
-  font-size:13px;font-weight:600;
-  color:var(--action-primary-hover);
-  text-decoration:none;
-}
-.carousel-cta a:hover{text-decoration:underline}
-.carousel-cta a svg{width:13px;height:13px;flex-shrink:0}
-
 /* ── Sidebar ──────────────────────────────────────────── */
 .sidebar{
   position:sticky;top:61px;
@@ -394,24 +383,56 @@ button{cursor:pointer;font-family:inherit}
 <div class="carousel-wrap" id="carousel">
   <div class="carousel-track" id="carousel-track">
 
-    <!-- Slide 1: Foundations — Text Content, real screenshot from the LUX 2.0 viewer -->
+    <!-- Slide 1: Token Architecture -->
     <div class="carousel-slide" onclick="openLightbox(0)" title="Click to expand">
-      <img src="images/slide-foundations.webp" width="960" height="392" alt="LUX 2.0 text content foundation — real screenshot showing header, subtitle, and paragraph structure"/>
+      <svg viewBox="0 0 960 420" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%;background:#f0f0f0">
+        <rect width="960" height="420" fill="#EBEBEB"/>
+        <g transform="translate(480,210)" fill="none" stroke="#BFBFBF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="-28" y="-22" width="56" height="44" rx="4"/>
+          <circle cx="-9" cy="-5" r="7"/>
+          <polyline points="28,22 10,-4 -14,22"/>
+          <polyline points="-14,22 -22,10 -28,22"/>
+        </g>
+      </svg>
     </div>
 
-    <!-- Slide 2: Component Library — Card, real screenshot, light theme -->
+    <!-- Slide 2: Component Library -->
     <div class="carousel-slide" onclick="openLightbox(1)" title="Click to expand">
-      <img src="images/slide-card-light.webp" width="960" height="380" alt="LUX 2.0 card component — real screenshot in light theme"/>
+      <svg viewBox="0 0 960 420" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%;background:#f0f0f0">
+        <rect width="960" height="420" fill="#EBEBEB"/>
+        <g transform="translate(480,210)" fill="none" stroke="#BFBFBF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="-28" y="-22" width="56" height="44" rx="4"/>
+          <circle cx="-9" cy="-5" r="7"/>
+          <polyline points="28,22 10,-4 -14,22"/>
+          <polyline points="-14,22 -22,10 -28,22"/>
+        </g>
+      </svg>
     </div>
 
-    <!-- Slide 3: Dark Mode — the same Card component, dark theme -->
+    <!-- Slide 3: Dark Mode - first in Verint history -->
     <div class="carousel-slide" onclick="openLightbox(2)" title="Click to expand">
-      <img src="images/slide-card-dark.webp" width="960" height="380" alt="LUX 2.0 card component — real screenshot in dark theme"/>
+      <svg viewBox="0 0 960 420" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%;background:#f0f0f0">
+        <rect width="960" height="420" fill="#EBEBEB"/>
+        <g transform="translate(480,210)" fill="none" stroke="#BFBFBF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="-28" y="-22" width="56" height="44" rx="4"/>
+          <circle cx="-9" cy="-5" r="7"/>
+          <polyline points="28,22 10,-4 -14,22"/>
+          <polyline points="-14,22 -22,10 -28,22"/>
+        </g>
+      </svg>
     </div>
 
-    <!-- Slide 4: Navigation pattern — real screenshot, five real states side by side -->
+    <!-- Slide 4: Motion Library -->
     <div class="carousel-slide" onclick="openLightbox(3)" title="Click to expand">
-      <img src="images/slide-navigation.webp" width="960" height="418" alt="LUX 2.0 left navigation pattern — real screenshot showing regular, hover, drag, and sub-navigation states"/>
+      <svg viewBox="0 0 960 420" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%;background:#f0f0f0">
+        <rect width="960" height="420" fill="#EBEBEB"/>
+        <g transform="translate(480,210)" fill="none" stroke="#BFBFBF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="-28" y="-22" width="56" height="44" rx="4"/>
+          <circle cx="-9" cy="-5" r="7"/>
+          <polyline points="28,22 10,-4 -14,22"/>
+          <polyline points="-14,22 -22,10 -28,22"/>
+        </g>
+      </svg>
     </div>
 
   </div><!-- /track -->
@@ -430,13 +451,6 @@ button{cursor:pointer;font-family:inherit}
     <div class="carousel-counter" id="car-counter">1 / 4</div>
   </div>
 </div><!-- /carousel-wrap -->
-
-<div class="carousel-cta">
-  <a href="https://oricohen.co/portfolio/LUX%202.0/lux-viewer.html" target="_blank" rel="noopener">
-    Browse the full live component library
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg>
-  </a>
-</div>
 </div><!-- /carousel-shell -->
 
 <!-- Lightbox -->
