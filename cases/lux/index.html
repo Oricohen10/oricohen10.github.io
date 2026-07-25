@@ -36,6 +36,8 @@ button{cursor:pointer;font-family:inherit}
   position:relative;
   overflow:hidden;
   background:var(--surface-raised);
+  border:1px solid var(--border-subtle);
+  border-radius:var(--r-xl);
 }
 .carousel-track{
   display:flex;
@@ -186,6 +188,14 @@ button{cursor:pointer;font-family:inherit}
   gap:48px;
   padding:36px 28px 80px;
   max-width:1040px;
+  margin:0 auto;
+}
+
+/* ── Carousel shell ───────────────────────────────────── */
+.carousel-shell{
+  max-width:1040px;
+  margin:0 auto;
+  padding:28px 28px 0;
 }
 
 /* ── Sidebar ──────────────────────────────────────────── */
@@ -199,11 +209,15 @@ button{cursor:pointer;font-family:inherit}
   font-size:9px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;
   color:var(--action-primary);
   background:var(--action-primary-subtle);
-  border:1px solid rgba(123,97,255,.18);
+  border:1px solid color-mix(in srgb, var(--figma) 18%, transparent);
   padding:4px 10px;border-radius:20px;
   width:fit-content;
 }
-.sb-fields{display:flex;flex-direction:column;gap:14px}
+.sb-fields{
+  display:flex;flex-direction:column;gap:16px;
+  padding-left:14px;
+  border-left:2px solid var(--figma);
+}
 .sb-label{font-size:9px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--text-tertiary);margin-bottom:3px}
 .sb-value{font-size:12.5px;font-weight:500;color:var(--text-secondary);line-height:1.45}
 .sb-div{height:1px;background:var(--border-subtle)}
@@ -219,6 +233,7 @@ button{cursor:pointer;font-family:inherit}
   letter-spacing:-.7px;line-height:1.2;
   color:var(--text-primary);
 }
+.cs-hero-accent{color:var(--figma)}
 .cs-hero-sub{
   margin-top:12px;
   font-size:15px;color:var(--text-secondary);
@@ -226,23 +241,11 @@ button{cursor:pointer;font-family:inherit}
 }
 
 /* ── Sections ─────────────────────────────────────────── */
-.cs-section{}
-.cs-section-num{
-  display:flex;align-items:center;gap:8px;
-  margin-bottom:14px;
-}
-.cs-num{
-  width:22px;height:22px;
-  border-radius:50%;
-  background:var(--action-primary-subtle);
-  border:1px solid rgba(123,97,255,.2);
-  display:flex;align-items:center;justify-content:center;
-  font-size:10px;font-weight:800;color:var(--action-primary);
-  flex-shrink:0;
-}
+.cs-section-num{margin-bottom:10px}
 .cs-sec-title{
-  font-size:11px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;
-  color:var(--action-primary);
+  font-size:24px;font-weight:800;
+  letter-spacing:-.3px;
+  color:var(--figma);
 }
 .cs-section p{
   font-size:15px;color:var(--text-secondary);
@@ -261,7 +264,7 @@ button{cursor:pointer;font-family:inherit}
 .impact-card{
   padding:20px 18px;
   background:var(--action-primary-subtle);
-  border:1px solid rgba(123,97,255,.18);
+  border:1px solid color-mix(in srgb, var(--figma) 18%, transparent);
   border-radius:12px;
   display:flex;flex-direction:column;gap:4px;
 }
@@ -284,6 +287,12 @@ button{cursor:pointer;font-family:inherit}
 .ai-icon{flex-shrink:0;margin-top:2px}
 .ai-label{font-size:9.5px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--text-tertiary);margin-bottom:8px}
 .ai-text{font-size:14px;color:var(--text-secondary);line-height:1.8}
+
+/* ── Scroll reveal ────────────────────────────────────── */
+@media(prefers-reduced-motion:no-preference){
+  .cs-reveal{opacity:0;transform:translateY(16px);transition:opacity .45s ease-out,transform .45s ease-out}
+  .cs-reveal.is-visible{opacity:1;transform:translateY(0)}
+}
 
 /* ── Responsive ───────────────────────────────────────── */
 @media(max-width:720px){
@@ -337,6 +346,7 @@ button{cursor:pointer;font-family:inherit}
 
 
 <!-- Carousel -->
+<div class="carousel-shell">
 <div class="carousel-wrap" id="carousel">
   <div class="carousel-track" id="carousel-track">
 
@@ -408,6 +418,7 @@ button{cursor:pointer;font-family:inherit}
     <div class="carousel-counter" id="car-counter">1 / 4</div>
   </div>
 </div><!-- /carousel-wrap -->
+</div><!-- /carousel-shell -->
 
 <!-- Lightbox -->
 <div class="lbx" id="lightbox" role="dialog" aria-modal="true" onclick="closeLightbox(event)">
@@ -457,14 +468,13 @@ button{cursor:pointer;font-family:inherit}
 
     <!-- Hero -->
     <div class="cs-hero">
-      <h1>One system.<br/>40+ products.<br/>Zero hardcoded values.</h1>
+      <h1>One system.<br/>40+ products.<br/><span class="cs-hero-accent">Zero hardcoded values.</span></h1>
       <p class="cs-hero-sub">LUX 2.0 replaced seven years of design debt with a token-driven system that lets a designer change a color in Figma and see it live in code - without filing a ticket.</p>
     </div>
 
     <!-- Section 1: Background -->
-    <div class="cs-section">
+    <div class="cs-section cs-reveal">
       <div class="cs-section-num">
-        <div class="cs-num">1</div>
         <div class="cs-sec-title">Background</div>
       </div>
       <p>LUX 1.0 carried seven years of design debt. No tokens. No dark mode. No responsive design. Accessibility gaps on nearly every component. It still worked - but it was starting to block product teams who needed to move faster and support more contexts.</p>
@@ -472,9 +482,8 @@ button{cursor:pointer;font-family:inherit}
     </div>
 
     <!-- Section 2: Challenge -->
-    <div class="cs-section">
+    <div class="cs-section cs-reveal">
       <div class="cs-section-num">
-        <div class="cs-num">2</div>
         <div class="cs-sec-title">Challenge</div>
       </div>
       <p>This was my first time building a design system from the ground up. I had to learn token architecture - primitives, semantics, components - while running the project and the team at the same time. Setting the visual direction, running biweekly sprints, presenting to steering committees, keeping documentation in sync.</p>
@@ -482,9 +491,8 @@ button{cursor:pointer;font-family:inherit}
     </div>
 
     <!-- Section 3: Solution -->
-    <div class="cs-section">
+    <div class="cs-section cs-reveal">
       <div class="cs-section-num">
-        <div class="cs-num">3</div>
         <div class="cs-sec-title">Solution</div>
       </div>
       <p>I structured the work into 2-week sprints - system architecture first, then tokens, then components and patterns. I didn't run it alone: a core team with weekly committee reviews kept quality consistent and unblocked decisions fast.</p>
@@ -492,7 +500,7 @@ button{cursor:pointer;font-family:inherit}
     </div>
 
     <!-- Impact cards -->
-    <div class="impact-grid">
+    <div class="impact-grid cs-reveal">
       <div class="impact-card">
         <div class="impact-num">40+</div>
         <div class="impact-label">products running on LUX 2.0</div>
@@ -508,9 +516,8 @@ button{cursor:pointer;font-family:inherit}
     </div>
 
     <!-- Section 4: Result -->
-    <div class="cs-section">
+    <div class="cs-section cs-reveal">
       <div class="cs-section-num">
-        <div class="cs-num">4</div>
         <div class="cs-sec-title">Result</div>
       </div>
       <p>LUX 2.0 is live across 40+ Verint products. Zero hardcoded values in the system. A designer makes a change in Figma, a pull request opens in under 60 seconds, the developer merges - and it's live. No build steps. No designer waiting on a developer for a color fix.</p>
@@ -518,7 +525,7 @@ button{cursor:pointer;font-family:inherit}
     </div>
 
     <!-- AI Usage -->
-    <div class="ai-box">
+    <div class="ai-box cs-reveal">
       <!-- Claude pixel octopus -->
       <div class="ai-icon">
         <svg width="48" height="48" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" shape-rendering="crispEdges" aria-label="Claude AI octopus">
@@ -681,6 +688,17 @@ document.addEventListener('keydown', function(e) {
   if (e.key === 'ArrowLeft') lbxMove(-1);
   if (e.key === 'ArrowRight') lbxMove(1);
 });
+
+/* ── Scroll reveal — fades each section in as it enters view ── */
+const revealObserver = new IntersectionObserver(function(entries) {
+  entries.forEach(function(entry) {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('is-visible');
+      revealObserver.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
+document.querySelectorAll('.cs-reveal').forEach(function(el) { revealObserver.observe(el); });
 </script>
 </body>
 </html>
