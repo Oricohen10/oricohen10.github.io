@@ -250,156 +250,15 @@ window.reopenModal = function(){
   requestAnimationFrame(()=>{ mBg.classList.remove('hide'); mBg.classList.add('show'); if(nIn) nIn.focus(); });
 };
 
-/* ── Idle cursor demo ──────────────────────────────────────────
-   After 1 s of no interaction the cursor glides from wherever it
-   is, sweeps across the toolbar (a11y → contact → about) and
-   finally clicks Projects. Once per page load.
-   ─────────────────────────────────────────────────────────── */
+/* ── Idle cursor demo ── */
 let demoDone  = false;
 let demoTimer = null;
-let demoRaf   = null;
-
-const DEMO_EVENTS = ['mousemove','mousedown','keydown','touchstart','wheel','pointermove'];
-
-function cancelIdleDemo() {
-  clearTimeout(demoTimer); demoTimer = null;
-  if (demoRaf) { cancelAnimationFrame(demoRaf); demoRaf = null; }
-}
 
 function startIdleDemo() {
   if (!isDesktop || demoDone) return;
   demoDone = true;
   /* Runs automatically ~5 s after modal close */
   demoTimer = setTimeout(runGhostScript, 5000);
-}
-
-function runDemoAnimation(startX, startY) {
-  /* Cancel if user interacts at any point during the animation */
-  function cancelOnInteract() {
-    if (demoRaf) { cancelAnimationFrame(demoRaf); demoRaf = null; }
-    document.body.classList.remove('demo-running');
-    document.querySelectorAll('.demo-hov').forEach(el => el.classList.remove('demo-hov'));
-    DEMO_EVENTS.forEach(ev => window.removeEventListener(ev, cancelOnInteract, true));
-  }
-  DEMO_EVENTS.forEach(ev => window.addEventListener(ev, cancelOnInteract, { capture: true, passive: true }));
-
-  /* Contact → About → Projects */
-  const IDS = ['nav-contact','nav-about','nav-projects'];
-  const btns = IDS.map(id => {
-    const el = document.getElementById(id);
-    if (!el) return null;
-    const r = el.getBoundingClientRect();
-    return { id, x: r.left + r.width * 0.5, y: r.top + r.height * 0.5 };
-  }).filter(Boolean);
-  if (btns.length < 3) return;
-
-  const [contact, about, proj] = btns;
-
-  /* ── Timeline ──────────────────────────────────────────────────
-     One continuous motion. No frozen stops.
-     easeInOut on each half naturally makes the cursor linger at
-     each button (slow near start and end of each segment) without
-     ever stopping dead.
-
-     T_IN:  arc from cursor down to Contact
-     T_TB:  toolbar sweep — Contact dwells, drifts to About, dwells,
-            drifts to Projects (all one smooth motion, ~1400 ms)
-     T_PRJ: explicit settle at Projects before click
-  ──────────────────────────────────────────────────────────── */
-  const T_IN  = 500;
-  const T_TB  = 1400;
-  const T_PRJ = 450;
-  const TOTAL = T_IN + T_TB + T_PRJ;
-
-  const cpx = startX * 0.35 + contact.x * 0.65;
-  const cpy = Math.min(startY, contact.y) - 50;
-
-  function qbez(t, a, b, c) { const u=1-t; return u*u*a+2*u*t*b+t*t*c; }
-  function easeOut(t)   { return 1-(1-t)*(1-t); }
-  function easeInOut(t) { return t<0.5?2*t*t:-1+(4-2*t)*t; }
-
-  let lastHovId = null;
-  const t0 = performance.now();
-
-  function setDemoHov(id) {
-    if (id === lastHovId) return;
-    if (lastHovId) document.getElementById(lastHovId)?.classList.remove('demo-hov');
-    if (id)        document.getElementById(id)?.classList.add('demo-hov');
-    lastHovId = id;
-  }
-
-  function nearest(cx, cy) {
-    let best = null, bd = 28;
-    for (const b of btns) {
-      const d = Math.hypot(cx - b.x, cy - b.y);
-      if (d < bd) { bd = d; best = b.id; }
-    }
-    return best;
-  }
-
-  function frame(now) {
-    const el = now - t0;
-    let cx, cy, state = 'arrow';
-
-    if (el <= T_IN) {
-      /* ── arc in ── */
-      const p = easeOut(el / T_IN);
-      cx = qbez(p, startX, cpx, contact.x);
-      cy = qbez(p, startY, cpy, contact.y);
-      setDemoHov(el > T_IN * 0.8 ? 'nav-contact' : null);
-
-    } else if (el <= T_IN + T_TB) {
-      /* ── continuous toolbar sweep ──
-         Split into two easeInOut halves:
-           first half  (t 0→0.5): Contact → About
-                        easeInOut makes cursor slow at Contact + slow at About
-           second half (t 0.5→1): About → Projects
-                        easeInOut makes cursor slow at About + slow at Projects
-         → seamless hover-like linger at each button, no frozen stops     */
-      const t  = (el - T_IN) / T_TB;   // 0 → 1
-
-      let bx, by;
-      if (t <= 0.5) {
-        const u = easeInOut(t / 0.5);
-        bx = contact.x + (about.x - contact.x) * u;
-        by = contact.y + (about.y - contact.y) * u;
-      } else {
-        const u = easeInOut((t - 0.5) / 0.5);
-        bx = about.x  + (proj.x - about.x)  * u;
-        by = about.y  + (proj.y - about.y)   * u;
-      }
-
-      /* subtle 2 px Y wobble — cursor feels alive, not on rails */
-      cx = bx;
-      cy = by + Math.sin(t * Math.PI * 2.5) * 2;
-
-      state = 'arrow';
-      setDemoHov(nearest(cx, cy));
-
-    } else {
-      /* ── settle at Projects ── */
-      cx = proj.x; cy = proj.y;
-      state = 'arrow';
-      setDemoHov('nav-projects');
-    }
-
-    setCursorState(state);
-    const [ox, oy] = CUR_OFFSET[state];
-    curEl.style.transform = `translate(${cx - ox}px,${cy - oy}px)`;
-
-    if (el < TOTAL) {
-      demoRaf = requestAnimationFrame(frame);
-    } else {
-      setDemoHov(null);
-      demoRaf = null;
-      document.body.classList.remove('demo-running');
-      DEMO_EVENTS.forEach(ev => window.removeEventListener(ev, cancelOnInteract, true));
-      document.getElementById('nav-projects')?.click();
-    }
-  }
-
-  document.body.classList.add('demo-running');
-  demoRaf = requestAnimationFrame(frame);
 }
 
 /* ── Toast ── */
@@ -410,12 +269,6 @@ function showToast(msg, dur=2400) {
   document.getElementById('tmsg').textContent = msg;
   tEl.classList.add('show');
   tTimer = setTimeout(() => tEl.classList.remove('show'), dur);
-}
-
-/* ── Download ── */
-function downloadPortfolio() {
-  const a = document.createElement('a');
-  a.href = window.location.href; a.download = 'portfolio.html'; a.click();
 }
 
 /* ════════════════════════════════════
@@ -588,6 +441,7 @@ document.addEventListener('mousemove', e => {
 
 document.addEventListener('mouseup', () => {
   panDrag = null; frameDrag = null;
+  drag = null; winResize = null;
   setIframePointerEvents('');
   showCustomCursor();
   setCursorState(spaceDown ? 'hand' : 'arrow');
@@ -606,7 +460,7 @@ window.addEventListener('load', () => {
 let wZ = 200, drag = null, dox = 0, doy = 0;
 let cascadeX = 60, cascadeY = 50;
 const STEP = 28;
-const WIN_IDS = ['projects','about','contact','proj-lux','proj-myverint','proj-copilot','proj-plugins','proj-supervisor','a11y'];
+const WIN_IDS = ['projects','about','contact','proj-lux','proj-myverint','proj-copilot','proj-plugins','proj-supervisor','a11y','lux-viewer'];
 
 function updateCloseAll() {
   const anyOpen = WIN_IDS.some(id => {
@@ -789,12 +643,6 @@ document.addEventListener('mousemove', e => {
     rw.style.right  = rw.style.bottom = 'auto';
     e.preventDefault();
   }
-});
-document.addEventListener('mouseup', () => {
-  drag = null; winResize = null;
-  setIframePointerEvents('');
-  showCustomCursor();
-  setCursorState(spaceDown ? 'hand' : 'arrow');
 });
 document.querySelectorAll('.win').forEach(w => w.addEventListener('mousedown', () => front(w)));
 
@@ -1032,9 +880,6 @@ function moveGhostTo(g, leftPct, topPct, durSec) {
    The bubble replaces the name tag visually — gtag hides while active. ── */
 function showGhostChat(g, text) {
   if (!g.el) return;
-  /* freeze drift so bubble stays readable */
-  clearTimeout(g._driftTimer);
-  g._driftTimer = null;
   /* hide name tag while chatting */
   const tag = g.el.querySelector('.gtag');
   if (tag) tag.style.opacity = '0';
@@ -1066,10 +911,9 @@ function hideGhostChat(g) {
   chat.style.opacity = '0';
   setTimeout(() => {
     try { chat.remove(); } catch(e){}
-    /* restore name tag and resume drifting */
+    /* restore name tag */
     const tag = g.el?.querySelector('.gtag');
     if (tag) tag.style.opacity = '1';
-    driftGhost(g);
   }, 250);
 }
 
@@ -1086,15 +930,25 @@ function runGhostScript() {
   const donkey = GHOST_USERS.find(g => g.id === 'donkey');
   if (!shrek?.el || !donkey?.el) return;
 
-  /* Both ghosts keep drifting naturally — no toolbar tour, just a conversation */
+  /* Freeze both ghosts immediately — snap to current mid-transition position */
+  [shrek, donkey].forEach(g => {
+    clearTimeout(g._driftTimer);
+    g._driftTimer = null;
+    const cs = getComputedStyle(g.el);
+    g.el.style.transitionDuration = '0s';
+    g.el.style.left = cs.left;
+    g.el.style.top  = cs.top;
+  });
 
-  /* ── Figma cursor-chat: Shrek teases Donkey about a hidden game ──
-     Naturally paced — long enough to read, short enough to feel live   */
   setTimeout(() => showGhostChat(shrek,  "what are you doing in my swamp."),  500);
-  setTimeout(() => hideGhostChat(shrek),                                       5000);
+  setTimeout(() => hideGhostChat(shrek),                                        5000);
 
-  setTimeout(() => showGhostChat(donkey, "...this is a portfolio Shrek 🐴"), 6500);
-  setTimeout(() => hideGhostChat(donkey),                                       11500);
+  setTimeout(() => showGhostChat(donkey, "...this is a portfolio Shrek \u{1F434}"), 6500);
+  setTimeout(() => {
+    hideGhostChat(donkey);
+    /* Resume drifting for both after the full exchange */
+    setTimeout(() => { driftGhost(shrek); driftGhost(donkey); }, 400);
+  }, 11500);
 }
 
 /* ════════════════════════════════════
