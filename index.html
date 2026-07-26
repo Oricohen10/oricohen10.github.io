@@ -16,10 +16,7 @@
 <meta name="twitter:description" content="Product Design Team Lead & Art Director at Verint. Enterprise design systems, AI product design, and the details that hold them together."/>
 <meta name="twitter:image" content="https://oricohen.co/Assets/Media/general/og-image.png"/>
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%237B61FF'/%3E%3Ctext x='16' y='22' font-family='Arial' font-weight='700' font-size='15' fill='white' text-anchor='middle'%3EOC%3C/text%3E%3C/svg%3E"/>
-<link rel="preconnect" href="https://fonts.googleapis.com"/>
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-<link rel="preconnect" href="https://unpkg.com"/>
-<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet"/>
+<!-- Press Start 2P loaded on demand (only used in A11y game) via JS -->
 <!-- Fallback tokens — overridden by tokens.css when it loads.
      Guards against transparent/broken UI if the external file 404s. -->
 <style>:root{
@@ -38,7 +35,7 @@
 <link rel="preload" href="Assets/Media/general/ori-profile.webp" as="image" type="image/webp"/>
 <link rel="sitemap" type="application/xml" href="/sitemap.xml"/>
 <link rel="stylesheet" href="tokens.css"/>
-<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/regular/style.css"/>
+<link rel="stylesheet" href="Assets/fonts/phosphor/phosphor.css"/>
 <link rel="stylesheet" href="styles.css"/>
 <script type="application/ld+json">
 {
@@ -395,7 +392,7 @@
     </div>
     <span class="wt">Verint Design System 2.0 — Case Study</span>
   </div>
-  <iframe class="proj-iframe" src="cases/lux/index.html" title="Verint Design System 2.0 Case Study"></iframe>
+  <iframe class="proj-iframe" src="cases/lux/index.html" title="Verint Design System 2.0 Case Study" loading="lazy"></iframe>
 </div>
 
 <!-- My Verint: placeholder -->

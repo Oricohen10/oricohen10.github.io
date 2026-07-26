@@ -637,7 +637,14 @@ function openWin(id) {
   const b = document.getElementById('nav-' + id);
   if (b) b.classList.add('on');
   if (id === 'about' && !window._termStarted) startTerm();
-  /* no tennis — a11y game self-initialises */
+  /* Load Press Start 2P font on first A11y game open */
+  if (id === 'a11y' && !window._psfLoaded) {
+    window._psfLoaded = true;
+    const lk = document.createElement('link');
+    lk.rel = 'stylesheet'; lk.crossOrigin = 'anonymous';
+    lk.href = 'https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap';
+    document.head.appendChild(lk);
+  }
   /* Case study windows open maximized on first launch */
   if ((id === 'proj-lux' || id === 'lux-viewer') && !w._everMaximized) {
     w._everMaximized = true;
@@ -1025,6 +1032,9 @@ function moveGhostTo(g, leftPct, topPct, durSec) {
    The bubble replaces the name tag visually — gtag hides while active. ── */
 function showGhostChat(g, text) {
   if (!g.el) return;
+  /* freeze drift so bubble stays readable */
+  clearTimeout(g._driftTimer);
+  g._driftTimer = null;
   /* hide name tag while chatting */
   const tag = g.el.querySelector('.gtag');
   if (tag) tag.style.opacity = '0';
@@ -1056,9 +1066,10 @@ function hideGhostChat(g) {
   chat.style.opacity = '0';
   setTimeout(() => {
     try { chat.remove(); } catch(e){}
-    /* restore name tag */
+    /* restore name tag and resume drifting */
     const tag = g.el?.querySelector('.gtag');
     if (tag) tag.style.opacity = '1';
+    driftGhost(g);
   }, 250);
 }
 
@@ -1079,17 +1090,11 @@ function runGhostScript() {
 
   /* ── Figma cursor-chat: Shrek teases Donkey about a hidden game ──
      Naturally paced — long enough to read, short enough to feel live   */
-  setTimeout(() => showGhostChat(shrek,  "scroll to zoom. try it."),                            500);
-  setTimeout(() => hideGhostChat(shrek),                                                        5000);
+  setTimeout(() => showGhostChat(shrek,  "what are you doing in my swamp."),  500);
+  setTimeout(() => hideGhostChat(shrek),                                       5000);
 
-  setTimeout(() => showGhostChat(donkey, "wait... the canvas ZOOMS?! 🐴"),             6500);
-  setTimeout(() => hideGhostChat(donkey),                                                       11000);
-
-  setTimeout(() => showGhostChat(shrek,  "the 👁 in the toolbar. there's a game."),   13000);
-  setTimeout(() => hideGhostChat(shrek),                                                        17500);
-
-  setTimeout(() => showGhostChat(donkey, "a game. in a portfolio. i've been standing here. 😭"), 19000);
-  setTimeout(() => hideGhostChat(donkey),                                                        25000);
+  setTimeout(() => showGhostChat(donkey, "...this is a portfolio Shrek 🐴"), 6500);
+  setTimeout(() => hideGhostChat(donkey),                                       11500);
 }
 
 /* ════════════════════════════════════
