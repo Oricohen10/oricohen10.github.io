@@ -5,6 +5,9 @@
   font-style: normal;
   font-display: swap;
 }
+.ph {
+  /* use !important to prevent issues with browser extensions that change fonts */
+  font-family: "Phosphor" !important;
   speak: never;
   font-style: normal;
   font-weight: normal;
