@@ -588,6 +588,7 @@ document.addEventListener('mousemove', e => {
 
 document.addEventListener('mouseup', () => {
   panDrag = null; frameDrag = null;
+  setIframePointerEvents('');
   showCustomCursor();
   setCursorState(spaceDown ? 'hand' : 'arrow');
 });
@@ -638,7 +639,7 @@ function openWin(id) {
   if (id === 'about' && !window._termStarted) startTerm();
   /* no tennis — a11y game self-initialises */
   /* Case study windows open maximized on first launch */
-  if ((id === 'proj-lux') && !w._everMaximized) {
+  if ((id === 'proj-lux' || id === 'lux-viewer') && !w._everMaximized) {
     w._everMaximized = true;
     requestAnimationFrame(() => maximizeWin(id));
   }
@@ -735,6 +736,7 @@ document.querySelectorAll('.win:not([data-no-resize])').forEach(w => {
       const r = w.getBoundingClientRect();
       winResize = { win: w, dir, sx: e.clientX, sy: e.clientY,
         ox: r.left, oy: r.top, ow: r.width, oh: r.height };
+      setIframePointerEvents('none');
     });
     w.appendChild(h);
   });
@@ -744,12 +746,17 @@ document.querySelectorAll('.win:not([data-no-resize])').forEach(w => {
 document.getElementById('flabel').addEventListener('mouseenter', showNativeCursor);
 document.getElementById('flabel').addEventListener('mouseleave', () => { if (!frameDrag) showCustomCursor(); });
 
+function setIframePointerEvents(val) {
+  document.querySelectorAll('iframe').forEach(f => f.style.pointerEvents = val);
+}
+
 function startDrag(e, id) {
   if (e.button !== 0) return;
   const w = document.getElementById(id);
   front(w); drag = w;
   const r = w.getBoundingClientRect();
   dox = e.clientX - r.left; doy = e.clientY - r.top;
+  setIframePointerEvents('none');
   e.preventDefault();
 }
 
@@ -778,6 +785,7 @@ document.addEventListener('mousemove', e => {
 });
 document.addEventListener('mouseup', () => {
   drag = null; winResize = null;
+  setIframePointerEvents('');
   showCustomCursor();
   setCursorState(spaceDown ? 'hand' : 'arrow');
 });
@@ -1071,17 +1079,17 @@ function runGhostScript() {
 
   /* ── Figma cursor-chat: Shrek teases Donkey about a hidden game ──
      Naturally paced — long enough to read, short enough to feel live   */
-  setTimeout(() => showGhostChat(shrek,  "what's your high score?"),          500);
-  setTimeout(() => hideGhostChat(shrek),                                      5000);
+  setTimeout(() => showGhostChat(shrek,  "scroll to zoom. try it."),                            500);
+  setTimeout(() => hideGhostChat(shrek),                                                        5000);
 
-  setTimeout(() => showGhostChat(donkey, "...in what game?! 🤔"),             6500);
-  setTimeout(() => hideGhostChat(donkey),                                     11000);
+  setTimeout(() => showGhostChat(donkey, "wait... the canvas ZOOMS?! 🐴"),             6500);
+  setTimeout(() => hideGhostChat(donkey),                                                       11000);
 
-  setTimeout(() => showGhostChat(shrek,  "the 👁 in the toolbar. good luck."), 13000);
-  setTimeout(() => hideGhostChat(shrek),                                       17500);
+  setTimeout(() => showGhostChat(shrek,  "the 👁 in the toolbar. there's a game."),   13000);
+  setTimeout(() => hideGhostChat(shrek),                                                        17500);
 
-  setTimeout(() => showGhostChat(donkey, "wait THERE'S A GAME?! 🐴"),         19000);
-  setTimeout(() => hideGhostChat(donkey),                                      23000);
+  setTimeout(() => showGhostChat(donkey, "a game. in a portfolio. i've been standing here. 😭"), 19000);
+  setTimeout(() => hideGhostChat(donkey),                                                        25000);
 }
 
 /* ════════════════════════════════════
