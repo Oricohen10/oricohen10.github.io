@@ -269,8 +269,8 @@ function cancelIdleDemo() {
 function startIdleDemo() {
   if (!isDesktop || demoDone) return;
   demoDone = true;
-  /* Runs automatically — not gated on user inactivity */
-  demoTimer = setTimeout(runGhostScript, 1200);
+  /* Runs automatically ~5 s after modal close */
+  demoTimer = setTimeout(runGhostScript, 5000);
 }
 
 function runDemoAnimation(startX, startY) {
@@ -1067,63 +1067,21 @@ function runGhostScript() {
   const donkey = GHOST_USERS.find(g => g.id === 'donkey');
   if (!shrek?.el || !donkey?.el) return;
 
-  /* Donkey keeps drifting naturally — only Shrek is scripted for Phase 1 */
+  /* Both ghosts keep drifting naturally — no toolbar tour, just a conversation */
 
-  /* Toolbar button positions in viewport % */
-  const IDS = ['nav-contact','nav-about','nav-projects'];
-  const navBtns = IDS.map(id => {
-    const el = document.getElementById(id);
-    if (!el) return null;
-    const r = el.getBoundingClientRect();
-    return {
-      id,
-      lPct: (r.left + r.width  * 0.5) / window.innerWidth  * 100,
-      tPct: (r.top  + r.height * 0.5) / window.innerHeight * 100
-    };
-  }).filter(Boolean);
-  if (!navBtns.length) { driftGhost(shrek); return; }
+  /* ── Figma cursor-chat: Shrek teases Donkey about a hidden game ──
+     Naturally paced — long enough to read, short enough to feel live   */
+  setTimeout(() => showGhostChat(shrek,  "what's your high score?"),          500);
+  setTimeout(() => hideGhostChat(shrek),                                      5000);
 
-  const [contact, about, proj] = navBtns;
+  setTimeout(() => showGhostChat(donkey, "...in what game?! 🤔"),             6500);
+  setTimeout(() => hideGhostChat(donkey),                                     11000);
 
-  function setHov(id, on) {
-    document.getElementById(id)?.classList[on ? 'add' : 'remove']('demo-hov');
-  }
+  setTimeout(() => showGhostChat(shrek,  "the 👁 in the toolbar. good luck."), 13000);
+  setTimeout(() => hideGhostChat(shrek),                                       17500);
 
-  /* ── Phase 1: Shrek drifts to toolbar — Contact, About, then clicks Projects ── */
-  moveGhostTo(shrek, contact.lPct - 2, contact.tPct - 6, 2.8);
-
-  /* Contact hover */
-  setTimeout(() => { setHov('nav-contact', true);  moveGhostTo(shrek, contact.lPct, contact.tPct - 1, 0.6); }, 3000);
-  setTimeout(() => { setHov('nav-contact', false); moveGhostTo(shrek, (about?.lPct ?? contact.lPct + 8), (about?.tPct ?? contact.tPct) - 3, 1.6); }, 4600);
-
-  /* About hover */
-  setTimeout(() => setHov('nav-about', true), 5500);
-  setTimeout(() => { setHov('nav-about', false); moveGhostTo(shrek, (proj?.lPct ?? (about?.lPct ?? 50) + 8), (proj?.tPct ?? contact.tPct) - 4, 1.8); }, 6900);
-
-  /* Projects hover → click */
-  setTimeout(() => setHov('nav-projects', true), 7800);
-  setTimeout(() => setHov('nav-projects', false), 9100);
-  setTimeout(() => document.getElementById('nav-projects')?.click(), 9300);
-
-  /* Shrek drifts to comfortable mid-screen chat position */
-  setTimeout(() => moveGhostTo(shrek, 38, 50, 3.2), 9500);
-
-  /* ── Phase 2: Figma cursor chat — game dialogue ──
-     Natural conversation pace, each message well-spaced  */
-  setTimeout(() => showGhostChat(shrek, "how many points did you score?"),  13000);
-  setTimeout(() => hideGhostChat(shrek),                                    16500);
-
-  setTimeout(() => showGhostChat(donkey, "what?? what game 🤔"),  18000);
-  setTimeout(() => hideGhostChat(donkey),                          21800);
-
-  setTimeout(() => showGhostChat(shrek, "check the bottom bar 👇"),  23500);
-  setTimeout(() => hideGhostChat(shrek),                              27000);
-
-  setTimeout(() => showGhostChat(donkey, "ohhh!! 🐴"),  28500);
-  setTimeout(() => hideGhostChat(donkey),                31500);
-
-  /* Script done — Shrek resumes normal drift */
-  setTimeout(() => driftGhost(shrek), 31700);
+  setTimeout(() => showGhostChat(donkey, "wait THERE'S A GAME?! 🐴"),         19000);
+  setTimeout(() => hideGhostChat(donkey),                                      23000);
 }
 
 /* ════════════════════════════════════
