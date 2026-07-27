@@ -272,6 +272,26 @@ i.ph,i.ph-bold,i.ph-fill,i.ph-light{line-height:1;display:flex;align-items:cente
 #bb-zoom{font-size:11px;font-weight:500;font-variant-numeric:tabular-nums;padding:0 8px;min-width:44px;text-align:center;white-space:nowrap}
 
 /* ════════════════════════════════════
+   PROJECT ACCENT COLORS
+════════════════════════════════════ */
+#win-proj-lux        { --proj-accent: #7B61FF; }
+#win-proj-myverint   { --proj-accent: #0664a8; }
+#win-proj-supervisor { --proj-accent: #F97316; }
+#win-proj-plugins    { --proj-accent: #8B5CF6; }
+#win-proj-copilot    { --proj-accent: #10B981; }
+
+/* Colored window ring per project */
+[id^="win-proj-"] {
+  box-shadow: 0 20px 60px rgba(0,0,0,.18), 0 0 0 1.5px var(--proj-accent);
+}
+
+/* Colored titlebar bottom border */
+[id^="win-proj-"] .wh {
+  border-bottom-color: var(--proj-accent);
+  border-bottom-width: 2px;
+}
+
+/* ════════════════════════════════════
    WINDOWS  —  Steve Folkes style
 ════════════════════════════════════ */
 .win{

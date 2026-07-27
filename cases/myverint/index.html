@@ -16,6 +16,18 @@
 <link rel="stylesheet" href="../../tokens.css"/>
 <script>if(window.self!==window.top){var _s=document.createElement('style');_s.textContent='*{cursor:none!important}';document.head.appendChild(_s);}</script>
 <style>
+/* -- Project accent: My Verint = Verint Blue ---------------------------- */
+:root {
+  --action-primary:        #0664a8;
+  --action-primary-hover:  #054e87;
+  --action-primary-subtle: rgba(6,100,168,.08);
+}
+[data-theme="dark"] {
+  --action-primary:        #4BA8E8;
+  --action-primary-hover:  #3a96d8;
+  --action-primary-subtle: rgba(75,168,232,.15);
+}
+
 /* -- Reset -------------------------------------------------------------- */
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
@@ -739,7 +751,6 @@ button{cursor:pointer;font-family:inherit}
         <div class="stat-num">85%</div>
         <div class="stat-title">AI Task Completion</div>
         <div class="stat-desc">of users complete every task through Ask Verint - no menus, no screens</div>
-        <a class="stat-more" href="#result">Learn more</a>
       </div>
       <div class="stat-card">
         <div class="stat-icon">
@@ -748,7 +759,6 @@ button{cursor:pointer;font-family:inherit}
         <div class="stat-num">10K+</div>
         <div class="stat-title">Daily Users</div>
         <div class="stat-desc">contact center employees using the app across iOS and Android</div>
-        <a class="stat-more" href="#result">Learn more</a>
       </div>
       <div class="stat-card">
         <div class="stat-icon">
@@ -757,7 +767,6 @@ button{cursor:pointer;font-family:inherit}
         <div class="stat-num">1st</div>
         <div class="stat-title">Mobile Design System</div>
         <div class="stat-desc">the first mobile design system ever built at Verint</div>
-        <a class="stat-more" href="#result">Learn more</a>
       </div>
     </div>
 
