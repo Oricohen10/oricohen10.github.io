@@ -369,6 +369,21 @@ button{cursor:pointer;font-family:inherit}
   .cs-body{padding:20px 16px 80px}
   .carousel-shell{padding:16px 16px 0}
 }
+
+/* -- Scroll to top -------------------------------------------------------- */
+#scroll-top{
+  position:fixed;bottom:28px;right:28px;
+  width:38px;height:38px;border-radius:50%;
+  background:var(--action-primary);color:#fff;
+  border:none;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 4px 16px rgba(0,0,0,.18);
+  opacity:0;transform:translateY(10px);
+  transition:opacity .22s,transform .22s,background .15s;
+  pointer-events:none;z-index:500;
+}
+#scroll-top.show{opacity:1;transform:translateY(0);pointer-events:auto}
+#scroll-top:hover{background:var(--action-primary-hover)}
 </style>
 <script type="application/ld+json">
 {
@@ -771,6 +786,21 @@ const revealObserver = new IntersectionObserver(function(entries) {
   });
 }, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
 document.querySelectorAll('.cs-reveal').forEach(function(el) { revealObserver.observe(el); });
+
+/* Scroll to top */
+var scrollBtn = document.getElementById('scroll-top');
+window.addEventListener('scroll', function() {
+  scrollBtn.classList.toggle('show', window.scrollY > 320);
+}, { passive: true });
+scrollBtn.addEventListener('click', function() {
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+});
 </script>
+
+<button id="scroll-top" aria-label="Back to top">
+  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M8 12V4M8 4L4 8M8 4L12 8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+  </svg>
+</button>
 </body>
 </html>
