@@ -1,0 +1,799 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Agent Copilot - Case Study - Ori Cohen</title>
+<meta name="description" content="Designing the real-time AI panel that coaches contact center agents during live customer conversations. Hackathon to Verint Engage in six months."/>
+<link rel="canonical" href="https://oricohen.co/cases/copilot/"/>
+<meta property="og:type" content="article"/>
+<meta property="og:title" content="Agent Copilot - Case Study - Ori Cohen"/>
+<meta property="og:description" content="Designing the real-time AI panel that coaches contact center agents during live customer conversations."/>
+<meta property="og:url" content="https://oricohen.co/cases/copilot/"/>
+<meta name="twitter:card" content="summary_large_image"/>
+<link rel="stylesheet" href="../../tokens.css"/>
+<script>if(window.self!==window.top){var _s=document.createElement('style');_s.textContent='*{cursor:none!important}';document.head.appendChild(_s);}</script>
+<style>
+/* -- Project accent: Copilot = emerald ---------------------------------- */
+:root {
+  --action-primary:        #047857;
+  --action-primary-hover:  #065f46;
+  --action-primary-subtle: rgba(4,120,87,.07);
+}
+[data-theme="dark"] {
+  --action-primary:        #34d399;
+  --action-primary-hover:  #6ee7b7;
+  --action-primary-subtle: rgba(52,211,153,.12);
+}
+
+/* -- Reset -------------------------------------------------------------- */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:var(--font-sans);
+  background:var(--surface-default);
+  color:var(--text-primary);
+  -webkit-font-smoothing:antialiased;
+  line-height:1.5;
+  min-height:100vh;
+}
+img{display:block;max-width:100%}
+button{cursor:pointer;font-family:inherit}
+
+/* -- Hero media --------------------------------------------------------- */
+.media-shell{
+  max-width:1040px;
+  margin:0 auto;
+  padding:28px 28px 0;
+}
+.media-wrap{
+  position:relative;
+  overflow:hidden;
+  background:#0D1117;
+  border:1px solid var(--border-subtle);
+  border-radius:var(--r-xl);
+}
+.media-video{
+  width:100%;
+  aspect-ratio:16/9;
+  display:block;
+  cursor:pointer;
+}
+.media-play{
+  position:absolute;
+  top:50%;left:50%;
+  transform:translate(-50%,-50%);
+  width:62px;height:62px;border-radius:50%;
+  background:rgba(255,255,255,.95);
+  border:none;
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;
+  box-shadow:0 6px 32px rgba(0,0,0,.38);
+  transition:transform .15s,opacity .18s;
+  z-index:5;
+}
+.media-play:hover{transform:translate(-50%,-50%) scale(1.1)}
+.media-play.hidden{opacity:0;pointer-events:none}
+.media-play svg{margin-left:3px}
+.media-pause{
+  position:absolute;
+  top:50%;left:50%;
+  transform:translate(-50%,-50%);
+  width:52px;height:52px;border-radius:50%;
+  background:rgba(0,0,0,.48);
+  border:none;
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;
+  box-shadow:0 4px 20px rgba(0,0,0,.3);
+  transition:opacity .18s,transform .15s;
+  z-index:6;
+  opacity:0;pointer-events:none;
+}
+.media-pause.playing{pointer-events:auto}
+.media-wrap:hover .media-pause.playing{opacity:1}
+.media-pause:hover{transform:translate(-50%,-50%) scale(1.08)}
+
+/* -- Screenshot strip --------------------------------------------------- */
+.ss-strip{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:10px;
+  padding:10px 0 0;
+}
+.ss-thumb{
+  border-radius:10px;
+  overflow:hidden;
+  cursor:pointer;
+  opacity:.65;
+  border:2px solid transparent;
+  transition:opacity .15s,border-color .15s;
+}
+.ss-thumb:hover,.ss-thumb.active{opacity:1;border-color:var(--action-primary)}
+.ss-thumb img{width:100%;height:auto;display:block}
+
+/* -- Body layout -------------------------------------------------------- */
+.cs-body{
+  display:grid;
+  grid-template-columns:200px 1fr;
+  gap:48px;
+  padding:36px 28px 80px;
+  max-width:1040px;
+  margin:0 auto;
+}
+
+/* -- Sidebar ------------------------------------------------------------ */
+.sidebar{
+  position:sticky;top:61px;
+  height:fit-content;
+  display:flex;flex-direction:column;gap:20px;
+}
+.chip{display:inline-flex;align-items:center;align-self:flex-start;font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:4px 10px;border-radius:6px;white-space:nowrap;flex-shrink:0;line-height:1}
+.chip--ai{background:rgba(4,120,87,.1);color:#047857}
+[data-theme="dark"] .chip--ai{background:rgba(52,211,153,.15);color:#34d399}
+.sb-fields{
+  display:flex;flex-direction:column;gap:16px;
+  padding-left:14px;
+  border-left:2px solid var(--action-primary);
+}
+.sb-label{font-size:9px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--text-tertiary);margin-bottom:3px}
+.sb-value{font-size:12.5px;font-weight:500;color:var(--text-secondary);line-height:1.45;text-wrap:pretty}
+.sb-div{height:1px;background:var(--border-subtle)}
+.sb-nut{font-size:12px;color:var(--text-secondary);line-height:1.75;font-style:italic;text-wrap:pretty}
+
+/* -- Content ------------------------------------------------------------ */
+.cs-content{display:flex;flex-direction:column;gap:44px}
+
+/* -- Hero --------------------------------------------------------------- */
+.cs-hero{padding-bottom:32px;border-bottom:1px solid var(--border-subtle)}
+.cs-hero h1{
+  font-size:32px;font-weight:800;
+  letter-spacing:-.7px;line-height:1.2;
+  color:var(--text-primary);
+}
+.cs-hero-accent{color:var(--action-primary)}
+.cs-hero-sub{
+  margin-top:12px;
+  font-size:15px;color:var(--text-secondary);
+  text-wrap:pretty;line-height:1.7;max-width:560px;
+}
+
+/* -- Sections ----------------------------------------------------------- */
+.cs-section-num{margin-bottom:10px}
+.cs-sec-title{
+  font-size:24px;font-weight:800;
+  letter-spacing:-.3px;
+  color:var(--action-primary);
+}
+.cs-section p{
+  font-size:15px;color:var(--text-secondary);
+  line-height:1.8;text-wrap:pretty;margin-bottom:10px;
+}
+.cs-section p:last-child{margin-bottom:0}
+.cs-section p strong{color:var(--text-primary);font-weight:600}
+
+/* -- Feature blocks ----------------------------------------------------- */
+.features-list{
+  display:flex;flex-direction:column;gap:16px;
+  margin-top:24px;
+}
+.feature-block{
+  position:relative;
+  border-radius:16px;
+  border:1px solid var(--border-subtle);
+  padding:28px 32px 28px 38px;
+  overflow:hidden;
+  background:var(--surface-default);
+  box-shadow:0 2px 12px rgba(0,0,0,.04);
+  transition:box-shadow .2s;
+}
+[data-theme="dark"] .feature-block{box-shadow:none}
+.feature-block:hover{box-shadow:0 6px 28px rgba(4,120,87,.1)}
+[data-theme="dark"] .feature-block:hover{box-shadow:0 0 0 1px var(--action-primary)}
+.feature-block::before{
+  content:'';
+  position:absolute;
+  left:0;top:0;bottom:0;width:4px;
+  background:var(--action-primary);
+  border-radius:4px 0 0 4px;
+}
+.feature-head{
+  display:flex;align-items:center;gap:10px;
+  margin-bottom:12px;
+}
+.feature-num{
+  font-size:10px;font-weight:800;letter-spacing:.12em;
+  text-transform:uppercase;color:var(--text-tertiary);
+}
+.feature-tag{
+  font-size:9px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;
+  color:var(--action-primary);
+  background:var(--action-primary-subtle);
+  padding:3px 9px;border-radius:4px;
+}
+.feature-title{
+  font-size:20px;font-weight:800;letter-spacing:-.35px;
+  color:var(--text-primary);margin-bottom:8px;
+}
+.feature-desc{
+  font-size:14px;color:var(--text-secondary);
+  line-height:1.75;max-width:560px;
+}
+
+/* -- Copilot mockup panel ----------------------------------------------- */
+.cp-panel{
+  margin-top:22px;
+  padding-top:20px;
+  border-top:1px dashed var(--border-subtle);
+}
+.cp-panel-label{
+  font-size:10px;font-weight:700;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--text-tertiary);
+  margin-bottom:14px;
+}
+.cp-card{
+  border:1.5px solid var(--border-subtle);
+  border-radius:10px;
+  overflow:hidden;
+  max-width:320px;
+  font-size:12px;
+}
+.cp-card-head{
+  display:flex;align-items:center;gap:8px;
+  padding:9px 14px;
+  background:var(--action-primary);
+  color:#fff;
+}
+.cp-card-icon{font-size:14px;line-height:1}
+.cp-card-title{font-size:11px;font-weight:700;letter-spacing:.02em}
+.cp-card-body{
+  padding:12px 14px;
+  background:var(--surface-default);
+  color:var(--text-secondary);
+  font-size:12.5px;
+  line-height:1.6;
+}
+.cp-card-body strong{color:var(--text-primary)}
+.cp-card-body .cp-table{
+  width:100%;border-collapse:collapse;
+  margin-top:8px;font-size:11.5px;
+}
+.cp-card-body .cp-table th{
+  text-align:left;font-weight:700;
+  color:var(--action-primary);
+  padding:2px 0;border-bottom:1px solid var(--border-subtle);
+}
+.cp-card-body .cp-table td{
+  padding:3px 0;color:var(--text-secondary);
+}
+.cp-card-body .cp-table tr.highlight td{
+  font-weight:700;color:var(--text-primary);
+}
+.cp-card-footer{
+  display:flex;align-items:center;gap:8px;
+  padding:8px 14px;
+  border-top:1px solid var(--border-subtle);
+  background:var(--canvas,#F5F5F5);
+}
+.cp-action-btn{
+  display:inline-flex;align-items:center;gap:4px;
+  font-size:10px;font-weight:700;
+  color:var(--action-primary);
+  background:var(--action-primary-subtle);
+  border:none;
+  border-radius:6px;
+  padding:4px 10px;
+  cursor:pointer;
+  letter-spacing:.02em;
+}
+.cp-action-btn svg{width:11px;height:11px;flex-shrink:0}
+
+/* -- Timeline ----------------------------------------------------------- */
+.timeline{
+  display:flex;flex-direction:column;gap:0;
+  margin-top:24px;
+  position:relative;
+}
+.timeline::before{
+  content:'';
+  position:absolute;
+  left:14px;top:28px;bottom:28px;width:2px;
+  background:var(--border-subtle);
+}
+.tl-item{
+  display:flex;gap:18px;
+  padding:12px 0;
+  position:relative;
+}
+.tl-dot{
+  width:30px;height:30px;border-radius:50%;
+  background:var(--surface-default);
+  border:2px solid var(--action-primary);
+  display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;
+  z-index:1;
+}
+.tl-dot-inner{
+  width:10px;height:10px;border-radius:50%;
+  background:var(--action-primary);
+}
+.tl-content{padding-top:4px}
+.tl-label{
+  font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;
+  color:var(--text-tertiary);margin-bottom:3px;
+}
+.tl-text{
+  font-size:14px;color:var(--text-secondary);line-height:1.65;
+}
+.tl-text strong{color:var(--text-primary);font-weight:600}
+
+/* -- Stat cards --------------------------------------------------------- */
+.stat-grid{
+  display:grid;grid-template-columns:repeat(3,1fr);
+  gap:16px;margin-top:28px;
+}
+.stat-card{
+  background:var(--surface-default);
+  border:1px solid var(--border-subtle);
+  border-radius:16px;
+  padding:28px 20px 0;
+  display:flex;flex-direction:column;align-items:center;
+  text-align:center;overflow:hidden;
+  box-shadow:0 1px 6px rgba(0,0,0,.04);
+}
+[data-theme="dark"] .stat-card{box-shadow:none}
+.stat-icon{color:var(--action-primary);margin-bottom:14px}
+.stat-icon svg{width:30px;height:30px;display:block}
+.stat-num{
+  font-size:48px;font-weight:900;
+  color:var(--action-primary);
+  letter-spacing:-2.5px;line-height:1;margin-bottom:8px;
+}
+.stat-title{font-size:14px;font-weight:700;color:var(--text-primary);margin-bottom:6px}
+.stat-desc{font-size:12px;color:var(--text-secondary);line-height:1.6;padding:0 6px 20px;flex:1}
+
+/* -- Scroll reveal ------------------------------------------------------ */
+@media(prefers-reduced-motion:no-preference){
+  .cs-reveal{opacity:0;transform:translateY(16px);transition:opacity .45s ease-out,transform .45s ease-out}
+  .cs-reveal.is-visible{opacity:1;transform:translateY(0)}
+}
+
+/* -- Back nav ----------------------------------------------------------- */
+.back-nav{
+  display:none;align-items:center;gap:6px;
+  padding:14px 18px;
+  font-size:13px;font-weight:600;
+  color:var(--text-secondary);text-decoration:none;
+  border-bottom:1px solid var(--border-subtle);
+  background:var(--surface-default);
+}
+.back-nav svg{flex-shrink:0;color:var(--text-tertiary)}
+.back-nav:hover{color:var(--text-primary)}
+
+/* -- Scroll to top ------------------------------------------------------ */
+#scroll-top{
+  position:fixed;bottom:28px;right:28px;
+  width:38px;height:38px;border-radius:50%;
+  background:var(--action-primary);color:#fff;
+  border:none;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 4px 16px rgba(0,0,0,.18);
+  opacity:0;transform:translateY(10px);
+  transition:opacity .22s,transform .22s,background .15s;
+  pointer-events:none;z-index:500;
+}
+#scroll-top.show{opacity:1;transform:translateY(0);pointer-events:auto}
+#scroll-top:hover{background:var(--action-primary-hover)}
+
+/* -- Responsive --------------------------------------------------------- */
+@media(max-width:720px){
+  .back-nav{display:flex}
+  .cs-body{grid-template-columns:1fr;gap:28px;padding:24px 18px 80px}
+  .media-shell{padding:20px 18px 0}
+  .sidebar{position:static}
+  .cs-hero h1{font-size:24px}
+  .cs-hero-sub{font-size:16px}
+  .cs-section p{font-size:16px}
+  .stat-grid{grid-template-columns:1fr 1fr}
+  .stat-grid .stat-card:last-child{grid-column:1/-1}
+  .feature-block{padding:22px 22px 22px 28px}
+  .feature-title{font-size:18px}
+  .ss-strip{gap:6px}
+}
+@media(max-width:480px){
+  .cs-body{padding:20px 16px 80px}
+  .media-shell{padding:16px 16px 0}
+  .stat-grid{grid-template-columns:1fr}
+  .stat-grid .stat-card:last-child{grid-column:auto}
+}
+</style>
+</head>
+<body>
+
+<!-- Back nav (mobile only) -->
+<a href="/" class="back-nav" aria-label="Back to portfolio">
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="15 18 9 12 15 6"/></svg>
+  Back to portfolio
+</a>
+
+<!-- Hero media -->
+<div class="media-shell">
+  <div class="media-wrap">
+    <video
+      class="media-video"
+      id="main-vid"
+      muted
+      playsinline
+      poster="images/demo-poster.jpg"
+      aria-label="Agent Copilot demo - real-time AI panel in a live customer conversation"
+    >
+      <source src="videos/demo.mp4" type="video/mp4"/>
+    </video>
+    <button class="media-play" id="play-btn" onclick="togglePlay()" aria-label="Play demo video">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="#047857" aria-hidden="true"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+    </button>
+    <button class="media-pause playing" id="pause-btn" onclick="togglePlay()" aria-label="Pause demo video">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="white" aria-hidden="true"><rect x="6" y="4" width="4" height="16" rx="1"/><rect x="14" y="4" width="4" height="16" rx="1"/></svg>
+    </button>
+
+    <!-- Screenshot strip inside wrap -->
+    <div style="padding:0 14px 14px">
+      <div class="ss-strip">
+        <button class="ss-thumb" id="ss-0" onclick="showShot(0)" aria-label="Show incoming chat screenshot">
+          <img src="images/incoming-chat.jpg" alt="Incoming chat with AI self-service summary" width="320" height="180" loading="lazy"/>
+        </button>
+        <button class="ss-thumb" id="ss-1" onclick="showShot(1)" aria-label="Show agent desktop screenshot">
+          <img src="images/agent-desktop.jpg" alt="Agent desktop with Copilot panel" width="320" height="180" loading="lazy"/>
+        </button>
+        <button class="ss-thumb" id="ss-2" onclick="showShot(2)" aria-label="Show Copilot answering a question">
+          <img src="images/copilot-answer.jpg" alt="Copilot answering agent question with credit score table" width="320" height="180" loading="lazy"/>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Body -->
+<div class="cs-body">
+
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <span class="chip chip--ai">AI Product</span>
+    <div class="sb-fields">
+      <div>
+        <div class="sb-label">Role</div>
+        <div class="sb-value">Senior Product Designer</div>
+      </div>
+      <div>
+        <div class="sb-label">Year</div>
+        <div class="sb-value">2024</div>
+      </div>
+      <div>
+        <div class="sb-label">Tools</div>
+        <div class="sb-value">Figma, Verint Agent Desktop</div>
+      </div>
+      <div>
+        <div class="sb-label">Company</div>
+        <div class="sb-value">Verint</div>
+      </div>
+    </div>
+    <div class="sb-div"></div>
+    <p class="sb-nut">Designed the real-time AI panel that surfaces suggestions, coaching, and summaries for contact center agents - while the conversation is happening.</p>
+  </aside>
+
+  <!-- Content -->
+  <div class="cs-content">
+
+    <!-- Hero -->
+    <div class="cs-hero">
+      <h1>The agent<br/>who always<br/><span class="cs-hero-accent">knows the answer.</span></h1>
+      <p class="cs-hero-sub">Agent Copilot is a real-time AI panel embedded in Verint's contact center desktop. It reads the conversation as it happens and surfaces what the agent needs - before they have to ask. First of its kind at Verint, designed and shipped in 2024.</p>
+    </div>
+
+    <!-- Background -->
+    <div class="cs-section cs-reveal">
+      <div class="cs-section-num">
+        <div class="cs-sec-title">The problem</div>
+      </div>
+      <p>Contact center agents are expected to know everything - instantly. While a customer is talking, they hold context, search knowledge bases, remember product rules, handle the conversation, and write up a wrap-up when it ends. All of that is manual, all of it adds up, and none of it is where agents want to spend their attention.</p>
+      <p>Existing agent desktops gave agents better tools for <strong>managing</strong> conversations. No product at Verint gave them real-time help <strong>during</strong> them. The Copilot panel was the answer to that gap.</p>
+    </div>
+
+    <!-- The Copilot panel -->
+    <div class="cs-section cs-reveal">
+      <div class="cs-section-num">
+        <div class="cs-sec-title">The Copilot panel</div>
+      </div>
+      <p>A dedicated right-hand panel in the agent desktop that tracks the conversation in real time and responds - surfacing context, knowledge, coaching, and summaries without the agent leaving their screen.</p>
+
+      <div class="features-list">
+
+        <!-- 01 Self-Service Summary -->
+        <div class="feature-block">
+          <div class="feature-head">
+            <span class="feature-num">01</span>
+            <span class="feature-tag">Before the agent says hello</span>
+          </div>
+          <h3 class="feature-title">Self-Service Summary</h3>
+          <p class="feature-desc">When a customer is escalated from the bot to a live agent, the Copilot has already read the entire prior conversation. A natural-language summary waits in the acceptance modal - who the customer is, what they want, what they already tried. Zero ramp-up time.</p>
+          <div class="cp-panel">
+            <div class="cp-panel-label">Copilot - acceptance modal</div>
+            <div class="cp-card">
+              <div class="cp-card-head">
+                <span class="cp-card-icon" aria-hidden="true">&#9432;</span>
+                <span class="cp-card-title">Self-Service Summary</span>
+              </div>
+              <div class="cp-card-body">
+                David is a <strong>first time buyer</strong> looking for a <strong>Mortgage</strong>, but has questions about <strong>deposits</strong> and how much to put down. David is interested in any <strong>assistance programs</strong> that can be offered for <strong>first-time buyers</strong>.
+              </div>
+              <div class="cp-card-footer">
+                <span style="font-size:10px;color:var(--text-tertiary)">Summarized using AI</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 02 Customer Insights -->
+        <div class="feature-block">
+          <div class="feature-head">
+            <span class="feature-num">02</span>
+            <span class="feature-tag">Who you're talking to</span>
+          </div>
+          <h3 class="feature-title">Customer Insights</h3>
+          <p class="feature-desc">Account data, channel history, contact reason, and customer tags - rendered as a scannable fact sheet. Agents know "existing customer, Premier tier, called 2 days ago, calling about mortgages" in the first two seconds.</p>
+        </div>
+
+        <!-- 03 Proactive Knowledge -->
+        <div class="feature-block">
+          <div class="feature-head">
+            <span class="feature-num">03</span>
+            <span class="feature-tag">Answers that appear before you ask</span>
+          </div>
+          <h3 class="feature-title">Proactive Knowledge</h3>
+          <p class="feature-desc">The Copilot reads the conversation and surfaces the relevant knowledge card automatically. When the customer mentions buying a home, the mortgage pre-approval step appears. When they ask about credit scores, the rates table is already there. Each card has push-to-chat and send-via-email actions built in.</p>
+          <div class="cp-panel">
+            <div class="cp-panel-label">Copilot - proactive card</div>
+            <div class="cp-card">
+              <div class="cp-card-head">
+                <span class="cp-card-icon" aria-hidden="true">&#9432;</span>
+                <span class="cp-card-title">Mortgage Application</span>
+              </div>
+              <div class="cp-card-body">
+                The first step is to get Pre-approved - this requires the customer to submit an application.
+              </div>
+              <div class="cp-card-footer">
+                <button class="cp-action-btn" type="button" aria-label="Push to chat">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                  Push to chat
+                </button>
+                <button class="cp-action-btn" type="button" aria-label="Send via email">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                  Email
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 04 Real-time Coaching -->
+        <div class="feature-block">
+          <div class="feature-head">
+            <span class="feature-num">04</span>
+            <span class="feature-tag">Catches what's easy to miss</span>
+          </div>
+          <h3 class="feature-title">Real-time Coaching</h3>
+          <p class="feature-desc">Nudge cards surface mid-conversation when the Copilot detects a missed opportunity or compliance requirement. Agents under pressure forget things - the Copilot doesn't.</p>
+          <div class="cp-panel">
+            <div class="cp-panel-label">Copilot - coaching nudge</div>
+            <div class="cp-card">
+              <div class="cp-card-head" style="background:var(--action-primary)">
+                <span class="cp-card-icon" aria-hidden="true">&#9888;</span>
+                <span class="cp-card-title">Don't forget!</span>
+              </div>
+              <div class="cp-card-body">
+                Don't forget to offer Private Mortgage Insurance (PMI) to all applicants who are making a down payment less than 20%.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 05 Call Summary -->
+        <div class="feature-block">
+          <div class="feature-head">
+            <span class="feature-num">05</span>
+            <span class="feature-tag">Write-up that writes itself</span>
+          </div>
+          <h3 class="feature-title">Call Complete Summary</h3>
+          <p class="feature-desc">When the customer leaves, the Copilot generates a full call summary - outcome, key points, next steps, additional notes. Agents review and edit before saving. What used to be two to three minutes of manual wrap-up becomes a 20-second edit.</p>
+          <div class="cp-panel">
+            <div class="cp-panel-label">Copilot - call summary</div>
+            <div class="cp-card" style="max-width:360px">
+              <div class="cp-card-head">
+                <span class="cp-card-icon" aria-hidden="true">&#9432;</span>
+                <span class="cp-card-title">Call complete summary</span>
+              </div>
+              <div class="cp-card-body" style="display:flex;flex-direction:column;gap:8px">
+                <div>
+                  <div style="font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--text-tertiary);margin-bottom:4px">Outcome</div>
+                  <div style="font-size:12px;color:var(--text-primary);font-weight:500">Customer provided with relevant information</div>
+                </div>
+                <div>
+                  <div style="font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--text-tertiary);margin-bottom:4px">Summary</div>
+                  <div style="font-size:12px;color:var(--text-secondary)">Customer inquired about Mortgage options for first-time buyers. Confirmed readiness to start the application process.</div>
+                </div>
+                <div>
+                  <div style="font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--text-tertiary);margin-bottom:4px">Next Steps</div>
+                  <div style="font-size:12px;color:var(--text-secondary)">Assistance sent via email for pre-approval application.</div>
+                </div>
+              </div>
+              <div class="cp-card-footer">
+                <span style="font-size:10px;color:var(--text-tertiary)">Summarized using AI</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Process -->
+    <div class="cs-section cs-reveal">
+      <div class="cs-section-num">
+        <div class="cs-sec-title">How it got built</div>
+      </div>
+      <p>This started as a hackathon. The concept - a real-time AI panel that reads the conversation and responds in kind - didn't exist anywhere in Verint's product suite. The hackathon gave us permission to try it fast.</p>
+      <p>The challenge was scope: the panel had to handle five distinct interaction patterns (summary, context, knowledge, coaching, wrap-up) while feeling like a single coherent assistant, not five separate widgets. Every iteration had to answer the same question - <strong>does this help the agent, or does it just add noise?</strong></p>
+
+      <div class="timeline">
+
+        <div class="tl-item">
+          <div class="tl-dot"><div class="tl-dot-inner"></div></div>
+          <div class="tl-content">
+            <div class="tl-label">Origin</div>
+            <div class="tl-text">Hackathon. First prototype of the real-time suggestion panel - no existing product to compare against, no internal template to follow. We were defining a new category.</div>
+          </div>
+        </div>
+
+        <div class="tl-item">
+          <div class="tl-dot"><div class="tl-dot-inner"></div></div>
+          <div class="tl-content">
+            <div class="tl-label">Design</div>
+            <div class="tl-text">Dozens of iterations in Figma. The constraints were hard: <strong>the panel could not distract from the conversation</strong>. Cards had to appear at the right moment and recede when not needed. Timing and hierarchy were everything.</div>
+          </div>
+        </div>
+
+        <div class="tl-item">
+          <div class="tl-dot"><div class="tl-dot-inner"></div></div>
+          <div class="tl-content">
+            <div class="tl-label">Demo</div>
+            <div class="tl-text">Presented at <strong>Verint Engage 2024</strong> as a Figma prototype. Full end-to-end scenario: customer on mobile, bot handoff, live agent conversation, AI coaching, call wrap-up. First time this category of AI assistance had been shown at Verint.</div>
+          </div>
+        </div>
+
+        <div class="tl-item">
+          <div class="tl-dot"><div class="tl-dot-inner"></div></div>
+          <div class="tl-content">
+            <div class="tl-label">Shipped</div>
+            <div class="tl-text">The Copilot was mature enough to ship standalone, ahead of the full Agent Experience launch. It became the first AI-first feature in Verint's contact center desktop.</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Result -->
+    <div class="cs-section cs-reveal">
+      <div class="cs-section-num">
+        <div class="cs-sec-title">Result</div>
+      </div>
+      <p>The Copilot shipped as a standalone feature ahead of the wider Agent Experience launch. Early business cases validated the core premise: when agents have in-the-moment access to the right knowledge, calls get shorter, outcomes improve, and agents spend less time on overhead.</p>
+
+      <div class="stat-grid">
+
+        <div class="stat-card">
+          <div class="stat-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          </div>
+          <div class="stat-num">20s</div>
+          <div class="stat-title">Average call duration cut</div>
+          <div class="stat-desc">A bank reduced average handle time by 20 seconds per call by giving agents instant knowledge access.</div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+          </div>
+          <div class="stat-num">£6M</div>
+          <div class="stat-title">Annual savings, one bank</div>
+          <div class="stat-desc">In-the-moment knowledge access converted directly into measurable annual savings on contact center operations.</div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+          </div>
+          <div class="stat-num">1st</div>
+          <div class="stat-title">First of its kind at Verint</div>
+          <div class="stat-desc">No existing Verint product offered real-time AI suggestions during a live interaction. This was the category-defining design.</div>
+        </div>
+
+      </div>
+    </div>
+
+  </div><!-- /cs-content -->
+</div><!-- /cs-body -->
+
+<!-- Scroll to top -->
+<button id="scroll-top" aria-label="Scroll to top" onclick="window.scrollTo({top:0,behavior:'smooth'})">
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="18 15 12 9 6 15"/></svg>
+</button>
+
+<script>
+/* -- Video toggle -------------------------------------------------------- */
+const vid = document.getElementById('main-vid');
+const playBtn = document.getElementById('play-btn');
+const pauseBtn = document.getElementById('pause-btn');
+
+function togglePlay(){
+  if(vid.paused){
+    vid.play();
+    playBtn.classList.add('hidden');
+    pauseBtn.classList.add('playing');
+  } else {
+    vid.pause();
+    playBtn.classList.remove('hidden');
+    pauseBtn.classList.remove('playing');
+  }
+}
+vid.addEventListener('ended', () => {
+  playBtn.classList.remove('hidden');
+  pauseBtn.classList.remove('playing');
+});
+
+/* -- Screenshot viewer --------------------------------------------------- */
+function showShot(idx){
+  const shots = [
+    'images/incoming-chat.jpg',
+    'images/agent-desktop.jpg',
+    'images/copilot-answer.jpg',
+  ];
+  const labels = [
+    'Incoming chat - AI self-service summary',
+    'Agent desktop with Copilot panel',
+    'Copilot answering an agent question',
+  ];
+  vid.pause();
+  vid.poster = shots[idx];
+  // Force poster to show by hiding src briefly
+  vid.src = '';
+  vid.load();
+  playBtn.classList.remove('hidden');
+  pauseBtn.classList.remove('playing');
+
+  document.querySelectorAll('.ss-thumb').forEach((el,i) => {
+    el.classList.toggle('active', i === idx);
+  });
+}
+
+/* -- Scroll reveal ------------------------------------------------------- */
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('is-visible'); });
+}, {threshold:.12});
+document.querySelectorAll('.cs-reveal').forEach(el => obs.observe(el));
+
+/* -- Scroll to top ------------------------------------------------------- */
+const st = document.getElementById('scroll-top');
+window.addEventListener('scroll', () => {
+  st.classList.toggle('show', window.scrollY > 400);
+}, {passive:true});
+
+/* -- Restore video src on reload ---------------------------------------- */
+window.addEventListener('load', () => {
+  if(!vid.src || vid.src === window.location.href){
+    vid.src = 'videos/demo.mp4';
+    vid.load();
+  }
+});
+</script>
+
+</body>
+</html>
