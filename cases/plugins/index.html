@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>LUX Plugins - Case Study - Ori Cohen</title>
+<meta name="description" content="Four Figma plugins built for LUX 2.0 - token sync, layout scaffolding, table generator, and icon picker. Designer to GitHub in 60 seconds."/>
+<link rel="canonical" href="https://oricohen.co/cases/plugins/"/>
+<meta property="og:type" content="article"/>
+<meta property="og:title" content="LUX Plugins - Case Study - Ori Cohen"/>
+<meta property="og:description" content="Four Figma plugins built for LUX 2.0 - token sync, layout scaffolding, table generator, and icon picker."/>
+<meta property="og:url" content="https://oricohen.co/cases/plugins/"/>
+<meta name="twitter:card" content="summary_large_image"/>
+<link rel="stylesheet" href="../../tokens.css"/>
+<script>if(window.self!==window.top){var _s=document.createElement('style');_s.textContent='*{cursor:none!important}';document.head.appendChild(_s);}</script>
+<style>
+/* -- Project accent: Figma Purple ---------------------------------------- */
+:root {
+  --action-primary:        #6248E8;
+  --action-primary-hover:  #4D35C8;
+  --action-primary-subtle: rgba(98,72,232,.08);
+  --plug-bg:               #F4F2FF;
+}
+[data-theme="dark"] {
+  --plug-bg: rgba(98,72,232,.08);
+}
+
+/* -- Reset -------------------------------------------------------------- */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:var(--font-sans);
+  background:var(--surface-default);
+  color:var(--text-primary);
+  -webkit-font-smoothing:antialiased;
+}
+
+/* -- Hero --------------------------------------------------------------- */
+.cs-hero{
+  padding:40px 48px 32px;
+  border-bottom:1px solid var(--border-subtle);
+  background:var(--surface-default);
+}
+.cs-hero h1{
+  font-size:32px;font-weight:800;
+  letter-spacing:-.5px;line-height:1.1;
+  color:var(--text-primary);
+  margin-top:10px;
+}
+.cs-hero-accent{color:var(--action-primary)}
+.cs-hero-sub{
+  margin-top:10px;
+  font-size:14px;color:var(--text-secondary);
+  line-height:1.6;max-width:560px;
+}
+
+/* -- Chip --------------------------------------------------------------- */
+.chip{display:inline-flex;align-items:center;font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:4px 10px;border-radius:6px;white-space:nowrap;flex-shrink:0;line-height:1}
+.chip--plugin{background:rgba(157,34,147,.1);color:#9d2293}
+.chip--system{background:rgba(91,63,199,.1);color:#5b3fc7}
+
+/* -- Layout ------------------------------------------------------------- */
+.cs-body{
+  display:grid;
+  grid-template-columns:200px 1fr;
+  gap:0;
+  align-items:start;
+}
+
+/* -- Sidebar ------------------------------------------------------------ */
+.sidebar{
+  padding:32px 24px 40px;
+  border-right:1px solid var(--border-subtle);
+  position:sticky;
+  top:0;
+  height:fit-content;
+  display:flex;flex-direction:column;gap:20px;
+}
+.sb-fields{
+  display:flex;flex-direction:column;gap:16px;
+  padding-left:14px;
+  border-left:2px solid var(--action-primary);
+}
+.sb-label{font-size:9px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--text-tertiary);margin-bottom:3px}
+.sb-value{font-size:12.5px;font-weight:500;color:var(--text-secondary);line-height:1.45;text-wrap:pretty}
+.sb-div{height:1px;background:var(--border-subtle)}
+.sb-nut{font-size:11.5px;color:var(--text-tertiary);line-height:1.65;text-wrap:pretty}
+
+/* -- Content ------------------------------------------------------------ */
+.cs-content{
+  padding:40px 48px 80px;
+  min-width:0;
+}
+
+/* -- Intro -------------------------------------------------------------- */
+.intro-text{
+  font-size:14px;color:var(--text-secondary);
+  line-height:1.75;margin-bottom:40px;
+  max-width:640px;
+}
+.intro-text p + p{margin-top:12px}
+
+/* -- Pipeline bar ------------------------------------------------------- */
+.pipeline{
+  background:var(--plug-bg);
+  border:1px solid var(--border-subtle);
+  border-radius:12px;
+  padding:24px 28px;
+  margin-bottom:48px;
+}
+.pipeline-title{
+  font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;
+  color:var(--action-primary);margin-bottom:16px;
+}
+.pipeline-headline{
+  font-size:20px;font-weight:800;letter-spacing:-.3px;
+  color:var(--text-primary);margin-bottom:6px;line-height:1.2;
+}
+.pipeline-sub{
+  font-size:12.5px;color:var(--text-secondary);
+  line-height:1.6;margin-bottom:20px;max-width:520px;
+}
+.pipeline-flow{
+  display:flex;align-items:center;gap:0;
+  flex-wrap:wrap;gap:4px;
+}
+.pf-step{
+  display:flex;align-items:center;gap:8px;
+  background:var(--surface-default);
+  border:1px solid var(--border-subtle);
+  border-radius:8px;
+  padding:8px 14px;
+  font-size:11.5px;font-weight:600;color:var(--text-primary);
+  white-space:nowrap;
+}
+.pf-step-icon{font-size:14px}
+.pf-badge{
+  font-size:9px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;
+  padding:2px 6px;border-radius:4px;margin-left:4px;
+  background:rgba(98,72,232,.12);color:var(--action-primary);
+}
+.pf-badge.auto{background:rgba(21,128,61,.12);color:#15803d}
+.pf-arrow{
+  color:var(--text-tertiary);font-size:12px;font-weight:600;
+  padding:0 2px;flex-shrink:0;
+}
+
+/* -- Plugin blocks ------------------------------------------------------ */
+.plugins-list{display:flex;flex-direction:column;gap:48px}
+
+.plugin-block{}
+.plugin-label{
+  display:flex;align-items:center;gap:10px;
+  margin-bottom:14px;
+}
+.plugin-num{
+  font-size:10px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;
+  color:var(--text-tertiary);
+}
+.plugin-tag{
+  font-size:9px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;
+  color:var(--action-primary);
+  background:var(--action-primary-subtle);
+  padding:3px 8px;border-radius:4px;
+}
+.plugin-video{
+  width:100%;aspect-ratio:16/10;
+  border-radius:10px;
+  overflow:hidden;
+  background:#0D0D0D;
+  border:1px solid var(--border-subtle);
+  box-shadow:0 8px 32px rgba(0,0,0,.12);
+  margin-bottom:16px;
+  position:relative;
+}
+.plugin-video video{
+  width:100%;height:100%;
+  object-fit:cover;display:block;
+}
+.plugin-title{
+  font-size:18px;font-weight:800;
+  letter-spacing:-.3px;color:var(--text-primary);
+  margin-bottom:6px;
+}
+.plugin-desc{
+  font-size:13.5px;color:var(--text-secondary);
+  line-height:1.7;max-width:600px;
+}
+
+/* -- Divider ------------------------------------------------------------ */
+.cs-divider{height:1px;background:var(--border-subtle);margin:8px 0 48px}
+
+/* -- Scroll to top ------------------------------------------------------ */
+#scroll-top{
+  position:fixed;bottom:28px;right:28px;
+  width:38px;height:38px;border-radius:50%;
+  background:var(--action-primary);color:#fff;
+  border:none;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 4px 16px rgba(0,0,0,.18);
+  opacity:0;transform:translateY(10px);
+  transition:opacity .22s,transform .22s,background .15s;
+  pointer-events:none;z-index:500;
+}
+#scroll-top.show{opacity:1;transform:translateY(0);pointer-events:auto}
+#scroll-top:hover{background:var(--action-primary-hover)}
+
+/* -- Reveal animation --------------------------------------------------- */
+.cs-reveal{opacity:0;transform:translateY(20px);transition:opacity .45s cubic-bezier(.22,.68,0,1.2),transform .45s cubic-bezier(.22,.68,0,1.2)}
+.cs-reveal.is-visible{opacity:1;transform:translateY(0)}
+
+/* -- Responsive --------------------------------------------------------- */
+@media(max-width:720px){
+  .cs-body{grid-template-columns:1fr}
+  .sidebar{position:static;border-right:none;border-bottom:1px solid var(--border-subtle);padding:24px 20px}
+  .cs-content{padding:28px 20px 60px}
+  .cs-hero{padding:28px 20px 24px}
+  .cs-hero h1{font-size:24px}
+  .pipeline-headline{font-size:17px}
+  .pf-step{font-size:10.5px;padding:6px 10px}
+}
+</style>
+</head>
+<body>
+
+<!-- Hero -->
+<header class="cs-hero">
+  <span class="chip chip--plugin">Figma Plugin</span>
+  <h1>Built to close the gaps.<br/><span class="cs-hero-accent">No plugin fit what LUX needed.</span></h1>
+  <p class="cs-hero-sub">So we built four. Each one eliminated a different manual step from the workflow - less friction, more time designing.</p>
+</header>
+
+<!-- Body -->
+<div class="cs-body">
+
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="sb-fields">
+      <div>
+        <div class="sb-label">Role</div>
+        <div class="sb-value">Design Lead, Plugin Engineering</div>
+      </div>
+      <div>
+        <div class="sb-label">Tools</div>
+        <div class="sb-value">Figma API, TypeScript, GitHub Actions</div>
+      </div>
+      <div>
+        <div class="sb-label">Company</div>
+        <div class="sb-value">Verint</div>
+      </div>
+      <div>
+        <div class="sb-label">Timeline</div>
+        <div class="sb-value">2024-2025</div>
+      </div>
+    </div>
+    <div class="sb-div"></div>
+    <p class="sb-nut">Four plugins built to remove manual steps from the LUX 2.0 workflow - from token sync to layout scaffolding to icon search.</p>
+  </aside>
+
+  <!-- Content -->
+  <div class="cs-content">
+
+    <!-- Intro -->
+    <div class="intro-text cs-reveal">
+      <p>LUX 2.0 introduced a three-layer token architecture, a Figma-to-Storybook pipeline, and strict component standards. The existing plugin ecosystem wasn't built for any of it.</p>
+      <p>Every plugin we tried either lacked token awareness, didn't integrate with our GitHub pipeline, or required a developer to finish what a designer started. So we built the ones that did the job.</p>
+    </div>
+
+    <!-- Pipeline -->
+    <div class="pipeline cs-reveal">
+      <div class="pipeline-title">The Pipeline</div>
+      <div class="pipeline-headline">Zero terminal.<br/>Designer to GitHub in 60 seconds.</div>
+      <p class="pipeline-sub">Edit a Figma variable, click once in the plugin, and a validated pull request lands on GitHub automatically. No terminal. No build step. No waiting.</p>
+      <div class="pipeline-flow">
+        <div class="pf-step"><span class="pf-step-icon">🎨</span> Figma Variables <span class="pf-badge">Manual</span></div>
+        <span class="pf-arrow">→</span>
+        <div class="pf-step"><span class="pf-step-icon">🔌</span> Token Sync <span class="pf-badge">Manual</span></div>
+        <span class="pf-arrow">→</span>
+        <div class="pf-step"><span class="pf-step-icon">📝</span> TS Generation <span class="pf-badge auto">Auto</span></div>
+        <span class="pf-arrow">→</span>
+        <div class="pf-step"><span class="pf-step-icon">😺</span> GitHub PR <span class="pf-badge auto">Auto</span></div>
+        <span class="pf-arrow">→</span>
+        <div class="pf-step"><span class="pf-step-icon">🚀</span> Live <span class="pf-badge auto">Auto</span></div>
+      </div>
+    </div>
+
+    <!-- Plugins -->
+    <div class="plugins-list">
+
+      <!-- 1. Token Sync -->
+      <div class="plugin-block cs-reveal">
+        <div class="plugin-label">
+          <span class="plugin-num">01</span>
+          <span class="plugin-tag">Token Pipeline</span>
+        </div>
+        <div class="plugin-video">
+          <video autoplay loop muted playsinline poster="images/token-sync-poster.jpg">
+            <source src="videos/token-sync.mp4" type="video/mp4"/>
+          </video>
+        </div>
+        <div class="plugin-title">Token Sync</div>
+        <p class="plugin-desc">Pushes updated design tokens from Figma directly into the pipeline. One click and tokens.json commits, the GitHub Action fires, and Storybook rebuilds. No developer needed.</p>
+      </div>
+
+      <div class="cs-divider"></div>
+
+      <!-- 2. Layout Creator -->
+      <div class="plugin-block cs-reveal">
+        <div class="plugin-label">
+          <span class="plugin-num">02</span>
+          <span class="plugin-tag">Layout Scaffolding</span>
+        </div>
+        <div class="plugin-video">
+          <video autoplay loop muted playsinline poster="images/layout-creator-poster.jpg">
+            <source src="videos/layout-creator.mp4" type="video/mp4"/>
+          </video>
+        </div>
+        <div class="plugin-title">Layout Creator</div>
+        <p class="plugin-desc">Scaffold a full LUX 2.0 layout in seconds. Generates containers, navigation, and page structure with the correct token bindings already applied - ready to design into, not from scratch.</p>
+      </div>
+
+      <div class="cs-divider"></div>
+
+      <!-- 3. Table Creator -->
+      <div class="plugin-block cs-reveal">
+        <div class="plugin-label">
+          <span class="plugin-num">03</span>
+          <span class="plugin-tag">Data Table Generator</span>
+        </div>
+        <div class="plugin-video">
+          <video autoplay loop muted playsinline poster="images/table-creator-poster.jpg">
+            <source src="videos/table-creator.mp4" type="video/mp4"/>
+          </video>
+        </div>
+        <div class="plugin-title">Table Creator</div>
+        <p class="plugin-desc">Generate data tables with configurable rows, columns, and content. Every output matches the LUX 2.0 Data Table token structure exactly - consistent across every Figma file, without manual assembly.</p>
+      </div>
+
+      <div class="cs-divider"></div>
+
+      <!-- 4. Icon Library Picker -->
+      <div class="plugin-block cs-reveal">
+        <div class="plugin-label">
+          <span class="plugin-num">04</span>
+          <span class="plugin-tag">Icon Search</span>
+        </div>
+        <div class="plugin-video">
+          <video autoplay loop muted playsinline poster="images/icons-generator-poster.jpg">
+            <source src="videos/icons-generator.mp4" type="video/mp4"/>
+          </video>
+        </div>
+        <div class="plugin-title">Icon Library Picker</div>
+        <p class="plugin-desc">Browse and insert icons from the LUX 2.0 icon library. Search by name, category, or meaning - and insert the right icon directly into your frame with correct sizing and token binding.</p>
+      </div>
+
+    </div><!-- /plugins-list -->
+
+  </div><!-- /cs-content -->
+</div><!-- /cs-body -->
+
+<script>
+/* Scroll reveal */
+var revealObserver = new IntersectionObserver(function(entries) {
+  entries.forEach(function(entry) {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('is-visible');
+      revealObserver.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+document.querySelectorAll('.cs-reveal').forEach(function(el) { revealObserver.observe(el); });
+
+/* Scroll to top */
+document.addEventListener('DOMContentLoaded', function() {
+  var scrollBtn = document.getElementById('scroll-top');
+  if (!scrollBtn) return;
+  window.addEventListener('scroll', function() {
+    scrollBtn.classList.toggle('show', window.scrollY > 320);
+  }, { passive: true });
+  scrollBtn.addEventListener('click', function() {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+});
+</script>
+
+<button id="scroll-top" aria-label="Back to top">
+  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M8 12V4M8 4L4 8M8 4L12 8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+  </svg>
+</button>
+</body>
+</html>
