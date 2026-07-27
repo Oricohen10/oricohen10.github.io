@@ -352,8 +352,7 @@ i.ph,i.ph-bold,i.ph-fill,i.ph-light{line-height:1;display:flex;align-items:cente
    Reusable color-coded tag. Base + variant class.
    chip--system | chip--product | chip--ai | chip--plugin | chip--dash
    ─────────────────────────────────────────────────────── */
-.chip{display:inline-flex;align-items:center;gap:5px;font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:3px 8px;border-radius:20px;white-space:nowrap;flex-shrink:0;line-height:1}
-.chip::before{content:'';width:5px;height:5px;border-radius:50%;background:currentColor;flex-shrink:0}
+.chip{display:inline-flex;align-items:center;font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:4px 10px;border-radius:6px;white-space:nowrap;flex-shrink:0;line-height:1}
 .chip--system {background:rgba(91,63,199,.1);color:#5b3fc7}
 .chip--product{background:rgba(6,100,168,.1);color:var(--tx-brand)}
 .chip--ai     {background:rgba(13,122,112,.1);color:#0d7a70}
@@ -366,7 +365,7 @@ i.ph,i.ph-bold,i.ph-fill,i.ph-light{line-height:1;display:flex;align-items:cente
 [data-theme="dark"] .chip--dash   {background:rgba(251,191,36,.14);color:#fbbf24}
 
 .pg-card-body{padding:10px 2px 4px;display:flex;flex-direction:column;gap:0}
-.pg-card-body .chip{margin-bottom:6px;align-self:flex-start}
+.pg-card-body .chip{margin-top:8px;align-self:flex-start}
 .pg-card-name{font-size:13px;font-weight:700;color:var(--tx);margin-bottom:4px;letter-spacing:-.2px}
 .pg-card-desc{font-size:11px;color:var(--tx2);line-height:1.5;margin-bottom:8px}
 .pg-card.pg-card-soon{cursor:default}
