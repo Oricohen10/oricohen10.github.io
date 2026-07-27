@@ -14,16 +14,16 @@
 <link rel="stylesheet" href="../../tokens.css"/>
 <script>if(window.self!==window.top){var _s=document.createElement('style');_s.textContent='*{cursor:none!important}';document.head.appendChild(_s);}</script>
 <style>
-/* -- Project accent: Figma blue ----------------------------------------- */
+/* -- Project accent: Plugins = magenta ---------------------------------- */
 :root {
-  --action-primary:        #0052CC;
-  --action-primary-hover:  #0041A3;
-  --action-primary-subtle: rgba(0,82,204,.07);
+  --action-primary:        #9d2293;
+  --action-primary-hover:  #7b1a73;
+  --action-primary-subtle: rgba(157,34,147,.07);
 }
 [data-theme="dark"] {
-  --action-primary:        #4C9AFF;
-  --action-primary-hover:  #3D8EF0;
-  --action-primary-subtle: rgba(76,154,255,.12);
+  --action-primary:        #e040fb;
+  --action-primary-hover:  #ba68c8;
+  --action-primary-subtle: rgba(224,64,251,.12);
 }
 
 /* -- Reset -------------------------------------------------------------- */
@@ -138,7 +138,7 @@ button{cursor:pointer;font-family:inherit}
   display:flex;flex-direction:column;gap:20px;
 }
 .chip{display:inline-flex;align-items:center;align-self:flex-start;font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:4px 10px;border-radius:6px;white-space:nowrap;flex-shrink:0;line-height:1}
-.chip--plugin{background:rgba(0,82,204,.1);color:#0052CC}
+.chip--plugin{background:rgba(157,34,147,.1);color:#9d2293}
 .sb-fields{
   display:flex;flex-direction:column;gap:16px;
   padding-left:14px;
@@ -195,7 +195,7 @@ button{cursor:pointer;font-family:inherit}
   box-shadow:0 2px 12px rgba(0,0,0,.04);
   transition:box-shadow .2s;
 }
-.plugin-block:hover{box-shadow:0 6px 28px rgba(0,82,204,.1)}
+.plugin-block:hover{box-shadow:0 6px 28px rgba(157,34,147,.1)}
 .plugin-block::before{
   content:'';
   position:absolute;
@@ -273,7 +273,7 @@ button{cursor:pointer;font-family:inherit}
 .pf-badge{
   font-size:9px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;
   padding:2px 6px;border-radius:4px;
-  background:rgba(0,82,204,.1);color:var(--action-primary);
+  background:var(--action-primary-subtle);color:var(--action-primary);
 }
 .pf-badge.auto{background:rgba(21,128,61,.12);color:#15803d}
 .pf-arrow{color:var(--text-tertiary);font-size:13px;font-weight:500;flex-shrink:0}
@@ -377,7 +377,7 @@ button{cursor:pointer;font-family:inherit}
         <source src="videos/token-sync.mp4" type="video/mp4"/>
       </video>
       <button class="car-play" onclick="playVid(0)" aria-label="Play Token Sync video">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="#0052CC"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="#9d2293"><polygon points="5 3 19 12 5 21 5 3"/></svg>
       </button>
       <div class="carousel-slide-label">Token Sync</div>
     </div>
@@ -388,7 +388,7 @@ button{cursor:pointer;font-family:inherit}
         <source src="videos/layout-creator.mp4" type="video/mp4"/>
       </video>
       <button class="car-play" onclick="playVid(1)" aria-label="Play Layout Creator video">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="#0052CC"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="#9d2293"><polygon points="5 3 19 12 5 21 5 3"/></svg>
       </button>
       <div class="carousel-slide-label">Layout Creator</div>
     </div>
@@ -399,7 +399,7 @@ button{cursor:pointer;font-family:inherit}
         <source src="videos/table-creator.mp4" type="video/mp4"/>
       </video>
       <button class="car-play" onclick="playVid(2)" aria-label="Play Table Creator video">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="#0052CC"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="#9d2293"><polygon points="5 3 19 12 5 21 5 3"/></svg>
       </button>
       <div class="carousel-slide-label">Table Creator</div>
     </div>
@@ -410,7 +410,7 @@ button{cursor:pointer;font-family:inherit}
         <source src="videos/icons-generator.mp4" type="video/mp4"/>
       </video>
       <button class="car-play" onclick="playVid(3)" aria-label="Play Icon Library Picker video">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="#0052CC"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="#9d2293"><polygon points="5 3 19 12 5 21 5 3"/></svg>
       </button>
       <div class="carousel-slide-label">Icon Library Picker</div>
     </div>
