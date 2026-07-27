@@ -31,7 +31,7 @@ Git operations go through `/sessions/blissful-adoring-thompson/repo-work/` (not 
 | Secondary text | `var(--tx2)` | #585b5e |
 | Muted text | `var(--tx3)` | #6a6d70 |
 | Brand/link text | `var(--tx-brand)` | #0664a8 |
-| Primary action | `var(--figma)` | #7B61FF |
+| Primary action | `var(--figma)` | #6248E8 (purple-600, AA accessible) |
 | Interactive blue | `var(--blue)` | for borders/accents only, NOT text |
 | Surface | `var(--wbg)` or `var(--frm)` | white |
 | Canvas bg | `var(--canvas)` | #F5F5F5 |

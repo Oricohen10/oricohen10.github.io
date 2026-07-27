@@ -108,8 +108,8 @@
   --text-inverse:   var(--vg-50);        /* #f7f8f8 — text on dark bg (text.common.inverse) */
 
   /* Interactive */
-  --action-primary:       var(--purple-500);   /* CTA, active nav, badge */
-  --action-primary-hover: var(--purple-600);
+  --action-primary:       var(--purple-600);   /* CTA, active nav, badge — AA accessible on white */
+  --action-primary-hover: var(--purple-700);
   --action-primary-subtle:var(--purple-50);    /* tint bg for badge, chip */
   --action-secondary:     var(--blue-500);     /* links, focus ring */
   --action-secondary-subtle: var(--blue-50);
@@ -162,7 +162,7 @@
   --text-inverse:   var(--vg-950);       /* #121213 — text on light elements within dark theme */
 
   /* Interactive — brand colors stay the same in dark */
-  --action-primary-subtle: rgba(123,97,255,.15);
+  --action-primary-subtle: rgba(98,72,232,.15);
   --action-secondary-subtle: rgba(24,160,251,.12);
 
   /* States */
