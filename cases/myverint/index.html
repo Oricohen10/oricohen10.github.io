@@ -310,25 +310,21 @@ button{cursor:pointer;font-family:inherit}
 
 /* -- Differently callouts ----------------------------------------------- */
 .diff-item{
-  display:flex;gap:14px;align-items:flex-start;
-  padding:20px 22px;
-  background:var(--surface-raised);
-  border:1px solid var(--border-subtle);
-  border-radius:12px;
-  margin-bottom:12px;
+  padding:0 0 24px 20px;
+  border-left:3px solid var(--action-primary);
+  margin-bottom:20px;
 }
-.diff-item:last-child{margin-bottom:0}
+.diff-item:last-child{padding-bottom:0;margin-bottom:0}
 .diff-num{
-  flex-shrink:0;
-  width:24px;height:24px;
-  background:var(--action-primary-subtle);
-  border-radius:50%;
-  display:flex;align-items:center;justify-content:center;
-  font-size:11px;font-weight:800;color:var(--action-primary);
-  margin-top:1px;
+  font-size:10px;font-weight:800;
+  text-transform:uppercase;letter-spacing:.08em;
+  color:var(--action-primary);
+  opacity:.7;
+  margin-bottom:6px;
 }
 .diff-text{font-size:14px;color:var(--text-secondary);line-height:1.8;text-wrap:pretty}
-.diff-text strong{color:var(--text-primary);font-weight:600}
+.diff-text strong{color:var(--text-primary);font-weight:700;display:block;margin-bottom:5px;font-size:15px}
+.cs-section .stat-grid{margin-top:28px}
 
 /* -- Scroll reveal ------------------------------------------------------- */
 @media(prefers-reduced-motion:no-preference){
@@ -687,7 +683,7 @@ button{cursor:pointer;font-family:inherit}
       </div>
       <div>
         <div class="sb-label">Timeline</div>
-        <div class="sb-value">2024-2025</div>
+        <div class="sb-value">2024-2026</div>
       </div>
       <div>
         <div class="sb-label">Users</div>
@@ -742,10 +738,9 @@ button{cursor:pointer;font-family:inherit}
       </div>
       <p>My Verint replaced both legacy apps - one unified experience across iOS and Android. The mobile design system gave every product team a foundation to build on that hadn't existed before.</p>
       <p>The number that tells the whole story: <strong>85% of users complete all their tasks through Ask Verint</strong>, without touching a single screen. A contact center agent can check their schedule, request time off, and review KPIs in a single conversation. The product changed not just how the app looks, but how people work.</p>
-    </div>
 
-    <!-- Stat cards -->
-    <div class="stat-grid cs-reveal">
+      <!-- Stat cards -->
+      <div class="stat-grid">
       <div class="stat-card">
         <div class="stat-icon">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/><circle cx="12" cy="10" r="1.5" fill="currentColor" stroke="none"/><path d="M8 10h.01M16 10h.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
@@ -769,6 +764,7 @@ button{cursor:pointer;font-family:inherit}
         <div class="stat-num">1st</div>
         <div class="stat-title">Mobile Design System</div>
         <div class="stat-desc">the first mobile design system ever built at Verint</div>
+      </div>
       </div>
     </div>
 
