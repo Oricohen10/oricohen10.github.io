@@ -190,7 +190,7 @@ const nIn  = document.getElementById('name-input');
 const bGo  = document.getElementById('btn-go');
 
 const PORTFOLIO_KEY = 'portfolio_v1';
-const LS_WIN_SESSION = 'win-session-v1';
+
 let siteAv = 0;   /* 0 = Shrek (default) */
 
 function getPortfolioUser(){try{return JSON.parse(localStorage.getItem(PORTFOLIO_KEY)||'null');}catch{return null;}}
@@ -457,12 +457,10 @@ document.addEventListener('mousemove', e => {
 
 document.addEventListener('mouseup', () => {
   panDrag = null; frameDrag = null;
-  const wasDrag = drag, wasResize = winResize;
   drag = null; winResize = null;
   setIframePointerEvents('');
   showCustomCursor();
   setCursorState(spaceDown ? 'hand' : 'arrow');
-  if (wasDrag || wasResize) saveWinSession();
 });
 function clamp(v, lo, hi) { return Math.max(lo, Math.min(hi, v)); }
 
@@ -470,7 +468,6 @@ function clamp(v, lo, hi) { return Math.max(lo, Math.min(hi, v)); }
 window.addEventListener('load', () => {
   applyFrame();
   centerFrame();
-  restoreWinSession();
 });
 
 /* ════════════════════════════════════
@@ -540,14 +537,13 @@ function openWin(id) {
     requestAnimationFrame(() => maximizeWin(id));
   }
   updateCloseAll();
-  saveWinSession();
 }
 
 function closeWin(id) {
   const w = document.getElementById('win-' + id);
   if (!w) return;
   w.classList.remove('show','collapsed');
-  setTimeout(() => { w.style.display = 'none'; updateCloseAll(); saveWinSession(); }, 200);
+  setTimeout(() => { w.style.display = 'none'; updateCloseAll(); }, 200);
   const b = document.getElementById('nav-' + id);
   if (b) b.classList.remove('on');
   if (w._opener && w._opener.focus) w._opener.focus();
@@ -580,7 +576,7 @@ function maximizeWin(id) {
     w.style.width = w._mW; w.style.height = w._mH;
     w.style.right = w.style.bottom = 'auto';
     w._maximized = false;
-    setTimeout(() => { w.classList.remove('mac-anim'); saveWinSession(); }, 380);
+    setTimeout(() => w.classList.remove('mac-anim'), 380);
   } else {
     /* ── Maximize: snapshot current rect as explicit px so we have a
        start value, then transition to fullscreen in the next paint ── */
@@ -599,7 +595,7 @@ function maximizeWin(id) {
       w.style.width = 'calc(100vw - 440px)'; w.style.height = 'calc(100vh - 58px)';
       w.classList.add('maximized');
       w._maximized = true;
-      setTimeout(() => { w.classList.remove('mac-anim'); saveWinSession(); }, 380);
+      setTimeout(() => w.classList.remove('mac-anim'), 380);
     }));
   }
 }
@@ -611,60 +607,6 @@ function closeAllWins() {
 
 function front(w) { w.style.zIndex = ++wZ; }
 
-/* ════════════════════════════════════
-   WINDOW SESSION PERSISTENCE
-   Save open windows + positions to localStorage so a
-   page refresh restores where the user left off.
-════════════════════════════════════ */
-function saveWinSession() {
-  const windows = WIN_IDS.map(id => {
-    const w = document.getElementById('win-' + id);
-    if (!w || !w.style.display || w.style.display === 'none') return null;
-    return {
-      id,
-      left:   w._maximized ? (w._mL || w.style.left)   : w.style.left,
-      top:    w._maximized ? (w._mT || w.style.top)    : w.style.top,
-      width:  w._maximized ? (w._mW || w.style.width)  : w.style.width,
-      height: w._maximized ? (w._mH || w.style.height) : w.style.height,
-      z:      parseInt(w.style.zIndex) || 0,
-      maximized: !!w._maximized,
-      preMaxL: w._mL, preMaxT: w._mT,
-      preMaxW: w._mW, preMaxH: w._mH,
-    };
-  }).filter(Boolean);
-  try { localStorage.setItem(LS_WIN_SESSION, JSON.stringify({windows})); } catch {}
-}
-
-function restoreWinSession() {
-  let saved;
-  try { saved = JSON.parse(localStorage.getItem(LS_WIN_SESSION) || 'null'); } catch {}
-  if (!saved || !saved.windows || !saved.windows.length) return;
-  /* Restore in z-index order so stacking is correct */
-  saved.windows.sort((a, b) => (a.z || 0) - (b.z || 0));
-  saved.windows.forEach(s => {
-    const w = document.getElementById('win-' + s.id);
-    if (!w) return;
-    /* Pre-position so openWin skips cascade */
-    w._placed = true;
-    w._everMaximized = true; /* skip auto-maximize on case studies */
-    w.style.left = s.left; w.style.top = s.top;
-    w.style.right = w.style.bottom = 'auto';
-    if (s.width)  w.style.width  = s.width;
-    if (s.height) w.style.height = s.height;
-    if (s.maximized) {
-      w._mL = s.preMaxL; w._mT = s.preMaxT;
-      w._mW = s.preMaxW; w._mH = s.preMaxH;
-    }
-    openWin(s.id);
-    if (s.maximized) {
-      w.style.left = '220px'; w.style.top = '0px';
-      w.style.width = 'calc(100vw - 440px)';
-      w.style.height = 'calc(100vh - 58px)';
-      w.classList.add('maximized');
-      w._maximized = true;
-    }
-  });
-}
 
 /* ════════════════════════════════════
    WINDOW RESIZE (border drag)
