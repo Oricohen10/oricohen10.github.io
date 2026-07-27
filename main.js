@@ -470,6 +470,21 @@ function updateCloseAll() {
   document.getElementById('nav-closeall').classList.toggle('inactive', !anyOpen);
 }
 
+function sortProjectTable(btn) {
+  const table = document.querySelector('.pl-table');
+  const rows = Array.from(table.querySelectorAll('.pl-row'));
+  const arrow = btn.querySelector('.pl-sort-arrow');
+  const asc = btn.dataset.sort !== 'asc';
+  rows.sort((a, b) => {
+    const na = a.querySelector('.pl-name').textContent.trim();
+    const nb = b.querySelector('.pl-name').textContent.trim();
+    return asc ? na.localeCompare(nb) : nb.localeCompare(na);
+  });
+  rows.forEach(r => table.appendChild(r));
+  btn.dataset.sort = asc ? 'asc' : 'desc';
+  if (arrow) arrow.textContent = asc ? '↑' : '↓';
+}
+
 function openWin(id) {
   const w = document.getElementById('win-' + id);
   if (!w) return;
