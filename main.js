@@ -456,18 +456,16 @@ window.addEventListener('load', () => {
 });
 
 /* ── Dock onboarding nudge ──────────────────────────────────────
-   Show once on first visit: tooltip above the bottombar that
-   bounces gently, then fades after 4s or on first click.
+   Show on every visit: tooltip above the bottombar that
+   bounces gently, then fades after 5s or on first click.
    ─────────────────────────────────────────────────────────────── */
 function initDockNudge() {
-  if (localStorage.getItem('ori-nudge-seen')) return;
   const nudge = document.getElementById('bb-nudge');
   if (!nudge) return;
 
   const dismiss = () => {
     nudge.style.transition = 'opacity .4s';
     nudge.classList.remove('show');
-    localStorage.setItem('ori-nudge-seen', '1');
   };
 
   /* Show after 1s */
