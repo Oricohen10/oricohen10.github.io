@@ -118,9 +118,18 @@ document.addEventListener('click', e => {
 });
 
 let dark = false;
+function swapThemeImages() {
+  document.querySelectorAll('img[data-src-dark]').forEach(img => {
+    const light = img.dataset.srcLight;
+    const d     = img.dataset.srcDark;
+    if (light && d) img.src = dark ? d : light;
+  });
+}
 function toggleTheme() {
   dark = !dark;
   document.documentElement.setAttribute('data-theme', dark ? 'dark' : 'light');
+  /* swap theme-aware thumbnails */
+  swapThemeImages();
   /* sync case study iframe */
   document.querySelectorAll('.proj-iframe').forEach(f=>{try{f.contentWindow.postMessage({type:'theme',dark},'*');}catch(e){}});
   document.getElementById('icon-moon').style.display = dark ? 'none' : 'block';
