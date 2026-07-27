@@ -263,43 +263,53 @@ button{cursor:pointer;font-family:inherit}
 [data-theme="dark"] .sb-cta:hover{background:rgba(123,97,255,.12);color:var(--purple-200);border-color:var(--purple-300);box-shadow:0 0 22px rgba(123,97,255,.55)}
 .sb-cta svg{width:13px;height:13px;flex-shrink:0}
 
-/* ── Impact ───────────────────────────────────────────── */
-.impact-grid{
+/* ── Stat cards ───────────────────────────────────────── */
+.stat-grid{
   display:grid;
   grid-template-columns:repeat(3,1fr);
-  gap:14px;
+  gap:16px;
 }
-.impact-card{
-  padding:24px 20px 22px;
-  background:var(--action-primary-subtle);
-  border:none;
-  border-radius:14px;
-  display:flex;flex-direction:column;gap:0;
-  position:relative;
+.stat-card{
+  background:var(--surface-default);
+  border:1px solid var(--border-subtle);
+  border-radius:16px;
+  padding:28px 20px 0;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  text-align:center;
   overflow:hidden;
+  box-shadow:0 1px 6px rgba(0,0,0,.04);
 }
-.impact-card::before{
-  content:'';
-  position:absolute;
-  top:0;left:0;right:0;
-  height:3px;
-  background:var(--action-primary);
-  opacity:.55;
-}
-.impact-eyebrow{
-  font-size:9px;font-weight:800;letter-spacing:.16em;text-transform:uppercase;
+[data-theme="dark"] .stat-card{box-shadow:none}
+.stat-icon{color:var(--action-primary);margin-bottom:14px}
+.stat-icon svg{width:30px;height:30px;display:block}
+.stat-num{
+  font-size:48px;font-weight:900;
   color:var(--action-primary);
-  opacity:.65;
-  margin-bottom:10px;
+  letter-spacing:-2.5px;line-height:1;
+  margin-bottom:8px;
 }
-.impact-num{
-  font-size:52px;font-weight:900;
-  color:var(--action-primary);
-  letter-spacing:-3px;line-height:.92;
-  margin-bottom:10px;
+.stat-title{font-size:14px;font-weight:700;color:var(--text-primary);margin-bottom:6px}
+.stat-desc{
+  font-size:12px;color:var(--text-secondary);
+  line-height:1.6;
+  padding:0 6px 20px;
+  flex:1;
 }
-.impact-label{font-size:13.5px;color:var(--text-secondary);line-height:1.55;font-weight:500}
-.impact-label strong{color:var(--text-primary);font-weight:700}
+.stat-more{
+  display:block;
+  width:calc(100% + 40px);
+  margin-left:-20px;
+  padding:12px 0 13px;
+  border-top:1px solid var(--border-subtle);
+  font-size:12.5px;font-weight:600;
+  color:var(--text-tertiary);
+  text-decoration:none;
+  transition:color .12s,background .12s;
+  text-align:center;
+}
+.stat-more:hover{color:var(--text-primary);background:var(--surface-raised)}
 
 /* ── AI ───────────────────────────────────────────────── */
 .ai-box{
@@ -344,15 +354,15 @@ button{cursor:pointer;font-family:inherit}
   .cs-hero-sub{font-size:16px}
   .cs-section p{font-size:16px}
   .ai-text{font-size:16px}
-  .impact-grid{grid-template-columns:1fr 1fr}
-  .impact-grid .impact-card:last-child{grid-column:1/-1}
+  .stat-grid{grid-template-columns:1fr 1fr}
+  .stat-grid .stat-card:last-child{grid-column:1/-1}
 }
 @media(max-width:480px){
   .carousel-btn{width:30px;height:30px}
   .carousel-btn svg{width:14px;height:14px}
   .lbx-btn,.lbx-prev,.lbx-next{display:none}
-  .impact-grid{grid-template-columns:1fr}
-  .impact-grid .impact-card:last-child{grid-column:auto}
+  .stat-grid{grid-template-columns:1fr}
+  .stat-grid .stat-card:last-child{grid-column:auto}
   .ai-box{flex-direction:column;gap:10px}
   .cs-body{padding:20px 16px 80px}
   .carousel-shell{padding:16px 16px 0}
@@ -561,22 +571,34 @@ button{cursor:pointer;font-family:inherit}
       <p>Alongside the component library, we built Verint's first motion design library - easing curves, duration tokens, and micro-animation specs for every interaction state. The pipeline from Figma to Storybook to GitHub runs fully automated - one token change in Figma, one PR, one merge.</p>
     </div>
 
-    <!-- Impact cards -->
-    <div class="impact-grid cs-reveal">
-      <div class="impact-card">
-        <div class="impact-eyebrow">Scale</div>
-        <div class="impact-num">40+</div>
-        <div class="impact-label">products running on LUX 2.0</div>
+    <!-- Stat cards -->
+    <div class="stat-grid cs-reveal">
+      <div class="stat-card">
+        <div class="stat-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+        </div>
+        <div class="stat-num">40+</div>
+        <div class="stat-title">Products</div>
+        <div class="stat-desc">running on LUX 2.0 across the Verint platform</div>
+        <a class="stat-more" href="#">Learn more</a>
       </div>
-      <div class="impact-card">
-        <div class="impact-eyebrow">Reach</div>
-        <div class="impact-num">10K+</div>
-        <div class="impact-label"><strong>daily users</strong> across the platform</div>
+      <div class="stat-card">
+        <div class="stat-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        </div>
+        <div class="stat-num">10K+</div>
+        <div class="stat-title">Daily Users</div>
+        <div class="stat-desc">working with LUX 2.0 components every day</div>
+        <a class="stat-more" href="#">Learn more</a>
       </div>
-      <div class="impact-card">
-        <div class="impact-eyebrow">Quality</div>
-        <div class="impact-num">0</div>
-        <div class="impact-label">hardcoded values anywhere in the system</div>
+      <div class="stat-card">
+        <div class="stat-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+        </div>
+        <div class="stat-num">0</div>
+        <div class="stat-title">Hardcoded Values</div>
+        <div class="stat-desc">every value tokenized from Figma to production</div>
+        <a class="stat-more" href="#">Learn more</a>
       </div>
     </div>
 

@@ -14,7 +14,6 @@
 <meta name="twitter:title" content="My Verint - Case Study - Ori Cohen"/>
 <meta name="twitter:description" content="How Ori Cohen redesigned My Verint - merging two disconnected mobile apps into a unified, AI-powered experience for 10,000+ contact center employees."/>
 <link rel="stylesheet" href="../../tokens.css"/>
-<!-- Hide default cursor when embedded in the portfolio iframe -->
 <script>if(window.self!==window.top){var _s=document.createElement('style');_s.textContent='*{cursor:none!important}';document.head.appendChild(_s);}</script>
 <style>
 /* -- Reset -------------------------------------------------------------- */
@@ -31,70 +30,90 @@ body{
 img{display:block;max-width:100%}
 button{cursor:pointer;font-family:inherit}
 
-/* -- Phone gallery ------------------------------------------------------- */
-.gallery-shell{
+/* -- Carousel ----------------------------------------------------------- */
+.carousel-shell{
   max-width:1040px;
   margin:0 auto;
   padding:28px 28px 0;
 }
-.gallery-wrap{
+.carousel-wrap{
+  position:relative;
+  overflow:hidden;
   background:var(--surface-raised);
   border:1px solid var(--border-subtle);
   border-radius:var(--r-xl);
-  padding:28px 20px 24px;
-  overflow:hidden;
 }
-.gallery-label{
-  font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
-  color:var(--text-tertiary);
-  margin-bottom:16px;
-  text-align:center;
-}
-.phone-strip{
+.carousel-track{
   display:flex;
-  gap:14px;
-  justify-content:center;
-  overflow-x:auto;
-  -webkit-overflow-scrolling:touch;
-  scrollbar-width:none;
-  padding-bottom:2px;
+  transition:transform .38s cubic-bezier(.4,0,.2,1);
+  will-change:transform;
 }
-.phone-strip::-webkit-scrollbar{display:none}
-.phone-item{
-  flex:0 0 auto;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  gap:8px;
-}
-.phone-frame{
-  width:160px;
-  border-radius:22px;
+.carousel-slide{
+  flex:0 0 100%;
+  aspect-ratio:16/7;
+  position:relative;
   overflow:hidden;
-  border:1.5px solid var(--border-subtle);
-  box-shadow:0 4px 20px rgba(0,0,0,.10),0 1px 4px rgba(0,0,0,.06);
-  transition:transform .18s var(--ease),box-shadow .18s var(--ease);
   cursor:pointer;
 }
-.phone-frame:hover{
-  transform:translateY(-3px);
-  box-shadow:0 10px 32px rgba(0,0,0,.14),0 2px 8px rgba(0,0,0,.08);
-}
-[data-theme="dark"] .phone-frame{border-color:var(--border-default)}
-.phone-frame img{
-  width:100%;
-  height:auto;
+.carousel-slide svg,
+.carousel-slide img{
+  width:100%;height:100%;
+  object-fit:cover;
   display:block;
   pointer-events:none;
   user-select:none;
 }
-.phone-tab-label{
-  font-size:11px;font-weight:600;
-  color:var(--text-tertiary);
-  letter-spacing:.03em;
+.carousel-btn{
+  position:absolute;top:50%;transform:translateY(-50%);
+  z-index:10;
+  width:36px;height:36px;
+  display:flex;align-items:center;justify-content:center;
+  background:rgba(255,255,255,.88);
+  border:1px solid rgba(0,0,0,.1);
+  border-radius:50%;
+  backdrop-filter:blur(8px);
+  -webkit-backdrop-filter:blur(8px);
+  color:#1a1a2e;
+  transition:background .12s,transform .12s;
+  box-shadow:0 1px 6px rgba(0,0,0,.12);
 }
+[data-theme="dark"] .carousel-btn{background:rgba(44,44,44,.88);color:#f3f4f5;border-color:rgba(255,255,255,.1)}
+.carousel-btn:hover{background:rgba(255,255,255,1);transform:translateY(-50%) scale(1.05)}
+[data-theme="dark"] .carousel-btn:hover{background:rgba(60,60,60,1)}
+.carousel-btn.prev{left:14px}
+.carousel-btn.next{right:14px}
+.carousel-btn svg{width:16px;height:16px;display:block;flex-shrink:0}
+.carousel-footer{
+  position:absolute;bottom:14px;left:0;right:0;
+  display:flex;align-items:center;justify-content:center;
+  pointer-events:none;
+}
+.carousel-counter{
+  font-size:12px;font-weight:600;letter-spacing:.02em;
+  color:rgba(255,255,255,.9);
+  background:rgba(0,0,0,.35);
+  border-radius:20px;padding:3px 10px;
+  pointer-events:none;
+  backdrop-filter:blur(4px);
+  -webkit-backdrop-filter:blur(4px);
+}
+.carousel-zoom{
+  position:absolute;bottom:14px;left:14px;z-index:10;
+  width:32px;height:32px;
+  display:flex;align-items:center;justify-content:center;
+  background:rgba(255,255,255,.88);
+  border:1px solid rgba(0,0,0,.1);
+  border-radius:50%;
+  box-shadow:0 1px 4px rgba(0,0,0,.14);
+  color:#1a1a2e;
+  transition:background .12s,transform .12s;
+}
+.carousel-zoom:hover{background:rgba(255,255,255,1);transform:scale(1.08)}
+.carousel-zoom svg{width:15px;height:15px;display:block}
+[data-theme="dark"] .carousel-zoom{background:rgba(44,44,44,.88);color:#f3f4f5;border-color:rgba(255,255,255,.12)}
+[data-theme="dark"] .carousel-zoom:hover{background:rgba(60,60,60,1)}
 
-/* -- Lightbox ------------------------------------------------------------ */
+/* -- Lightbox ----------------------------------------------------------- */
 .lbx{
   display:none;
   position:fixed;inset:0;z-index:9999;
@@ -106,13 +125,15 @@ button{cursor:pointer;font-family:inherit}
 @keyframes lbxIn{from{opacity:0}to{opacity:1}}
 .lbx-inner{
   position:relative;
-  max-width:360px;
-  width:calc(100vw - 80px);
+  max-width:calc(100vw - 80px);
+  max-height:calc(100vh - 60px);
   display:flex;align-items:center;justify-content:center;
 }
+.lbx-inner svg,
 .lbx-inner img{
-  width:100%;
-  border-radius:22px;
+  max-width:100%;
+  max-height:calc(100vh - 60px);
+  border-radius:6px;
   box-shadow:0 8px 60px rgba(0,0,0,.6);
   display:block;
 }
@@ -218,43 +239,60 @@ button{cursor:pointer;font-family:inherit}
 .cs-section p:last-child{margin-bottom:0}
 .cs-section p strong{color:var(--text-primary);font-weight:600}
 
-/* -- Impact cards -------------------------------------------------------- */
-.impact-grid{
+/* -- Stat cards ---------------------------------------------------------- */
+.stat-grid{
   display:grid;
   grid-template-columns:repeat(3,1fr);
-  gap:14px;
+  gap:16px;
 }
-.impact-card{
-  padding:24px 20px 22px;
-  background:var(--action-primary-subtle);
-  border:none;
-  border-radius:14px;
-  display:flex;flex-direction:column;gap:0;
-  position:relative;
+.stat-card{
+  background:var(--surface-default);
+  border:1px solid var(--border-subtle);
+  border-radius:16px;
+  padding:28px 20px 0;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  text-align:center;
   overflow:hidden;
+  box-shadow:0 1px 6px rgba(0,0,0,.04);
 }
-.impact-card::before{
-  content:'';
-  position:absolute;
-  top:0;left:0;right:0;
-  height:3px;
-  background:var(--action-primary);
-  opacity:.55;
-}
-.impact-eyebrow{
-  font-size:9px;font-weight:800;letter-spacing:.16em;text-transform:uppercase;
+[data-theme="dark"] .stat-card{box-shadow:none}
+.stat-icon{
   color:var(--action-primary);
-  opacity:.65;
-  margin-bottom:10px;
+  margin-bottom:14px;
 }
-.impact-num{
-  font-size:52px;font-weight:900;
+.stat-icon svg{width:30px;height:30px;display:block}
+.stat-num{
+  font-size:48px;font-weight:900;
   color:var(--action-primary);
-  letter-spacing:-3px;line-height:.92;
-  margin-bottom:10px;
+  letter-spacing:-2.5px;line-height:1;
+  margin-bottom:8px;
 }
-.impact-label{font-size:13.5px;color:var(--text-secondary);line-height:1.55;font-weight:500}
-.impact-label strong{color:var(--text-primary);font-weight:700}
+.stat-title{
+  font-size:14px;font-weight:700;
+  color:var(--text-primary);
+  margin-bottom:6px;
+}
+.stat-desc{
+  font-size:12px;color:var(--text-secondary);
+  line-height:1.6;
+  padding:0 6px 20px;
+  flex:1;
+}
+.stat-more{
+  display:block;
+  width:calc(100% + 40px);
+  margin-left:-20px;
+  padding:12px 0 13px;
+  border-top:1px solid var(--border-subtle);
+  font-size:12.5px;font-weight:600;
+  color:var(--text-tertiary);
+  text-decoration:none;
+  transition:color .12s,background .12s;
+  text-align:center;
+}
+.stat-more:hover{color:var(--text-primary);background:var(--surface-raised)}
 
 /* -- Differently callouts ----------------------------------------------- */
 .diff-item{
@@ -302,22 +340,21 @@ button{cursor:pointer;font-family:inherit}
 @media(max-width:720px){
   .back-nav{display:flex}
   .cs-body{grid-template-columns:1fr;gap:28px;padding:24px 18px 80px}
-  .gallery-shell{padding:20px 18px 0}
-  .gallery-wrap{padding:20px 16px 18px}
+  .carousel-shell{padding:20px 18px 0}
   .sidebar{position:static}
   .cs-hero h1{font-size:24px}
   .cs-hero-sub{font-size:16px}
   .cs-section p{font-size:16px}
-  .phone-frame{width:130px;border-radius:18px}
   .diff-text{font-size:15px}
-  .impact-grid{grid-template-columns:1fr 1fr}
-  .impact-grid .impact-card:last-child{grid-column:1/-1}
+  .stat-grid{grid-template-columns:1fr 1fr}
+  .stat-grid .stat-card:last-child{grid-column:1/-1}
 }
 @media(max-width:480px){
-  .phone-frame{width:110px;border-radius:15px}
   .lbx-btn,.lbx-prev,.lbx-next{display:none}
   .cs-body{padding:20px 16px 80px}
-  .gallery-shell{padding:16px 16px 0}
+  .carousel-shell{padding:16px 16px 0}
+  .stat-grid{grid-template-columns:1fr}
+  .stat-grid .stat-card:last-child{grid-column:auto}
 }
 </style>
 <script type="application/ld+json">
@@ -359,53 +396,253 @@ button{cursor:pointer;font-family:inherit}
   Back to portfolio
 </a>
 
-<!-- Phone gallery -->
-<div class="gallery-shell">
-  <div class="gallery-wrap">
-    <div class="gallery-label">5 tabs - Ask AI, Performance, Schedule, Requests, More</div>
-    <div class="phone-strip" id="phone-strip">
+<!-- Carousel -->
+<div class="carousel-shell">
+<div class="carousel-wrap" id="carousel">
+  <div class="carousel-track" id="carousel-track">
 
-      <div class="phone-item">
-        <div class="phone-frame" onclick="openLightbox(0)" role="button" tabindex="0" aria-label="Ask AI tab - expand" onkeydown="if(event.key==='Enter'||event.key===' ')openLightbox(0)">
-          <img src="images/tab-ask-ai.jpg" alt="Ask AI tab - conversational interface for workforce tasks" width="446" height="960"/>
-        </div>
-        <span class="phone-tab-label">Ask AI</span>
-      </div>
-
-      <div class="phone-item">
-        <div class="phone-frame" onclick="openLightbox(1)" role="button" tabindex="0" aria-label="Performance tab - expand" onkeydown="if(event.key==='Enter'||event.key===' ')openLightbox(1)">
-          <img src="images/tab-performance.jpg" alt="Performance tab - metrics and KPI overview" width="446" height="960"/>
-        </div>
-        <span class="phone-tab-label">Performance</span>
-      </div>
-
-      <div class="phone-item">
-        <div class="phone-frame" onclick="openLightbox(2)" role="button" tabindex="0" aria-label="Schedule tab - expand" onkeydown="if(event.key==='Enter'||event.key===' ')openLightbox(2)">
-          <img src="images/tab-schedule.jpg" alt="Schedule tab - shift and time-off management" width="446" height="960"/>
-        </div>
-        <span class="phone-tab-label">Schedule</span>
-      </div>
-
-      <div class="phone-item">
-        <div class="phone-frame" onclick="openLightbox(3)" role="button" tabindex="0" aria-label="Requests tab - expand" onkeydown="if(event.key==='Enter'||event.key===' ')openLightbox(3)">
-          <img src="images/tab-requests.jpg" alt="Requests tab - time-off requests and approvals" width="446" height="960"/>
-        </div>
-        <span class="phone-tab-label">Requests</span>
-      </div>
-
-      <div class="phone-item">
-        <div class="phone-frame" onclick="openLightbox(4)" role="button" tabindex="0" aria-label="More tab - expand" onkeydown="if(event.key==='Enter'||event.key===' ')openLightbox(4)">
-          <img src="images/tab-more.jpg" alt="More tab - additional settings and features" width="446" height="960"/>
-        </div>
-        <span class="phone-tab-label">More</span>
-      </div>
-
+    <!-- Slide 1: Ask AI -->
+    <div class="carousel-slide" onclick="openLightbox(0)" title="Click to expand">
+      <svg viewBox="0 0 960 420" xmlns="http://www.w3.org/2000/svg">
+        <rect width="960" height="420" fill="#EBEBEB"/>
+        <defs><clipPath id="cp1"><rect x="395" y="45" width="170" height="330" rx="26"/></clipPath></defs>
+        <!-- Phone body -->
+        <rect x="395" y="45" width="170" height="330" rx="26" fill="white" stroke="#D9D9D9" stroke-width="1.5"/>
+        <g clip-path="url(#cp1)">
+          <!-- Status bar -->
+          <rect x="395" y="45" width="170" height="36" fill="#F0F2FF"/>
+          <rect x="444" y="50" width="72" height="18" rx="9" fill="#D8D1FF"/>
+          <!-- Screen bg -->
+          <rect x="395" y="81" width="170" height="250" fill="white"/>
+          <!-- Header -->
+          <rect x="395" y="81" width="170" height="28" fill="#FAFAFA"/>
+          <rect x="466" y="91" width="28" height="8" rx="4" fill="#BFBFBF"/>
+          <!-- AI bubble 1 -->
+          <rect x="404" y="120" width="112" height="22" rx="11" fill="#F0F2FF"/>
+          <rect x="410" y="127" width="72" height="7" rx="3.5" fill="#C4BEFF"/>
+          <!-- User bubble -->
+          <rect x="443" y="152" width="114" height="22" rx="11" fill="#7B61FF"/>
+          <rect x="450" y="159" width="80" height="7" rx="3.5" fill="rgba(255,255,255,.7)"/>
+          <!-- AI bubble 2 -->
+          <rect x="404" y="184" width="130" height="22" rx="11" fill="#F0F2FF"/>
+          <rect x="410" y="191" width="95" height="7" rx="3.5" fill="#C4BEFF"/>
+          <!-- Suggestion chips -->
+          <rect x="404" y="217" width="72" height="18" rx="9" fill="#F0F2FF" stroke="#D0C7FF" stroke-width="1"/>
+          <rect x="482" y="217" width="54" height="18" rx="9" fill="#F0F2FF" stroke="#D0C7FF" stroke-width="1"/>
+          <rect x="404" y="241" width="60" height="18" rx="9" fill="#F0F2FF" stroke="#D0C7FF" stroke-width="1"/>
+          <!-- Typing indicator -->
+          <rect x="404" y="270" width="44" height="18" rx="9" fill="#F0F2FF"/>
+          <circle cx="416" cy="279" r="3" fill="#C4BEFF"/>
+          <circle cx="426" cy="279" r="3" fill="#C4BEFF"/>
+          <circle cx="436" cy="279" r="3" fill="#C4BEFF"/>
+          <!-- Input bar -->
+          <rect x="395" y="295" width="170" height="36" fill="#F5F5F5"/>
+          <rect x="404" y="304" width="100" height="9" rx="4.5" fill="#D9D9D9"/>
+          <rect x="540" y="301" width="16" height="16" rx="8" fill="#7B61FF" opacity=".5"/>
+          <!-- Nav bar -->
+          <rect x="395" y="331" width="170" height="44" fill="#FAFAFA"/>
+          <rect x="395" y="331" width="170" height="1" fill="#E8E8E8"/>
+          <!-- Nav tab indicators -->
+          <circle cx="412" cy="349" r="4" fill="#7B61FF"/>
+          <circle cx="438" cy="349" r="3.5" fill="#D9D9D9"/>
+          <circle cx="464" cy="349" r="3.5" fill="#D9D9D9"/>
+          <circle cx="490" cy="349" r="3.5" fill="#D9D9D9"/>
+          <circle cx="516" cy="349" r="3.5" fill="#D9D9D9"/>
+          <!-- Home bar -->
+          <rect x="447" y="362" width="66" height="3" rx="1.5" fill="#D0D3D6"/>
+        </g>
+        <!-- Label -->
+        <text x="480" y="400" text-anchor="middle" font-family="-apple-system,BlinkMacSystemFont,sans-serif" font-size="12" font-weight="700" fill="#7B61FF" letter-spacing=".08em">ASK AI</text>
+      </svg>
     </div>
+
+    <!-- Slide 2: Schedule -->
+    <div class="carousel-slide" onclick="openLightbox(1)" title="Click to expand">
+      <svg viewBox="0 0 960 420" xmlns="http://www.w3.org/2000/svg">
+        <rect width="960" height="420" fill="#EBEBEB"/>
+        <defs><clipPath id="cp2"><rect x="395" y="45" width="170" height="330" rx="26"/></clipPath></defs>
+        <rect x="395" y="45" width="170" height="330" rx="26" fill="white" stroke="#D9D9D9" stroke-width="1.5"/>
+        <g clip-path="url(#cp2)">
+          <rect x="395" y="45" width="170" height="36" fill="#F0F2FF"/>
+          <rect x="444" y="50" width="72" height="18" rx="9" fill="#D8D1FF"/>
+          <rect x="395" y="81" width="170" height="250" fill="white"/>
+          <!-- Header -->
+          <rect x="395" y="81" width="170" height="28" fill="#FAFAFA"/>
+          <rect x="455" y="91" width="50" height="8" rx="4" fill="#BFBFBF"/>
+          <!-- Month label -->
+          <rect x="419" y="119" width="62" height="9" rx="4.5" fill="#D0C7FF"/>
+          <!-- Day headers row -->
+          <rect x="403" y="136" width="16" height="7" rx="3.5" fill="#E8E8E8"/>
+          <rect x="424" y="136" width="16" height="7" rx="3.5" fill="#E8E8E8"/>
+          <rect x="445" y="136" width="16" height="7" rx="3.5" fill="#E8E8E8"/>
+          <rect x="466" y="136" width="16" height="7" rx="3.5" fill="#E8E8E8"/>
+          <rect x="487" y="136" width="16" height="7" rx="3.5" fill="#E8E8E8"/>
+          <rect x="508" y="136" width="16" height="7" rx="3.5" fill="#E8E8E8"/>
+          <rect x="529" y="136" width="16" height="7" rx="3.5" fill="#E8E8E8"/>
+          <!-- Week row 1 -->
+          <rect x="403" y="150" width="16" height="16" rx="8" fill="#F5F5F5"/>
+          <rect x="424" y="150" width="16" height="16" rx="8" fill="#F5F5F5"/>
+          <rect x="445" y="150" width="16" height="16" rx="8" fill="#F5F5F5"/>
+          <rect x="466" y="150" width="16" height="16" rx="8" fill="#7B61FF"/>
+          <rect x="487" y="150" width="16" height="16" rx="8" fill="#F5F5F5"/>
+          <rect x="508" y="150" width="16" height="16" rx="8" fill="#F5F5F5"/>
+          <rect x="529" y="150" width="16" height="16" rx="8" fill="#F5F5F5"/>
+          <!-- Week row 2 -->
+          <rect x="403" y="172" width="16" height="16" rx="8" fill="#F5F5F5"/>
+          <rect x="424" y="172" width="16" height="16" rx="8" fill="#D0C7FF"/>
+          <rect x="445" y="172" width="16" height="16" rx="8" fill="#D0C7FF"/>
+          <rect x="466" y="172" width="16" height="16" rx="8" fill="#D0C7FF"/>
+          <rect x="487" y="172" width="16" height="16" rx="8" fill="#F5F5F5"/>
+          <rect x="508" y="172" width="16" height="16" rx="8" fill="#F5F5F5"/>
+          <rect x="529" y="172" width="16" height="16" rx="8" fill="#F5F5F5"/>
+          <!-- Week row 3 -->
+          <rect x="403" y="194" width="16" height="16" rx="8" fill="#F5F5F5"/>
+          <rect x="424" y="194" width="16" height="16" rx="8" fill="#F5F5F5"/>
+          <rect x="445" y="194" width="16" height="16" rx="8" fill="#F5F5F5"/>
+          <rect x="466" y="194" width="16" height="16" rx="8" fill="#F5F5F5"/>
+          <rect x="487" y="194" width="16" height="16" rx="8" fill="#F5F5F5"/>
+          <rect x="508" y="194" width="16" height="16" rx="8" fill="#F5F5F5"/>
+          <rect x="529" y="194" width="16" height="16" rx="8" fill="#F5F5F5"/>
+          <!-- Divider -->
+          <rect x="403" y="217" width="154" height="1" fill="#EBEBEB"/>
+          <!-- Shift items -->
+          <rect x="403" y="225" width="154" height="24" rx="6" fill="#F0F2FF"/>
+          <rect x="410" y="231" width="6" height="12" rx="3" fill="#7B61FF"/>
+          <rect x="421" y="233" width="60" height="5" rx="2.5" fill="#D0C7FF"/>
+          <rect x="487" y="233" width="30" height="5" rx="2.5" fill="#D0C7FF" opacity=".5"/>
+          <rect x="403" y="255" width="154" height="24" rx="6" fill="#F0F2FF"/>
+          <rect x="410" y="261" width="6" height="12" rx="3" fill="#9F8AFF"/>
+          <rect x="421" y="263" width="80" height="5" rx="2.5" fill="#D0C7FF"/>
+          <!-- Nav bar -->
+          <rect x="395" y="331" width="170" height="44" fill="#FAFAFA"/>
+          <rect x="395" y="331" width="170" height="1" fill="#E8E8E8"/>
+          <circle cx="412" cy="349" r="3.5" fill="#D9D9D9"/>
+          <circle cx="438" cy="349" r="3.5" fill="#D9D9D9"/>
+          <circle cx="464" cy="349" r="4" fill="#7B61FF"/>
+          <circle cx="490" cy="349" r="3.5" fill="#D9D9D9"/>
+          <circle cx="516" cy="349" r="3.5" fill="#D9D9D9"/>
+          <rect x="447" y="362" width="66" height="3" rx="1.5" fill="#D0D3D6"/>
+        </g>
+        <text x="480" y="400" text-anchor="middle" font-family="-apple-system,BlinkMacSystemFont,sans-serif" font-size="12" font-weight="700" fill="#7B61FF" letter-spacing=".08em">SCHEDULE</text>
+      </svg>
+    </div>
+
+    <!-- Slide 3: Performance -->
+    <div class="carousel-slide" onclick="openLightbox(2)" title="Click to expand">
+      <svg viewBox="0 0 960 420" xmlns="http://www.w3.org/2000/svg">
+        <rect width="960" height="420" fill="#EBEBEB"/>
+        <defs><clipPath id="cp3"><rect x="395" y="45" width="170" height="330" rx="26"/></clipPath></defs>
+        <rect x="395" y="45" width="170" height="330" rx="26" fill="white" stroke="#D9D9D9" stroke-width="1.5"/>
+        <g clip-path="url(#cp3)">
+          <rect x="395" y="45" width="170" height="36" fill="#F0F2FF"/>
+          <rect x="444" y="50" width="72" height="18" rx="9" fill="#D8D1FF"/>
+          <rect x="395" y="81" width="170" height="250" fill="white"/>
+          <!-- Header -->
+          <rect x="395" y="81" width="170" height="28" fill="#FAFAFA"/>
+          <rect x="444" y="91" width="72" height="8" rx="4" fill="#BFBFBF"/>
+          <!-- KPI big number area -->
+          <rect x="412" y="117" width="136" height="54" rx="10" fill="#F4F2FF"/>
+          <rect x="436" y="127" width="44" height="16" rx="8" fill="#D0C7FF"/>
+          <rect x="427" y="150" width="106" height="9" rx="4.5" fill="#D0C7FF" opacity=".5"/>
+          <!-- Chart bars -->
+          <rect x="403" y="256" width="18" height="62" rx="4" fill="#D0C7FF"/>
+          <rect x="426" y="238" width="18" height="80" rx="4" fill="#B0A0FF"/>
+          <rect x="449" y="220" width="18" height="98" rx="4" fill="#9F8AFF"/>
+          <rect x="472" y="230" width="18" height="88" rx="4" fill="#7B61FF"/>
+          <rect x="495" y="248" width="18" height="70" rx="4" fill="#9F8AFF"/>
+          <rect x="518" y="236" width="18" height="82" rx="4" fill="#B0A0FF"/>
+          <rect x="541" y="252" width="18" height="66" rx="4" fill="#D0C7FF"/>
+          <!-- X axis -->
+          <rect x="403" y="318" width="156" height="1" fill="#E8E8E8"/>
+          <!-- Nav bar -->
+          <rect x="395" y="331" width="170" height="44" fill="#FAFAFA"/>
+          <rect x="395" y="331" width="170" height="1" fill="#E8E8E8"/>
+          <circle cx="412" cy="349" r="3.5" fill="#D9D9D9"/>
+          <circle cx="438" cy="349" r="4" fill="#7B61FF"/>
+          <circle cx="464" cy="349" r="3.5" fill="#D9D9D9"/>
+          <circle cx="490" cy="349" r="3.5" fill="#D9D9D9"/>
+          <circle cx="516" cy="349" r="3.5" fill="#D9D9D9"/>
+          <rect x="447" y="362" width="66" height="3" rx="1.5" fill="#D0D3D6"/>
+        </g>
+        <text x="480" y="400" text-anchor="middle" font-family="-apple-system,BlinkMacSystemFont,sans-serif" font-size="12" font-weight="700" fill="#7B61FF" letter-spacing=".08em">PERFORMANCE</text>
+      </svg>
+    </div>
+
+    <!-- Slide 4: Requests -->
+    <div class="carousel-slide" onclick="openLightbox(3)" title="Click to expand">
+      <svg viewBox="0 0 960 420" xmlns="http://www.w3.org/2000/svg">
+        <rect width="960" height="420" fill="#EBEBEB"/>
+        <defs><clipPath id="cp4"><rect x="395" y="45" width="170" height="330" rx="26"/></clipPath></defs>
+        <rect x="395" y="45" width="170" height="330" rx="26" fill="white" stroke="#D9D9D9" stroke-width="1.5"/>
+        <g clip-path="url(#cp4)">
+          <rect x="395" y="45" width="170" height="36" fill="#F0F2FF"/>
+          <rect x="444" y="50" width="72" height="18" rx="9" fill="#D8D1FF"/>
+          <rect x="395" y="81" width="170" height="250" fill="white"/>
+          <!-- Header -->
+          <rect x="395" y="81" width="170" height="28" fill="#FAFAFA"/>
+          <rect x="450" y="91" width="60" height="8" rx="4" fill="#BFBFBF"/>
+          <!-- Filter chips -->
+          <rect x="403" y="117" width="44" height="16" rx="8" fill="#7B61FF"/>
+          <rect x="452" y="117" width="44" height="16" rx="8" fill="#F0F2FF" stroke="#D0C7FF" stroke-width="1"/>
+          <rect x="501" y="117" width="44" height="16" rx="8" fill="#F0F2FF" stroke="#D0C7FF" stroke-width="1"/>
+          <!-- Request item 1 -->
+          <rect x="403" y="142" width="154" height="40" rx="8" fill="#FAFAFA" stroke="#EBEBEB" stroke-width="1"/>
+          <rect x="411" y="151" width="70" height="7" rx="3.5" fill="#BFBFBF"/>
+          <rect x="411" y="163" width="46" height="6" rx="3" fill="#D0C7FF"/>
+          <rect x="510" y="155" width="38" height="16" rx="8" fill="#E8FFF4"/>
+          <!-- Request item 2 -->
+          <rect x="403" y="189" width="154" height="40" rx="8" fill="#FAFAFA" stroke="#EBEBEB" stroke-width="1"/>
+          <rect x="411" y="198" width="80" height="7" rx="3.5" fill="#BFBFBF"/>
+          <rect x="411" y="210" width="50" height="6" rx="3" fill="#D0C7FF"/>
+          <rect x="510" y="202" width="38" height="16" rx="8" fill="#FFF4E8"/>
+          <!-- Request item 3 -->
+          <rect x="403" y="236" width="154" height="40" rx="8" fill="#FAFAFA" stroke="#EBEBEB" stroke-width="1"/>
+          <rect x="411" y="245" width="60" height="7" rx="3.5" fill="#BFBFBF"/>
+          <rect x="411" y="257" width="40" height="6" rx="3" fill="#D0C7FF"/>
+          <rect x="510" y="249" width="38" height="16" rx="8" fill="#F0F2FF"/>
+          <!-- Request item 4 -->
+          <rect x="403" y="283" width="154" height="40" rx="8" fill="#FAFAFA" stroke="#EBEBEB" stroke-width="1"/>
+          <rect x="411" y="292" width="88" height="7" rx="3.5" fill="#BFBFBF"/>
+          <rect x="411" y="304" width="44" height="6" rx="3" fill="#D0C7FF"/>
+          <rect x="510" y="296" width="38" height="16" rx="8" fill="#E8FFF4"/>
+          <!-- Nav bar -->
+          <rect x="395" y="331" width="170" height="44" fill="#FAFAFA"/>
+          <rect x="395" y="331" width="170" height="1" fill="#E8E8E8"/>
+          <circle cx="412" cy="349" r="3.5" fill="#D9D9D9"/>
+          <circle cx="438" cy="349" r="3.5" fill="#D9D9D9"/>
+          <circle cx="464" cy="349" r="3.5" fill="#D9D9D9"/>
+          <circle cx="490" cy="349" r="4" fill="#7B61FF"/>
+          <circle cx="516" cy="349" r="3.5" fill="#D9D9D9"/>
+          <rect x="447" y="362" width="66" height="3" rx="1.5" fill="#D0D3D6"/>
+        </g>
+        <text x="480" y="400" text-anchor="middle" font-family="-apple-system,BlinkMacSystemFont,sans-serif" font-size="12" font-weight="700" fill="#7B61FF" letter-spacing=".08em">REQUESTS</text>
+      </svg>
+    </div>
+
+  </div><!-- /track -->
+
+  <!-- Arrows -->
+  <button class="carousel-btn prev" id="car-prev" onclick="carMove(-1)" aria-label="Previous slide">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+  </button>
+  <button class="carousel-btn next" id="car-next" onclick="carMove(1)" aria-label="Next slide">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+  </button>
+
+  <!-- Zoom button -->
+  <button class="carousel-zoom" aria-label="Expand image" onclick="openLightbox(carIdx)">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg>
+  </button>
+
+  <!-- Counter -->
+  <div class="carousel-footer">
+    <span class="carousel-counter" id="car-counter">1 / 4</span>
   </div>
-</div>
+</div><!-- /carousel-wrap -->
+</div><!-- /carousel-shell -->
 
 <!-- Lightbox -->
-<div class="lbx" id="lightbox" role="dialog" aria-modal="true" aria-label="Screen preview" onclick="closeLightbox(event)">
+<div class="lbx" id="lightbox" role="dialog" aria-modal="true" onclick="closeLightbox(event)">
   <div class="lbx-inner" id="lbx-inner"></div>
   <button class="lbx-close" onclick="closeLightbox()" aria-label="Close">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
@@ -453,7 +690,7 @@ button{cursor:pointer;font-family:inherit}
     <!-- Hero -->
     <div class="cs-hero">
       <h1>Two apps.<br/>One workforce.<br/><span class="cs-hero-accent">Zero mobile-first thinking.</span></h1>
-      <p class="cs-hero-sub">My Verint turned a fragmented, inaccessible mobile experience into a unified, AI-powered app for 10,000+ contact center employees.</p>
+      <p class="cs-hero-sub">My Verint unified two fragmented mobile apps into one AI-first experience - used daily by 10,000+ contact center employees across iOS and Android.</p>
     </div>
 
     <!-- Section 1: Background -->
@@ -461,8 +698,8 @@ button{cursor:pointer;font-family:inherit}
       <div class="cs-section-num">
         <div class="cs-sec-title">Background</div>
       </div>
-      <p>For years, Verint ran two separate mobile apps - one for supervisors, one for agents. Both had grown out of the desktop WFE product as afterthoughts. Mobile was treated as a free add-on, so there was no dedicated budget, no design owner, and no design system. The work passed from hand to hand, accumulating inconsistencies and accessibility gaps over time.</p>
-      <p>The catalyst arrived in 2024: a company mandate to integrate Ask Verint - an AI agent - into the mobile experience. You can't build something new on a broken foundation, so we rebuilt the foundation first.</p>
+      <p>Verint ran two separate mobile apps for years - one for supervisors, one for agents. Both grew out of the desktop WFE product as afterthoughts. Mobile was a free add-on: no dedicated budget, no design owner, no system. The work passed hand to hand, accumulating inconsistencies and accessibility gaps along the way.</p>
+      <p>The catalyst arrived in 2024: a mandate to integrate Ask Verint - Verint's AI agent - into the mobile experience. You can't build something new on a broken foundation, so we rebuilt the foundation first.</p>
     </div>
 
     <!-- Section 2: Challenge -->
@@ -470,8 +707,8 @@ button{cursor:pointer;font-family:inherit}
       <div class="cs-section-num">
         <div class="cs-sec-title">Challenge</div>
       </div>
-      <p>The structural problems were long: no design system, no accessibility baseline, no documentation, and no access to all existing flows. Some parts of the app were effectively invisible to design.</p>
-      <p>The hardest challenge was organizational. Stakeholders wanted to move every desktop capability to mobile - one to one. I disagreed. Desktop and mobile serve <strong>different use cases</strong>. A supervisor planning next month's schedule does that from a desktop. A contact center agent adding 15 minutes to their shift does it from their phone, on the floor, between calls. Cramming full desktop features into a small screen - without asking whether they belong there - was the wrong brief. Changing that framing took time and required more than logic to move.</p>
+      <p>The problems ran deep: no design system, no accessibility baseline, no documentation, and no access to half the existing flows. Parts of the app were invisible to design entirely.</p>
+      <p>The harder challenge was organizational. Stakeholders wanted every desktop capability on mobile - one to one. I disagreed. Desktop and mobile serve <strong>different use cases</strong>. A supervisor plans next month's schedule from a desktop. A contact center agent adding 15 minutes to their shift does it from their phone, between calls, on the floor. Porting desktop features into small screen real estate - without asking if they belonged there - was the wrong brief. Rewriting it took time and more than logic to move.</p>
     </div>
 
     <!-- Section 3: Solution -->
@@ -479,36 +716,48 @@ button{cursor:pointer;font-family:inherit}
       <div class="cs-section-num">
         <div class="cs-sec-title">Solution</div>
       </div>
-      <p>The first move was combining the two apps into one, with role-based capability views - supervisors and agents each get what they need, not everything at once.</p>
-      <p>Alongside that, we built My Verint's first mobile design system: color tokens, typography scales, responsive behaviors, motion specs, and full documentation. It gave the team a shared language that didn't exist before.</p>
-      <p>The biggest outcome is Ask Verint. <strong>85% of users now complete all their tasks through the AI tab</strong> - through natural language, without navigating menus at all. The design work made that possible; the data validated every decision we'd made about mobile-first scope.</p>
+      <p>We merged both apps into one, with role-based capability views - supervisors and agents each see what they need, not everything at once.</p>
+      <p>Alongside that, we built My Verint's first mobile design system: color tokens, type scales, responsive behaviors, motion specs, and documentation. A shared language the team had never had.</p>
+      <p>The biggest outcome: Ask Verint. <strong>85% of users now complete all their tasks through the AI tab</strong> - in natural language, without navigating a single screen. The design work made that possible. The data validated every mobile-first call we made.</p>
     </div>
 
     <!-- Section 4: Result -->
-    <div class="cs-section cs-reveal">
+    <div class="cs-section cs-reveal" id="result">
       <div class="cs-section-num">
         <div class="cs-sec-title">Result</div>
       </div>
-      <p>My Verint shipped as a single unified app for iOS and Android, replacing both legacy apps. The mobile design system gave every team a shared foundation to build on - something that had never existed before.</p>
-      <p>The number that tells the whole story: <strong>85% of users complete all their tasks through Ask Verint</strong> - without touching a single screen. A contact center agent can check their schedule, request time off, and review their KPIs through a single conversation. The product changed not just how the app looks, but how people work.</p>
+      <p>My Verint replaced both legacy apps - one unified experience across iOS and Android. The mobile design system gave every product team a foundation to build on that hadn't existed before.</p>
+      <p>The number that tells the whole story: <strong>85% of users complete all their tasks through Ask Verint</strong>, without touching a single screen. A contact center agent can check their schedule, request time off, and review KPIs in a single conversation. The product changed not just how the app looks, but how people work.</p>
     </div>
 
-    <!-- Impact cards -->
-    <div class="impact-grid cs-reveal">
-      <div class="impact-card">
-        <div class="impact-eyebrow">Adoption</div>
-        <div class="impact-num">85%</div>
-        <div class="impact-label">of users complete all tasks <strong>through Ask Verint</strong></div>
+    <!-- Stat cards -->
+    <div class="stat-grid cs-reveal">
+      <div class="stat-card">
+        <div class="stat-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/><circle cx="12" cy="10" r="1.5" fill="currentColor" stroke="none"/><path d="M8 10h.01M16 10h.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        </div>
+        <div class="stat-num">85%</div>
+        <div class="stat-title">AI Task Completion</div>
+        <div class="stat-desc">of users complete every task through Ask Verint - no menus, no screens</div>
+        <a class="stat-more" href="#result">Learn more</a>
       </div>
-      <div class="impact-card">
-        <div class="impact-eyebrow">Reach</div>
-        <div class="impact-num">10K+</div>
-        <div class="impact-label"><strong>contact center employees</strong> on iOS and Android</div>
+      <div class="stat-card">
+        <div class="stat-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        </div>
+        <div class="stat-num">10K+</div>
+        <div class="stat-title">Daily Users</div>
+        <div class="stat-desc">contact center employees using the app across iOS and Android</div>
+        <a class="stat-more" href="#result">Learn more</a>
       </div>
-      <div class="impact-card">
-        <div class="impact-eyebrow">Foundation</div>
-        <div class="impact-num">1st</div>
-        <div class="impact-label">mobile design system <strong>in Verint's history</strong></div>
+      <div class="stat-card">
+        <div class="stat-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/><path d="M9 6h6M9 10h6M9 14h4"/></svg>
+        </div>
+        <div class="stat-num">1st</div>
+        <div class="stat-title">Mobile Design System</div>
+        <div class="stat-desc">the first mobile design system ever built at Verint</div>
+        <a class="stat-more" href="#result">Learn more</a>
       </div>
     </div>
 
@@ -519,11 +768,11 @@ button{cursor:pointer;font-family:inherit}
       </div>
       <div class="diff-item">
         <div class="diff-num">1</div>
-        <p class="diff-text"><strong>Bring data to stakeholder conversations, not wireframes.</strong> I spent weeks arguing for mobile-first scope based on instinct and logic. Usage analytics and a few user interviews - showing where and how people actually used the app - would have replaced those debates with a single slide and moved the project faster.</p>
+        <p class="diff-text"><strong>Bring data to stakeholder conversations before the wireframes.</strong> I spent weeks arguing mobile-first scope on instinct and logic. A few user interviews and usage analytics - showing where and how people actually used the app - would have replaced those debates with a single slide and moved the project faster.</p>
       </div>
       <div class="diff-item">
         <div class="diff-num">2</div>
-        <p class="diff-text"><strong>Involve real contact center agents earlier.</strong> Our testing happened too late in the process, which meant some assumptions got baked in before we could validate them. Access to actual users early on - not internal proxies - would have let us pressure-test the core design direction before committing to it.</p>
+        <p class="diff-text"><strong>Involve real contact center agents earlier.</strong> Our testing happened too late, which meant assumptions got baked in before we could validate them. Earlier access to actual users - not internal proxies - would have let us test the core premise before committing to the design direction.</p>
       </div>
     </div>
 
@@ -531,35 +780,53 @@ button{cursor:pointer;font-family:inherit}
 </div><!-- /cs-body -->
 
 <script>
-/* -- Theme sync from parent portfolio via postMessage -- */
+/* -- Theme sync --------------------------------------------------------- */
 window.addEventListener('message', function(e) {
   if (e.data && e.data.type === 'theme') {
     document.documentElement.setAttribute('data-theme', e.data.dark ? 'dark' : 'light');
   }
 });
 
-/* -- Relay mousemove to parent so portfolio cursor tracks inside iframe -- */
+/* -- Relay mousemove to parent ------------------------------------------ */
 document.addEventListener('mousemove', function(e) {
   try { window.parent.postMessage({type:'iframe-mm', x:e.clientX, y:e.clientY}, '*'); } catch(err){}
 }, { passive: true });
 
+/* -- Carousel ----------------------------------------------------------- */
+var carIdx = 0;
+var CAR_TOTAL = 4;
+
+function carUpdate() {
+  document.getElementById('carousel-track').style.transform = 'translateX(-' + (carIdx * 100) + '%)';
+  document.getElementById('car-counter').textContent = (carIdx + 1) + ' / ' + CAR_TOTAL;
+}
+
+function carMove(dir) {
+  carIdx = (carIdx + dir + CAR_TOTAL) % CAR_TOTAL;
+  carUpdate();
+}
+
+carUpdate();
+
+document.addEventListener('keydown', function(e) {
+  if (document.getElementById('lightbox').classList.contains('open')) return;
+  if (e.key === 'ArrowLeft') carMove(-1);
+  if (e.key === 'ArrowRight') carMove(1);
+});
+
+/* Touch swipe */
+(function() {
+  var wrap = document.getElementById('carousel');
+  var sx = 0;
+  wrap.addEventListener('touchstart', function(e) { sx = e.touches[0].clientX; }, {passive:true});
+  wrap.addEventListener('touchend', function(e) {
+    var dx = e.changedTouches[0].clientX - sx;
+    if (Math.abs(dx) > 40) carMove(dx < 0 ? 1 : -1);
+  }, {passive:true});
+})();
+
 /* -- Lightbox ----------------------------------------------------------- */
-const LBX_TOTAL = 5;
-const LBX_SRCS = [
-  'images/tab-ask-ai.jpg',
-  'images/tab-performance.jpg',
-  'images/tab-schedule.jpg',
-  'images/tab-requests.jpg',
-  'images/tab-more.jpg'
-];
-const LBX_ALTS = [
-  'Ask AI tab',
-  'Performance tab',
-  'Schedule tab',
-  'Requests tab',
-  'More tab'
-];
-let lbxIdx = 0;
+var lbxIdx = 0;
 
 function openLightbox(idx) {
   lbxIdx = idx;
@@ -575,20 +842,18 @@ function closeLightbox(e) {
 }
 
 function lbxMove(dir) {
-  lbxIdx = (lbxIdx + dir + LBX_TOTAL) % LBX_TOTAL;
+  lbxIdx = (lbxIdx + dir + CAR_TOTAL) % CAR_TOTAL;
   lbxRender();
+  carIdx = lbxIdx; carUpdate();
 }
 
 function lbxRender() {
+  var slides = document.querySelectorAll('.carousel-slide');
   var inner = document.getElementById('lbx-inner');
-  var img = document.createElement('img');
-  img.src = LBX_SRCS[lbxIdx];
-  img.alt = LBX_ALTS[lbxIdx];
-  img.width = 446;
-  img.height = 960;
+  var el = slides[lbxIdx].firstElementChild.cloneNode(true);
   inner.innerHTML = '';
-  inner.appendChild(img);
-  document.getElementById('lbx-counter').textContent = (lbxIdx + 1) + ' / ' + LBX_TOTAL;
+  inner.appendChild(el);
+  document.getElementById('lbx-counter').textContent = (lbxIdx + 1) + ' / ' + CAR_TOTAL;
 }
 
 document.addEventListener('keydown', function(e) {
@@ -599,7 +864,7 @@ document.addEventListener('keydown', function(e) {
   if (e.key === 'ArrowRight') lbxMove(1);
 });
 
-/* -- Scroll reveal -- fades sections in as they enter view -- */
+/* -- Scroll reveal ------------------------------------------------------ */
 var revealObserver = new IntersectionObserver(function(entries) {
   entries.forEach(function(entry) {
     if (entry.isIntersecting) {
