@@ -459,7 +459,36 @@ function clamp(v, lo, hi) { return Math.max(lo, Math.min(hi, v)); }
 window.addEventListener('load', () => {
   applyFrame();
   centerFrame();
+  initDockNudge();
 });
+
+/* ── Dock onboarding nudge ──────────────────────────────────────
+   Show once on first visit: tooltip above the bottombar that
+   bounces gently, then fades after 4s or on first click.
+   ─────────────────────────────────────────────────────────────── */
+function initDockNudge() {
+  if (localStorage.getItem('ori-nudge-seen')) return;
+  const nudge = document.getElementById('bb-nudge');
+  if (!nudge) return;
+
+  const dismiss = () => {
+    nudge.style.transition = 'opacity .4s';
+    nudge.classList.remove('show');
+    localStorage.setItem('ori-nudge-seen', '1');
+  };
+
+  /* Show after 1s */
+  setTimeout(() => {
+    nudge.classList.add('show');
+    /* Auto-dismiss after 4.5s */
+    const timer = setTimeout(dismiss, 4500);
+    /* Also dismiss on first click anywhere on the dock */
+    document.getElementById('bottombar').addEventListener('click', () => {
+      clearTimeout(timer);
+      dismiss();
+    }, { once: true });
+  }, 1000);
+}
 
 /* ════════════════════════════════════
    WINDOW SYSTEM
