@@ -226,13 +226,19 @@ window.pickSiteAv = function(id){ siteAv=(siteAv===id)?null:id; buildModalAvGrid
 
 if (isDesktop) setTimeout(() => {
   const u = getPortfolioUser();
-  if(u){
+  if (u) {
+    /* Returning user — skip modal, apply saved data directly */
     siteAv = (u.avatarId !== null && u.avatarId !== undefined) ? u.avatarId : 0;
-    if(u.name && u.name !== 'Recruiter'){ nIn.value = u.name; bGo.disabled=false; bGo.classList.add('ready'); }
+    buildModalAvGrid();
+    mBg.style.display = 'none';
+    setName(u.name || 'Visitor');
+    startIdleDemo();
+  } else {
+    /* First visit — show modal */
+    buildModalAvGrid();
+    mBg.classList.add('show');
+    nIn.focus();
   }
-  buildModalAvGrid();
-  mBg.classList.add('show');
-  nIn.focus();
 }, 450);
 
 nIn.addEventListener('input', () => {
