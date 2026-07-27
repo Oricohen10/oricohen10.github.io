@@ -300,20 +300,13 @@ function setZoom(z, cx, cy) {
 
 /* Wheel / trackpad:
    - Pinch (ctrlKey) = zoom, more responsive
-   - Two-finger scroll / mouse wheel = pan canvas */
+   - Two-finger scroll / mouse wheel = blocked (no pan, no zoom) */
 canvasEl.addEventListener('wheel', e => {
   e.preventDefault();
+  if (!e.ctrlKey) return;
   const r = canvasEl.getBoundingClientRect();
-  if (e.ctrlKey) {
-    /* Pinch-to-zoom — more sensitive than before */
-    const factor = Math.exp(-e.deltaY / 180);
-    setZoom(zoom * factor, e.clientX - r.left, e.clientY - r.top);
-  } else {
-    /* Two-finger scroll or mouse wheel = pan */
-    panX -= e.deltaX;
-    panY -= e.deltaY;
-    applyCanvas();
-  }
+  const factor = Math.exp(-e.deltaY / 180);
+  setZoom(zoom * factor, e.clientX - r.left, e.clientY - r.top);
 }, { passive: false });
 
 /* Keyboard */
