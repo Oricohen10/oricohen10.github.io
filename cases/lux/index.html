@@ -82,21 +82,21 @@ button{cursor:pointer;font-family:inherit}
 .carousel-btn.prev{left:14px}
 .carousel-btn.next{right:14px}
 .carousel-btn svg{width:16px;height:16px;display:block;flex-shrink:0}
-/* Dots + counter */
+/* Counter */
 .carousel-footer{
   position:absolute;bottom:14px;left:0;right:0;
   display:flex;align-items:center;justify-content:center;gap:10px;
   pointer-events:none;
 }
-.carousel-dots{display:flex;gap:8px;pointer-events:auto}
-.carousel-dot{
-  width:8px;height:8px;border-radius:50%;
-  background:rgba(255,255,255,.5);
-  border:1px solid rgba(255,255,255,.35);
-  transition:background .15s,transform .15s;
-  cursor:pointer;
+.carousel-counter{
+  font-size:12px;font-weight:600;letter-spacing:.02em;
+  color:rgba(255,255,255,.9);
+  background:rgba(0,0,0,.35);
+  border-radius:20px;padding:3px 10px;
+  pointer-events:none;
+  backdrop-filter:blur(4px);
+  -webkit-backdrop-filter:blur(4px);
 }
-.carousel-dot.active{background:#fff;transform:scale(1.25)}
 
 /* Zoom button — fixed to carousel-wrap, not inside scrolling track */
 .carousel-zoom{
@@ -333,12 +333,6 @@ button{cursor:pointer;font-family:inherit}
 .back-nav svg{flex-shrink:0;color:var(--text-tertiary)}
 .back-nav:hover{color:var(--text-primary)}
 
-/* ── Carousel dot tap target ──────────────────────────── */
-.carousel-dot{
-  padding:5px;
-  margin:-5px;
-  box-sizing:content-box;
-}
 
 /* ── Responsive ───────────────────────────────────────── */
 @media(max-width:720px){
@@ -476,9 +470,9 @@ button{cursor:pointer;font-family:inherit}
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg>
   </button>
 
-  <!-- Footer: dots only -->
+  <!-- Footer: counter -->
   <div class="carousel-footer">
-    <div class="carousel-dots" id="car-dots"></div>
+    <span class="carousel-counter" id="car-counter">1 / 4</span>
   </div>
 </div><!-- /carousel-wrap -->
 </div><!-- /carousel-shell -->
@@ -671,8 +665,7 @@ const CAR_TOTAL = 4;
 
 function carUpdate() {
   document.getElementById('carousel-track').style.transform = 'translateX(-' + (carIdx * 100) + '%)';
-  /* dots */
-  document.querySelectorAll('.carousel-dot').forEach((d, i) => d.classList.toggle('active', i === carIdx));
+  document.getElementById('car-counter').textContent = (carIdx + 1) + ' / ' + CAR_TOTAL;
 }
 
 function carMove(dir) {
@@ -685,18 +678,7 @@ function carGoto(i) {
   carUpdate();
 }
 
-/* Build dots */
-(function() {
-  const dotsEl = document.getElementById('car-dots');
-  for (let i = 0; i < CAR_TOTAL; i++) {
-    const d = document.createElement('button');
-    d.className = 'carousel-dot' + (i === 0 ? ' active' : '');
-    d.setAttribute('aria-label', 'Go to slide ' + (i + 1));
-    d.onclick = function() { carGoto(i); };
-    dotsEl.appendChild(d);
-  }
-  carUpdate();
-})();
+carUpdate();
 
 /* Keyboard nav for carousel */
 document.addEventListener('keydown', function(e) {
