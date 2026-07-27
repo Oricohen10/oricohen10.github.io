@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>My Verint - Case Study - Ori Cohen</title>
+<meta name="description" content="How Ori Cohen redesigned My Verint - merging two disconnected mobile apps into a unified, AI-powered experience for 10,000+ contact center employees."/>
+<link rel="canonical" href="https://oricohen.co/cases/myverint/"/>
+<meta property="og:type" content="article"/>
+<meta property="og:title" content="My Verint - Case Study - Ori Cohen"/>
+<meta property="og:description" content="How Ori Cohen redesigned My Verint - merging two disconnected mobile apps into a unified, AI-powered experience for 10,000+ contact center employees."/>
+<meta property="og:url" content="https://oricohen.co/cases/myverint/"/>
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:title" content="My Verint - Case Study - Ori Cohen"/>
+<meta name="twitter:description" content="How Ori Cohen redesigned My Verint - merging two disconnected mobile apps into a unified, AI-powered experience for 10,000+ contact center employees."/>
+<link rel="stylesheet" href="../../tokens.css"/>
+<!-- Hide default cursor when embedded in the portfolio iframe -->
+<script>if(window.self!==window.top){var _s=document.createElement('style');_s.textContent='*{cursor:none!important}';document.head.appendChild(_s);}</script>
+<style>
+/* -- Reset -------------------------------------------------------------- */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:var(--font-sans);
+  background:var(--surface-default);
+  color:var(--text-primary);
+  -webkit-font-smoothing:antialiased;
+  line-height:1.5;
+  min-height:100vh;
+}
+img{display:block;max-width:100%}
+button{cursor:pointer;font-family:inherit}
+
+/* -- Phone gallery ------------------------------------------------------- */
+.gallery-shell{
+  max-width:1040px;
+  margin:0 auto;
+  padding:28px 28px 0;
+}
+.gallery-wrap{
+  background:var(--surface-raised);
+  border:1px solid var(--border-subtle);
+  border-radius:var(--r-xl);
+  padding:28px 20px 24px;
+  overflow:hidden;
+}
+.gallery-label{
+  font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--text-tertiary);
+  margin-bottom:16px;
+  text-align:center;
+}
+.phone-strip{
+  display:flex;
+  gap:14px;
+  justify-content:center;
+  overflow-x:auto;
+  -webkit-overflow-scrolling:touch;
+  scrollbar-width:none;
+  padding-bottom:2px;
+}
+.phone-strip::-webkit-scrollbar{display:none}
+.phone-item{
+  flex:0 0 auto;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:8px;
+}
+.phone-frame{
+  width:160px;
+  border-radius:22px;
+  overflow:hidden;
+  border:1.5px solid var(--border-subtle);
+  box-shadow:0 4px 20px rgba(0,0,0,.10),0 1px 4px rgba(0,0,0,.06);
+  transition:transform .18s var(--ease),box-shadow .18s var(--ease);
+  cursor:pointer;
+}
+.phone-frame:hover{
+  transform:translateY(-3px);
+  box-shadow:0 10px 32px rgba(0,0,0,.14),0 2px 8px rgba(0,0,0,.08);
+}
+[data-theme="dark"] .phone-frame{border-color:var(--border-default)}
+.phone-frame img{
+  width:100%;
+  height:auto;
+  display:block;
+  pointer-events:none;
+  user-select:none;
+}
+.phone-tab-label{
+  font-size:11px;font-weight:600;
+  color:var(--text-tertiary);
+  letter-spacing:.03em;
+}
+
+/* -- Lightbox ------------------------------------------------------------ */
+.lbx{
+  display:none;
+  position:fixed;inset:0;z-index:9999;
+  background:rgba(0,0,0,.9);
+  align-items:center;justify-content:center;
+  animation:lbxIn .18s ease;
+}
+.lbx.open{display:flex}
+@keyframes lbxIn{from{opacity:0}to{opacity:1}}
+.lbx-inner{
+  position:relative;
+  max-width:360px;
+  width:calc(100vw - 80px);
+  display:flex;align-items:center;justify-content:center;
+}
+.lbx-inner img{
+  width:100%;
+  border-radius:22px;
+  box-shadow:0 8px 60px rgba(0,0,0,.6);
+  display:block;
+}
+.lbx-close{
+  position:fixed;top:18px;right:22px;
+  width:36px;height:36px;
+  display:flex;align-items:center;justify-content:center;
+  background:rgba(255,255,255,.12);
+  border:1px solid rgba(255,255,255,.18);
+  border-radius:50%;
+  color:#fff;
+  transition:background .12s;
+  z-index:10000;
+}
+.lbx-close:hover{background:rgba(255,255,255,.22)}
+.lbx-close svg{width:16px;height:16px;display:block}
+.lbx-btn{
+  position:fixed;top:50%;transform:translateY(-50%);
+  width:42px;height:42px;
+  display:flex;align-items:center;justify-content:center;
+  background:rgba(255,255,255,.12);
+  border:1px solid rgba(255,255,255,.18);
+  border-radius:50%;
+  color:#fff;
+  transition:background .12s;
+  z-index:10000;
+}
+.lbx-btn:hover{background:rgba(255,255,255,.22)}
+.lbx-btn svg{width:18px;height:18px;display:block}
+.lbx-prev{left:18px}
+.lbx-next{right:18px}
+.lbx-counter{
+  position:fixed;bottom:22px;left:50%;transform:translateX(-50%);
+  font-size:11px;font-weight:700;letter-spacing:.06em;
+  color:rgba(255,255,255,.5);
+  z-index:10000;
+}
+
+/* -- Layout -------------------------------------------------------------- */
+.cs-body{
+  display:grid;
+  grid-template-columns:200px 1fr;
+  gap:48px;
+  padding:36px 28px 80px;
+  max-width:1040px;
+  margin:0 auto;
+}
+
+/* -- Sidebar ------------------------------------------------------------- */
+.sidebar{
+  position:sticky;top:61px;
+  height:fit-content;
+  display:flex;flex-direction:column;gap:20px;
+}
+.sb-tag{
+  display:inline-flex;
+  font-size:9px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--action-primary);
+  background:var(--action-primary-subtle);
+  border:1px solid color-mix(in srgb, var(--figma) 18%, transparent);
+  padding:4px 10px;border-radius:20px;
+  width:fit-content;
+}
+.sb-fields{
+  display:flex;flex-direction:column;gap:16px;
+  padding-left:14px;
+  border-left:2px solid var(--action-primary);
+}
+.sb-label{font-size:9px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--text-tertiary);margin-bottom:3px}
+.sb-value{font-size:12.5px;font-weight:500;color:var(--text-secondary);line-height:1.45}
+.sb-div{height:1px;background:var(--border-subtle)}
+.sb-nut{font-size:12px;color:var(--text-secondary);line-height:1.75;font-style:italic}
+
+/* -- Content ------------------------------------------------------------- */
+.cs-content{display:flex;flex-direction:column;gap:44px}
+
+/* -- Hero ---------------------------------------------------------------- */
+.cs-hero{padding-bottom:32px;border-bottom:1px solid var(--border-subtle)}
+.cs-hero h1{
+  font-size:32px;font-weight:800;
+  letter-spacing:-.7px;line-height:1.2;
+  color:var(--text-primary);
+}
+.cs-hero-accent{color:var(--action-primary)}
+.cs-hero-sub{
+  margin-top:12px;
+  font-size:15px;color:var(--text-secondary);
+  line-height:1.7;max-width:560px;
+}
+
+/* -- Sections ------------------------------------------------------------ */
+.cs-section-num{margin-bottom:10px}
+.cs-sec-title{
+  font-size:24px;font-weight:800;
+  letter-spacing:-.3px;
+  color:var(--action-primary);
+}
+.cs-section p{
+  font-size:15px;color:var(--text-secondary);
+  line-height:1.8;
+  margin-bottom:10px;
+}
+.cs-section p:last-child{margin-bottom:0}
+.cs-section p strong{color:var(--text-primary);font-weight:600}
+
+/* -- Differently callouts ----------------------------------------------- */
+.diff-item{
+  display:flex;gap:14px;align-items:flex-start;
+  padding:20px 22px;
+  background:var(--surface-raised);
+  border:1px solid var(--border-subtle);
+  border-radius:12px;
+  margin-bottom:12px;
+}
+.diff-item:last-child{margin-bottom:0}
+.diff-num{
+  flex-shrink:0;
+  width:24px;height:24px;
+  background:var(--action-primary-subtle);
+  border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:11px;font-weight:800;color:var(--action-primary);
+  margin-top:1px;
+}
+.diff-text{font-size:14px;color:var(--text-secondary);line-height:1.8}
+.diff-text strong{color:var(--text-primary);font-weight:600}
+
+/* -- Scroll reveal ------------------------------------------------------- */
+@media(prefers-reduced-motion:no-preference){
+  .cs-reveal{opacity:0;transform:translateY(16px);transition:opacity .45s ease-out,transform .45s ease-out}
+  .cs-reveal.is-visible{opacity:1;transform:translateY(0)}
+}
+
+/* -- Back nav ------------------------------------------------------------ */
+.back-nav{
+  display:none;
+  align-items:center;gap:6px;
+  padding:14px 18px;
+  font-size:13px;font-weight:600;
+  color:var(--text-secondary);
+  text-decoration:none;
+  border-bottom:1px solid var(--border-subtle);
+  background:var(--surface-default);
+}
+.back-nav svg{flex-shrink:0;color:var(--text-tertiary)}
+.back-nav:hover{color:var(--text-primary)}
+
+/* -- Responsive ---------------------------------------------------------- */
+@media(max-width:720px){
+  .back-nav{display:flex}
+  .cs-body{grid-template-columns:1fr;gap:28px;padding:24px 18px 80px}
+  .gallery-shell{padding:20px 18px 0}
+  .gallery-wrap{padding:20px 16px 18px}
+  .sidebar{position:static}
+  .cs-hero h1{font-size:24px}
+  .cs-hero-sub{font-size:16px}
+  .cs-section p{font-size:16px}
+  .phone-frame{width:130px;border-radius:18px}
+  .diff-text{font-size:15px}
+}
+@media(max-width:480px){
+  .phone-frame{width:110px;border-radius:15px}
+  .lbx-btn,.lbx-prev,.lbx-next{display:none}
+  .cs-body{padding:20px 16px 80px}
+  .gallery-shell{padding:16px 16px 0}
+}
+</style>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "@id": "https://oricohen.co/cases/myverint/",
+  "url": "https://oricohen.co/cases/myverint/",
+  "headline": "My Verint - Case Study",
+  "description": "How Ori Cohen redesigned My Verint - merging two disconnected mobile apps into a unified, AI-powered experience for 10,000+ contact center employees.",
+  "author": {
+    "@type": "Person",
+    "@id": "https://oricohen.co/#person",
+    "name": "Ori Cohen"
+  },
+  "publisher": {
+    "@type": "Person",
+    "name": "Ori Cohen",
+    "url": "https://oricohen.co/"
+  },
+  "isPartOf": {
+    "@type": "WebSite",
+    "@id": "https://oricohen.co/#website"
+  },
+  "about": {
+    "@type": "SoftwareApplication",
+    "name": "My Verint",
+    "applicationCategory": "Mobile App",
+    "operatingSystem": "iOS, Android"
+  }
+}
+</script>
+</head>
+<body>
+
+<!-- Back nav (mobile only) -->
+<a href="/" class="back-nav" aria-label="Back to portfolio">
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+  Back to portfolio
+</a>
+
+<!-- Phone gallery -->
+<div class="gallery-shell">
+  <div class="gallery-wrap">
+    <div class="gallery-label">5 tabs - Ask AI, Performance, Schedule, Requests, More</div>
+    <div class="phone-strip" id="phone-strip">
+
+      <div class="phone-item">
+        <div class="phone-frame" onclick="openLightbox(0)" role="button" tabindex="0" aria-label="Ask AI tab - expand" onkeydown="if(event.key==='Enter'||event.key===' ')openLightbox(0)">
+          <img src="images/tab-ask-ai.jpg" alt="Ask AI tab - conversational interface for workforce tasks" width="446" height="960"/>
+        </div>
+        <span class="phone-tab-label">Ask AI</span>
+      </div>
+
+      <div class="phone-item">
+        <div class="phone-frame" onclick="openLightbox(1)" role="button" tabindex="0" aria-label="Performance tab - expand" onkeydown="if(event.key==='Enter'||event.key===' ')openLightbox(1)">
+          <img src="images/tab-performance.jpg" alt="Performance tab - metrics and KPI overview" width="446" height="960"/>
+        </div>
+        <span class="phone-tab-label">Performance</span>
+      </div>
+
+      <div class="phone-item">
+        <div class="phone-frame" onclick="openLightbox(2)" role="button" tabindex="0" aria-label="Schedule tab - expand" onkeydown="if(event.key==='Enter'||event.key===' ')openLightbox(2)">
+          <img src="images/tab-schedule.jpg" alt="Schedule tab - shift and time-off management" width="446" height="960"/>
+        </div>
+        <span class="phone-tab-label">Schedule</span>
+      </div>
+
+      <div class="phone-item">
+        <div class="phone-frame" onclick="openLightbox(3)" role="button" tabindex="0" aria-label="Requests tab - expand" onkeydown="if(event.key==='Enter'||event.key===' ')openLightbox(3)">
+          <img src="images/tab-requests.jpg" alt="Requests tab - time-off requests and approvals" width="446" height="960"/>
+        </div>
+        <span class="phone-tab-label">Requests</span>
+      </div>
+
+      <div class="phone-item">
+        <div class="phone-frame" onclick="openLightbox(4)" role="button" tabindex="0" aria-label="More tab - expand" onkeydown="if(event.key==='Enter'||event.key===' ')openLightbox(4)">
+          <img src="images/tab-more.jpg" alt="More tab - additional settings and features" width="446" height="960"/>
+        </div>
+        <span class="phone-tab-label">More</span>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- Lightbox -->
+<div class="lbx" id="lightbox" role="dialog" aria-modal="true" aria-label="Screen preview" onclick="closeLightbox(event)">
+  <div class="lbx-inner" id="lbx-inner"></div>
+  <button class="lbx-close" onclick="closeLightbox()" aria-label="Close">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+  </button>
+  <button class="lbx-btn lbx-prev" onclick="lbxMove(-1)" aria-label="Previous">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+  </button>
+  <button class="lbx-btn lbx-next" onclick="lbxMove(1)" aria-label="Next">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+  </button>
+  <div class="lbx-counter" id="lbx-counter"></div>
+</div>
+
+<!-- Body -->
+<div class="cs-body">
+
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <span class="sb-tag">Mobile App</span>
+    <div class="sb-fields">
+      <div>
+        <div class="sb-label">Role</div>
+        <div class="sb-value">Design Lead, Team Lead</div>
+      </div>
+      <div>
+        <div class="sb-label">Platform</div>
+        <div class="sb-value">iOS + Android</div>
+      </div>
+      <div>
+        <div class="sb-label">Timeline</div>
+        <div class="sb-value">2024-2025</div>
+      </div>
+      <div>
+        <div class="sb-label">Users</div>
+        <div class="sb-value">10,000+</div>
+      </div>
+    </div>
+    <div class="sb-div"></div>
+    <p class="sb-nut">Merged two disconnected workforce apps into a single mobile experience - with a mobile design system and an AI-first model that 85% of users now rely on for all their tasks.</p>
+  </aside>
+
+  <!-- Content -->
+  <div class="cs-content">
+
+    <!-- Hero -->
+    <div class="cs-hero">
+      <h1>Two apps.<br/>One workforce.<br/><span class="cs-hero-accent">Zero mobile-first thinking.</span></h1>
+      <p class="cs-hero-sub">My Verint turned a fragmented, inaccessible mobile experience into a unified, AI-powered app for 10,000+ contact center employees.</p>
+    </div>
+
+    <!-- Section 1: Background -->
+    <div class="cs-section cs-reveal">
+      <div class="cs-section-num">
+        <div class="cs-sec-title">Background</div>
+      </div>
+      <p>For years, Verint ran two separate mobile apps - one for supervisors, one for agents. Both had grown out of the desktop WFE product as afterthoughts. Mobile was treated as a free add-on, so there was no dedicated budget, no design owner, and no design system. The work passed from hand to hand, accumulating inconsistencies and accessibility gaps over time.</p>
+      <p>The catalyst arrived in 2024: a company mandate to integrate Ask Verint - an AI agent - into the mobile experience. You can't build something new on a broken foundation, so we rebuilt the foundation first.</p>
+    </div>
+
+    <!-- Section 2: Challenge -->
+    <div class="cs-section cs-reveal">
+      <div class="cs-section-num">
+        <div class="cs-sec-title">Challenge</div>
+      </div>
+      <p>The structural problems were long: no design system, no accessibility baseline, no documentation, and no access to all existing flows. Some parts of the app were effectively invisible to design.</p>
+      <p>The hardest challenge was organizational. Stakeholders wanted to move every desktop capability to mobile - one to one. I disagreed. Desktop and mobile serve <strong>different use cases</strong>. A supervisor planning next month's schedule does that from a desktop. A contact center agent adding 15 minutes to their shift does it from their phone, on the floor, between calls. Cramming full desktop features into a small screen - without asking whether they belong there - was the wrong brief. Changing that framing took time and required more than logic to move.</p>
+    </div>
+
+    <!-- Section 3: Solution -->
+    <div class="cs-section cs-reveal">
+      <div class="cs-section-num">
+        <div class="cs-sec-title">Solution</div>
+      </div>
+      <p>The first move was combining the two apps into one, with role-based capability views - supervisors and agents each get what they need, not everything at once.</p>
+      <p>Alongside that, we built My Verint's first mobile design system: color tokens, typography scales, responsive behaviors, motion specs, and full documentation. It gave the team a shared language that didn't exist before.</p>
+      <p>The biggest outcome is Ask Verint. <strong>85% of users now complete all their tasks through the AI tab</strong> - through natural language, without navigating menus at all. The design work made that possible; the data validated every decision we'd made about mobile-first scope.</p>
+    </div>
+
+    <!-- Section 4: What I'd do differently -->
+    <div class="cs-section cs-reveal">
+      <div class="cs-section-num">
+        <div class="cs-sec-title">What I'd do differently</div>
+      </div>
+      <div class="diff-item">
+        <div class="diff-num">1</div>
+        <p class="diff-text"><strong>Bring data to stakeholder conversations, not wireframes.</strong> I spent weeks arguing for mobile-first scope based on instinct and logic. Usage analytics and a few user interviews - showing where and how people actually used the app - would have replaced those debates with a single slide and moved the project faster.</p>
+      </div>
+      <div class="diff-item">
+        <div class="diff-num">2</div>
+        <p class="diff-text"><strong>Involve real contact center agents earlier.</strong> Our testing happened too late in the process, which meant some assumptions got baked in before we could validate them. Access to actual users early on - not internal proxies - would have let us pressure-test the core design direction before committing to it.</p>
+      </div>
+    </div>
+
+  </div>
+</div><!-- /cs-body -->
+
+<script>
+/* -- Theme sync from parent portfolio via postMessage -- */
+window.addEventListener('message', function(e) {
+  if (e.data && e.data.type === 'theme') {
+    document.documentElement.setAttribute('data-theme', e.data.dark ? 'dark' : 'light');
+  }
+});
+
+/* -- Relay mousemove to parent so portfolio cursor tracks inside iframe -- */
+document.addEventListener('mousemove', function(e) {
+  try { window.parent.postMessage({type:'iframe-mm', x:e.clientX, y:e.clientY}, '*'); } catch(err){}
+}, { passive: true });
+
+/* -- Lightbox ----------------------------------------------------------- */
+const LBX_TOTAL = 5;
+const LBX_SRCS = [
+  'images/tab-ask-ai.jpg',
+  'images/tab-performance.jpg',
+  'images/tab-schedule.jpg',
+  'images/tab-requests.jpg',
+  'images/tab-more.jpg'
+];
+const LBX_ALTS = [
+  'Ask AI tab',
+  'Performance tab',
+  'Schedule tab',
+  'Requests tab',
+  'More tab'
+];
+let lbxIdx = 0;
+
+function openLightbox(idx) {
+  lbxIdx = idx;
+  lbxRender();
+  document.getElementById('lightbox').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeLightbox(e) {
+  if (e && e.target !== document.getElementById('lightbox')) return;
+  document.getElementById('lightbox').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+function lbxMove(dir) {
+  lbxIdx = (lbxIdx + dir + LBX_TOTAL) % LBX_TOTAL;
+  lbxRender();
+}
+
+function lbxRender() {
+  var inner = document.getElementById('lbx-inner');
+  var img = document.createElement('img');
+  img.src = LBX_SRCS[lbxIdx];
+  img.alt = LBX_ALTS[lbxIdx];
+  img.width = 446;
+  img.height = 960;
+  inner.innerHTML = '';
+  inner.appendChild(img);
+  document.getElementById('lbx-counter').textContent = (lbxIdx + 1) + ' / ' + LBX_TOTAL;
+}
+
+document.addEventListener('keydown', function(e) {
+  var lb = document.getElementById('lightbox');
+  if (!lb.classList.contains('open')) return;
+  if (e.key === 'Escape') { lb.classList.remove('open'); document.body.style.overflow = ''; }
+  if (e.key === 'ArrowLeft') lbxMove(-1);
+  if (e.key === 'ArrowRight') lbxMove(1);
+});
+
+/* -- Scroll reveal -- fades sections in as they enter view -- */
+var revealObserver = new IntersectionObserver(function(entries) {
+  entries.forEach(function(entry) {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('is-visible');
+      revealObserver.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+document.querySelectorAll('.cs-reveal').forEach(function(el) { revealObserver.observe(el); });
+</script>
+</body>
+</html>
