@@ -38,28 +38,43 @@ body{
   min-height:100vh;
 }
 img{display:block;max-width:100%}
-button{cursor:pointer;font-family:inherit}
+button{font-family:inherit}
 
-/* -- Hero media --------------------------------------------------------- */
-.media-shell{
+/* -- Carousel ----------------------------------------------------------- */
+.carousel-shell{
   max-width:1040px;
   margin:0 auto;
   padding:28px 28px 0;
 }
-.media-wrap{
+.carousel-wrap{
   position:relative;
   overflow:hidden;
-  background:#0D1117;
+  background:#0D0D0D;
   border:1px solid var(--border-subtle);
   border-radius:var(--r-xl);
 }
-.media-video{
-  width:100%;
-  aspect-ratio:16/9;
-  display:block;
-  cursor:pointer;
+.carousel-track{
+  display:flex;
+  transition:transform .38s cubic-bezier(.4,0,.2,1);
+  will-change:transform;
 }
-.media-play{
+.carousel-slide{
+  flex:0 0 100%;
+  aspect-ratio:16/9;
+  position:relative;
+  overflow:hidden;
+}
+.carousel-slide video{
+  width:100%;height:100%;
+  object-fit:cover;
+  display:block;
+}
+.carousel-slide img{
+  width:100%;height:100%;
+  object-fit:cover;
+  display:block;
+}
+.car-play{
   position:absolute;
   top:50%;left:50%;
   transform:translate(-50%,-50%);
@@ -67,15 +82,50 @@ button{cursor:pointer;font-family:inherit}
   background:rgba(255,255,255,.95);
   border:none;
   display:flex;align-items:center;justify-content:center;
-  cursor:pointer;
   box-shadow:0 6px 32px rgba(0,0,0,.38);
   transition:transform .15s,opacity .18s;
   z-index:5;
 }
-.media-play:hover{transform:translate(-50%,-50%) scale(1.1)}
-.media-play.hidden{opacity:0;pointer-events:none}
-.media-play svg{margin-left:3px}
-.media-pause{
+.car-play:hover{transform:translate(-50%,-50%) scale(1.1)}
+.car-play.hidden{opacity:0;pointer-events:none}
+.car-play svg{margin-left:3px}
+.carousel-slide-label{
+  position:absolute;
+  bottom:14px;left:50%;transform:translateX(-50%);
+  font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
+  color:#fff;
+  background:rgba(0,0,0,.48);
+  backdrop-filter:blur(6px);
+  -webkit-backdrop-filter:blur(6px);
+  padding:4px 14px;border-radius:100px;
+  white-space:nowrap;pointer-events:none;
+}
+.carousel-btn{
+  position:absolute;top:50%;transform:translateY(-50%);
+  z-index:10;
+  width:34px;height:34px;border-radius:50%;
+  background:rgba(255,255,255,.92);
+  border:none;box-shadow:0 2px 8px rgba(0,0,0,.18);
+  display:flex;align-items:center;justify-content:center;
+  transition:background .15s,opacity .15s;opacity:.85;
+}
+.carousel-btn:hover{background:#fff;opacity:1}
+.carousel-btn svg{width:16px;height:16px;color:#333}
+.prev{left:12px}.next{right:12px}
+.carousel-footer{
+  position:absolute;bottom:10px;right:14px;
+  display:flex;align-items:center;gap:8px;
+}
+.carousel-counter{
+  font-size:11px;font-weight:600;
+  color:rgba(255,255,255,.7);
+  background:rgba(0,0,0,.35);
+  padding:3px 10px;border-radius:100px;
+  backdrop-filter:blur(4px);
+}
+
+/* -- Pause button ------------------------------------------------------- */
+.car-pause{
   position:absolute;
   top:50%;left:50%;
   transform:translate(-50%,-50%);
@@ -83,33 +133,63 @@ button{cursor:pointer;font-family:inherit}
   background:rgba(0,0,0,.48);
   border:none;
   display:flex;align-items:center;justify-content:center;
-  cursor:pointer;
   box-shadow:0 4px 20px rgba(0,0,0,.3);
   transition:opacity .18s,transform .15s;
   z-index:6;
   opacity:0;pointer-events:none;
 }
-.media-pause.playing{pointer-events:auto}
-.media-wrap:hover .media-pause.playing{opacity:1}
-.media-pause:hover{transform:translate(-50%,-50%) scale(1.08)}
+.car-pause.playing{pointer-events:auto}
+.carousel-slide:hover .car-pause.playing{opacity:1}
+.car-pause:hover{transform:translate(-50%,-50%) scale(1.08)}
 
-/* -- Screenshot strip --------------------------------------------------- */
-.ss-strip{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:10px;
-  padding:10px 0 0;
+/* -- Zoom button -------------------------------------------------------- */
+.carousel-zoom{
+  position:absolute;bottom:14px;left:14px;z-index:10;
+  width:32px;height:32px;
+  display:flex;align-items:center;justify-content:center;
+  background:rgba(255,255,255,.88);
+  border:1px solid rgba(0,0,0,.1);
+  border-radius:50%;
+  box-shadow:0 1px 4px rgba(0,0,0,.14);
+  color:#1a1a2e;
+  transition:background .12s,transform .12s;
 }
-.ss-thumb{
-  border-radius:10px;
-  overflow:hidden;
-  cursor:pointer;
-  opacity:.65;
-  border:2px solid transparent;
-  transition:opacity .15s,border-color .15s;
+.carousel-zoom:hover{background:rgba(255,255,255,1);transform:scale(1.08)}
+.carousel-zoom svg{width:15px;height:15px;display:block}
+
+/* -- Video lightbox ----------------------------------------------------- */
+.vlbx{
+  display:none;
+  position:fixed;inset:0;z-index:9999;
+  background:rgba(0,0,0,.92);
+  align-items:center;justify-content:center;
+  animation:lbxIn .18s ease;
 }
-.ss-thumb:hover,.ss-thumb.active{opacity:1;border-color:var(--action-primary)}
-.ss-thumb img{width:100%;height:auto;display:block}
+.vlbx.open{display:flex}
+@keyframes lbxIn{from{opacity:0}to{opacity:1}}
+.vlbx-inner{
+  position:relative;
+  max-width:calc(100vw - 80px);
+  width:min(960px, calc(100vw - 80px));
+}
+.vlbx-inner video{
+  width:100%;border-radius:8px;
+  box-shadow:0 8px 60px rgba(0,0,0,.6);
+  display:block;
+}
+.vlbx-close{
+  position:fixed;top:18px;right:22px;
+  width:36px;height:36px;
+  display:flex;align-items:center;justify-content:center;
+  background:rgba(255,255,255,.12);
+  border:1px solid rgba(255,255,255,.18);
+  border-radius:50%;
+  color:#fff;
+  transition:background .12s;
+  z-index:10000;
+}
+.vlbx-close:hover{background:rgba(255,255,255,.22)}
+.vlbx-close svg{width:16px;height:16px;display:block}
 
 /* -- Body layout -------------------------------------------------------- */
 .cs-body{
@@ -171,160 +251,53 @@ button{cursor:pointer;font-family:inherit}
 .cs-section p:last-child{margin-bottom:0}
 .cs-section p strong{color:var(--text-primary);font-weight:600}
 
-/* -- Feature blocks ----------------------------------------------------- */
-.features-list{
+/* -- Plugin blocks ------------------------------------------------------ */
+.plugins-list{
   display:flex;flex-direction:column;gap:16px;
   margin-top:24px;
 }
-.feature-block{
+.plugin-block{
   position:relative;
   border-radius:16px;
   border:1px solid var(--border-subtle);
-  padding:28px 32px 28px 38px;
+  padding:30px 36px 30px 40px;
   overflow:hidden;
   background:var(--surface-default);
   box-shadow:0 2px 12px rgba(0,0,0,.04);
   transition:box-shadow .2s;
 }
-[data-theme="dark"] .feature-block{box-shadow:none}
-.feature-block:hover{box-shadow:0 6px 28px rgba(4,120,87,.1)}
-[data-theme="dark"] .feature-block:hover{box-shadow:0 0 0 1px var(--action-primary)}
-.feature-block::before{
+[data-theme="dark"] .plugin-block{box-shadow:none}
+.plugin-block:hover{box-shadow:0 6px 28px rgba(4,120,87,.1)}
+[data-theme="dark"] .plugin-block:hover{box-shadow:0 0 0 1px var(--action-primary)}
+.plugin-block::before{
   content:'';
   position:absolute;
   left:0;top:0;bottom:0;width:4px;
   background:var(--action-primary);
   border-radius:4px 0 0 4px;
 }
-.feature-head{
+.plugin-head{
   display:flex;align-items:center;gap:10px;
-  margin-bottom:12px;
+  margin-bottom:14px;
 }
-.feature-num{
+.plugin-num{
   font-size:10px;font-weight:800;letter-spacing:.12em;
   text-transform:uppercase;color:var(--text-tertiary);
 }
-.feature-tag{
+.plugin-tag{
   font-size:9px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;
   color:var(--action-primary);
   background:var(--action-primary-subtle);
   padding:3px 9px;border-radius:4px;
 }
-.feature-title{
-  font-size:20px;font-weight:800;letter-spacing:-.35px;
-  color:var(--text-primary);margin-bottom:8px;
+.plugin-title{
+  font-size:22px;font-weight:800;letter-spacing:-.4px;
+  color:var(--text-primary);margin-bottom:10px;
 }
-.feature-desc{
+.plugin-desc{
   font-size:14px;color:var(--text-secondary);
   line-height:1.75;max-width:560px;
 }
-
-/* -- Copilot mockup panel ----------------------------------------------- */
-.cp-panel{
-  margin-top:22px;
-  padding-top:20px;
-  border-top:1px dashed var(--border-subtle);
-}
-.cp-panel-label{
-  font-size:10px;font-weight:700;letter-spacing:.1em;
-  text-transform:uppercase;color:var(--text-tertiary);
-  margin-bottom:14px;
-}
-.cp-card{
-  border:1.5px solid var(--border-subtle);
-  border-radius:10px;
-  overflow:hidden;
-  max-width:320px;
-  font-size:12px;
-}
-.cp-card-head{
-  display:flex;align-items:center;gap:8px;
-  padding:9px 14px;
-  background:var(--action-primary);
-  color:#fff;
-}
-.cp-card-icon{font-size:14px;line-height:1}
-.cp-card-title{font-size:11px;font-weight:700;letter-spacing:.02em}
-.cp-card-body{
-  padding:12px 14px;
-  background:var(--surface-default);
-  color:var(--text-secondary);
-  font-size:12.5px;
-  line-height:1.6;
-}
-.cp-card-body strong{color:var(--text-primary)}
-.cp-card-body .cp-table{
-  width:100%;border-collapse:collapse;
-  margin-top:8px;font-size:11.5px;
-}
-.cp-card-body .cp-table th{
-  text-align:left;font-weight:700;
-  color:var(--action-primary);
-  padding:2px 0;border-bottom:1px solid var(--border-subtle);
-}
-.cp-card-body .cp-table td{
-  padding:3px 0;color:var(--text-secondary);
-}
-.cp-card-body .cp-table tr.highlight td{
-  font-weight:700;color:var(--text-primary);
-}
-.cp-card-footer{
-  display:flex;align-items:center;gap:8px;
-  padding:8px 14px;
-  border-top:1px solid var(--border-subtle);
-  background:var(--canvas,#F5F5F5);
-}
-.cp-action-btn{
-  display:inline-flex;align-items:center;gap:4px;
-  font-size:10px;font-weight:700;
-  color:var(--action-primary);
-  background:var(--action-primary-subtle);
-  border:none;
-  border-radius:6px;
-  padding:4px 10px;
-  cursor:pointer;
-  letter-spacing:.02em;
-}
-.cp-action-btn svg{width:11px;height:11px;flex-shrink:0}
-
-/* -- Timeline ----------------------------------------------------------- */
-.timeline{
-  display:flex;flex-direction:column;gap:0;
-  margin-top:24px;
-  position:relative;
-}
-.timeline::before{
-  content:'';
-  position:absolute;
-  left:14px;top:28px;bottom:28px;width:2px;
-  background:var(--border-subtle);
-}
-.tl-item{
-  display:flex;gap:18px;
-  padding:12px 0;
-  position:relative;
-}
-.tl-dot{
-  width:30px;height:30px;border-radius:50%;
-  background:var(--surface-default);
-  border:2px solid var(--action-primary);
-  display:flex;align-items:center;justify-content:center;
-  flex-shrink:0;
-  z-index:1;
-}
-.tl-dot-inner{
-  width:10px;height:10px;border-radius:50%;
-  background:var(--action-primary);
-}
-.tl-content{padding-top:4px}
-.tl-label{
-  font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;
-  color:var(--text-tertiary);margin-bottom:3px;
-}
-.tl-text{
-  font-size:14px;color:var(--text-secondary);line-height:1.65;
-}
-.tl-text strong{color:var(--text-primary);font-weight:600}
 
 /* -- Stat cards --------------------------------------------------------- */
 .stat-grid{
@@ -374,7 +347,7 @@ button{cursor:pointer;font-family:inherit}
   position:fixed;bottom:28px;right:28px;
   width:38px;height:38px;border-radius:50%;
   background:var(--action-primary);color:#fff;
-  border:none;cursor:pointer;
+  border:none;
   display:flex;align-items:center;justify-content:center;
   box-shadow:0 4px 16px rgba(0,0,0,.18);
   opacity:0;transform:translateY(10px);
@@ -388,20 +361,19 @@ button{cursor:pointer;font-family:inherit}
 @media(max-width:720px){
   .back-nav{display:flex}
   .cs-body{grid-template-columns:1fr;gap:28px;padding:24px 18px 80px}
-  .media-shell{padding:20px 18px 0}
+  .carousel-shell{padding:20px 18px 0}
   .sidebar{position:static}
   .cs-hero h1{font-size:24px}
   .cs-hero-sub{font-size:16px}
   .cs-section p{font-size:16px}
   .stat-grid{grid-template-columns:1fr 1fr}
   .stat-grid .stat-card:last-child{grid-column:1/-1}
-  .feature-block{padding:22px 22px 22px 28px}
-  .feature-title{font-size:18px}
-  .ss-strip{gap:6px}
+  .plugin-block{padding:24px 24px 24px 28px}
+  .plugin-title{font-size:19px}
 }
 @media(max-width:480px){
   .cs-body{padding:20px 16px 80px}
-  .media-shell{padding:16px 16px 0}
+  .carousel-shell{padding:16px 16px 0}
   .stat-grid{grid-template-columns:1fr}
   .stat-grid .stat-card:last-child{grid-column:auto}
 }
@@ -415,42 +387,64 @@ button{cursor:pointer;font-family:inherit}
   Back to portfolio
 </a>
 
-<!-- Hero media -->
-<div class="media-shell">
-  <div class="media-wrap">
-    <video
-      class="media-video"
-      id="main-vid"
-      muted
-      playsinline
-      poster="images/demo-poster.jpg"
-      aria-label="Agent Copilot demo - real-time AI panel in a live customer conversation"
-    >
-      <source src="videos/demo.mp4" type="video/mp4"/>
-    </video>
-    <button class="media-play" id="play-btn" onclick="togglePlay()" aria-label="Play demo video">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="#047857" aria-hidden="true"><polygon points="5 3 19 12 5 21 5 3"/></svg>
-    </button>
-    <button class="media-pause playing" id="pause-btn" onclick="togglePlay()" aria-label="Pause demo video">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="white" aria-hidden="true"><rect x="6" y="4" width="4" height="16" rx="1"/><rect x="14" y="4" width="4" height="16" rx="1"/></svg>
-    </button>
+<!-- Carousel -->
+<div class="carousel-shell">
+<div class="carousel-wrap" id="carousel">
+  <div class="carousel-track" id="carousel-track">
 
-    <!-- Screenshot strip inside wrap -->
-    <div style="padding:0 14px 14px">
-      <div class="ss-strip">
-        <button class="ss-thumb" id="ss-0" onclick="showShot(0)" aria-label="Show incoming chat screenshot">
-          <img src="images/incoming-chat.jpg" alt="Incoming chat with AI self-service summary" width="320" height="180" loading="lazy"/>
-        </button>
-        <button class="ss-thumb" id="ss-1" onclick="showShot(1)" aria-label="Show agent desktop screenshot">
-          <img src="images/agent-desktop.jpg" alt="Agent desktop with Copilot panel" width="320" height="180" loading="lazy"/>
-        </button>
-        <button class="ss-thumb" id="ss-2" onclick="showShot(2)" aria-label="Show Copilot answering a question">
-          <img src="images/copilot-answer.jpg" alt="Copilot answering agent question with credit score table" width="320" height="180" loading="lazy"/>
-        </button>
-      </div>
+    <!-- Slide 1: Full demo video -->
+    <div class="carousel-slide">
+      <video muted playsinline poster="images/demo-poster.jpg" id="vid-0">
+        <source src="videos/demo.mp4" type="video/mp4"/>
+      </video>
+      <button class="car-play" onclick="playVid(0)" aria-label="Play demo video">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="#047857" aria-hidden="true"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+      </button>
+      <button class="car-pause" id="pause-0" onclick="pauseVid(0)" aria-label="Pause video">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="white" aria-hidden="true"><rect x="6" y="4" width="4" height="16" rx="1"/><rect x="14" y="4" width="4" height="16" rx="1"/></svg>
+      </button>
+      <div class="carousel-slide-label">Full Demo</div>
     </div>
+
+    <!-- Slide 2: Agent desktop -->
+    <div class="carousel-slide">
+      <img src="images/agent-desktop.jpg" alt="Verint agent desktop with the Copilot panel open on the right" width="1024" height="576" loading="lazy"/>
+      <div class="carousel-slide-label">Copilot Panel</div>
+    </div>
+
+    <!-- Slide 3: Real-time answer -->
+    <div class="carousel-slide">
+      <img src="images/copilot-answer.jpg" alt="Copilot answering an agent question with a structured credit score table" width="1024" height="576" loading="lazy"/>
+      <div class="carousel-slide-label">Real-time Answer</div>
+    </div>
+
+    <!-- Slide 4: Call summary -->
+    <div class="carousel-slide">
+      <img src="images/call-summary.jpg" alt="AI-generated call complete summary with outcome, key points and next steps" width="1024" height="576" loading="lazy"/>
+      <div class="carousel-slide-label">Call Summary</div>
+    </div>
+
+  </div><!-- /track -->
+
+  <!-- Arrows -->
+  <button class="carousel-btn prev" id="car-prev" onclick="carMove(-1)" aria-label="Previous slide">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="15 18 9 12 15 6"/></svg>
+  </button>
+  <button class="carousel-btn next" id="car-next" onclick="carMove(1)" aria-label="Next slide">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg>
+  </button>
+
+  <!-- Zoom (video slide only) -->
+  <button class="carousel-zoom" id="zoom-btn" onclick="openVideoLightbox()" aria-label="View fullscreen">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/></svg>
+  </button>
+
+  <!-- Counter -->
+  <div class="carousel-footer">
+    <span class="carousel-counter" id="car-counter">1 / 4</span>
   </div>
-</div>
+</div><!-- /carousel-wrap -->
+</div><!-- /carousel-shell -->
 
 <!-- Body -->
 <div class="cs-body">
@@ -469,7 +463,7 @@ button{cursor:pointer;font-family:inherit}
       </div>
       <div>
         <div class="sb-label">Tools</div>
-        <div class="sb-value">Figma, Verint Agent Desktop</div>
+        <div class="sb-value">Figma</div>
       </div>
       <div>
         <div class="sb-label">Company</div>
@@ -477,7 +471,7 @@ button{cursor:pointer;font-family:inherit}
       </div>
     </div>
     <div class="sb-div"></div>
-    <p class="sb-nut">Designed the real-time AI panel that surfaces suggestions, coaching, and summaries for contact center agents - while the conversation is happening.</p>
+    <p class="sb-nut">Designed the real-time AI panel that surfaces answers and summaries for contact center agents - while the conversation is live.</p>
   </aside>
 
   <!-- Content -->
@@ -485,196 +479,65 @@ button{cursor:pointer;font-family:inherit}
 
     <!-- Hero -->
     <div class="cs-hero">
-      <h1>The agent<br/>who always<br/><span class="cs-hero-accent">knows the answer.</span></h1>
-      <p class="cs-hero-sub">Agent Copilot is a real-time AI panel embedded in Verint's contact center desktop. It reads the conversation as it happens and surfaces what the agent needs - before they have to ask. First of its kind at Verint, designed and shipped in 2024.</p>
+      <h1>The agent who always<br/><span class="cs-hero-accent">knows the answer.</span></h1>
+      <p class="cs-hero-sub">Agent Copilot is a real-time AI panel embedded in Verint's contact center desktop. It reads the conversation as it happens and surfaces what the agent needs - before they have to search.</p>
     </div>
 
     <!-- Background -->
     <div class="cs-section cs-reveal">
       <div class="cs-section-num">
+        <div class="cs-sec-title">Background</div>
+      </div>
+      <p>Verint had best-in-class tools for routing, recording, and workforce management - but nothing for the agent in the middle of a live conversation. Agent Experience was the initiative to change that, and the Copilot panel was the bet at its center.</p>
+      <p>It started as a hackathon. The concept - a panel that reads what's happening in real time and responds with context, knowledge, and guidance - didn't exist anywhere in Verint's product suite. It was a blank page problem, which meant it was also a real design problem.</p>
+    </div>
+
+    <!-- Problem -->
+    <div class="cs-section cs-reveal">
+      <div class="cs-section-num">
         <div class="cs-sec-title">The problem</div>
       </div>
-      <p>Contact center agents are expected to know everything - instantly. While a customer is talking, they hold context, search knowledge bases, remember product rules, handle the conversation, and write up a wrap-up when it ends. All of that is manual, all of it adds up, and none of it is where agents want to spend their attention.</p>
-      <p>Existing agent desktops gave agents better tools for <strong>managing</strong> conversations. No product at Verint gave them real-time help <strong>during</strong> them. The Copilot panel was the answer to that gap.</p>
+      <p>Agents are expected to know everything - instantly. While a customer is talking, they hold context, search knowledge bases, stay on top of compliance requirements, manage the conversation itself, and write a wrap-up when it's done.</p>
+      <p>All of it is manual. All of it adds up. <strong>Nobody was helping the agent.</strong></p>
     </div>
 
-    <!-- The Copilot panel -->
+    <!-- Solution -->
     <div class="cs-section cs-reveal">
       <div class="cs-section-num">
-        <div class="cs-sec-title">The Copilot panel</div>
+        <div class="cs-sec-title">The Copilot</div>
       </div>
-      <p>A dedicated right-hand panel in the agent desktop that tracks the conversation in real time and responds - surfacing context, knowledge, coaching, and summaries without the agent leaving their screen.</p>
+      <p>A dedicated panel on the right side of the agent desktop. It tracks the conversation and responds - no search, no switching screens, no extra effort.</p>
 
-      <div class="features-list">
+      <div class="plugins-list">
 
-        <!-- 01 Self-Service Summary -->
-        <div class="feature-block">
-          <div class="feature-head">
-            <span class="feature-num">01</span>
-            <span class="feature-tag">Before the agent says hello</span>
+        <!-- 01 Context -->
+        <div class="plugin-block">
+          <div class="plugin-head">
+            <span class="plugin-num">01</span>
+            <span class="plugin-tag">Before the agent says hello</span>
           </div>
-          <h3 class="feature-title">Self-Service Summary</h3>
-          <p class="feature-desc">When a customer is escalated from the bot to a live agent, the Copilot has already read the entire prior conversation. A natural-language summary waits in the acceptance modal - who the customer is, what they want, what they already tried. Zero ramp-up time.</p>
-          <div class="cp-panel">
-            <div class="cp-panel-label">Copilot - acceptance modal</div>
-            <div class="cp-card">
-              <div class="cp-card-head">
-                <span class="cp-card-icon" aria-hidden="true">&#9432;</span>
-                <span class="cp-card-title">Self-Service Summary</span>
-              </div>
-              <div class="cp-card-body">
-                David is a <strong>first time buyer</strong> looking for a <strong>Mortgage</strong>, but has questions about <strong>deposits</strong> and how much to put down. David is interested in any <strong>assistance programs</strong> that can be offered for <strong>first-time buyers</strong>.
-              </div>
-              <div class="cp-card-footer">
-                <span style="font-size:10px;color:var(--text-tertiary)">Summarized using AI</span>
-              </div>
-            </div>
-          </div>
+          <h3 class="plugin-title">Context from the start</h3>
+          <p class="plugin-desc">When a customer escalates from the bot to a live agent, the Copilot has already read the entire prior conversation. A natural-language summary waits in the acceptance screen - who they are, what they want, what they already tried. The agent picks up exactly where the bot left off.</p>
         </div>
 
-        <!-- 02 Customer Insights -->
-        <div class="feature-block">
-          <div class="feature-head">
-            <span class="feature-num">02</span>
-            <span class="feature-tag">Who you're talking to</span>
+        <!-- 02 Knowledge -->
+        <div class="plugin-block">
+          <div class="plugin-head">
+            <span class="plugin-num">02</span>
+            <span class="plugin-tag">Answers before you ask for them</span>
           </div>
-          <h3 class="feature-title">Customer Insights</h3>
-          <p class="feature-desc">Account data, channel history, contact reason, and customer tags - rendered as a scannable fact sheet. Agents know "existing customer, Premier tier, called 2 days ago, calling about mortgages" in the first two seconds.</p>
+          <h3 class="plugin-title">Real-time knowledge</h3>
+          <p class="plugin-desc">The Copilot reads the conversation and surfaces the right knowledge card automatically. When the topic shifts to credit scores, the rates table appears. When a compliance requirement is triggered, a coaching nudge fires. Agents can also ask directly and get a structured answer - with push-to-chat and send-via-email built into every response.</p>
         </div>
 
-        <!-- 03 Proactive Knowledge -->
-        <div class="feature-block">
-          <div class="feature-head">
-            <span class="feature-num">03</span>
-            <span class="feature-tag">Answers that appear before you ask</span>
+        <!-- 03 Summary -->
+        <div class="plugin-block">
+          <div class="plugin-head">
+            <span class="plugin-num">03</span>
+            <span class="plugin-tag">Wrap-up that writes itself</span>
           </div>
-          <h3 class="feature-title">Proactive Knowledge</h3>
-          <p class="feature-desc">The Copilot reads the conversation and surfaces the relevant knowledge card automatically. When the customer mentions buying a home, the mortgage pre-approval step appears. When they ask about credit scores, the rates table is already there. Each card has push-to-chat and send-via-email actions built in.</p>
-          <div class="cp-panel">
-            <div class="cp-panel-label">Copilot - proactive card</div>
-            <div class="cp-card">
-              <div class="cp-card-head">
-                <span class="cp-card-icon" aria-hidden="true">&#9432;</span>
-                <span class="cp-card-title">Mortgage Application</span>
-              </div>
-              <div class="cp-card-body">
-                The first step is to get Pre-approved - this requires the customer to submit an application.
-              </div>
-              <div class="cp-card-footer">
-                <button class="cp-action-btn" type="button" aria-label="Push to chat">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-                  Push to chat
-                </button>
-                <button class="cp-action-btn" type="button" aria-label="Send via email">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
-                  Email
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- 04 Real-time Coaching -->
-        <div class="feature-block">
-          <div class="feature-head">
-            <span class="feature-num">04</span>
-            <span class="feature-tag">Catches what's easy to miss</span>
-          </div>
-          <h3 class="feature-title">Real-time Coaching</h3>
-          <p class="feature-desc">Nudge cards surface mid-conversation when the Copilot detects a missed opportunity or compliance requirement. Agents under pressure forget things - the Copilot doesn't.</p>
-          <div class="cp-panel">
-            <div class="cp-panel-label">Copilot - coaching nudge</div>
-            <div class="cp-card">
-              <div class="cp-card-head" style="background:var(--action-primary)">
-                <span class="cp-card-icon" aria-hidden="true">&#9888;</span>
-                <span class="cp-card-title">Don't forget!</span>
-              </div>
-              <div class="cp-card-body">
-                Don't forget to offer Private Mortgage Insurance (PMI) to all applicants who are making a down payment less than 20%.
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- 05 Call Summary -->
-        <div class="feature-block">
-          <div class="feature-head">
-            <span class="feature-num">05</span>
-            <span class="feature-tag">Write-up that writes itself</span>
-          </div>
-          <h3 class="feature-title">Call Complete Summary</h3>
-          <p class="feature-desc">When the customer leaves, the Copilot generates a full call summary - outcome, key points, next steps, additional notes. Agents review and edit before saving. What used to be two to three minutes of manual wrap-up becomes a 20-second edit.</p>
-          <div class="cp-panel">
-            <div class="cp-panel-label">Copilot - call summary</div>
-            <div class="cp-card" style="max-width:360px">
-              <div class="cp-card-head">
-                <span class="cp-card-icon" aria-hidden="true">&#9432;</span>
-                <span class="cp-card-title">Call complete summary</span>
-              </div>
-              <div class="cp-card-body" style="display:flex;flex-direction:column;gap:8px">
-                <div>
-                  <div style="font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--text-tertiary);margin-bottom:4px">Outcome</div>
-                  <div style="font-size:12px;color:var(--text-primary);font-weight:500">Customer provided with relevant information</div>
-                </div>
-                <div>
-                  <div style="font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--text-tertiary);margin-bottom:4px">Summary</div>
-                  <div style="font-size:12px;color:var(--text-secondary)">Customer inquired about Mortgage options for first-time buyers. Confirmed readiness to start the application process.</div>
-                </div>
-                <div>
-                  <div style="font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--text-tertiary);margin-bottom:4px">Next Steps</div>
-                  <div style="font-size:12px;color:var(--text-secondary)">Assistance sent via email for pre-approval application.</div>
-                </div>
-              </div>
-              <div class="cp-card-footer">
-                <span style="font-size:10px;color:var(--text-tertiary)">Summarized using AI</span>
-              </div>
-            </div>
-          </div>
-        </div>
-
-      </div>
-    </div>
-
-    <!-- Process -->
-    <div class="cs-section cs-reveal">
-      <div class="cs-section-num">
-        <div class="cs-sec-title">How it got built</div>
-      </div>
-      <p>This started as a hackathon. The concept - a real-time AI panel that reads the conversation and responds in kind - didn't exist anywhere in Verint's product suite. The hackathon gave us permission to try it fast.</p>
-      <p>The challenge was scope: the panel had to handle five distinct interaction patterns (summary, context, knowledge, coaching, wrap-up) while feeling like a single coherent assistant, not five separate widgets. Every iteration had to answer the same question - <strong>does this help the agent, or does it just add noise?</strong></p>
-
-      <div class="timeline">
-
-        <div class="tl-item">
-          <div class="tl-dot"><div class="tl-dot-inner"></div></div>
-          <div class="tl-content">
-            <div class="tl-label">Origin</div>
-            <div class="tl-text">Hackathon. First prototype of the real-time suggestion panel - no existing product to compare against, no internal template to follow. We were defining a new category.</div>
-          </div>
-        </div>
-
-        <div class="tl-item">
-          <div class="tl-dot"><div class="tl-dot-inner"></div></div>
-          <div class="tl-content">
-            <div class="tl-label">Design</div>
-            <div class="tl-text">Dozens of iterations in Figma. The constraints were hard: <strong>the panel could not distract from the conversation</strong>. Cards had to appear at the right moment and recede when not needed. Timing and hierarchy were everything.</div>
-          </div>
-        </div>
-
-        <div class="tl-item">
-          <div class="tl-dot"><div class="tl-dot-inner"></div></div>
-          <div class="tl-content">
-            <div class="tl-label">Demo</div>
-            <div class="tl-text">Presented at <strong>Verint Engage 2024</strong> as a Figma prototype. Full end-to-end scenario: customer on mobile, bot handoff, live agent conversation, AI coaching, call wrap-up. First time this category of AI assistance had been shown at Verint.</div>
-          </div>
-        </div>
-
-        <div class="tl-item">
-          <div class="tl-dot"><div class="tl-dot-inner"></div></div>
-          <div class="tl-content">
-            <div class="tl-label">Shipped</div>
-            <div class="tl-text">The Copilot was mature enough to ship standalone, ahead of the full Agent Experience launch. It became the first AI-first feature in Verint's contact center desktop.</div>
-          </div>
+          <h3 class="plugin-title">Call complete summary</h3>
+          <p class="plugin-desc">When the customer leaves, the Copilot generates the full wrap-up - outcome, key points, next steps, notes. The agent reviews and edits before saving. Two to three minutes of manual write-up becomes a 20-second review.</p>
         </div>
 
       </div>
@@ -685,115 +548,189 @@ button{cursor:pointer;font-family:inherit}
       <div class="cs-section-num">
         <div class="cs-sec-title">Result</div>
       </div>
-      <p>The Copilot shipped as a standalone feature ahead of the wider Agent Experience launch. Early business cases validated the core premise: when agents have in-the-moment access to the right knowledge, calls get shorter, outcomes improve, and agents spend less time on overhead.</p>
+      <p>The Copilot was mature enough to ship standalone - ahead of the full Agent Experience launch. It became the first AI-first feature in Verint's contact center desktop, and the first time this category of real-time assistance was shown at Verint Engage.</p>
 
       <div class="stat-grid">
-
         <div class="stat-card">
           <div class="stat-icon">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
           </div>
           <div class="stat-num">20s</div>
           <div class="stat-title">Average call duration cut</div>
-          <div class="stat-desc">A bank reduced average handle time by 20 seconds per call by giving agents instant knowledge access.</div>
+          <div class="stat-desc">per call, at a bank that deployed in-the-moment knowledge access</div>
         </div>
-
         <div class="stat-card">
           <div class="stat-icon">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
           </div>
           <div class="stat-num">£6M</div>
-          <div class="stat-title">Annual savings, one bank</div>
-          <div class="stat-desc">In-the-moment knowledge access converted directly into measurable annual savings on contact center operations.</div>
+          <div class="stat-title">Annual savings</div>
+          <div class="stat-desc">the value of that 20-second reduction across an entire contact center</div>
         </div>
-
         <div class="stat-card">
           <div class="stat-icon">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
           </div>
           <div class="stat-num">1st</div>
-          <div class="stat-title">First of its kind at Verint</div>
-          <div class="stat-desc">No existing Verint product offered real-time AI suggestions during a live interaction. This was the category-defining design.</div>
+          <div class="stat-title">First of its kind</div>
+          <div class="stat-desc">real-time AI suggestion panel in a live interaction - new category for Verint</div>
         </div>
-
       </div>
     </div>
 
   </div><!-- /cs-content -->
 </div><!-- /cs-body -->
 
-<!-- Scroll to top -->
-<button id="scroll-top" aria-label="Scroll to top" onclick="window.scrollTo({top:0,behavior:'smooth'})">
-  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="18 15 12 9 6 15"/></svg>
-</button>
-
 <script>
-/* -- Video toggle -------------------------------------------------------- */
-const vid = document.getElementById('main-vid');
-const playBtn = document.getElementById('play-btn');
-const pauseBtn = document.getElementById('pause-btn');
-
-function togglePlay(){
-  if(vid.paused){
-    vid.play();
-    playBtn.classList.add('hidden');
-    pauseBtn.classList.add('playing');
-  } else {
-    vid.pause();
-    playBtn.classList.remove('hidden');
-    pauseBtn.classList.remove('playing');
+/* -- Theme sync --------------------------------------------------------- */
+window.addEventListener('message', function(e) {
+  if (e.data && e.data.type === 'theme') {
+    document.documentElement.setAttribute('data-theme', e.data.dark ? 'dark' : 'light');
   }
-}
-vid.addEventListener('ended', () => {
-  playBtn.classList.remove('hidden');
-  pauseBtn.classList.remove('playing');
 });
 
-/* -- Screenshot viewer --------------------------------------------------- */
-function showShot(idx){
-  const shots = [
-    'images/incoming-chat.jpg',
-    'images/agent-desktop.jpg',
-    'images/copilot-answer.jpg',
-  ];
-  const labels = [
-    'Incoming chat - AI self-service summary',
-    'Agent desktop with Copilot panel',
-    'Copilot answering an agent question',
-  ];
-  vid.pause();
-  vid.poster = shots[idx];
-  // Force poster to show by hiding src briefly
-  vid.src = '';
-  vid.load();
-  playBtn.classList.remove('hidden');
-  pauseBtn.classList.remove('playing');
+/* -- Relay mousemove to parent ------------------------------------------ */
+document.addEventListener('mousemove', function(e) {
+  try { window.parent.postMessage({type:'iframe-mm', x:e.clientX, y:e.clientY}, '*'); } catch(err){}
+}, { passive: true });
 
-  document.querySelectorAll('.ss-thumb').forEach((el,i) => {
-    el.classList.toggle('active', i === idx);
-  });
+/* -- Carousel ----------------------------------------------------------- */
+var carIdx = 0;
+var CAR_TOTAL = 4;
+
+function carUpdate() {
+  document.getElementById('carousel-track').style.transform = 'translateX(-' + (carIdx * 100) + '%)';
+  document.getElementById('car-counter').textContent = (carIdx + 1) + ' / ' + CAR_TOTAL;
+  /* Show zoom only on the video slide */
+  var zoomBtn = document.getElementById('zoom-btn');
+  if (zoomBtn) zoomBtn.style.display = carIdx === 0 ? '' : 'none';
 }
 
-/* -- Scroll reveal ------------------------------------------------------- */
-const obs = new IntersectionObserver(entries => {
-  entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('is-visible'); });
-}, {threshold:.12});
-document.querySelectorAll('.cs-reveal').forEach(el => obs.observe(el));
+function carMove(dir) {
+  document.querySelectorAll('.carousel-slide').forEach(function(slide) {
+    var vid = slide.querySelector('video');
+    var playBtn = slide.querySelector('.car-play');
+    var pauseBtn = slide.querySelector('.car-pause');
+    if (vid) { vid.pause(); vid.currentTime = 0; }
+    if (playBtn) playBtn.classList.remove('hidden');
+    if (pauseBtn) pauseBtn.classList.remove('playing');
+  });
+  carIdx = (carIdx + dir + CAR_TOTAL) % CAR_TOTAL;
+  carUpdate();
+}
 
-/* -- Scroll to top ------------------------------------------------------- */
-const st = document.getElementById('scroll-top');
-window.addEventListener('scroll', () => {
-  st.classList.toggle('show', window.scrollY > 400);
-}, {passive:true});
+function playVid(idx) {
+  var slide = document.querySelectorAll('.carousel-slide')[idx];
+  var vid = slide.querySelector('video');
+  var playBtn = slide.querySelector('.car-play');
+  var pauseBtn = slide.querySelector('.car-pause');
+  if (!vid) return;
+  vid.play();
+  playBtn.classList.add('hidden');
+  if (pauseBtn) pauseBtn.classList.add('playing');
+  vid.onended = function() {
+    vid.currentTime = 0;
+    playBtn.classList.remove('hidden');
+    if (pauseBtn) pauseBtn.classList.remove('playing');
+  };
+}
 
-/* -- Restore video src on reload ---------------------------------------- */
-window.addEventListener('load', () => {
-  if(!vid.src || vid.src === window.location.href){
-    vid.src = 'videos/demo.mp4';
-    vid.load();
+function pauseVid(idx) {
+  var slide = document.querySelectorAll('.carousel-slide')[idx];
+  var vid = slide.querySelector('video');
+  var playBtn = slide.querySelector('.car-play');
+  var pauseBtn = slide.querySelector('.car-pause');
+  if (!vid) return;
+  vid.pause();
+  playBtn.classList.remove('hidden');
+  if (pauseBtn) pauseBtn.classList.remove('playing');
+}
+
+function openVideoLightbox() {
+  if (carIdx !== 0) return;
+  var lbx = document.getElementById('vlbx');
+  var lbxVid = document.getElementById('vlbx-vid');
+  var srcVid = document.querySelector('.carousel-slide video');
+  lbxVid.src = 'videos/demo.mp4';
+  lbxVid.load();
+  if (srcVid && !srcVid.paused) {
+    lbxVid.addEventListener('canplay', function onCanPlay() {
+      lbxVid.currentTime = srcVid.currentTime;
+      lbxVid.play();
+      lbxVid.removeEventListener('canplay', onCanPlay);
+    });
   }
+  lbx.classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeVideoLightbox() {
+  var lbx = document.getElementById('vlbx');
+  var lbxVid = document.getElementById('vlbx-vid');
+  lbxVid.pause();
+  lbxVid.src = '';
+  lbx.classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+carUpdate();
+
+document.addEventListener('keydown', function(e) {
+  if (document.getElementById('vlbx').classList.contains('open')) return;
+  if (e.key === 'ArrowLeft') carMove(-1);
+  if (e.key === 'ArrowRight') carMove(1);
+});
+
+/* Touch swipe */
+(function() {
+  var wrap = document.getElementById('carousel');
+  var sx = 0;
+  wrap.addEventListener('touchstart', function(e) { sx = e.touches[0].clientX; }, {passive:true});
+  wrap.addEventListener('touchend', function(e) {
+    var dx = e.changedTouches[0].clientX - sx;
+    if (Math.abs(dx) > 40) carMove(dx < 0 ? 1 : -1);
+  }, {passive:true});
+})();
+
+/* -- Scroll reveal ------------------------------------------------------ */
+var revealObserver = new IntersectionObserver(function(entries) {
+  entries.forEach(function(entry) {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('is-visible');
+      revealObserver.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+document.querySelectorAll('.cs-reveal').forEach(function(el) { revealObserver.observe(el); });
+
+/* -- Scroll to top ------------------------------------------------------ */
+document.addEventListener('DOMContentLoaded', function() {
+  var scrollBtn = document.getElementById('scroll-top');
+  if (!scrollBtn) return;
+  window.addEventListener('scroll', function() {
+    scrollBtn.classList.toggle('show', window.scrollY > 320);
+  }, { passive: true });
+  scrollBtn.addEventListener('click', function() {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
 });
 </script>
+
+<!-- Video lightbox -->
+<div class="vlbx" id="vlbx" role="dialog" aria-modal="true" aria-label="Video fullscreen" onclick="closeVideoLightbox()">
+  <button class="vlbx-close" onclick="closeVideoLightbox()" aria-label="Close fullscreen">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+  </button>
+  <div class="vlbx-inner" onclick="event.stopPropagation()">
+    <video id="vlbx-vid" muted playsinline controls></video>
+  </div>
+</div>
+
+<button id="scroll-top" aria-label="Back to top">
+  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <path d="M8 12V4M8 4L4 8M8 4L12 8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+  </svg>
+</button>
 
 </body>
 </html>
