@@ -163,7 +163,7 @@ i.ph,i.ph-bold,i.ph-fill,i.ph-light{line-height:1;display:flex;align-items:cente
 .wf-bdot{width:7px;height:7px;background:#22C55E;border-radius:50%;animation:pulse 2s infinite;flex-shrink:0}
 [data-theme="dark"] .wf-badge{color:#4ADE80;background:rgba(34,197,94,.1);border-color:rgba(34,197,94,.25)}
 .wf-name{font-size:34px;font-weight:900;color:var(--tx);letter-spacing:-1.5px;line-height:1.05;margin-bottom:7px}
-.wf-role{font-size:15px;color:var(--tx2);font-weight:500;letter-spacing:-.01em;line-height:1.4;margin-bottom:20px}
+.wf-role{font-size:15px;color:var(--tx2);font-weight:500;letter-spacing:-.01em;line-height:1.4;margin-bottom:10px}
 .wf-bio{font-size:13.5px;color:var(--tx2);line-height:1.75;margin-bottom:20px}
 .wf-hint{display:none}
 .wf-ctas{display:flex;gap:10px;flex-wrap:wrap}
