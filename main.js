@@ -298,22 +298,29 @@ function setZoom(z, cx, cy) {
   applyCanvas();
 }
 
-/* Wheel / trackpad — all scroll = zoom, pan disabled.
-   Space+drag still works for power users. */
+/* Wheel / trackpad:
+   - Pinch (ctrlKey) = zoom, more responsive
+   - Two-finger scroll / mouse wheel = pan canvas */
 canvasEl.addEventListener('wheel', e => {
   e.preventDefault();
   const r = canvasEl.getBoundingClientRect();
-  const factor = e.ctrlKey
-    ? Math.exp(-e.deltaY / 300)           /* smooth pinch-to-zoom */
-    : (e.deltaY < 0 ? 1.08 : 1 / 1.08);  /* mouse wheel / two-finger scroll */
-  setZoom(zoom * factor, e.clientX - r.left, e.clientY - r.top);
+  if (e.ctrlKey) {
+    /* Pinch-to-zoom — more sensitive than before */
+    const factor = Math.exp(-e.deltaY / 180);
+    setZoom(zoom * factor, e.clientX - r.left, e.clientY - r.top);
+  } else {
+    /* Two-finger scroll or mouse wheel = pan */
+    panX -= e.deltaX;
+    panY -= e.deltaY;
+    applyCanvas();
+  }
 }, { passive: false });
 
 /* Keyboard */
 window.addEventListener('keydown', e => {
   if (!e.metaKey && !e.ctrlKey) return;
-  if (e.key === '=' || e.key === '+') { e.preventDefault(); setZoom(zoom * 1.15); }
-  if (e.key === '-')                  { e.preventDefault(); setZoom(zoom / 1.15); }
+  if (e.key === '=' || e.key === '+') { e.preventDefault(); setZoom(zoom * 1.25); }
+  if (e.key === '-')                  { e.preventDefault(); setZoom(zoom / 1.25); }
   if (e.key === '0')                  { e.preventDefault(); centerFrame(); }
 });
 

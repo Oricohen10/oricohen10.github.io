@@ -246,27 +246,31 @@ button{cursor:pointer;font-family:inherit}
   margin-bottom:16px;
 }
 .pv-flow{
-  display:flex;align-items:stretch;flex-wrap:wrap;gap:5px;
-  margin-bottom:18px;
+  display:flex;align-items:stretch;flex-wrap:nowrap;gap:6px;
+  margin-bottom:20px;
+  overflow-x:auto;
+  padding-bottom:2px;
 }
 .pv-step{
-  display:flex;flex-direction:column;align-items:center;gap:6px;
+  flex:1 1 0;min-width:0;
+  display:flex;flex-direction:column;align-items:center;gap:8px;
   background:var(--canvas,#F5F5F5);
   border:1px solid var(--border-subtle);
-  border-radius:10px;
-  padding:12px 13px;
-  min-width:78px;text-align:center;
+  border-radius:16px;
+  padding:16px 10px 14px;
+  text-align:center;
 }
-.pv-icon{font-size:19px;line-height:1}
-.pv-name{font-size:10px;font-weight:700;color:var(--text-primary);white-space:nowrap}
+.pv-icon{font-size:24px;line-height:1}
+.pv-name{font-size:11.5px;font-weight:700;color:var(--text-primary);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
 .pv-badge{
-  font-size:8px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;
-  padding:2px 6px;border-radius:4px;
+  font-size:9px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;
+  padding:3px 8px;border-radius:100px;
   background:var(--action-primary-subtle);color:var(--action-primary);
+  white-space:nowrap;
 }
 .pv-badge.auto{background:rgba(21,128,61,.1);color:#15803d}
 .pv-arr{
-  color:var(--text-tertiary);font-size:13px;font-weight:600;
+  color:var(--text-tertiary);font-size:14px;font-weight:600;
   flex-shrink:0;align-self:center;
 }
 /* PR card */
@@ -343,19 +347,90 @@ button{cursor:pointer;font-family:inherit}
 .stat-desc{font-size:12px;color:var(--text-secondary);line-height:1.6;padding:0 6px 20px;flex:1}
 
 /* -- AI section --------------------------------------------------------- */
-.ai-list{display:flex;flex-direction:column;gap:14px;margin-top:24px}
-.ai-item{
-  display:flex;gap:14px;
-  padding:16px 18px;
+.ai-card{
+  display:flex;align-items:flex-start;gap:18px;
+  margin-top:24px;
+  padding:20px 22px;
   background:var(--canvas,#F5F5F5);
   border:1px solid var(--border-subtle);
-  border-left:3px solid var(--action-primary);
-  border-radius:0 10px 10px 0;
+  border-radius:14px;
 }
-.ai-item-icon{font-size:20px;line-height:1;flex-shrink:0;padding-top:1px}
-.ai-item-body{flex:1}
-.ai-item-label{font-size:12px;font-weight:700;color:var(--text-primary);margin-bottom:4px}
-.ai-item-text{font-size:13px;color:var(--text-secondary);line-height:1.7}
+.ai-octopus{font-size:42px;line-height:1;flex-shrink:0;margin-top:2px}
+.ai-card-body{flex:1}
+.ai-card-label{
+  font-size:10px;font-weight:800;letter-spacing:.12em;
+  text-transform:uppercase;color:var(--action-primary);
+  margin-bottom:10px;
+}
+.ai-card-text{font-size:14.5px;color:var(--text-secondary);line-height:1.85}
+
+/* -- Pause button ------------------------------------------------------- */
+.car-pause{
+  position:absolute;
+  top:50%;left:50%;
+  transform:translate(-50%,-50%);
+  width:52px;height:52px;border-radius:50%;
+  background:rgba(0,0,0,.48);
+  border:none;
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;
+  box-shadow:0 4px 20px rgba(0,0,0,.3);
+  transition:opacity .18s,transform .15s;
+  z-index:6;
+  opacity:0;pointer-events:none;
+}
+.car-pause.playing{pointer-events:auto}
+.carousel-slide:hover .car-pause.playing{opacity:1}
+.car-pause:hover{transform:translate(-50%,-50%) scale(1.08)}
+
+/* -- Zoom button -------------------------------------------------------- */
+.carousel-zoom{
+  position:absolute;bottom:14px;left:14px;z-index:10;
+  width:32px;height:32px;
+  display:flex;align-items:center;justify-content:center;
+  background:rgba(255,255,255,.88);
+  border:1px solid rgba(0,0,0,.1);
+  border-radius:50%;
+  box-shadow:0 1px 4px rgba(0,0,0,.14);
+  color:#1a1a2e;
+  transition:background .12s,transform .12s;
+}
+.carousel-zoom:hover{background:rgba(255,255,255,1);transform:scale(1.08)}
+.carousel-zoom svg{width:15px;height:15px;display:block}
+
+/* -- Video lightbox ----------------------------------------------------- */
+.vlbx{
+  display:none;
+  position:fixed;inset:0;z-index:9999;
+  background:rgba(0,0,0,.92);
+  align-items:center;justify-content:center;
+  animation:lbxIn .18s ease;
+}
+.vlbx.open{display:flex}
+@keyframes lbxIn{from{opacity:0}to{opacity:1}}
+.vlbx-inner{
+  position:relative;
+  max-width:calc(100vw - 80px);
+  width:min(960px, calc(100vw - 80px));
+}
+.vlbx-inner video{
+  width:100%;border-radius:8px;
+  box-shadow:0 8px 60px rgba(0,0,0,.6);
+  display:block;
+}
+.vlbx-close{
+  position:fixed;top:18px;right:22px;
+  width:36px;height:36px;
+  display:flex;align-items:center;justify-content:center;
+  background:rgba(255,255,255,.12);
+  border:1px solid rgba(255,255,255,.18);
+  border-radius:50%;
+  color:#fff;
+  transition:background .12s;
+  z-index:10000;
+}
+.vlbx-close:hover{background:rgba(255,255,255,.22)}
+.vlbx-close svg{width:16px;height:16px;display:block}
 
 /* -- Scroll reveal ------------------------------------------------------ */
 @media(prefers-reduced-motion:no-preference){
@@ -433,6 +508,9 @@ button{cursor:pointer;font-family:inherit}
       <button class="car-play" onclick="playVid(0)" aria-label="Play Token Sync video">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="#9d2293"><polygon points="5 3 19 12 5 21 5 3"/></svg>
       </button>
+      <button class="car-pause" id="pause-0" onclick="pauseVid(0)" aria-label="Pause video">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="white"><rect x="6" y="4" width="4" height="16" rx="1"/><rect x="14" y="4" width="4" height="16" rx="1"/></svg>
+      </button>
       <div class="carousel-slide-label">Token Sync</div>
     </div>
 
@@ -443,6 +521,9 @@ button{cursor:pointer;font-family:inherit}
       </video>
       <button class="car-play" onclick="playVid(1)" aria-label="Play Layout Creator video">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="#9d2293"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+      </button>
+      <button class="car-pause" id="pause-1" onclick="pauseVid(1)" aria-label="Pause video">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="white"><rect x="6" y="4" width="4" height="16" rx="1"/><rect x="14" y="4" width="4" height="16" rx="1"/></svg>
       </button>
       <div class="carousel-slide-label">Layout Creator</div>
     </div>
@@ -455,6 +536,9 @@ button{cursor:pointer;font-family:inherit}
       <button class="car-play" onclick="playVid(2)" aria-label="Play Table Creator video">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="#9d2293"><polygon points="5 3 19 12 5 21 5 3"/></svg>
       </button>
+      <button class="car-pause" id="pause-2" onclick="pauseVid(2)" aria-label="Pause video">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="white"><rect x="6" y="4" width="4" height="16" rx="1"/><rect x="14" y="4" width="4" height="16" rx="1"/></svg>
+      </button>
       <div class="carousel-slide-label">Table Creator</div>
     </div>
 
@@ -465,6 +549,9 @@ button{cursor:pointer;font-family:inherit}
       </video>
       <button class="car-play" onclick="playVid(3)" aria-label="Play Icon Library Picker video">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="#9d2293"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+      </button>
+      <button class="car-pause" id="pause-3" onclick="pauseVid(3)" aria-label="Pause video">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="white"><rect x="6" y="4" width="4" height="16" rx="1"/><rect x="14" y="4" width="4" height="16" rx="1"/></svg>
       </button>
       <div class="carousel-slide-label">Icon Library Picker</div>
     </div>
@@ -477,6 +564,11 @@ button{cursor:pointer;font-family:inherit}
   </button>
   <button class="carousel-btn next" id="car-next" onclick="carMove(1)" aria-label="Next slide">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+  </button>
+
+  <!-- Zoom button -->
+  <button class="carousel-zoom" onclick="openVideoLightbox()" aria-label="View fullscreen">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/></svg>
   </button>
 
   <!-- Counter -->
@@ -651,7 +743,7 @@ button{cursor:pointer;font-family:inherit}
           <p class="plugin-desc">Generate data tables with configurable rows, columns, and content. Every output matches the LUX 2.0 Data Table token structure exactly - consistent across every Figma file, without manual assembly.</p>
           <div class="plugin-highlight">
             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
-            Any dimension, pixel-perfect every time
+            Responsive and fully editable
           </div>
         </div>
 
@@ -714,27 +806,11 @@ button{cursor:pointer;font-family:inherit}
       </div>
       <p>Every plugin was built in live pair-programming sessions with Claude - not as a code generator, but as a collaborator that understood the constraint: no terminal, no developer, no waiting.</p>
 
-      <div class="ai-list">
-        <div class="ai-item">
-          <div class="ai-item-icon">🔌</div>
-          <div class="ai-item-body">
-            <div class="ai-item-label">Plugin Architecture</div>
-            <div class="ai-item-text">Claude designed and iterated on the Figma plugin message-passing architecture, the token transformation pipeline from Figma Variables to TypeScript types, and the GitHub API integration - all running in-browser without a build step.</div>
-          </div>
-        </div>
-        <div class="ai-item">
-          <div class="ai-item-icon">&#9881;&#65039;</div>
-          <div class="ai-item-body">
-            <div class="ai-item-label">GitHub Actions Pipeline</div>
-            <div class="ai-item-text">The CI/CD workflow that validates TypeScript, runs the Storybook preview build, and auto-merges passing PRs was written and debugged entirely with Claude as the primary author.</div>
-          </div>
-        </div>
-        <div class="ai-item">
-          <div class="ai-item-icon">&#128030;</div>
-          <div class="ai-item-body">
-            <div class="ai-item-label">Edge Case Resolution</div>
-            <div class="ai-item-text">Token naming conflicts, Figma variable scope issues, GitHub rate limits during batch pushes - every edge case that surfaced during testing was diagnosed and resolved in conversation with Claude.</div>
-          </div>
+      <div class="ai-card">
+        <div class="ai-octopus">&#x1F419;</div>
+        <div class="ai-card-body">
+          <div class="ai-card-label">AI use on this project</div>
+          <p class="ai-card-text">AI ran through the whole project - component brainstorming, writing Figma plugins that cut workflow time significantly, QA across tokens and code to catch drift between design and implementation. The token-sync plugin gets its own case study. Claude helped with the heavy lifting.</p>
         </div>
       </div>
     </div>
@@ -765,12 +841,14 @@ function carUpdate() {
 }
 
 function carMove(dir) {
-  /* Pause all videos and reset play buttons */
+  /* Pause all videos and reset play/pause buttons */
   document.querySelectorAll('.carousel-slide').forEach(function(slide) {
     var vid = slide.querySelector('video');
-    var btn = slide.querySelector('.car-play');
+    var playBtn = slide.querySelector('.car-play');
+    var pauseBtn = slide.querySelector('.car-pause');
     if (vid) { vid.pause(); vid.currentTime = 0; }
-    if (btn) btn.classList.remove('hidden');
+    if (playBtn) playBtn.classList.remove('hidden');
+    if (pauseBtn) pauseBtn.classList.remove('playing');
   });
   carIdx = (carIdx + dir + CAR_TOTAL) % CAR_TOTAL;
   carUpdate();
@@ -779,19 +857,69 @@ function carMove(dir) {
 function playVid(idx) {
   var slide = document.querySelectorAll('.carousel-slide')[idx];
   var vid = slide.querySelector('video');
-  var btn = slide.querySelector('.car-play');
+  var playBtn = slide.querySelector('.car-play');
+  var pauseBtn = slide.querySelector('.car-pause');
   vid.play();
-  btn.classList.add('hidden');
-  /* Show play button again when video ends */
+  playBtn.classList.add('hidden');
+  if (pauseBtn) pauseBtn.classList.add('playing');
   vid.onended = function() {
     vid.currentTime = 0;
-    btn.classList.remove('hidden');
+    playBtn.classList.remove('hidden');
+    if (pauseBtn) pauseBtn.classList.remove('playing');
   };
+}
+
+function pauseVid(idx) {
+  var slide = document.querySelectorAll('.carousel-slide')[idx];
+  var vid = slide.querySelector('video');
+  var playBtn = slide.querySelector('.car-play');
+  var pauseBtn = slide.querySelector('.car-pause');
+  vid.pause();
+  playBtn.classList.remove('hidden');
+  if (pauseBtn) pauseBtn.classList.remove('playing');
+}
+
+/* Video sources for lightbox */
+var vidSrcs = [
+  'videos/token-sync.mp4',
+  'videos/layout-creator.mp4',
+  'videos/table-creator.mp4',
+  'videos/icons-generator.mp4'
+];
+
+function openVideoLightbox() {
+  var src = vidSrcs[carIdx];
+  var lbx = document.getElementById('vlbx');
+  var lbxVid = document.getElementById('vlbx-vid');
+  /* Mirror current play position if the slide video is playing */
+  var slide = document.querySelectorAll('.carousel-slide')[carIdx];
+  var srcVid = slide ? slide.querySelector('video') : null;
+  lbxVid.src = src;
+  lbxVid.load();
+  if (srcVid && !srcVid.paused) {
+    lbxVid.addEventListener('canplay', function onCanPlay() {
+      lbxVid.currentTime = srcVid.currentTime;
+      lbxVid.play();
+      lbxVid.removeEventListener('canplay', onCanPlay);
+    });
+  }
+  lbx.classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeVideoLightbox() {
+  var lbx = document.getElementById('vlbx');
+  var lbxVid = document.getElementById('vlbx-vid');
+  lbxVid.pause();
+  lbxVid.src = '';
+  lbx.classList.remove('open');
+  document.body.style.overflow = '';
 }
 
 carUpdate();
 
 document.addEventListener('keydown', function(e) {
+  if (document.getElementById('vlbx').classList.contains('open')) return;
   if (e.key === 'ArrowLeft') carMove(-1);
   if (e.key === 'ArrowRight') carMove(1);
 });
@@ -830,6 +958,16 @@ document.addEventListener('DOMContentLoaded', function() {
   });
 });
 </script>
+
+<!-- Video lightbox -->
+<div class="vlbx" id="vlbx" role="dialog" aria-modal="true" aria-label="Video fullscreen" onclick="closeVideoLightbox()">
+  <button class="vlbx-close" onclick="closeVideoLightbox()" aria-label="Close fullscreen">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+  </button>
+  <div class="vlbx-inner" onclick="event.stopPropagation()">
+    <video id="vlbx-vid" muted playsinline controls></video>
+  </div>
+</div>
 
 <button id="scroll-top" aria-label="Back to top">
   <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
