@@ -515,7 +515,8 @@ function openWin(id) {
     document.head.appendChild(lk);
   }
   /* Case study windows open maximized on first launch */
-  if ((id === 'proj-lux' || id === 'lux-viewer') && !w._everMaximized) {
+  const CASE_STUDIES = ['proj-lux', 'proj-myverint', 'proj-supervisor', 'proj-plugins', 'proj-copilot', 'lux-viewer'];
+  if (CASE_STUDIES.includes(id) && !w._everMaximized) {
     w._everMaximized = true;
     requestAnimationFrame(() => maximizeWin(id));
   }
