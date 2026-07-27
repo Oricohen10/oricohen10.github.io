@@ -218,6 +218,44 @@ button{cursor:pointer;font-family:inherit}
 .cs-section p:last-child{margin-bottom:0}
 .cs-section p strong{color:var(--text-primary);font-weight:600}
 
+/* -- Impact cards -------------------------------------------------------- */
+.impact-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:14px;
+}
+.impact-card{
+  padding:24px 20px 22px;
+  background:var(--action-primary-subtle);
+  border:none;
+  border-radius:14px;
+  display:flex;flex-direction:column;gap:0;
+  position:relative;
+  overflow:hidden;
+}
+.impact-card::before{
+  content:'';
+  position:absolute;
+  top:0;left:0;right:0;
+  height:3px;
+  background:var(--action-primary);
+  opacity:.55;
+}
+.impact-eyebrow{
+  font-size:9px;font-weight:800;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--action-primary);
+  opacity:.65;
+  margin-bottom:10px;
+}
+.impact-num{
+  font-size:52px;font-weight:900;
+  color:var(--action-primary);
+  letter-spacing:-3px;line-height:.92;
+  margin-bottom:10px;
+}
+.impact-label{font-size:13.5px;color:var(--text-secondary);line-height:1.55;font-weight:500}
+.impact-label strong{color:var(--text-primary);font-weight:700}
+
 /* -- Differently callouts ----------------------------------------------- */
 .diff-item{
   display:flex;gap:14px;align-items:flex-start;
@@ -272,6 +310,8 @@ button{cursor:pointer;font-family:inherit}
   .cs-section p{font-size:16px}
   .phone-frame{width:130px;border-radius:18px}
   .diff-text{font-size:15px}
+  .impact-grid{grid-template-columns:1fr 1fr}
+  .impact-grid .impact-card:last-child{grid-column:1/-1}
 }
 @media(max-width:480px){
   .phone-frame{width:110px;border-radius:15px}
@@ -444,7 +484,35 @@ button{cursor:pointer;font-family:inherit}
       <p>The biggest outcome is Ask Verint. <strong>85% of users now complete all their tasks through the AI tab</strong> - through natural language, without navigating menus at all. The design work made that possible; the data validated every decision we'd made about mobile-first scope.</p>
     </div>
 
-    <!-- Section 4: What I'd do differently -->
+    <!-- Section 4: Result -->
+    <div class="cs-section cs-reveal">
+      <div class="cs-section-num">
+        <div class="cs-sec-title">Result</div>
+      </div>
+      <p>My Verint shipped as a single unified app for iOS and Android, replacing both legacy apps. The mobile design system gave every team a shared foundation to build on - something that had never existed before.</p>
+      <p>The number that tells the whole story: <strong>85% of users complete all their tasks through Ask Verint</strong> - without touching a single screen. A contact center agent can check their schedule, request time off, and review their KPIs through a single conversation. The product changed not just how the app looks, but how people work.</p>
+    </div>
+
+    <!-- Impact cards -->
+    <div class="impact-grid cs-reveal">
+      <div class="impact-card">
+        <div class="impact-eyebrow">Adoption</div>
+        <div class="impact-num">85%</div>
+        <div class="impact-label">of users complete all tasks <strong>through Ask Verint</strong></div>
+      </div>
+      <div class="impact-card">
+        <div class="impact-eyebrow">Reach</div>
+        <div class="impact-num">10K+</div>
+        <div class="impact-label"><strong>contact center employees</strong> on iOS and Android</div>
+      </div>
+      <div class="impact-card">
+        <div class="impact-eyebrow">Foundation</div>
+        <div class="impact-num">1st</div>
+        <div class="impact-label">mobile design system <strong>in Verint's history</strong></div>
+      </div>
+    </div>
+
+    <!-- Section 5: What I'd do differently -->
     <div class="cs-section cs-reveal">
       <div class="cs-section-num">
         <div class="cs-sec-title">What I'd do differently</div>
