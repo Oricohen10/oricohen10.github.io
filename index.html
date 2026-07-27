@@ -793,7 +793,10 @@
   <!-- FLOATING BOTTOM BAR -->
   <div id="bottombar">
     <!-- First-visit onboarding nudge -->
-    <div id="bb-nudge" aria-hidden="true">Click icons to explore</div>
+    <div id="bb-nudge" aria-hidden="true">
+      <span id="bb-nudge-text">Open a project from the dock below</span>
+      <span id="bb-nudge-arrow">&#x2304;</span>
+    </div>
     <!-- Left: nav buttons -->
     <div class="bb-left">
       <button class="bb-btn" id="nav-projects" data-tip="Projects" onclick="toggleWin('projects')">

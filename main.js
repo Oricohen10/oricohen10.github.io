@@ -473,8 +473,8 @@ function initDockNudge() {
   /* Show after 1s */
   setTimeout(() => {
     nudge.classList.add('show');
-    /* Auto-dismiss after 4.5s */
-    const timer = setTimeout(dismiss, 4500);
+    /* Auto-dismiss after 5s */
+    const timer = setTimeout(dismiss, 5000);
     /* Also dismiss on first click anywhere on the dock */
     document.getElementById('bottombar').addEventListener('click', () => {
       clearTimeout(timer);
