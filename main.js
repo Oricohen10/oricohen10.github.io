@@ -940,7 +940,7 @@ function runGhostScript() {
     g.el.style.top  = cs.top;
   });
 
-  setTimeout(() => showGhostChat(shrek,  "what are you doing in my swamp."),  500);
+  setTimeout(() => showGhostChat(shrek,  "What are you doing in my swamp?!"),  500);
   setTimeout(() => hideGhostChat(shrek),                                        5000);
 
   setTimeout(() => showGhostChat(donkey, "...this is a portfolio Shrek \u{1F434}"), 6500);
