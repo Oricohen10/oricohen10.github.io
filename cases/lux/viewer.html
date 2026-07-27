@@ -1085,6 +1085,13 @@ function updateFitBtn(active) {
   document.querySelectorAll('.btn-fit-sync').forEach(el => el.classList.toggle('active', active));
 }
 
+/* ── Relay mousemove to parent portfolio for custom cursor ── */
+if (window.self !== window.top) {
+  window.addEventListener('mousemove', e => {
+    try { window.parent.postMessage({type:'iframe-mm', x:e.clientX, y:e.clientY}, '*'); } catch(err){}
+  });
+}
+
 </script>
 </body>
 </html>
