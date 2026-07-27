@@ -473,7 +473,7 @@ function updateCloseAll() {
 function sortProjectTable(btn) {
   const table = document.querySelector('.pl-table');
   const rows = Array.from(table.querySelectorAll('.pl-row'));
-  const arrow = btn.querySelector('.pl-sort-arrow');
+  const icon = btn.querySelector('i');
   const asc = btn.dataset.sort !== 'asc';
   rows.sort((a, b) => {
     const na = a.querySelector('.pl-name').textContent.trim();
@@ -482,7 +482,7 @@ function sortProjectTable(btn) {
   });
   rows.forEach(r => table.appendChild(r));
   btn.dataset.sort = asc ? 'asc' : 'desc';
-  if (arrow) arrow.textContent = asc ? '↑' : '↓';
+  if (icon) icon.className = 'ph ' + (asc ? 'ph-caret-up' : 'ph-caret-down');
 }
 
 function openWin(id) {
