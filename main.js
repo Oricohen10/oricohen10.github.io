@@ -482,7 +482,7 @@ function sortProjectTable(btn) {
   });
   rows.forEach(r => table.appendChild(r));
   btn.dataset.sort = asc ? 'asc' : 'desc';
-  if (icon) icon.className = 'ph ' + (asc ? 'ph-caret-up' : 'ph-caret-down');
+  if (icon) icon.className = 'ph ' + (asc ? 'ph-arrow-up' : 'ph-arrow-down');
 }
 
 function openWin(id) {
