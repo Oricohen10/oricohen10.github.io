@@ -200,15 +200,8 @@ button{cursor:pointer;font-family:inherit}
   height:fit-content;
   display:flex;flex-direction:column;gap:20px;
 }
-.sb-tag{
-  display:inline-flex;
-  font-size:9px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;
-  color:var(--action-primary);
-  background:var(--action-primary-subtle);
-  border:1px solid color-mix(in srgb, var(--figma) 18%, transparent);
-  padding:4px 10px;border-radius:20px;
-  width:fit-content;
-}
+.chip{display:inline-flex;align-items:center;font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:4px 10px;border-radius:6px;white-space:nowrap;flex-shrink:0;line-height:1}
+.chip--mobile{background:rgba(21,128,61,.1);color:#15803d}
 .sb-fields{
   display:flex;flex-direction:column;gap:16px;
   padding-left:14px;
@@ -686,7 +679,7 @@ button{cursor:pointer;font-family:inherit}
 
   <!-- Sidebar -->
   <aside class="sidebar">
-    <span class="sb-tag">Mobile App</span>
+    <span class="chip chip--mobile">Mobile</span>
     <div class="sb-fields">
       <div>
         <div class="sb-label">Role</div>
@@ -743,7 +736,7 @@ button{cursor:pointer;font-family:inherit}
       </div>
       <p>We merged both apps into one, with role-based capability views - supervisors and agents each see what they need, not everything at once.</p>
       <p>Alongside that, we built My Verint's first mobile design system: color tokens, type scales, responsive behaviors, motion specs, and documentation. A shared language the team had never had.</p>
-      <p>The biggest outcome: Ask Verint. <strong>85% of users now complete all their tasks through the AI tab</strong> - in natural language, without navigating a single screen. The design work made that possible. The data validated every mobile-first call we made.</p>
+      <p>The biggest outcome: Ask Verint users now complete all their tasks through the AI tab - in natural language, without navigating a single screen. The design work made that possible. The data validated every mobile-first call we made.</p>
     </div>
 
     <!-- Section 4: Result -->
@@ -898,12 +891,15 @@ var revealObserver = new IntersectionObserver(function(entries) {
 document.querySelectorAll('.cs-reveal').forEach(function(el) { revealObserver.observe(el); });
 
 /* Scroll to top */
-var scrollBtn = document.getElementById('scroll-top');
-window.addEventListener('scroll', function() {
-  scrollBtn.classList.toggle('show', window.scrollY > 320);
-}, { passive: true });
-scrollBtn.addEventListener('click', function() {
-  window.scrollTo({ top: 0, behavior: 'smooth' });
+document.addEventListener('DOMContentLoaded', function() {
+  var scrollBtn = document.getElementById('scroll-top');
+  if (!scrollBtn) return;
+  window.addEventListener('scroll', function() {
+    scrollBtn.classList.toggle('show', window.scrollY > 320);
+  }, { passive: true });
+  scrollBtn.addEventListener('click', function() {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
 });
 </script>
 

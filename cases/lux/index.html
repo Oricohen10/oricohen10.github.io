@@ -195,6 +195,8 @@ button{cursor:pointer;font-family:inherit}
   height:fit-content;
   display:flex;flex-direction:column;gap:20px;
 }
+.chip{display:inline-flex;align-items:center;font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:4px 10px;border-radius:6px;white-space:nowrap;flex-shrink:0;line-height:1}
+.chip--system{background:rgba(91,63,199,.1);color:#5b3fc7}
 .sb-tag{
   display:inline-flex;
   font-size:9px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;
@@ -524,7 +526,7 @@ button{cursor:pointer;font-family:inherit}
 
   <!-- Sidebar -->
   <aside class="sidebar">
-    <span class="sb-tag">Design System</span>
+    <span class="chip chip--system">Design System</span>
     <div class="sb-fields">
       <div>
         <div class="sb-label">Role</div>
@@ -788,12 +790,15 @@ const revealObserver = new IntersectionObserver(function(entries) {
 document.querySelectorAll('.cs-reveal').forEach(function(el) { revealObserver.observe(el); });
 
 /* Scroll to top */
-var scrollBtn = document.getElementById('scroll-top');
-window.addEventListener('scroll', function() {
-  scrollBtn.classList.toggle('show', window.scrollY > 320);
-}, { passive: true });
-scrollBtn.addEventListener('click', function() {
-  window.scrollTo({ top: 0, behavior: 'smooth' });
+document.addEventListener('DOMContentLoaded', function() {
+  var scrollBtn = document.getElementById('scroll-top');
+  if (!scrollBtn) return;
+  window.addEventListener('scroll', function() {
+    scrollBtn.classList.toggle('show', window.scrollY > 320);
+  }, { passive: true });
+  scrollBtn.addEventListener('click', function() {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
 });
 </script>
 
