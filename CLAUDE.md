@@ -24,6 +24,15 @@ Git operations go through `/sessions/blissful-adoring-thompson/repo-work/` (not 
 ### Formatting
 - Never use em dash (-) or en dash. Always use hyphen (-).
 
+### Typesetting and copy-editing (applies to all articles, case studies, and long-form text)
+- **Line length**: target 50-75 characters (8-12 words) per line for optimal readability.
+- **Widows and orphans**: never leave a single word or short line (fewer than 2-3 words) isolated at the top or bottom of a paragraph, page, or column.
+- **Paragraph length**: 3-5 lines (40-80 words) on average; vary paragraph length deliberately - mix in occasional 1-2 line paragraphs for visual breathing room.
+- **Sentence integrity**: never split a sentence so it ends with a period immediately followed by a single stray word from the next paragraph - keep sentence endings and paragraph starts visually intact.
+- **Ragged edges**: when text is not justified, avoid line breaks that leave a noticeably short or long line compared to surrounding lines.
+- **Orphaned subheadings**: never leave a subheading as the last line of a block with no body text beneath it.
+- Apply these rules automatically to any article, blog post, case study, or long-form content - do not wait to be asked each time.
+
 ### Design tokens - always use variables, never hardcode
 | Use case | Variable | Value |
 |----------|----------|-------|
