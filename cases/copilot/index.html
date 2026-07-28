@@ -12,6 +12,7 @@
 <meta property="og:url" content="https://oricohen.co/cases/copilot/"/>
 <meta name="twitter:card" content="summary_large_image"/>
 <link rel="stylesheet" href="../../tokens.css"/>
+<link rel="stylesheet" href="../shared/case-study.css"/>
 <script>if(window.self!==window.top){var _s=document.createElement('style');_s.textContent='*{cursor:none!important}';document.head.appendChild(_s);}</script>
 <style>
 /* -- Project accent: Copilot = emerald ---------------------------------- */
@@ -26,357 +27,9 @@
   --action-primary-subtle: rgba(52,211,153,.12);
 }
 
-/* -- Reset -------------------------------------------------------------- */
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-html{scroll-behavior:smooth}
-body{
-  font-family:var(--font-sans);
-  background:var(--surface-default);
-  color:var(--text-primary);
-  -webkit-font-smoothing:antialiased;
-  line-height:1.5;
-  min-height:100vh;
-}
-img{display:block;max-width:100%}
-button{font-family:inherit}
-
-/* -- Carousel ----------------------------------------------------------- */
-.carousel-shell{
-  max-width:1040px;
-  margin:0 auto;
-  padding:28px 28px 0;
-}
-.carousel-wrap{
-  position:relative;
-  overflow:hidden;
-  background:#0D0D0D;
-  border:1px solid var(--border-subtle);
-  border-radius:var(--r-xl);
-}
-.carousel-track{
-  display:flex;
-  transition:transform .38s cubic-bezier(.4,0,.2,1);
-  will-change:transform;
-}
-.carousel-slide{
-  flex:0 0 100%;
-  aspect-ratio:16/9;
-  position:relative;
-  overflow:hidden;
-}
-.carousel-slide video{
-  width:100%;height:100%;
-  object-fit:cover;
-  display:block;
-}
-.carousel-slide img{
-  width:100%;height:100%;
-  object-fit:cover;
-  display:block;
-}
-.car-play{
-  position:absolute;
-  top:50%;left:50%;
-  transform:translate(-50%,-50%);
-  width:62px;height:62px;border-radius:50%;
-  background:rgba(255,255,255,.95);
-  border:none;
-  display:flex;align-items:center;justify-content:center;
-  box-shadow:0 6px 32px rgba(0,0,0,.38);
-  transition:transform .15s,opacity .18s;
-  z-index:5;
-}
-.car-play:hover{transform:translate(-50%,-50%) scale(1.1)}
-.car-play.hidden{opacity:0;pointer-events:none}
-.car-play svg{margin-left:3px}
-.carousel-slide-label{
-  position:absolute;
-  bottom:14px;left:50%;transform:translateX(-50%);
-  font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
-  color:#fff;
-  background:rgba(0,0,0,.48);
-  backdrop-filter:blur(6px);
-  -webkit-backdrop-filter:blur(6px);
-  padding:4px 14px;border-radius:100px;
-  white-space:nowrap;pointer-events:none;
-}
-.carousel-btn{
-  position:absolute;top:50%;transform:translateY(-50%);
-  z-index:10;
-  width:34px;height:34px;border-radius:50%;
-  background:rgba(255,255,255,.92);
-  border:none;box-shadow:0 2px 8px rgba(0,0,0,.18);
-  display:flex;align-items:center;justify-content:center;
-  transition:background .15s,opacity .15s;opacity:.85;
-}
-.carousel-btn:hover{background:#fff;opacity:1}
-.carousel-btn svg{width:16px;height:16px;color:#333}
-.prev{left:12px}.next{right:12px}
-.carousel-footer{
-  position:absolute;bottom:10px;right:14px;
-  display:flex;align-items:center;gap:8px;
-}
-.carousel-counter{
-  font-size:11px;font-weight:600;
-  color:rgba(255,255,255,.7);
-  background:rgba(0,0,0,.35);
-  padding:3px 10px;border-radius:100px;
-  backdrop-filter:blur(4px);
-}
-
-/* -- Pause button ------------------------------------------------------- */
-.car-pause{
-  position:absolute;
-  top:50%;left:50%;
-  transform:translate(-50%,-50%);
-  width:52px;height:52px;border-radius:50%;
-  background:rgba(0,0,0,.48);
-  border:none;
-  display:flex;align-items:center;justify-content:center;
-  box-shadow:0 4px 20px rgba(0,0,0,.3);
-  transition:opacity .18s,transform .15s;
-  z-index:6;
-  opacity:0;pointer-events:none;
-}
-.car-pause.playing{pointer-events:auto}
-.carousel-slide:hover .car-pause.playing{opacity:1}
-.car-pause:hover{transform:translate(-50%,-50%) scale(1.08)}
-
-/* -- Zoom button -------------------------------------------------------- */
-.carousel-zoom{
-  position:absolute;bottom:14px;left:14px;z-index:10;
-  width:32px;height:32px;
-  display:flex;align-items:center;justify-content:center;
-  background:rgba(255,255,255,.88);
-  border:1px solid rgba(0,0,0,.1);
-  border-radius:50%;
-  box-shadow:0 1px 4px rgba(0,0,0,.14);
-  color:#1a1a2e;
-  transition:background .12s,transform .12s;
-}
-.carousel-zoom:hover{background:rgba(255,255,255,1);transform:scale(1.08)}
-.carousel-zoom svg{width:15px;height:15px;display:block}
-
-/* -- Video lightbox ----------------------------------------------------- */
-.vlbx{
-  display:none;
-  position:fixed;inset:0;z-index:9999;
-  background:rgba(0,0,0,.92);
-  align-items:center;justify-content:center;
-  animation:lbxIn .18s ease;
-}
-.vlbx.open{display:flex}
-@keyframes lbxIn{from{opacity:0}to{opacity:1}}
-.vlbx-inner{
-  position:relative;
-  max-width:calc(100vw - 80px);
-  width:min(960px, calc(100vw - 80px));
-}
-.vlbx-inner video{
-  width:100%;border-radius:8px;
-  box-shadow:0 8px 60px rgba(0,0,0,.6);
-  display:block;
-}
-.vlbx-close{
-  position:fixed;top:18px;right:22px;
-  width:36px;height:36px;
-  display:flex;align-items:center;justify-content:center;
-  background:rgba(255,255,255,.12);
-  border:1px solid rgba(255,255,255,.18);
-  border-radius:50%;
-  color:#fff;
-  transition:background .12s;
-  z-index:10000;
-}
-.vlbx-close:hover{background:rgba(255,255,255,.22)}
-.vlbx-close svg{width:16px;height:16px;display:block}
-
-/* -- Body layout -------------------------------------------------------- */
-.cs-body{
-  display:grid;
-  grid-template-columns:200px 1fr;
-  gap:48px;
-  padding:36px 28px 80px;
-  max-width:1040px;
-  margin:0 auto;
-}
-
-/* -- Sidebar ------------------------------------------------------------ */
-.sidebar{
-  position:sticky;top:61px;
-  height:fit-content;
-  display:flex;flex-direction:column;gap:20px;
-}
-.chip{display:inline-flex;align-items:center;align-self:flex-start;font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:4px 10px;border-radius:6px;white-space:nowrap;flex-shrink:0;line-height:1}
+/* -- Chip variant ------------------------------------------------------- */
 .chip--ai{background:rgba(4,120,87,.1);color:#047857}
 [data-theme="dark"] .chip--ai{background:rgba(52,211,153,.15);color:#34d399}
-.sb-fields{
-  display:flex;flex-direction:column;gap:16px;
-  padding-left:14px;
-  border-left:2px solid var(--action-primary);
-}
-.sb-label{font-size:9px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--text-tertiary);margin-bottom:3px}
-.sb-value{font-size:12.5px;font-weight:500;color:var(--text-secondary);line-height:1.45;text-wrap:pretty}
-.sb-div{height:1px;background:var(--border-subtle)}
-.sb-nut{font-size:12px;color:var(--text-secondary);line-height:1.75;font-style:italic;text-wrap:pretty}
-
-/* -- Content ------------------------------------------------------------ */
-.cs-content{display:flex;flex-direction:column;gap:44px}
-
-/* -- Hero --------------------------------------------------------------- */
-.cs-hero{padding-bottom:32px;border-bottom:1px solid var(--border-subtle)}
-.cs-hero h1{
-  font-size:32px;font-weight:800;
-  letter-spacing:-.7px;line-height:1.2;
-  color:var(--text-primary);
-}
-.cs-hero-accent{color:var(--action-primary)}
-.cs-hero-sub{
-  margin-top:12px;
-  font-size:15px;color:var(--text-secondary);
-  text-wrap:pretty;line-height:1.7;max-width:560px;
-}
-
-/* -- Sections ----------------------------------------------------------- */
-.cs-section-num{margin-bottom:10px}
-.cs-sec-title{
-  font-size:24px;font-weight:800;
-  letter-spacing:-.3px;
-  color:var(--action-primary);
-}
-.cs-section p{
-  font-size:15px;color:var(--text-secondary);
-  line-height:1.8;text-wrap:pretty;margin-bottom:10px;
-}
-.cs-section p:last-child{margin-bottom:0}
-.cs-section p strong{color:var(--text-primary);font-weight:600}
-
-/* -- Plugin blocks ------------------------------------------------------ */
-.plugins-list{
-  display:flex;flex-direction:column;gap:16px;
-  margin-top:24px;
-}
-.plugin-block{
-  position:relative;
-  border-radius:16px;
-  border:1px solid var(--border-subtle);
-  padding:30px 36px 30px 40px;
-  overflow:hidden;
-  background:var(--surface-default);
-  box-shadow:0 2px 12px rgba(0,0,0,.04);
-  transition:box-shadow .2s;
-}
-[data-theme="dark"] .plugin-block{box-shadow:none}
-.plugin-block:hover{box-shadow:0 6px 28px rgba(4,120,87,.1)}
-[data-theme="dark"] .plugin-block:hover{box-shadow:0 0 0 1px var(--action-primary)}
-.plugin-block::before{
-  content:'';
-  position:absolute;
-  left:0;top:0;bottom:0;width:4px;
-  background:var(--action-primary);
-  border-radius:4px 0 0 4px;
-}
-.plugin-head{
-  display:flex;align-items:center;gap:10px;
-  margin-bottom:14px;
-}
-.plugin-num{
-  font-size:10px;font-weight:800;letter-spacing:.12em;
-  text-transform:uppercase;color:var(--text-tertiary);
-}
-.plugin-tag{
-  font-size:9px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;
-  color:var(--action-primary);
-  background:var(--action-primary-subtle);
-  padding:3px 9px;border-radius:4px;
-}
-.plugin-title{
-  font-size:22px;font-weight:800;letter-spacing:-.4px;
-  color:var(--text-primary);margin-bottom:10px;
-}
-.plugin-desc{
-  font-size:14px;color:var(--text-secondary);
-  line-height:1.75;max-width:560px;
-}
-
-/* -- Stat cards --------------------------------------------------------- */
-.stat-grid{
-  display:grid;grid-template-columns:repeat(3,1fr);
-  gap:16px;margin-top:28px;
-}
-.stat-card{
-  background:var(--surface-default);
-  border:1px solid var(--border-subtle);
-  border-radius:16px;
-  padding:28px 20px 0;
-  display:flex;flex-direction:column;align-items:center;
-  text-align:center;overflow:hidden;
-  box-shadow:0 1px 6px rgba(0,0,0,.04);
-}
-[data-theme="dark"] .stat-card{box-shadow:none}
-.stat-icon{color:var(--action-primary);margin-bottom:14px}
-.stat-icon svg{width:30px;height:30px;display:block}
-.stat-num{
-  font-size:48px;font-weight:900;
-  color:var(--action-primary);
-  letter-spacing:-2.5px;line-height:1;margin-bottom:8px;
-}
-.stat-title{font-size:14px;font-weight:700;color:var(--text-primary);margin-bottom:6px}
-.stat-desc{font-size:12px;color:var(--text-secondary);line-height:1.6;padding:0 6px 20px;flex:1}
-
-/* -- Scroll reveal ------------------------------------------------------ */
-@media(prefers-reduced-motion:no-preference){
-  .cs-reveal{opacity:0;transform:translateY(16px);transition:opacity .45s ease-out,transform .45s ease-out}
-  .cs-reveal.is-visible{opacity:1;transform:translateY(0)}
-}
-
-/* -- Back nav ----------------------------------------------------------- */
-.back-nav{
-  display:none;align-items:center;gap:6px;
-  padding:14px 18px;
-  font-size:13px;font-weight:600;
-  color:var(--text-secondary);text-decoration:none;
-  border-bottom:1px solid var(--border-subtle);
-  background:var(--surface-default);
-}
-.back-nav svg{flex-shrink:0;color:var(--text-tertiary)}
-.back-nav:hover{color:var(--text-primary)}
-
-/* -- Scroll to top ------------------------------------------------------ */
-#scroll-top{
-  position:fixed;bottom:28px;right:28px;
-  width:38px;height:38px;border-radius:50%;
-  background:var(--action-primary);color:#fff;
-  border:none;
-  display:flex;align-items:center;justify-content:center;
-  box-shadow:0 4px 16px rgba(0,0,0,.18);
-  opacity:0;transform:translateY(10px);
-  transition:opacity .22s,transform .22s,background .15s;
-  pointer-events:none;z-index:500;
-}
-#scroll-top.show{opacity:1;transform:translateY(0);pointer-events:auto}
-#scroll-top:hover{background:var(--action-primary-hover)}
-
-/* -- Responsive --------------------------------------------------------- */
-@media(max-width:720px){
-  .back-nav{display:flex}
-  .cs-body{grid-template-columns:1fr;gap:28px;padding:24px 18px 80px}
-  .carousel-shell{padding:20px 18px 0}
-  .sidebar{position:static}
-  .cs-hero h1{font-size:24px}
-  .cs-hero-sub{font-size:16px}
-  .cs-section p{font-size:16px}
-  .stat-grid{grid-template-columns:1fr 1fr}
-  .stat-grid .stat-card:last-child{grid-column:1/-1}
-  .plugin-block{padding:24px 24px 24px 28px}
-  .plugin-title{font-size:19px}
-}
-@media(max-width:480px){
-  .cs-body{padding:20px 16px 80px}
-  .carousel-shell{padding:16px 16px 0}
-  .stat-grid{grid-template-columns:1fr}
-  .stat-grid .stat-card:last-child{grid-column:auto}
-}
 </style>
 </head>
 <body>
@@ -389,7 +42,7 @@ button{font-family:inherit}
 
 <!-- Carousel -->
 <div class="carousel-shell">
-<div class="carousel-wrap" id="carousel">
+<div class="carousel-wrap" id="carousel" data-total="4">
   <div class="carousel-track" id="carousel-track">
 
     <!-- Slide 1: Full demo video -->
@@ -434,8 +87,8 @@ button{font-family:inherit}
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg>
   </button>
 
-  <!-- Zoom (video slide only) -->
-  <button class="carousel-zoom" id="zoom-btn" onclick="openVideoLightbox()" aria-label="View fullscreen">
+  <!-- Zoom (shared JS shows/hides based on slide type) -->
+  <button class="carousel-zoom" onclick="openVideoLightbox()" aria-label="View fullscreen">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/></svg>
   </button>
 
@@ -445,6 +98,16 @@ button{font-family:inherit}
   </div>
 </div><!-- /carousel-wrap -->
 </div><!-- /carousel-shell -->
+
+<!-- Video lightbox -->
+<div class="vlbx" id="vlbx" role="dialog" aria-modal="true" aria-label="Video fullscreen" onclick="closeVideoLightbox()">
+  <button class="vlbx-close" onclick="closeVideoLightbox()" aria-label="Close fullscreen">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+  </button>
+  <div class="vlbx-inner" onclick="event.stopPropagation()">
+    <video id="vlbx-vid" muted playsinline controls></video>
+  </div>
+</div>
 
 <!-- Body -->
 <div class="cs-body">
@@ -581,156 +244,12 @@ button{font-family:inherit}
   </div><!-- /cs-content -->
 </div><!-- /cs-body -->
 
-<script>
-/* -- Theme sync --------------------------------------------------------- */
-window.addEventListener('message', function(e) {
-  if (e.data && e.data.type === 'theme') {
-    document.documentElement.setAttribute('data-theme', e.data.dark ? 'dark' : 'light');
-  }
-});
-
-/* -- Relay mousemove to parent ------------------------------------------ */
-document.addEventListener('mousemove', function(e) {
-  try { window.parent.postMessage({type:'iframe-mm', x:e.clientX, y:e.clientY}, '*'); } catch(err){}
-}, { passive: true });
-
-/* -- Carousel ----------------------------------------------------------- */
-var carIdx = 0;
-var CAR_TOTAL = 4;
-
-function carUpdate() {
-  document.getElementById('carousel-track').style.transform = 'translateX(-' + (carIdx * 100) + '%)';
-  document.getElementById('car-counter').textContent = (carIdx + 1) + ' / ' + CAR_TOTAL;
-  /* Show zoom only on the video slide */
-  var zoomBtn = document.getElementById('zoom-btn');
-  if (zoomBtn) zoomBtn.style.display = carIdx === 0 ? '' : 'none';
-}
-
-function carMove(dir) {
-  document.querySelectorAll('.carousel-slide').forEach(function(slide) {
-    var vid = slide.querySelector('video');
-    var playBtn = slide.querySelector('.car-play');
-    var pauseBtn = slide.querySelector('.car-pause');
-    if (vid) { vid.pause(); vid.currentTime = 0; }
-    if (playBtn) playBtn.classList.remove('hidden');
-    if (pauseBtn) pauseBtn.classList.remove('playing');
-  });
-  carIdx = (carIdx + dir + CAR_TOTAL) % CAR_TOTAL;
-  carUpdate();
-}
-
-function playVid(idx) {
-  var slide = document.querySelectorAll('.carousel-slide')[idx];
-  var vid = slide.querySelector('video');
-  var playBtn = slide.querySelector('.car-play');
-  var pauseBtn = slide.querySelector('.car-pause');
-  if (!vid) return;
-  vid.play();
-  playBtn.classList.add('hidden');
-  if (pauseBtn) pauseBtn.classList.add('playing');
-  vid.onended = function() {
-    vid.currentTime = 0;
-    playBtn.classList.remove('hidden');
-    if (pauseBtn) pauseBtn.classList.remove('playing');
-  };
-}
-
-function pauseVid(idx) {
-  var slide = document.querySelectorAll('.carousel-slide')[idx];
-  var vid = slide.querySelector('video');
-  var playBtn = slide.querySelector('.car-play');
-  var pauseBtn = slide.querySelector('.car-pause');
-  if (!vid) return;
-  vid.pause();
-  playBtn.classList.remove('hidden');
-  if (pauseBtn) pauseBtn.classList.remove('playing');
-}
-
-function openVideoLightbox() {
-  if (carIdx !== 0) return;
-  var lbx = document.getElementById('vlbx');
-  var lbxVid = document.getElementById('vlbx-vid');
-  var srcVid = document.querySelector('.carousel-slide video');
-  lbxVid.src = 'videos/demo.mp4';
-  lbxVid.load();
-  if (srcVid && !srcVid.paused) {
-    lbxVid.addEventListener('canplay', function onCanPlay() {
-      lbxVid.currentTime = srcVid.currentTime;
-      lbxVid.play();
-      lbxVid.removeEventListener('canplay', onCanPlay);
-    });
-  }
-  lbx.classList.add('open');
-  document.body.style.overflow = 'hidden';
-}
-
-function closeVideoLightbox() {
-  var lbx = document.getElementById('vlbx');
-  var lbxVid = document.getElementById('vlbx-vid');
-  lbxVid.pause();
-  lbxVid.src = '';
-  lbx.classList.remove('open');
-  document.body.style.overflow = '';
-}
-
-carUpdate();
-
-document.addEventListener('keydown', function(e) {
-  if (document.getElementById('vlbx').classList.contains('open')) return;
-  if (e.key === 'ArrowLeft') carMove(-1);
-  if (e.key === 'ArrowRight') carMove(1);
-});
-
-/* Touch swipe */
-(function() {
-  var wrap = document.getElementById('carousel');
-  var sx = 0;
-  wrap.addEventListener('touchstart', function(e) { sx = e.touches[0].clientX; }, {passive:true});
-  wrap.addEventListener('touchend', function(e) {
-    var dx = e.changedTouches[0].clientX - sx;
-    if (Math.abs(dx) > 40) carMove(dx < 0 ? 1 : -1);
-  }, {passive:true});
-})();
-
-/* -- Scroll reveal ------------------------------------------------------ */
-var revealObserver = new IntersectionObserver(function(entries) {
-  entries.forEach(function(entry) {
-    if (entry.isIntersecting) {
-      entry.target.classList.add('is-visible');
-      revealObserver.unobserve(entry.target);
-    }
-  });
-}, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
-document.querySelectorAll('.cs-reveal').forEach(function(el) { revealObserver.observe(el); });
-
-/* -- Scroll to top ------------------------------------------------------ */
-document.addEventListener('DOMContentLoaded', function() {
-  var scrollBtn = document.getElementById('scroll-top');
-  if (!scrollBtn) return;
-  window.addEventListener('scroll', function() {
-    scrollBtn.classList.toggle('show', window.scrollY > 320);
-  }, { passive: true });
-  scrollBtn.addEventListener('click', function() {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  });
-});
-</script>
-
-<!-- Video lightbox -->
-<div class="vlbx" id="vlbx" role="dialog" aria-modal="true" aria-label="Video fullscreen" onclick="closeVideoLightbox()">
-  <button class="vlbx-close" onclick="closeVideoLightbox()" aria-label="Close fullscreen">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-  </button>
-  <div class="vlbx-inner" onclick="event.stopPropagation()">
-    <video id="vlbx-vid" muted playsinline controls></video>
-  </div>
-</div>
-
 <button id="scroll-top" aria-label="Back to top">
   <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
     <path d="M8 12V4M8 4L4 8M8 4L12 8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
   </svg>
 </button>
 
+<script src="../shared/case-study.js"></script>
 </body>
 </html>

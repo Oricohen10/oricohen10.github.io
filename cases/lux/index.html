@@ -16,378 +16,56 @@
 <meta name="twitter:description" content="How Ori Cohen built Verint's enterprise design system from scratch — one language for 40+ products and 10k+ users."/>
 <meta name="twitter:image" content="https://oricohen.co/cases/lux/images/og-image.jpg"/>
 <link rel="stylesheet" href="../../tokens.css"/>
+<link rel="stylesheet" href="../shared/case-study.css"/>
 <!-- Hide default cursor when embedded in the portfolio iframe -->
 <script>if(window.self!==window.top){var _s=document.createElement('style');_s.textContent='*{cursor:none!important}';document.head.appendChild(_s);}</script>
 <style>
-/* ── Reset ─────────────────────────────────────────────── */
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-html{scroll-behavior:smooth}
-body{
-  font-family:var(--font-sans);
-  background:var(--surface-default);
-  color:var(--text-primary);
-  -webkit-font-smoothing:antialiased;
-  line-height:1.5;
-  min-height:100vh;
+/* -- Project accent: LUX = Verint purple -------------------------------- */
+:root {
+  --action-primary:        var(--figma);
+  --action-primary-hover:  var(--purple-700, #4c36c8);
+  --action-primary-subtle: rgba(98,72,232,.08);
 }
-img{display:block;max-width:100%}
-button{cursor:pointer;font-family:inherit}
-
-/* ── Carousel ─────────────────────────────────────────── */
-.carousel-wrap{
-  position:relative;
-  overflow:hidden;
-  background:var(--surface-raised);
-  border:1px solid var(--border-subtle);
-  border-radius:var(--r-xl);
-}
-.carousel-track{
-  display:flex;
-  transition:transform .38s cubic-bezier(.4,0,.2,1);
-  will-change:transform;
-}
-.carousel-slide{
-  flex:0 0 100%;
-  aspect-ratio:16/7;
-  position:relative;
-  overflow:hidden;
-  cursor:pointer;
-}
-.carousel-slide svg,
-.carousel-slide img{
-  width:100%;height:100%;
-  object-fit:cover;
-  display:block;
-  pointer-events:none;
-  user-select:none;
-}
-/* Arrow buttons */
-.carousel-btn{
-  position:absolute;top:50%;transform:translateY(-50%);
-  z-index:10;
-  width:36px;height:36px;
-  display:flex;align-items:center;justify-content:center;
-  background:rgba(255,255,255,.88);
-  border:1px solid rgba(0,0,0,.1);
-  border-radius:50%;
-  backdrop-filter:blur(8px);
-  -webkit-backdrop-filter:blur(8px);
-  color:#1a1a2e;
-  transition:background .12s,transform .12s;
-  box-shadow:0 1px 6px rgba(0,0,0,.12);
-}
-[data-theme="dark"] .carousel-btn{background:rgba(44,44,44,.88);color:#f3f4f5;border-color:rgba(255,255,255,.1)}
-.carousel-btn:hover{background:rgba(255,255,255,1);transform:translateY(-50%) scale(1.05)}
-[data-theme="dark"] .carousel-btn:hover{background:rgba(60,60,60,1)}
-.carousel-btn.prev{left:14px}
-.carousel-btn.next{right:14px}
-.carousel-btn svg{width:16px;height:16px;display:block;flex-shrink:0}
-/* Counter */
-.carousel-footer{
-  position:absolute;bottom:10px;right:14px;
-  display:flex;align-items:center;
-  pointer-events:none;
-}
-.carousel-counter{
-  font-size:12px;font-weight:600;letter-spacing:.02em;
-  color:rgba(255,255,255,.9);
-  background:rgba(0,0,0,.35);
-  border-radius:20px;padding:3px 10px;
-  pointer-events:none;
-  backdrop-filter:blur(4px);
-  -webkit-backdrop-filter:blur(4px);
+[data-theme="dark"] {
+  --action-primary:        var(--purple-300, #a78bfa);
+  --action-primary-hover:  var(--purple-200, #c4b5fd);
+  --action-primary-subtle: rgba(167,139,250,.15);
 }
 
-/* Zoom button — fixed to carousel-wrap, not inside scrolling track */
-.carousel-zoom{
-  position:absolute;bottom:14px;left:14px;z-index:10;
-  width:32px;height:32px;
-  display:flex;align-items:center;justify-content:center;
-  background:rgba(255,255,255,.88);
-  border:1px solid rgba(0,0,0,.1);
-  border-radius:50%;
-  box-shadow:0 1px 4px rgba(0,0,0,.14);
-  color:#1a1a2e;
-  transition:background .12s,transform .12s;
-}
-.carousel-zoom:hover{background:rgba(255,255,255,1);transform:scale(1.08)}
-.carousel-zoom svg{width:15px;height:15px;display:block}
-[data-theme="dark"] .carousel-zoom{background:rgba(44,44,44,.88);color:#f3f4f5;border-color:rgba(255,255,255,.12)}
-[data-theme="dark"] .carousel-zoom:hover{background:rgba(60,60,60,1)}
-/* ── Lightbox ─────────────────────────────────────────── */
-.lbx{
-  display:none;
-  position:fixed;inset:0;z-index:9999;
-  background:rgba(0,0,0,.9);
-  align-items:center;justify-content:center;
-  animation:lbxIn .18s ease;
-}
-.lbx.open{display:flex}
-@keyframes lbxIn{from{opacity:0}to{opacity:1}}
-.lbx-inner{
-  position:relative;
-  max-width:calc(100vw - 80px);
-  max-height:calc(100vh - 60px);
-  display:flex;align-items:center;justify-content:center;
-}
-.lbx-inner svg,
-.lbx-inner img{
-  max-width:100%;
-  max-height:calc(100vh - 60px);
-  border-radius:6px;
-  box-shadow:0 8px 60px rgba(0,0,0,.6);
-  display:block;
-}
-.lbx-close{
-  position:fixed;top:18px;right:22px;
-  width:36px;height:36px;
-  display:flex;align-items:center;justify-content:center;
-  background:rgba(255,255,255,.12);
-  border:1px solid rgba(255,255,255,.18);
-  border-radius:50%;
-  color:#fff;
-  transition:background .12s;
-  z-index:10000;
-}
-.lbx-close:hover{background:rgba(255,255,255,.22)}
-.lbx-close svg{width:16px;height:16px;display:block}
-.lbx-btn{
-  position:fixed;top:50%;transform:translateY(-50%);
-  width:42px;height:42px;
-  display:flex;align-items:center;justify-content:center;
-  background:rgba(255,255,255,.12);
-  border:1px solid rgba(255,255,255,.18);
-  border-radius:50%;
-  color:#fff;
-  transition:background .12s;
-  z-index:10000;
-}
-.lbx-btn:hover{background:rgba(255,255,255,.22)}
-.lbx-btn svg{width:18px;height:18px;display:block}
-.lbx-prev{left:18px}
-.lbx-next{right:18px}
-.lbx-counter{
-  position:fixed;bottom:22px;left:50%;transform:translateX(-50%);
-  font-size:11px;font-weight:700;letter-spacing:.06em;
-  color:rgba(255,255,255,.5);
-  z-index:10000;
-}
+/* -- Carousel overrides for image slides -------------------------------- */
+.carousel-wrap{background:var(--surface-raised)}
+.carousel-slide{aspect-ratio:16/7;cursor:pointer}
 
-/* ── Layout ───────────────────────────────────────────── */
-.cs-body{
-  display:grid;
-  grid-template-columns:200px 1fr;
-  gap:48px;
-  padding:36px 28px 80px;
-  max-width:1040px;
-  margin:0 auto;
-}
-
-/* ── Carousel shell ───────────────────────────────────── */
-.carousel-shell{
-  max-width:1040px;
-  margin:0 auto;
-  padding:28px 28px 0;
-}
-/* ── Sidebar ──────────────────────────────────────────── */
-.sidebar{
-  position:sticky;top:61px;
-  height:fit-content;
-  display:flex;flex-direction:column;gap:20px;
-}
-.chip{display:inline-flex;align-items:center;align-self:flex-start;font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:4px 10px;border-radius:6px;white-space:nowrap;flex-shrink:0;line-height:1}
+/* -- Chip variant ------------------------------------------------------- */
 .chip--system{background:rgba(91,63,199,.1);color:#5b3fc7}
+
+/* -- Sidebar tag (pill chip with accent border) ------------------------- */
 .sb-tag{
   display:inline-flex;
   font-size:9px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;
   color:var(--action-primary);
   background:var(--action-primary-subtle);
-  border:1px solid color-mix(in srgb, var(--figma) 18%, transparent);
+  border:1px solid color-mix(in srgb, var(--action-primary) 18%, transparent);
   padding:4px 10px;border-radius:20px;
   width:fit-content;
 }
-.sb-fields{
-  display:flex;flex-direction:column;gap:16px;
-  padding-left:14px;
-  border-left:2px solid var(--figma);
-}
-.sb-label{font-size:9px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--text-tertiary);margin-bottom:3px}
-.sb-value{font-size:12.5px;font-weight:500;color:var(--text-secondary);line-height:1.45;text-wrap:pretty}
-.sb-div{height:1px;background:var(--border-subtle)}
-.sb-nut{font-size:12px;color:var(--text-secondary);line-height:1.75;font-style:italic;text-wrap:pretty}
 
-/* ── Content ──────────────────────────────────────────── */
-.cs-content{display:flex;flex-direction:column;gap:44px}
-
-/* ── Hero ─────────────────────────────────────────────── */
-.cs-hero{padding-bottom:32px;border-bottom:1px solid var(--border-subtle)}
-.cs-hero h1{
-  font-size:32px;font-weight:800;
-  letter-spacing:-.7px;line-height:1.2;
-  color:var(--text-primary);
-}
-.cs-hero-accent{color:var(--figma)}
-.cs-hero-sub{
-  margin-top:12px;
-  font-size:15px;color:var(--text-secondary);
-  line-height:1.7;max-width:560px;
-  text-wrap:pretty;
-}
-
-/* ── Sections ─────────────────────────────────────────── */
-.cs-section-num{margin-bottom:10px}
-.cs-sec-title{
-  font-size:24px;font-weight:800;
-  letter-spacing:-.3px;
-  color:var(--figma);
-}
-.cs-section p{
-  font-size:15px;color:var(--text-secondary);
-  line-height:1.8;
-  margin-bottom:10px;
-  text-wrap:pretty;
-}
-.cs-section p:last-child{margin-bottom:0}
-.cs-section p strong{color:var(--text-primary);font-weight:600}
-
-/* ── Live viewer CTA — matches the site's .btn/.btn-secondary system ── */
+/* -- Sidebar CTA - links to live viewer --------------------------------- */
 .sb-cta{
   display:inline-flex;align-items:center;justify-content:center;gap:6px;
   width:fit-content;
   padding:9px 18px;border-radius:var(--r-md);
-  background:transparent;color:var(--purple-600);border:1.5px solid var(--purple-600);
+  background:transparent;color:var(--purple-600, #6248E8);border:1.5px solid var(--purple-600, #6248E8);
   font-size:13px;font-weight:600;
   text-decoration:none;
   box-shadow:0 0 14px rgba(123,97,255,.28);
   transition:background .12s,color .12s,border-color .12s,box-shadow .12s;
 }
-.sb-cta:hover{background:var(--purple-50);color:var(--purple-700);border-color:var(--purple-700);box-shadow:0 0 20px rgba(98,72,232,.4)}
-.sb-cta:active{background:rgba(98,72,232,.1);color:var(--purple-800);border-color:var(--purple-800)}
-[data-theme="dark"] .sb-cta{color:var(--purple-300);border-color:var(--purple-400);box-shadow:0 0 16px rgba(123,97,255,.4)}
-[data-theme="dark"] .sb-cta:hover{background:rgba(123,97,255,.12);color:var(--purple-200);border-color:var(--purple-300);box-shadow:0 0 22px rgba(123,97,255,.55)}
+.sb-cta:hover{background:var(--purple-50, #f0f0ff);color:var(--purple-700, #4c36c8);border-color:var(--purple-700, #4c36c8);box-shadow:0 0 20px rgba(98,72,232,.4)}
+.sb-cta:active{background:rgba(98,72,232,.1);color:var(--purple-800, #3a289e);border-color:var(--purple-800, #3a289e)}
+[data-theme="dark"] .sb-cta{color:var(--purple-300, #a78bfa);border-color:var(--purple-400, #8b72f0);box-shadow:0 0 16px rgba(123,97,255,.4)}
+[data-theme="dark"] .sb-cta:hover{background:rgba(123,97,255,.12);color:var(--purple-200, #c4b5fd);border-color:var(--purple-300, #a78bfa);box-shadow:0 0 22px rgba(123,97,255,.55)}
 .sb-cta svg{width:13px;height:13px;flex-shrink:0}
-
-/* ── Stat cards ───────────────────────────────────────── */
-.stat-grid{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:16px;
-}
-.stat-card{
-  background:var(--surface-default);
-  border:1px solid var(--border-subtle);
-  border-radius:16px;
-  padding:28px 20px 0;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  text-align:center;
-  overflow:hidden;
-  box-shadow:0 1px 6px rgba(0,0,0,.04);
-}
-[data-theme="dark"] .stat-card{box-shadow:none}
-.stat-icon{color:var(--action-primary);margin-bottom:14px}
-.stat-icon svg{width:30px;height:30px;display:block}
-.stat-num{
-  font-size:48px;font-weight:900;
-  color:var(--action-primary);
-  letter-spacing:-2.5px;line-height:1;
-  margin-bottom:8px;
-}
-.stat-title{font-size:14px;font-weight:700;color:var(--text-primary);margin-bottom:6px}
-.stat-desc{
-  font-size:12px;color:var(--text-secondary);
-  line-height:1.6;
-  padding:0 6px 20px;
-  flex:1;
-}
-.stat-more{
-  display:block;
-  width:calc(100% + 40px);
-  margin-left:-20px;
-  padding:12px 0 13px;
-  border-top:1px solid var(--border-subtle);
-  font-size:12.5px;font-weight:600;
-  color:var(--text-tertiary);
-  text-decoration:none;
-  transition:color .12s,background .12s;
-  text-align:center;
-}
-.stat-more:hover{color:var(--text-primary);background:var(--surface-raised)}
-
-/* ── AI ───────────────────────────────────────────────── */
-.ai-box{
-  display:flex;align-items:flex-start;gap:20px;
-  margin-top:24px;
-  padding:22px 24px;
-  background:var(--canvas,#F5F5F5);
-  border:1px solid var(--border-subtle);
-  border-radius:16px;
-}
-.ai-icon{flex-shrink:0;margin-top:2px;width:40px;height:auto;display:block}
-.ai-icon svg{width:40px;height:auto;display:block}
-.ai-label{font-size:10px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--text-primary);margin-bottom:10px}
-.ai-text{font-size:14.5px;color:var(--text-secondary);line-height:1.85;text-wrap:pretty}
-
-/* ── Scroll reveal ────────────────────────────────────── */
-@media(prefers-reduced-motion:no-preference){
-  .cs-reveal{opacity:0;transform:translateY(16px);transition:opacity .45s ease-out,transform .45s ease-out}
-  .cs-reveal.is-visible{opacity:1;transform:translateY(0)}
-}
-
-/* ── Back nav ─────────────────────────────────────────── */
-.back-nav{
-  display:none;
-  align-items:center;gap:6px;
-  padding:14px 18px;
-  font-size:13px;font-weight:600;
-  color:var(--text-secondary);
-  text-decoration:none;
-  border-bottom:1px solid var(--border-subtle);
-  background:var(--surface-base);
-}
-.back-nav svg{flex-shrink:0;color:var(--text-tertiary)}
-.back-nav:hover{color:var(--text-primary)}
-
-
-/* ── Responsive ───────────────────────────────────────── */
-@media(max-width:720px){
-  .back-nav{display:flex}
-  .cs-body{grid-template-columns:1fr;gap:28px;padding:24px 18px 80px}
-  .carousel-shell{padding:20px 18px 0}
-  .sidebar{position:static}
-  .cs-hero h1{font-size:24px}
-  .cs-hero-sub{font-size:16px}
-  .cs-section p{font-size:16px}
-  .ai-text{font-size:16px}
-  .stat-grid{grid-template-columns:1fr 1fr}
-  .stat-grid .stat-card:last-child{grid-column:1/-1}
-}
-@media(max-width:480px){
-  .carousel-btn{width:30px;height:30px}
-  .carousel-btn svg{width:14px;height:14px}
-  .lbx-btn,.lbx-prev,.lbx-next{display:none}
-  .stat-grid{grid-template-columns:1fr}
-  .stat-grid .stat-card:last-child{grid-column:auto}
-  .ai-box{flex-direction:column;gap:10px}
-  .cs-body{padding:20px 16px 80px}
-  .carousel-shell{padding:16px 16px 0}
-}
-
-/* -- Scroll to top -------------------------------------------------------- */
-#scroll-top{
-  position:fixed;bottom:28px;right:28px;
-  width:38px;height:38px;border-radius:50%;
-  background:var(--action-primary);color:#fff;
-  border:none;cursor:pointer;
-  display:flex;align-items:center;justify-content:center;
-  box-shadow:0 4px 16px rgba(0,0,0,.18);
-  opacity:0;transform:translateY(10px);
-  transition:opacity .22s,transform .22s,background .15s;
-  pointer-events:none;z-index:500;
-}
-#scroll-top.show{opacity:1;transform:translateY(0);pointer-events:auto}
-#scroll-top:hover{background:var(--action-primary-hover)}
 </style>
 <script type="application/ld+json">
 {
@@ -431,7 +109,7 @@ button{cursor:pointer;font-family:inherit}
 
 <!-- Carousel -->
 <div class="carousel-shell">
-<div class="carousel-wrap" id="carousel">
+<div class="carousel-wrap" id="carousel" data-total="4">
   <div class="carousel-track" id="carousel-track">
 
     <!-- Slide 1: Token Architecture -->
@@ -460,7 +138,7 @@ button{cursor:pointer;font-family:inherit}
       </svg>
     </div>
 
-    <!-- Slide 3: Dark Mode - first in Verint history -->
+    <!-- Slide 3: Dark Mode -->
     <div class="carousel-slide" onclick="openLightbox(2)" title="Click to expand">
       <svg viewBox="0 0 960 420" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%;background:#f0f0f0">
         <rect width="960" height="420" fill="#EBEBEB"/>
@@ -496,20 +174,20 @@ button{cursor:pointer;font-family:inherit}
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
   </button>
 
-  <!-- Zoom button — anchored to wrap, not the scrolling track -->
+  <!-- Zoom button -->
   <button class="carousel-zoom" aria-label="Expand image" onclick="openLightbox(carIdx)">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg>
   </button>
 
-  <!-- Footer: counter -->
+  <!-- Counter -->
   <div class="carousel-footer">
     <span class="carousel-counter" id="car-counter">1 / 4</span>
   </div>
 </div><!-- /carousel-wrap -->
 </div><!-- /carousel-shell -->
 
-<!-- Lightbox -->
-<div class="lbx" id="lightbox" role="dialog" aria-modal="true" onclick="closeLightbox(event)">
+<!-- Image lightbox -->
+<div class="lbx" id="lightbox" role="dialog" aria-modal="true" aria-label="Image fullscreen" onclick="closeLightbox(event)">
   <div class="lbx-inner" id="lbx-inner"></div>
   <button class="lbx-close" onclick="closeLightbox()" aria-label="Close">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
@@ -596,7 +274,7 @@ button{cursor:pointer;font-family:inherit}
     <div class="stat-grid cs-reveal">
       <div class="stat-card">
         <div class="stat-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
         </div>
         <div class="stat-num">40+</div>
         <div class="stat-title">Products</div>
@@ -630,7 +308,7 @@ button{cursor:pointer;font-family:inherit}
     </div>
 
     <!-- AI Usage -->
-    <div class="ai-box cs-reveal">
+    <div class="ai-card cs-reveal">
       <div class="ai-icon">
         <svg viewBox="0 0 37 40" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
           <path d="M27.7002 3H30.8008V6H33.9004V22H30.9004V24.5996H21.4004V40H18.4004V37H15.4004V24.5996H12.001V33.9004H9.10059V36.9004H6.10059V30.9004H9.00098V24.5996H5.90039V22H2.90039V6H6.10059V3H8.90039V0H27.7002V3ZM5.90039 39.9004H2.90039V37.1006H5.90039V39.9004ZM33.8008 39.9004H30.8008V37.1006H33.8008V39.9004ZM5.90039 30.6016H3V36.9014H0V27.9014H2.90039V24.6016H5.90039V30.6016ZM33.9004 24.6006V27.9014H36.8008V36.9014H33.8008V30.6016H30.9004V24.5996L33.9004 24.6006ZM27.7002 30.9004H30.6006V36.9004H27.6006V33.9004H24.7002V24.6006H27.7002V30.9004ZM9 15.5H15.5V9H9V15.5ZM21.2998 9V15.5H27.7998V9H21.2998Z" fill="var(--action-primary)"/>
@@ -640,137 +318,21 @@ button{cursor:pointer;font-family:inherit}
           <path d="M24.7998 12.5H27.7998V15.5H24.7998V12.5Z" fill="#261539"/>
         </svg>
       </div>
-      <div>
-        <div class="ai-label">AI use on this project</div>
-        <p class="ai-text">AI ran through the whole project - component brainstorming, writing Figma plugins that cut workflow time significantly, QA across tokens and code to catch drift between design and implementation. Claude handled the heavy lifting.</p>
+      <div class="ai-card-body">
+        <div class="ai-card-label">AI use on this project</div>
+        <p class="ai-card-text">AI ran through the whole project - component brainstorming, writing Figma plugins that cut workflow time significantly, QA across tokens and code to catch drift between design and implementation. Claude handled the heavy lifting.</p>
       </div>
     </div>
 
   </div>
 </div><!-- /cs-body -->
 
-<script>
-/* ── Theme — syncs from parent portfolio via postMessage ── */
-window.addEventListener('message', function(e) {
-  if (e.data && e.data.type === 'theme') {
-    document.documentElement.setAttribute('data-theme', e.data.dark ? 'dark' : 'light');
-  }
-});
-
-/* ── Relay mousemove to parent so the portfolio's custom cursor tracks inside this iframe ── */
-document.addEventListener('mousemove', function(e) {
-  try { window.parent.postMessage({type:'iframe-mm', x:e.clientX, y:e.clientY}, '*'); } catch(err){}
-}, { passive: true });
-
-/* ── Carousel ──────────────────────────────────────────── */
-let carIdx = 0;
-const CAR_TOTAL = 4;
-
-function carUpdate() {
-  document.getElementById('carousel-track').style.transform = 'translateX(-' + (carIdx * 100) + '%)';
-  document.getElementById('car-counter').textContent = (carIdx + 1) + ' / ' + CAR_TOTAL;
-}
-
-function carMove(dir) {
-  carIdx = (carIdx + dir + CAR_TOTAL) % CAR_TOTAL;
-  carUpdate();
-}
-
-function carGoto(i) {
-  carIdx = i;
-  carUpdate();
-}
-
-carUpdate();
-
-/* Keyboard nav for carousel */
-document.addEventListener('keydown', function(e) {
-  if (document.getElementById('lightbox').classList.contains('open')) return;
-  if (e.key === 'ArrowLeft') carMove(-1);
-  if (e.key === 'ArrowRight') carMove(1);
-});
-
-/* Touch swipe */
-(function() {
-  const wrap = document.getElementById('carousel');
-  let sx = 0;
-  wrap.addEventListener('touchstart', function(e) { sx = e.touches[0].clientX; }, {passive:true});
-  wrap.addEventListener('touchend', function(e) {
-    const dx = e.changedTouches[0].clientX - sx;
-    if (Math.abs(dx) > 40) carMove(dx < 0 ? 1 : -1);
-  }, {passive:true});
-})();
-
-/* ── Lightbox ──────────────────────────────────────────── */
-let lbxIdx = 0;
-
-function openLightbox(idx) {
-  lbxIdx = idx;
-  lbxRender();
-  document.getElementById('lightbox').classList.add('open');
-  document.body.style.overflow = 'hidden';
-}
-
-function closeLightbox(e) {
-  if (e && e.target !== document.getElementById('lightbox')) return;
-  document.getElementById('lightbox').classList.remove('open');
-  document.body.style.overflow = '';
-}
-
-function lbxMove(dir) {
-  lbxIdx = (lbxIdx + dir + CAR_TOTAL) % CAR_TOTAL;
-  lbxRender();
-  /* also sync carousel */
-  carIdx = lbxIdx; carUpdate();
-}
-
-function lbxRender() {
-  const slides = document.querySelectorAll('.carousel-slide');
-  const inner = document.getElementById('lbx-inner');
-  const slide = slides[lbxIdx];
-  /* clone the SVG/img from the slide */
-  const el = slide.firstElementChild.cloneNode(true);
-  inner.innerHTML = '';
-  inner.appendChild(el);
-  document.getElementById('lbx-counter').textContent = (lbxIdx + 1) + ' / ' + CAR_TOTAL;
-}
-
-document.addEventListener('keydown', function(e) {
-  const lb = document.getElementById('lightbox');
-  if (!lb.classList.contains('open')) return;
-  if (e.key === 'Escape') { lb.classList.remove('open'); document.body.style.overflow = ''; }
-  if (e.key === 'ArrowLeft') lbxMove(-1);
-  if (e.key === 'ArrowRight') lbxMove(1);
-});
-
-/* ── Scroll reveal — fades each section in as it enters view ── */
-const revealObserver = new IntersectionObserver(function(entries) {
-  entries.forEach(function(entry) {
-    if (entry.isIntersecting) {
-      entry.target.classList.add('is-visible');
-      revealObserver.unobserve(entry.target);
-    }
-  });
-}, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
-document.querySelectorAll('.cs-reveal').forEach(function(el) { revealObserver.observe(el); });
-
-/* Scroll to top */
-document.addEventListener('DOMContentLoaded', function() {
-  var scrollBtn = document.getElementById('scroll-top');
-  if (!scrollBtn) return;
-  window.addEventListener('scroll', function() {
-    scrollBtn.classList.toggle('show', window.scrollY > 320);
-  }, { passive: true });
-  scrollBtn.addEventListener('click', function() {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  });
-});
-</script>
-
 <button id="scroll-top" aria-label="Back to top">
   <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
     <path d="M8 12V4M8 4L4 8M8 4L12 8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
   </svg>
 </button>
+
+<script src="../shared/case-study.js"></script>
 </body>
 </html>

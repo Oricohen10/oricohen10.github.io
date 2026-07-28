@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<!--
+ * cases/_template.html - Source of truth for all case study pages
+ *
+ * HOW TO USE:
+ * 1. Copy this file to cases/[project]/index.html
+ * 2. Update head: title, description, canonical, og:image, JSON-LD
+ * 3. Set --action-primary colors in the <style> block
+ * 4. Add chip--[variant] color in the <style> block
+ * 5. Keep only the SECTIONS you need (each section marked with which project uses it)
+ * 6. Delete sections you don't need
+ * 7. Update data-total on #carousel to match your slide count
+ *
+ * LIGHTBOX TYPES:
+ * - Image lightbox (.lbx): use for image/SVG slides (LUX)
+ * - Video lightbox (.vlbx): use for video slides (Plugins, Copilot)
+ * Include only the one(s) you need.
+ *
+ * CAROUSEL SLIDE TYPES:
+ * - Video slide: <video> + .car-play + .car-pause buttons
+ * - Image slide: <img> with alt text
+ * - Clickable image slide (image lightbox): add onclick="openLightbox(idx)"
+ *
+ * SECTIONS POOL (check which project uses each):
+ *   carousel ........... all
+ *   sidebar ............ all
+ *   hero ............... all
+ *   background ......... all
+ *   challenge .......... LUX
+ *   problem ............ Copilot
+ *   solution/plugins ... LUX Plugins, Copilot
+ *   stat-grid .......... all
+ *   result ............. all
+ *   ai-card ............ all
+ *   pipeline visual .... LUX Plugins (Token Sync block only)
+ *   pr-card ............ LUX Plugins (Token Sync block only)
+ *   sb-cta ............. LUX (live viewer link)
+ *   sb-tag ............. LUX (accent-bordered pill chip)
+ *   stat-more .......... LUX (footer link inside stat card)
+-->
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>[Project Name] - Case Study - Ori Cohen</title>
+<meta name="description" content="[Description]"/>
+<link rel="canonical" href="https://oricohen.co/cases/[project]/"/>
+<meta property="og:type" content="article"/>
+<meta property="og:title" content="[Project Name] - Case Study - Ori Cohen"/>
+<meta property="og:description" content="[Description]"/>
+<meta property="og:url" content="https://oricohen.co/cases/[project]/"/>
+<meta property="og:image" content="https://oricohen.co/cases/[project]/images/og-image.jpg"/>
+<meta name="twitter:card" content="summary_large_image"/>
+<link rel="stylesheet" href="../../tokens.css"/>
+<link rel="stylesheet" href="../shared/case-study.css"/>
+<script>if(window.self!==window.top){var _s=document.createElement('style');_s.textContent='*{cursor:none!important}';document.head.appendChild(_s);}</script>
+<style>
+/* ── REQUIRED: Project accent color ──────────────────────────────────────── */
+/*
+ * Light mode: use a dark-enough color that passes 4.5:1 on white (#fff)
+ * Dark mode: use a light-enough color that passes 4.5:1 on dark (#1a1a2e)
+ *
+ * Examples:
+ *   LUX:     var(--figma) = #6248E8 / dark: var(--purple-300, #a78bfa)
+ *   Plugins: #9d2293 / dark: #e040fb
+ *   Copilot: #047857 / dark: #34d399
+ */
+:root {
+  --action-primary:        #[hex];
+  --action-primary-hover:  #[hex-darker];
+  --action-primary-subtle: rgba([r],[g],[b],.07);
+}
+[data-theme="dark"] {
+  --action-primary:        #[hex-lighter];
+  --action-primary-hover:  #[hex-lighter-2];
+  --action-primary-subtle: rgba([r],[g],[b],.12);
+}
+
+/* ── REQUIRED: Chip variant ───────────────────────────────────────────────── */
+/* Name it chip--[category] and hardcode the light-mode colors */
+.chip--[category]{background:rgba([r],[g],[b],.1);color:#[hex]}
+[data-theme="dark"] .chip--[category]{background:rgba([r],[g],[b],.15);color:#[hex-light]}
+
+/* ── OPTIONAL: Carousel background ───────────────────────────────────────── */
+/* Default is #0D0D0D (dark, for video). For image carousels use surface-raised */
+/* .carousel-wrap{background:var(--surface-raised)} */
+
+/* ── OPTIONAL: Carousel aspect ratio ─────────────────────────────────────── */
+/* Default is 16/9. Override for different content ratios */
+/* .carousel-slide{aspect-ratio:16/7} */
+
+/* ── OPTIONAL: LUX-specific sidebar elements (sb-tag, sb-cta) ────────────── */
+/* Copy from cases/lux/index.html if needed */
+</style>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "@id": "https://oricohen.co/cases/[project]/",
+  "url": "https://oricohen.co/cases/[project]/",
+  "headline": "[Project Name] - Case Study",
+  "description": "[Description]",
+  "author": {
+    "@type": "Person",
+    "@id": "https://oricohen.co/#person",
+    "name": "Ori Cohen"
+  },
+  "publisher": {
+    "@type": "Person",
+    "name": "Ori Cohen",
+    "url": "https://oricohen.co/"
+  },
+  "isPartOf": {
+    "@type": "WebSite",
+    "@id": "https://oricohen.co/#website"
+  }
+}
+</script>
+</head>
+<body>
+
+<!-- Back nav (mobile only) -->
+<a href="/" class="back-nav" aria-label="Back to portfolio">
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+  Back to portfolio
+</a>
+
+<!--
+ ═══════════════════════════════════════════════════════════════════
+  CAROUSEL — used by all projects
+  - Set data-total to match the number of slides
+  - Use VIDEO slides for demos/recordings
+  - Use IMAGE slides for screenshots
+  - Use onclick="openLightbox(N)" on slides when using image lightbox
+ ═══════════════════════════════════════════════════════════════════
+-->
+<div class="carousel-shell">
+<div class="carousel-wrap" id="carousel" data-total="4">
+  <div class="carousel-track" id="carousel-track">
+
+    <!-- VIDEO SLIDE example -->
+    <div class="carousel-slide">
+      <video muted playsinline poster="images/slide-poster.jpg" id="vid-0">
+        <source src="videos/slide.mp4" type="video/mp4"/>
+      </video>
+      <button class="car-play" onclick="playVid(0)" aria-label="Play video">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="var(--action-primary)"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+      </button>
+      <button class="car-pause" id="pause-0" onclick="pauseVid(0)" aria-label="Pause video">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="white"><rect x="6" y="4" width="4" height="16" rx="1"/><rect x="14" y="4" width="4" height="16" rx="1"/></svg>
+      </button>
+      <div class="carousel-slide-label">Slide label</div>
+    </div>
+
+    <!-- IMAGE SLIDE example -->
+    <div class="carousel-slide">
+      <img src="images/screenshot.jpg" alt="Description of screenshot" width="1024" height="576" loading="lazy"/>
+      <div class="carousel-slide-label">Slide label</div>
+    </div>
+
+    <!-- CLICKABLE IMAGE SLIDE (for image lightbox) example -->
+    <!--
+    <div class="carousel-slide" onclick="openLightbox(2)" title="Click to expand">
+      <img src="images/screenshot.jpg" alt="Description" width="1024" height="576" loading="lazy"/>
+    </div>
+    -->
+
+  </div><!-- /track -->
+
+  <!-- Arrows -->
+  <button class="carousel-btn prev" id="car-prev" onclick="carMove(-1)" aria-label="Previous slide">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+  </button>
+  <button class="carousel-btn next" id="car-next" onclick="carMove(1)" aria-label="Next slide">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+  </button>
+
+  <!-- Zoom button (shared JS auto-shows/hides based on slide content) -->
+  <!-- For VIDEO lightbox: -->
+  <button class="carousel-zoom" onclick="openVideoLightbox()" aria-label="View fullscreen">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/></svg>
+  </button>
+  <!-- For IMAGE lightbox, change to: onclick="openLightbox(carIdx)" and the icon to a magnify glass -->
+
+  <!-- Counter -->
+  <div class="carousel-footer">
+    <span class="carousel-counter" id="car-counter">1 / 4</span>
+  </div>
+</div><!-- /carousel-wrap -->
+</div><!-- /carousel-shell -->
+
+<!--
+ ═══════════════════════════════════════════════════════════════════
+  LIGHTBOXES — include only the type(s) you need
+ ═══════════════════════════════════════════════════════════════════
+-->
+
+<!-- VIDEO LIGHTBOX (Plugins, Copilot) -->
+<div class="vlbx" id="vlbx" role="dialog" aria-modal="true" aria-label="Video fullscreen" onclick="closeVideoLightbox()">
+  <button class="vlbx-close" onclick="closeVideoLightbox()" aria-label="Close fullscreen">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+  </button>
+  <div class="vlbx-inner" onclick="event.stopPropagation()">
+    <video id="vlbx-vid" muted playsinline controls></video>
+  </div>
+</div>
+
+<!-- IMAGE LIGHTBOX (LUX) — include if using clickable image slides -->
+<!--
+<div class="lbx" id="lightbox" role="dialog" aria-modal="true" aria-label="Image fullscreen" onclick="closeLightbox(event)">
+  <div class="lbx-inner" id="lbx-inner"></div>
+  <button class="lbx-close" onclick="closeLightbox()" aria-label="Close">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+  </button>
+  <button class="lbx-btn lbx-prev" onclick="lbxMove(-1)" aria-label="Previous">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+  </button>
+  <button class="lbx-btn lbx-next" onclick="lbxMove(1)" aria-label="Next">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+  </button>
+  <div class="lbx-counter" id="lbx-counter"></div>
+</div>
+-->
+
+<!--
+ ═══════════════════════════════════════════════════════════════════
+  BODY LAYOUT
+ ═══════════════════════════════════════════════════════════════════
+-->
+<div class="cs-body">
+
+  <!-- ── SIDEBAR — all projects ── -->
+  <aside class="sidebar">
+    <!-- Chip: change class + text to match project category -->
+    <span class="chip chip--[category]">[Category]</span>
+
+    <div class="sb-fields">
+      <div>
+        <div class="sb-label">Role</div>
+        <div class="sb-value">[Role]</div>
+      </div>
+      <div>
+        <div class="sb-label">Year</div>
+        <div class="sb-value">[Year]</div>
+      </div>
+      <div>
+        <div class="sb-label">Company</div>
+        <div class="sb-value">Verint</div>
+      </div>
+    </div>
+    <div class="sb-div"></div>
+    <p class="sb-nut">[One-sentence project summary for the sidebar.]</p>
+
+    <!-- OPTIONAL: LUX sb-cta — link to live viewer or external demo -->
+    <!--
+    <a class="sb-cta" href="[url]" target="_blank" rel="noopener">
+      [CTA label]
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg>
+    </a>
+    -->
+  </aside>
+
+  <!-- ── CONTENT ── -->
+  <div class="cs-content">
+
+    <!-- ── HERO — all projects ── -->
+    <div class="cs-hero">
+      <h1>[Headline]<br/><span class="cs-hero-accent">[Accented phrase.]</span></h1>
+      <p class="cs-hero-sub">[2-3 sentence project summary.]</p>
+    </div>
+
+    <!-- ── SECTION: BACKGROUND — all projects ── -->
+    <div class="cs-section cs-reveal">
+      <div class="cs-section-num">
+        <div class="cs-sec-title">Background</div>
+      </div>
+      <p>[Background paragraph 1.]</p>
+      <p>[Background paragraph 2.]</p>
+    </div>
+
+    <!-- ── SECTION: CHALLENGE / PROBLEM — LUX, Copilot ── -->
+    <div class="cs-section cs-reveal">
+      <div class="cs-section-num">
+        <div class="cs-sec-title">The problem</div><!-- or "Challenge" -->
+      </div>
+      <p>[Problem paragraph 1.]</p>
+      <p>[Problem paragraph 2 with <strong>emphasis</strong>.]</p>
+    </div>
+
+    <!-- ── SECTION: SOLUTION / PLUGIN BLOCKS — all projects ── -->
+    <div class="cs-section cs-reveal">
+      <div class="cs-section-num">
+        <div class="cs-sec-title">The [solution/plugins/copilot]</div>
+      </div>
+      <p>[Intro paragraph.]</p>
+
+      <!-- Plugin/feature blocks — use for listing 2-4 key features/components -->
+      <div class="plugins-list">
+
+        <div class="plugin-block">
+          <div class="plugin-head">
+            <span class="plugin-num">01</span>
+            <span class="plugin-tag">[Tagline]</span>
+          </div>
+          <h3 class="plugin-title">[Feature name]</h3>
+          <p class="plugin-desc">[Feature description. 2-3 sentences.]</p>
+
+          <!-- OPTIONAL: Pipeline visual (LUX Token Sync block only) -->
+          <!--
+          <div class="pv-wrap">
+            <div class="pv-label">How the pipeline works</div>
+            <div class="pv-flow">
+              <div class="pv-step" data-step="1">
+                <span class="pv-icon">&#127912;</span>
+                <span class="pv-name">Step name</span>
+                <span class="pv-badge">Manual</span>
+              </div>
+              <span class="pv-arr">&#8594;</span>
+              <div class="pv-step" data-step="5">
+                <span class="pv-icon">&#128640;</span>
+                <span class="pv-name">Live</span>
+                <span class="pv-badge auto">Auto</span>
+              </div>
+            </div>
+          </div>
+          -->
+        </div>
+
+        <div class="plugin-block">
+          <div class="plugin-head">
+            <span class="plugin-num">02</span>
+            <span class="plugin-tag">[Tagline]</span>
+          </div>
+          <h3 class="plugin-title">[Feature name]</h3>
+          <p class="plugin-desc">[Feature description.]</p>
+        </div>
+
+        <div class="plugin-block">
+          <div class="plugin-head">
+            <span class="plugin-num">03</span>
+            <span class="plugin-tag">[Tagline]</span>
+          </div>
+          <h3 class="plugin-title">[Feature name]</h3>
+          <p class="plugin-desc">[Feature description.]</p>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ── SECTION: RESULT — all projects ── -->
+    <div class="cs-section cs-reveal">
+      <div class="cs-section-num">
+        <div class="cs-sec-title">Result</div>
+      </div>
+      <p>[Result paragraph.]</p>
+
+      <!-- Stat cards — use 3 cards per row -->
+      <div class="stat-grid">
+        <div class="stat-card">
+          <div class="stat-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          </div>
+          <div class="stat-num">[Number]</div>
+          <div class="stat-title">[Stat title]</div>
+          <div class="stat-desc">[Short stat description]</div>
+          <!-- OPTIONAL: stat-more footer link (LUX) -->
+          <!-- <a class="stat-more" href="[url]">[Link text] &#8594;</a> -->
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+          </div>
+          <div class="stat-num">[Number]</div>
+          <div class="stat-title">[Stat title]</div>
+          <div class="stat-desc">[Short stat description]</div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+          </div>
+          <div class="stat-num">[Number]</div>
+          <div class="stat-title">[Stat title]</div>
+          <div class="stat-desc">[Short stat description]</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── AI CARD — all projects ── -->
+    <!-- Claude octopus SVG + short note on AI's role in the project -->
+    <div class="ai-card cs-reveal">
+      <svg class="ai-octopus" viewBox="0 0 37 40" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <path d="M27.7002 3H30.8008V6H33.9004V22H30.9004V24.5996H21.4004V40H18.4004V37H15.4004V24.5996H12.001V33.9004H9.10059V36.9004H6.10059V30.9004H9.00098V24.5996H5.90039V22H2.90039V6H6.10059V3H8.90039V0H27.7002V3ZM5.90039 39.9004H2.90039V37.1006H5.90039V39.9004ZM33.8008 39.9004H30.8008V37.1006H33.8008V39.9004ZM5.90039 30.6016H3V36.9014H0V27.9014H2.90039V24.6016H5.90039V30.6016ZM33.9004 24.6006V27.9014H36.8008V36.9014H33.8008V30.6016H30.9004V24.5996L33.9004 24.6006ZM27.7002 30.9004H30.6006V36.9004H27.6006V33.9004H24.7002V24.6006H27.7002V30.9004ZM9 15.5H15.5V9H9V15.5ZM21.2998 9V15.5H27.7998V9H21.2998Z" fill="var(--action-primary)"/>
+        <path d="M12.5 12.5H15.5V15.5H12.5V12.5Z" fill="#261539"/>
+        <path d="M6 19H9V22H6V19Z" fill="#AB81C9"/>
+        <path d="M28 19H31V22H28V19Z" fill="#AB81C9"/>
+        <path d="M24.7998 12.5H27.7998V15.5H24.7998V12.5Z" fill="#261539"/>
+      </svg>
+      <div class="ai-card-body">
+        <div class="ai-card-label">AI use on this project</div>
+        <p class="ai-card-text">[Describe how AI was used on this project. 2-3 sentences.]</p>
+      </div>
+    </div>
+
+  </div><!-- /cs-content -->
+</div><!-- /cs-body -->
+
+<button id="scroll-top" aria-label="Back to top">
+  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M8 12V4M8 4L4 8M8 4L12 8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+  </svg>
+</button>
+
+<!-- Shared JS — always the last thing before </body> -->
+<script src="../shared/case-study.js"></script>
+</body>
+</html>
