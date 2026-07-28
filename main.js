@@ -821,16 +821,16 @@ const PORTRAITS = {
 };
 
 const SITE_AVATARS=[
-  {key:'shrek',    name:'Shrek',    color:'#4a7020', bg:'#F0E8C0'},  /* swamp fog / fen mist */
-  {key:'donkey',   name:'Donkey',   color:'#7B6555', bg:'#E8C8D8'},  /* dusty rose — warm & goofy */
-  {key:'puss',     name:'Puss',     color:'#D07020', bg:'#A8C8E0'},  /* Zorro velvet blue */
+  {key:'shrek',    name:'Shrek',    color:'#4a7020', bg:'#C8E890'},  /* vivid swamp green */
+  {key:'donkey',   name:'Donkey',   color:'#7B6555', bg:'#FFD4B0'},  /* warm caramel */
+  {key:'puss',     name:'Puss',     color:'#D07020', bg:'#E0CCFF'},  /* soft violet */
   {key:'fiona',    name:'Fiona',    color:'#A03060', bg:'#FFD8EC'},  /* princess rose */
-  {key:'farquaad', name:'Farquaad', color:'#8B0000', bg:'#DDD8CC'},  /* castle stone */
-  {key:'gingy',    name:'Gingy',    color:'#C87941', bg:'#C8ECD8'},  /* Christmas sage */
-  {key:'fairy',    name:'Fairy GM', color:'#C050A0', bg:'#DDD0FF'},  /* fairy dust lavender */
-  {key:'dragon',   name:'Dragon',   color:'#8B0090', bg:'#FFCCA8'},  /* dragon fire / ember */
-  {key:'pino',     name:'Pino',     color:'#CC2020', bg:'#C4E4FF'},  /* Italian sky */
-  {key:'humpty',   name:'Humpty',   color:'#C8A000', bg:'#C8E0F0'},  /* nursery wall blue */
+  {key:'farquaad', name:'Farquaad', color:'#8B0000', bg:'#C0D8FF'},  /* cerulean blue */
+  {key:'gingy',    name:'Gingy',    color:'#C87941', bg:'#FFE8A0'},  /* gingerbread honey */
+  {key:'fairy',    name:'Fairy GM', color:'#C050A0', bg:'#F8D4FF'},  /* fairy magic */
+  {key:'dragon',   name:'Dragon',   color:'#8B0090', bg:'#FFC8B4'},  /* dragon fire coral */
+  {key:'pino',     name:'Pino',     color:'#CC2020', bg:'#C4F4DC'},  /* Italian fresh mint */
+  {key:'humpty',   name:'Humpty',   color:'#C8A000', bg:'#FFFAC8'},  /* eggshell yellow */
 ];
 
 /* ════════════════════════════════════

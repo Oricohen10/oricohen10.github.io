@@ -47,11 +47,11 @@
 
     <!-- Slide 1: Full demo video -->
     <div class="carousel-slide">
-      <video muted playsinline poster="images/demo-poster.jpg" id="vid-0">
+      <video muted loop playsinline poster="images/demo-poster.jpg" id="vid-0">
         <source src="videos/demo.mp4" type="video/mp4"/>
       </video>
-      <button class="car-play" onclick="playVid(0)" aria-label="Play demo video">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="#047857" aria-hidden="true"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+      <button class="car-play hidden" onclick="playVid(0)" aria-label="Play demo video">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="white" aria-hidden="true"><polygon points="5 3 19 12 5 21 5 3"/></svg>
       </button>
       <button class="car-pause" id="pause-0" onclick="pauseVid(0)" aria-label="Pause video">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="white" aria-hidden="true"><rect x="6" y="4" width="4" height="16" rx="1"/><rect x="14" y="4" width="4" height="16" rx="1"/></svg>
