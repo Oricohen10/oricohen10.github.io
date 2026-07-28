@@ -371,21 +371,30 @@ i.ph,i.ph-bold,i.ph-fill,i.ph-light{line-height:1;display:flex;align-items:cente
 }
 /* ── Chip component ─────────────────────────────────────────
    Reusable color-coded tag. Base + variant class.
-   chip--system | chip--product | chip--ai | chip--plugin | chip--dash
+   chip--system | chip--product | chip--ai | chip--plugin | chip--dash |
+   chip--mobile | chip--research | chip--web | chip--data | chip--brand
    ─────────────────────────────────────────────────────── */
 .chip{display:inline-flex;align-items:center;font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:4px 10px;border-radius:6px;white-space:nowrap;flex-shrink:0;line-height:1}
-.chip--system {background:rgba(91,63,199,.1);color:#5b3fc7}
-.chip--product{background:rgba(6,100,168,.1);color:var(--tx-brand)}
-.chip--ai     {background:rgba(13,122,112,.1);color:#0d7a70}
-.chip--plugin {background:rgba(157,34,147,.1);color:#9d2293}
-.chip--dash   {background:rgba(180,83,9,.1);color:#b45309}
-.chip--mobile {background:rgba(21,128,61,.1);color:#15803d}
-[data-theme="dark"] .chip--system {background:rgba(167,139,250,.14);color:#a78bfa}
-[data-theme="dark"] .chip--product{background:rgba(96,165,250,.14);color:#60a5fa}
-[data-theme="dark"] .chip--ai     {background:rgba(45,212,191,.14);color:#2dd4bf}
-[data-theme="dark"] .chip--plugin {background:rgba(232,121,249,.14);color:#e879f9}
-[data-theme="dark"] .chip--dash   {background:rgba(251,191,36,.14);color:#fbbf24}
-[data-theme="dark"] .chip--mobile {background:rgba(74,222,128,.14);color:#4ade80}
+.chip--system   {background:rgba(91,63,199,.1);color:#5b3fc7}
+.chip--product  {background:rgba(6,100,168,.1);color:var(--tx-brand)}
+.chip--ai       {background:rgba(13,122,112,.1);color:#0d7a70}
+.chip--plugin   {background:rgba(157,34,147,.1);color:#9d2293}
+.chip--dash     {background:rgba(180,83,9,.1);color:#b45309}
+.chip--mobile   {background:rgba(21,128,61,.1);color:#15803d}
+.chip--research {background:rgba(190,18,60,.1);color:#be123c}
+.chip--web      {background:rgba(14,165,233,.1);color:#0284c7}
+.chip--data     {background:rgba(99,102,241,.1);color:#4f46e5}
+.chip--brand    {background:rgba(234,88,12,.1);color:#c2410c}
+[data-theme="dark"] .chip--system   {background:rgba(167,139,250,.14);color:#a78bfa}
+[data-theme="dark"] .chip--product  {background:rgba(96,165,250,.14);color:#60a5fa}
+[data-theme="dark"] .chip--ai       {background:rgba(45,212,191,.14);color:#2dd4bf}
+[data-theme="dark"] .chip--plugin   {background:rgba(232,121,249,.14);color:#e879f9}
+[data-theme="dark"] .chip--dash     {background:rgba(251,191,36,.14);color:#fbbf24}
+[data-theme="dark"] .chip--mobile   {background:rgba(74,222,128,.14);color:#4ade80}
+[data-theme="dark"] .chip--research {background:rgba(251,113,133,.14);color:#fb7185}
+[data-theme="dark"] .chip--web      {background:rgba(56,189,248,.14);color:#38bdf8}
+[data-theme="dark"] .chip--data     {background:rgba(165,180,252,.14);color:#a5b4fc}
+[data-theme="dark"] .chip--brand    {background:rgba(251,146,60,.14);color:#fb923c}
 
 .pg-card-body{padding:10px 2px 4px;display:flex;flex-direction:column;gap:0}
 .pg-chips{display:flex;gap:5px;flex-wrap:wrap;margin-top:8px}

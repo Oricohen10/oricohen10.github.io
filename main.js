@@ -817,16 +817,16 @@ const PORTRAITS = {
 };
 
 const SITE_AVATARS=[
-  {key:'shrek',    name:'Shrek',    color:'#4a7020', bg:'#C8E890'},  /* vivid swamp green */
-  {key:'donkey',   name:'Donkey',   color:'#7B6555', bg:'#FFD4B0'},  /* warm caramel */
-  {key:'puss',     name:'Puss',     color:'#D07020', bg:'#E0CCFF'},  /* soft violet */
-  {key:'fiona',    name:'Fiona',    color:'#A03060', bg:'#FFD8EC'},  /* princess rose */
-  {key:'farquaad', name:'Farquaad', color:'#8B0000', bg:'#C0D8FF'},  /* cerulean blue */
-  {key:'gingy',    name:'Gingy',    color:'#C87941', bg:'#FFE8A0'},  /* gingerbread honey */
-  {key:'fairy',    name:'Fairy GM', color:'#C050A0', bg:'#F8D4FF'},  /* fairy magic */
-  {key:'dragon',   name:'Dragon',   color:'#8B0090', bg:'#FFC8B4'},  /* dragon fire coral */
-  {key:'pino',     name:'Pino',     color:'#CC2020', bg:'#C4F4DC'},  /* Italian fresh mint */
-  {key:'humpty',   name:'Humpty',   color:'#C8A000', bg:'#E0D0FF'},  /* lavender - contrasts with yellow */
+  {key:'shrek',    name:'Shrek',    color:'#4a7020', bg:'#E7F5ED'},  /* chip--mobile green */
+  {key:'donkey',   name:'Donkey',   color:'#7B6555', bg:'#FAF0E6'},  /* chip--dash amber */
+  {key:'puss',     name:'Puss',     color:'#D07020', bg:'#E7F6FD'},  /* chip--web sky */
+  {key:'fiona',    name:'Fiona',    color:'#A03060', bg:'#E5F4F2'},  /* chip--ai teal */
+  {key:'farquaad', name:'Farquaad', color:'#8B0000', bg:'#EFEFFE'},  /* chip--data indigo */
+  {key:'gingy',    name:'Gingy',    color:'#C87941', bg:'#F8E7EB'},  /* chip--research rose */
+  {key:'fairy',    name:'Fairy GM', color:'#C050A0', bg:'#FDEEE7'},  /* chip--brand orange */
+  {key:'dragon',   name:'Dragon',   color:'#8B0090', bg:'#E6EFF8'},  /* chip--product blue */
+  {key:'pino',     name:'Pino',     color:'#CC2020', bg:'#EFEBFB'},  /* chip--system purple */
+  {key:'humpty',   name:'Humpty',   color:'#C8A000', bg:'#F6E6F6'},  /* chip--plugin magenta */
 ];
 
 /* ════════════════════════════════════
