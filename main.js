@@ -830,7 +830,7 @@ const SITE_AVATARS=[
   {key:'fairy',    name:'Fairy GM', color:'#C050A0', bg:'#F8D4FF'},  /* fairy magic */
   {key:'dragon',   name:'Dragon',   color:'#8B0090', bg:'#FFC8B4'},  /* dragon fire coral */
   {key:'pino',     name:'Pino',     color:'#CC2020', bg:'#C4F4DC'},  /* Italian fresh mint */
-  {key:'humpty',   name:'Humpty',   color:'#C8A000', bg:'#FFFAC8'},  /* eggshell yellow */
+  {key:'humpty',   name:'Humpty',   color:'#C8A000', bg:'#E0D0FF'},  /* lavender - contrasts with yellow */
 ];
 
 /* ════════════════════════════════════
