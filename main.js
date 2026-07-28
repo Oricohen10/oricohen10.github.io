@@ -991,7 +991,7 @@ const SEED_CMTS = [
     text:`My big innocent eyes can't find the CTA button. You hid it too well, señor, almost like my sword, pretty but unclear how to draw.`,
     ts: Date.now() - 8*3600000 },
   { id:'s7', name:'Ori Cohen',     color:'#7B61FF', initials:'OC',
-    text:'filed under: valid feedback. will revisit in Q3.',
+    text:'feel free to leave one of your own - it goes straight to my inbox. i respond faster than puss draws his sword.',
     ts: Date.now() - 2*3600000 },
 ];
 
