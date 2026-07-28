@@ -32,26 +32,11 @@ function carUpdate() {
   document.getElementById('car-counter').textContent = (carIdx + 1) + ' / ' + CAR_TOTAL;
   /* Show zoom button only when the current slide has media worth zooming */
   var zoomBtn = document.querySelector('.carousel-zoom');
-  var slide = document.querySelectorAll('.carousel-slide')[carIdx];
   if (zoomBtn) {
+    var slide = document.querySelectorAll('.carousel-slide')[carIdx];
     var hasVideo = slide && slide.querySelector('video');
     var hasImgLightbox = slide && slide.getAttribute('onclick');
     zoomBtn.style.display = (hasVideo || hasImgLightbox) ? 'flex' : 'none';
-  }
-  /* Auto-play the current slide's video (like the original autoplay loop) */
-  if (slide) {
-    var curVid = slide.querySelector('video');
-    if (curVid) {
-      var curPlay = slide.querySelector('.car-play');
-      var curPause = slide.querySelector('.car-pause');
-      if (curPlay) curPlay.classList.add('hidden');
-      if (curPause) curPause.classList.add('playing');
-      curVid.play().catch(function() {
-        /* Autoplay blocked by browser - show play button as fallback */
-        if (curPlay) curPlay.classList.remove('hidden');
-        if (curPause) curPause.classList.remove('playing');
-      });
-    }
   }
 }
 
