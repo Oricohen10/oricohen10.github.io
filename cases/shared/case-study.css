@@ -72,7 +72,7 @@ button{cursor:pointer;font-family:inherit}
 }
 .car-play:hover{transform:translate(-50%,-50%) scale(1.1)}
 .car-play.hidden{opacity:0;pointer-events:none}
-.car-play svg{width:14px;height:14px;margin-left:2px}
+.car-play svg{width:17px;height:17px;margin-left:2px}
 
 /* Pause button */
 .car-pause{
