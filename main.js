@@ -267,8 +267,8 @@ let demoTimer = null;
 function startIdleDemo() {
   if (!isDesktop || demoDone) return;
   demoDone = true;
-  /* Runs automatically ~5 s after modal close */
-  demoTimer = setTimeout(runGhostScript, 5000);
+  /* Start shortly after modal close — feels immediate */
+  demoTimer = setTimeout(runGhostScript, 800);
 }
 
 /* ── Toast ── */
@@ -975,88 +975,87 @@ function runGhostScript() {
     };
   }
 
-  /* ── Phase 1: Shrek casually explores the nav bar ──────────────────────
-     Motion design rationale:
-       - Approach from a wide angle (feels like wandering, not targeting)
-       - Two-stage settle: fast approach → slow final inch-in
-       - Tiny micro-correct on arrival (real cursors overshoot by a pixel)
-       - Small drift while reading tooltip (humans never hold perfectly still)
-       - Arc between buttons (up-and-across, not a straight slide)
-       - Ease curves vary by movement type:
-           casual sweep  → standard ease (.25,.1,.25,1)
-           close approach → strong ease-out (.16,1,.3,1) — decelerates sharply
-           quick snaps   → ease-in-out (.42,0,.58,1)
-           departure     → ease-in (.42,0,1,1) — accelerates away
+  /* ── Phase 1: Gentle pass over the nav bar ─────────────────────────────
+     Motion design (inspired by Steve's portfolio):
+       - No targeting individual buttons — cursor just drifts through the zone
+       - Three-beat path: slow approach → dreamy horizontal sweep → float away
+       - Hover states appear/disappear as the cursor CROSSES each button,
+         not as deliberate "land and wait" pauses
+       - Easing is uniformly soft:
+           approach/sweep → cubic-bezier(.25,.46,.45,.94)  standard ease-out
+           floating away  → cubic-bezier(.4,0,.2,1)        smooth decelerate
   ─────────────────────────────────────────────────────────────────────── */
   const btn1 = document.getElementById('nav-projects');
   const btn2 = document.getElementById('nav-about');
+  const btn3 = document.getElementById('nav-contact');
   document.body.classList.add('demo-running');
 
-  const EASE_SWEEP    = 'cubic-bezier(.25,.1,.25,1)';
-  const EASE_SETTLE   = 'cubic-bezier(.16,1,.3,1)';
-  const EASE_SNAP     = 'cubic-bezier(.42,0,.58,1)';
-  const EASE_DEPART   = 'cubic-bezier(.42,0,1,1)';
+  const EASE_FLOAT  = 'cubic-bezier(.25,.46,.45,.94)';
+  const EASE_AWAY   = 'cubic-bezier(.4,0,.2,1)';
 
   if (btn1 && btn2) {
     const p1 = elPct(btn1);
     const p2 = elPct(btn2);
+    const p3 = btn3 ? elPct(btn3) : { x: p2.x + (p2.x - p1.x), y: p2.y };
 
-    /* 1. Wide sweep toward the bar — arrive to the right of Projects
-          (looks like wandering rather than targeting) */
-    moveGhostTo(shrek, p1.x + 9, p1.y - 3, 2.0, EASE_SWEEP);
+    /* Beat 1 — slow dreamy drift downward to a point left of the nav.
+       Long duration makes it feel weightless, not robotic. */
+    moveGhostTo(shrek, p1.x - 3, p1.y - 1.5, 3.5, EASE_FLOAT);
 
-    /* 2. Slow close-approach: drift left onto Projects */
+    /* Beat 2 — very slow horizontal sweep rightward across the nav.
+       The cursor passes THROUGH the buttons — hover states fire
+       automatically at the right moments within this single move. */
     setTimeout(() => {
-      moveGhostTo(shrek, p1.x + 0.6, p1.y - 0.4, 0.85, EASE_SETTLE);
-    }, 2100);
+      moveGhostTo(shrek, p3.x + 4, p3.y - 0.5, 4.0, EASE_FLOAT);
+    }, 3600);
 
-    /* 3. Micro-correction on arrival + hover fires */
+    /* Hover fires as cursor crosses Projects (~0.5s into sweep) */
     setTimeout(() => {
-      moveGhostTo(shrek, p1.x - 0.2, p1.y + 0.1, 0.18, EASE_SNAP);
       btn1.classList.add('demo-hov');
       jTipShow(btn1, btn1.dataset.tip);
-    }, 3020);
+    }, 4200);
 
-    /* 4. Tiny living drift while reading tooltip (humans never hold still) */
-    setTimeout(() => moveGhostTo(shrek, p1.x + 0.1, p1.y - 0.15, 0.5, EASE_SNAP), 3500);
-    setTimeout(() => moveGhostTo(shrek, p1.x - 0.1, p1.y + 0.05, 0.4, EASE_SNAP), 4050);
-
-    /* 5. Leave Projects — arc slightly up before sliding right to About */
+    /* Leave Projects as cursor moves on (~0.9s into sweep) */
     setTimeout(() => {
       btn1.classList.remove('demo-hov');
       jTipHide();
-      moveGhostTo(shrek, (p1.x + p2.x) / 2, p1.y - 2.5, 0.4, EASE_SNAP);
-    }, 4600);
+    }, 5000);
 
-    /* 6. Come down onto About */
+    /* Hover fires as cursor crosses About (~1.5s into sweep) */
     setTimeout(() => {
-      moveGhostTo(shrek, p2.x + 0.8, p2.y - 0.3, 0.55, EASE_SETTLE);
-    }, 5050);
-
-    /* 7. Settle micro-correction + hover fires */
-    setTimeout(() => {
-      moveGhostTo(shrek, p2.x - 0.15, p2.y + 0.1, 0.15, EASE_SNAP);
       btn2.classList.add('demo-hov');
       jTipShow(btn2, btn2.dataset.tip);
-    }, 5650);
+    }, 5300);
 
-    /* 8. Small alive drift on About */
-    setTimeout(() => moveGhostTo(shrek, p2.x + 0.2, p2.y - 0.2, 0.45, EASE_SNAP), 6100);
-
-    /* 9. Depart — accelerate away toward mid-canvas */
+    /* Leave About */
     setTimeout(() => {
       btn2.classList.remove('demo-hov');
       jTipHide();
+      /* Hover Contact if it exists */
+      if (btn3) {
+        btn3.classList.add('demo-hov');
+        jTipShow(btn3, btn3.dataset.tip);
+      }
+    }, 6000);
+
+    /* Leave Contact, clean up */
+    setTimeout(() => {
+      if (btn3) { btn3.classList.remove('demo-hov'); }
+      jTipHide();
+    }, 6700);
+
+    /* Beat 3 — float gently up and away from the nav */
+    setTimeout(() => {
       document.body.classList.remove('demo-running');
-      moveGhostTo(shrek, 44, 42, 2.2, EASE_DEPART);
-    }, 6900);
+      moveGhostTo(shrek, 46, 38, 3.0, EASE_AWAY);
+    }, 7200);
 
   } else {
     document.body.classList.remove('demo-running');
   }
 
-  /* ── Phase 2: Figma cursor-chat exchange (starts after Phase 1 settles) ── */
-  const P2 = 9500;
+  /* ── Phase 2: Figma cursor-chat exchange (starts after Phase 1) ── */
+  const P2 = 11500;
   setTimeout(() => showGhostChat(shrek,  "What are you doing in my swamp?!"),   P2 + 500);
   setTimeout(() => hideGhostChat(shrek),                                          P2 + 5000);
 
