@@ -257,7 +257,7 @@
       <div class="cs-section-num">
         <div class="cs-sec-title">Challenge</div>
       </div>
-      <p>This was my first time building a design system from the ground up. I had to learn token architecture - primitives, semantics, components - while running the project and the team at the same time. Setting the visual direction, running biweekly sprints, presenting to steering committees, keeping documentation in sync.</p>
+      <p>This was my first time building a design system from the ground up. I had to learn token architecture - primitives, semantics, components - while running the project and the team at the same time. Every sprint was a balancing act: making architectural decisions that would be hard to undo, managing a committee of stakeholders with competing priorities, and keeping the documentation honest enough that teams would actually trust it.</p>
       <p>The biggest technical challenge: closing the gap between design and code entirely. A designer changes a token in Figma - the change opens a PR in GitHub automatically, the developer merges, and it's live. <strong>No developer needed for design changes.</strong></p>
     </div>
 
@@ -303,8 +303,23 @@
       <div class="cs-section-num">
         <div class="cs-sec-title">Result</div>
       </div>
-      <p>LUX 2.0 is live across 40+ Verint products. Zero hardcoded values in the system. A designer makes a change in Figma, a pull request opens in under 60 seconds, the developer merges - and it's live. No build steps. No designer waiting on a developer for a color fix.</p>
-      <p>Dark mode shipped on day one - the first time Verint products have ever supported it. The motion library gave product teams a shared language for animation that didn't exist before.</p>
+      <p>LUX 2.0 is live across 40+ Verint products. Zero hardcoded values in the system. Product teams that once waited days for a color fix now merge it themselves in under a minute - no ticket, no developer, no delay.</p>
+      <p>Dark mode shipped on day one - the first in Verint's history. The motion library gave every product team a shared language for animation that hadn't existed before. For the first time, every interaction across the platform follows the same timing, the same easing, the same spec.</p>
+    </div>
+
+    <!-- What I'd do differently -->
+    <div class="cs-section cs-reveal">
+      <div class="cs-section-num">
+        <div class="cs-sec-title">What I'd do differently</div>
+      </div>
+      <div class="diff-item">
+        <div class="diff-num">1</div>
+        <p class="diff-text"><strong>Built the adoption playbook after the system, not before.</strong> LUX 2.0 launched with strong documentation for how to use it, but no formal migration path from LUX 1.0. Teams had to figure out the switch on their own. A migration guide built during development - even a minimal one - would have cut the adoption lag significantly.</p>
+      </div>
+      <div class="diff-item">
+        <div class="diff-num">2</div>
+        <p class="diff-text"><strong>Added a consuming team to the core sprint much later than I should have.</strong> We had steering committee reviews, but they were governance - not feedback. Having one product team building with LUX in parallel from sprint four or five would have surfaced real gaps while they were still cheap to fix, not in the months after launch.</p>
+      </div>
     </div>
 
     <!-- AI Usage -->
@@ -320,7 +335,7 @@
       </div>
       <div class="ai-card-body">
         <div class="ai-card-label">AI use on this project</div>
-        <p class="ai-card-text">AI ran through the whole project - component brainstorming, writing Figma plugins that cut workflow time significantly, QA across tokens and code to catch drift between design and implementation. Claude handled the heavy lifting.</p>
+        <p class="ai-card-text">AI ran through the whole project - token architecture brainstorming, building all four Figma plugins from scratch (token sync, icon picker, table generator, layout creator), and QA passes to catch drift between design and code. The plugins alone saved weeks of manual implementation. None of it would have shipped as fast without it.</p>
       </div>
     </div>
 
