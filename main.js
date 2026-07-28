@@ -394,10 +394,6 @@ function applyFrame() {
   fwEl.style.left  = fX + 'px'; fwEl.style.top = fY + 'px';
   fBord.style.width  = fW + 'px'; fBord.style.height = fH + 'px';
   wEl.style.width  = '100%'; wEl.style.height = '100%';
-  document.getElementById('rp-w').textContent = Math.round(fW);
-  document.getElementById('rp-h').textContent = Math.round(fH);
-  document.getElementById('rp-x').textContent = Math.round(fX);
-  document.getElementById('rp-y').textContent = Math.round(fY);
 }
 
 function centerFrame() {
