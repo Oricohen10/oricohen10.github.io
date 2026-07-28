@@ -889,11 +889,14 @@ function driftGhost(g) {
   g._driftTimer = setTimeout(() => driftGhost(g), dur * 1000 + pause);
 }
 
-/* ── Move a ghost to specific viewport % coords ── */
-function moveGhostTo(g, leftPct, topPct, durSec) {
+/* ── Move a ghost to specific viewport % coords ──
+   ease: optional CSS timing-function string.
+   Defaults to the same curve used by driftGhost. ── */
+function moveGhostTo(g, leftPct, topPct, durSec, ease) {
   if (!g.el) return;
   clearTimeout(g._driftTimer);
   g._driftTimer = null;
+  g.el.style.transitionTimingFunction = ease || 'cubic-bezier(.25,.46,.45,.94)';
   g.el.style.transitionDuration = durSec.toFixed(2) + 's';
   g.el.style.left = leftPct.toFixed(1) + '%';
   g.el.style.top  = topPct.toFixed(1)  + '%';
@@ -972,50 +975,88 @@ function runGhostScript() {
     };
   }
 
-  /* ── Phase 1: Shrek drifts to bottombar, casually hovers 2 nav buttons ── */
+  /* ── Phase 1: Shrek casually explores the nav bar ──────────────────────
+     Motion design rationale:
+       - Approach from a wide angle (feels like wandering, not targeting)
+       - Two-stage settle: fast approach → slow final inch-in
+       - Tiny micro-correct on arrival (real cursors overshoot by a pixel)
+       - Small drift while reading tooltip (humans never hold perfectly still)
+       - Arc between buttons (up-and-across, not a straight slide)
+       - Ease curves vary by movement type:
+           casual sweep  → standard ease (.25,.1,.25,1)
+           close approach → strong ease-out (.16,1,.3,1) — decelerates sharply
+           quick snaps   → ease-in-out (.42,0,.58,1)
+           departure     → ease-in (.42,0,1,1) — accelerates away
+  ─────────────────────────────────────────────────────────────────────── */
   const btn1 = document.getElementById('nav-projects');
   const btn2 = document.getElementById('nav-about');
   document.body.classList.add('demo-running');
+
+  const EASE_SWEEP    = 'cubic-bezier(.25,.1,.25,1)';
+  const EASE_SETTLE   = 'cubic-bezier(.16,1,.3,1)';
+  const EASE_SNAP     = 'cubic-bezier(.42,0,.58,1)';
+  const EASE_DEPART   = 'cubic-bezier(.42,0,1,1)';
 
   if (btn1 && btn2) {
     const p1 = elPct(btn1);
     const p2 = elPct(btn2);
 
-    /* Move toward first button */
-    moveGhostTo(shrek, p1.x - 0.5, p1.y - 0.8, 2.2);
+    /* 1. Wide sweep toward the bar — arrive to the right of Projects
+          (looks like wandering rather than targeting) */
+    moveGhostTo(shrek, p1.x + 9, p1.y - 3, 2.0, EASE_SWEEP);
 
-    /* Arrive — activate hover + tooltip */
+    /* 2. Slow close-approach: drift left onto Projects */
     setTimeout(() => {
+      moveGhostTo(shrek, p1.x + 0.6, p1.y - 0.4, 0.85, EASE_SETTLE);
+    }, 2100);
+
+    /* 3. Micro-correction on arrival + hover fires */
+    setTimeout(() => {
+      moveGhostTo(shrek, p1.x - 0.2, p1.y + 0.1, 0.18, EASE_SNAP);
       btn1.classList.add('demo-hov');
       jTipShow(btn1, btn1.dataset.tip);
-    }, 2400);
+    }, 3020);
 
-    /* Drift to second button */
+    /* 4. Tiny living drift while reading tooltip (humans never hold still) */
+    setTimeout(() => moveGhostTo(shrek, p1.x + 0.1, p1.y - 0.15, 0.5, EASE_SNAP), 3500);
+    setTimeout(() => moveGhostTo(shrek, p1.x - 0.1, p1.y + 0.05, 0.4, EASE_SNAP), 4050);
+
+    /* 5. Leave Projects — arc slightly up before sliding right to About */
     setTimeout(() => {
       btn1.classList.remove('demo-hov');
       jTipHide();
-      moveGhostTo(shrek, p2.x - 0.5, p2.y - 0.8, 1.0);
-    }, 3700);
+      moveGhostTo(shrek, (p1.x + p2.x) / 2, p1.y - 2.5, 0.4, EASE_SNAP);
+    }, 4600);
 
-    /* Arrive — activate hover + tooltip */
+    /* 6. Come down onto About */
     setTimeout(() => {
+      moveGhostTo(shrek, p2.x + 0.8, p2.y - 0.3, 0.55, EASE_SETTLE);
+    }, 5050);
+
+    /* 7. Settle micro-correction + hover fires */
+    setTimeout(() => {
+      moveGhostTo(shrek, p2.x - 0.15, p2.y + 0.1, 0.15, EASE_SNAP);
       btn2.classList.add('demo-hov');
       jTipShow(btn2, btn2.dataset.tip);
-    }, 4800);
+    }, 5650);
 
-    /* Clean up, drift back to mid-screen */
+    /* 8. Small alive drift on About */
+    setTimeout(() => moveGhostTo(shrek, p2.x + 0.2, p2.y - 0.2, 0.45, EASE_SNAP), 6100);
+
+    /* 9. Depart — accelerate away toward mid-canvas */
     setTimeout(() => {
       btn2.classList.remove('demo-hov');
       jTipHide();
       document.body.classList.remove('demo-running');
-      moveGhostTo(shrek, 42, 44, 1.8);
-    }, 6200);
+      moveGhostTo(shrek, 44, 42, 2.2, EASE_DEPART);
+    }, 6900);
+
   } else {
     document.body.classList.remove('demo-running');
   }
 
-  /* ── Phase 2: Figma cursor-chat exchange (offset after Phase 1) ── */
-  const P2 = 8500;
+  /* ── Phase 2: Figma cursor-chat exchange (starts after Phase 1 settles) ── */
+  const P2 = 9500;
   setTimeout(() => showGhostChat(shrek,  "What are you doing in my swamp?!"),   P2 + 500);
   setTimeout(() => hideGhostChat(shrek),                                          P2 + 5000);
 
