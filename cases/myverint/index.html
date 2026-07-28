@@ -303,17 +303,38 @@ button{cursor:pointer;font-family:inherit}
 
 /* -- Differently callouts ----------------------------------------------- */
 .diff-item{
-  padding:0 0 24px 20px;
-  border-left:3px solid var(--action-primary);
-  margin-bottom:20px;
+  position:relative;
+  background:var(--surface-default);
+  border:1px solid var(--border-subtle);
+  border-radius:16px;
+  padding:24px 24px 24px 76px;
+  margin-bottom:14px;
+  box-shadow:0 1px 6px rgba(0,0,0,.04);
+  overflow:hidden;
+  transition:box-shadow .2s;
 }
-.diff-item:last-child{padding-bottom:0;margin-bottom:0}
+[data-theme="dark"] .diff-item{box-shadow:none}
+.diff-item:hover{box-shadow:0 6px 24px rgba(0,0,0,.09)}
+[data-theme="dark"] .diff-item:hover{box-shadow:0 0 0 1px var(--action-primary)}
+.diff-item:last-child{margin-bottom:0}
+.diff-item::before{
+  content:'';
+  position:absolute;
+  top:0;left:0;bottom:0;width:4px;
+  background:var(--action-primary);
+  border-radius:4px 0 0 4px;
+}
 .diff-num{
-  font-size:10px;font-weight:800;
-  text-transform:uppercase;letter-spacing:.08em;
-  color:var(--action-primary);
-  opacity:.7;
-  margin-bottom:6px;
+  position:absolute;
+  left:20px;top:24px;
+  width:32px;height:32px;
+  display:flex;align-items:center;justify-content:center;
+  border-radius:50%;
+  background:var(--action-primary);
+  color:#fff;
+  font-size:14px;font-weight:800;
+  letter-spacing:0;text-transform:none;
+  opacity:1;
 }
 .diff-text{font-size:14px;color:var(--text-secondary);line-height:1.8;text-wrap:pretty}
 .diff-text strong{color:var(--text-primary);font-weight:700;display:block;margin-bottom:5px;font-size:15px}
@@ -690,12 +711,12 @@ button{cursor:pointer;font-family:inherit}
         <div class="sb-value">iOS + Android</div>
       </div>
       <div>
-        <div class="sb-label">Company</div>
-        <div class="sb-value">Verint</div>
-      </div>
-      <div>
         <div class="sb-label">Timeline</div>
         <div class="sb-value">2024-2026</div>
+      </div>
+      <div>
+        <div class="sb-label">Company</div>
+        <div class="sb-value">Verint</div>
       </div>
     </div>
     <div class="sb-div"></div>
