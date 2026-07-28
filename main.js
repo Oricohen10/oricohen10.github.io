@@ -463,7 +463,7 @@ window.addEventListener('load', () => {
 /* ════════════════════════════════════
    WINDOW SYSTEM
 ════════════════════════════════════ */
-let wZ = 200, drag = null, dox = 0, doy = 0;
+let wZ = 600, drag = null, dox = 0, doy = 0;
 let cascadeX = 60, cascadeY = 50;
 const STEP = 28;
 const WIN_IDS = ['projects','about','contact','proj-lux','proj-myverint','proj-copilot','proj-plugins','proj-supervisor','a11y','lux-viewer'];
@@ -953,7 +953,7 @@ function runGhostScript() {
   const donkey = GHOST_USERS.find(g => g.id === 'donkey');
   if (!shrek?.el || !donkey?.el) return;
 
-  /* Freeze both ghosts immediately — snap to current mid-transition position */
+  /* Freeze both ghosts — snap to current mid-transition position */
   [shrek, donkey].forEach(g => {
     clearTimeout(g._driftTimer);
     g._driftTimer = null;
@@ -963,15 +963,68 @@ function runGhostScript() {
     g.el.style.top  = cs.top;
   });
 
-  setTimeout(() => showGhostChat(shrek,  "What are you doing in my swamp?!"),  500);
-  setTimeout(() => hideGhostChat(shrek),                                        5000);
+  /* Helper: get viewport-% center of an element */
+  function elPct(el) {
+    const r = el.getBoundingClientRect();
+    return {
+      x: (r.left + r.width  / 2) / window.innerWidth  * 100,
+      y: (r.top  + r.height / 2) / window.innerHeight * 100
+    };
+  }
 
-  setTimeout(() => showGhostChat(donkey, "...this is a portfolio Shrek \u{1F434}"), 6500);
+  /* ── Phase 1: Shrek drifts to bottombar, casually hovers 2 nav buttons ── */
+  const btn1 = document.getElementById('nav-projects');
+  const btn2 = document.getElementById('nav-about');
+  document.body.classList.add('demo-running');
+
+  if (btn1 && btn2) {
+    const p1 = elPct(btn1);
+    const p2 = elPct(btn2);
+
+    /* Move toward first button */
+    moveGhostTo(shrek, p1.x - 0.5, p1.y - 0.8, 2.2);
+
+    /* Arrive — activate hover + tooltip */
+    setTimeout(() => {
+      btn1.classList.add('demo-hov');
+      jTipShow(btn1, btn1.dataset.tip);
+    }, 2400);
+
+    /* Drift to second button */
+    setTimeout(() => {
+      btn1.classList.remove('demo-hov');
+      jTipHide();
+      moveGhostTo(shrek, p2.x - 0.5, p2.y - 0.8, 1.0);
+    }, 3700);
+
+    /* Arrive — activate hover + tooltip */
+    setTimeout(() => {
+      btn2.classList.add('demo-hov');
+      jTipShow(btn2, btn2.dataset.tip);
+    }, 4800);
+
+    /* Clean up, drift back to mid-screen */
+    setTimeout(() => {
+      btn2.classList.remove('demo-hov');
+      jTipHide();
+      document.body.classList.remove('demo-running');
+      moveGhostTo(shrek, 42, 44, 1.8);
+    }, 6200);
+  } else {
+    document.body.classList.remove('demo-running');
+  }
+
+  /* ── Phase 2: Figma cursor-chat exchange (offset after Phase 1) ── */
+  const P2 = 8500;
+  setTimeout(() => showGhostChat(shrek,  "What are you doing in my swamp?!"),   P2 + 500);
+  setTimeout(() => hideGhostChat(shrek),                                          P2 + 5000);
+
+  setTimeout(() => showGhostChat(donkey, "...this is a portfolio Shrek \u{1F434}"), P2 + 6500);
   setTimeout(() => {
     hideGhostChat(donkey);
     /* Resume drifting for both after the full exchange */
     setTimeout(() => { driftGhost(shrek); driftGhost(donkey); }, 400);
-  }, 11500);
+  }, P2 + 11500);
 }
 
 /* ════════════════════════════════════
