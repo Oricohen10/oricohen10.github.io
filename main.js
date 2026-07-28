@@ -817,16 +817,16 @@ const PORTRAITS = {
 };
 
 const SITE_AVATARS=[
-  {key:'shrek',    name:'Shrek',    color:'#4a7020', bg:'#E7F5ED'},  /* chip--mobile green */
-  {key:'donkey',   name:'Donkey',   color:'#7B6555', bg:'#FAF0E6'},  /* chip--dash amber */
-  {key:'puss',     name:'Puss',     color:'#D07020', bg:'#E7F6FD'},  /* chip--web sky */
-  {key:'fiona',    name:'Fiona',    color:'#A03060', bg:'#E5F4F2'},  /* chip--ai teal */
-  {key:'farquaad', name:'Farquaad', color:'#8B0000', bg:'#EFEFFE'},  /* chip--data indigo */
-  {key:'gingy',    name:'Gingy',    color:'#C87941', bg:'#F8E7EB'},  /* chip--research rose */
-  {key:'fairy',    name:'Fairy GM', color:'#C050A0', bg:'#FDEEE7'},  /* chip--brand orange */
-  {key:'dragon',   name:'Dragon',   color:'#8B0090', bg:'#E6EFF8'},  /* chip--product blue */
-  {key:'pino',     name:'Pino',     color:'#CC2020', bg:'#EFEBFB'},  /* chip--system purple */
-  {key:'humpty',   name:'Humpty',   color:'#C8A000', bg:'#F6E6F6'},  /* chip--plugin magenta */
+  {key:'shrek',    name:'Shrek',    color:'#4a7020', bg:'#CCF5E5'},  /* chip green */
+  {key:'donkey',   name:'Donkey',   color:'#7B6555', bg:'#EFE9CC'},  /* chip yellow */
+  {key:'puss',     name:'Puss',     color:'#D07020', bg:'#CCE4FF'},  /* chip blue */
+  {key:'fiona',    name:'Fiona',    color:'#A03060', bg:'#CCEDE9'},  /* chip teal */
+  {key:'farquaad', name:'Farquaad', color:'#8B0000', bg:'#CCEBF9'},  /* chip cyan */
+  {key:'gingy',    name:'Gingy',    color:'#C87941', bg:'#FCCCCC'},  /* chip red */
+  {key:'fairy',    name:'Fairy GM', color:'#C050A0', bg:'#FEE2D2'},  /* chip orange */
+  {key:'dragon',   name:'Dragon',   color:'#8B0090', bg:'#DEE0E3'},  /* chip navy */
+  {key:'pino',     name:'Pino',     color:'#CC2020', bg:'#E4DCEA'},  /* chip purple */
+  {key:'humpty',   name:'Humpty',   color:'#C8A000', bg:'#F6E1ED'},  /* chip pink */
 ];
 
 /* ════════════════════════════════════
