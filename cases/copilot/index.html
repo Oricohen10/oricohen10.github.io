@@ -74,33 +74,55 @@
 
     <!-- Slide 1: Full demo video -->
     <div class="carousel-slide">
-      <video muted playsinline poster="images/demo-poster.jpg" id="vid-0">
-        <source src="videos/demo.mp4" type="video/mp4"/>
-      </video>
-      <button class="car-play" onclick="playVid(0)" aria-label="Play demo video">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="#047857" aria-hidden="true"><polygon points="5 3 19 12 5 21 5 3"/></svg>
-      </button>
-      <button class="car-pause" id="pause-0" onclick="pauseVid(0)" aria-label="Pause video">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="white" aria-hidden="true"><rect x="6" y="4" width="4" height="16" rx="1"/><rect x="14" y="4" width="4" height="16" rx="1"/></svg>
-      </button>
+      <svg viewBox="0 0 960 420" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%">
+        <rect width="960" height="420" fill="#EBEBEB"/>
+        <g transform="translate(480,210)" fill="none" stroke="#BFBFBF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+          <polygon points="-18,-20 22,0 -18,20"/>
+          <circle cx="0" cy="0" r="34"/>
+        </g>
+      </svg>
       <div class="carousel-slide-label">Full Demo</div>
     </div>
 
     <!-- Slide 2: Agent desktop -->
     <div class="carousel-slide">
-      <img src="images/agent-desktop.jpg" alt="Verint agent desktop with the Copilot panel open on the right" width="1024" height="576" loading="lazy"/>
+      <svg viewBox="0 0 960 420" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%">
+        <rect width="960" height="420" fill="#EBEBEB"/>
+        <g transform="translate(480,210)" fill="none" stroke="#BFBFBF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="-28" y="-22" width="56" height="44" rx="4"/>
+          <line x1="-28" y1="-10" x2="28" y2="-10"/>
+          <circle cx="-19" cy="-16" r="3"/>
+          <circle cx="-11" cy="-16" r="3"/>
+        </g>
+      </svg>
       <div class="carousel-slide-label">Copilot Panel</div>
     </div>
 
     <!-- Slide 3: Real-time answer -->
     <div class="carousel-slide">
-      <img src="images/copilot-answer.jpg" alt="Copilot answering an agent question with a structured credit score table" width="1024" height="576" loading="lazy"/>
+      <svg viewBox="0 0 960 420" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%">
+        <rect width="960" height="420" fill="#EBEBEB"/>
+        <g transform="translate(480,210)" fill="none" stroke="#BFBFBF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="-28" y="-22" width="56" height="44" rx="4"/>
+          <line x1="-28" y1="-10" x2="28" y2="-10"/>
+          <circle cx="-19" cy="-16" r="3"/>
+          <circle cx="-11" cy="-16" r="3"/>
+        </g>
+      </svg>
       <div class="carousel-slide-label">Real-time Answer</div>
     </div>
 
     <!-- Slide 4: Call summary -->
     <div class="carousel-slide">
-      <img src="images/call-summary.jpg" alt="AI-generated call complete summary with outcome, key points and next steps" width="1024" height="576" loading="lazy"/>
+      <svg viewBox="0 0 960 420" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%">
+        <rect width="960" height="420" fill="#EBEBEB"/>
+        <g transform="translate(480,210)" fill="none" stroke="#BFBFBF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="-28" y="-22" width="56" height="44" rx="4"/>
+          <line x1="-28" y1="-10" x2="28" y2="-10"/>
+          <circle cx="-19" cy="-16" r="3"/>
+          <circle cx="-11" cy="-16" r="3"/>
+        </g>
+      </svg>
       <div class="carousel-slide-label">Call Summary</div>
     </div>
 
@@ -114,27 +136,12 @@
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg>
   </button>
 
-  <!-- Zoom (shared JS shows/hides based on slide type) -->
-  <button class="carousel-zoom" onclick="openVideoLightbox()" aria-label="View fullscreen">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/></svg>
-  </button>
-
   <!-- Counter -->
   <div class="carousel-footer">
     <span class="carousel-counter" id="car-counter">1 / 4</span>
   </div>
 </div><!-- /carousel-wrap -->
 </div><!-- /carousel-shell -->
-
-<!-- Video lightbox -->
-<div class="vlbx" id="vlbx" role="dialog" aria-modal="true" aria-label="Video fullscreen" onclick="closeVideoLightbox()">
-  <button class="vlbx-close" onclick="closeVideoLightbox()" aria-label="Close fullscreen">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-  </button>
-  <div class="vlbx-inner" onclick="event.stopPropagation()">
-    <video id="vlbx-vid" muted playsinline controls></video>
-  </div>
-</div>
 
 <!-- Body -->
 <div class="cs-body">
@@ -275,11 +282,11 @@
       </div>
       <div class="diff-item">
         <div class="diff-num">1</div>
-        <p class="diff-text"><strong>Designed the empty state last - it should have been first.</strong> What appears in the Copilot panel at the very start of a call, before anything has been said, was one of the last problems we solved. It should have been the first. That opening state sets every expectation the agent forms about what the panel is and when to trust it. We validated it late, and almost shipped a version that undersold the feature.</p>
+        <p class="diff-text"><strong>Set a hard scope boundary at the start.</strong> We had a lot of stakeholders, each with a slightly different version of what Copilot should be. Without a fixed scope and timeline locked in early, those competing visions kept surfacing mid-sprint - pulling the design in different directions and making it hard to reach a decision that stuck. A defined cutoff agreed on upfront would have given the team something to push back against, and would have made prioritization faster and cleaner.</p>
       </div>
       <div class="diff-item">
         <div class="diff-num">2</div>
-        <p class="diff-text"><strong>The hackathon framing stayed too long.</strong> Moving fast at the start was the right call - it got a working concept in front of stakeholders quickly. But we held onto that looseness longer than we should have. By the time we started thinking seriously about edge cases - no internet, low-confidence answers, escalation flows - the core patterns were already locked. Some of that cost us time late in the process.</p>
+        <p class="diff-text"><strong>Documented every decision in writing, every time.</strong> We had a lot of alignment meetings - but alignment that lives only in people's heads doesn't survive the next meeting. When decisions weren't written down, they got relitigated. The same questions came back in different forms, with different people, and the design paid for it in unnecessary iterations. A simple decision log - what we decided, why, and who was in the room - would have saved significant time across the project.</p>
       </div>
     </div>
 
