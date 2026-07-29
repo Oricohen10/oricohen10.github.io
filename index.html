@@ -18,26 +18,23 @@
 <meta name="twitter:image" content="https://oricohen.co/Assets/Media/general/og-image.png"/>
 <link rel="icon" type="image/svg+xml" href="Assets/favicon.svg"/>
 <!-- Press Start 2P loaded on demand (only used in A11y game) via JS -->
-<!-- Fallback tokens — overridden by tokens.css when it loads.
-     Guards against transparent/broken UI if the external file 404s. -->
-<style>:root{
-  --canvas:#F5F5F5;--wbg:#FFFFFF;--wbd:rgba(0,0,0,.1);--frm:#FFFFFF;--panel:#FFFFFF;
-  --bd:rgba(0,0,0,.12);--bd2:rgba(0,0,0,.18);--bd3:rgba(0,0,0,.08);
-  --tx:#1a1a1a;--tx2:#555;--tx3:#6a6d70;--inp:#F5F5F5;--hov:rgba(0,0,0,.04);
-  --act:rgba(24,160,251,.08);--mbg:rgba(0,0,0,.25);--mbox:#fff;--mbd:rgba(0,0,0,.12);
-  --glass:rgba(255,255,255,.88);--glass-bd:rgba(0,0,0,.12);
-  --blue:#0882d4;--figma:#6248E8;--f:-apple-system,BlinkMacSystemFont,'Helvetica Neue',sans-serif;
-  --dot:rgba(0,0,0,.05);--tbg:#fff;--ttx:#1a1a1a;--tgrey:#999;--thdr:#f5f5f5;--thdr-bd:rgba(0,0,0,.1);
-  --tprompt:#3DAD38;--tkey:#881391;--tstr:#C41A16;--tdir:#0066CC;--tlink:#0066CC;
-  --r-md:8px;--r-full:9999px;
-}
+<!-- Design tokens inlined — zero-latency, no extra HTTP request.
+     Single source of truth: tokens.css is kept for case study pages which load it externally. -->
+<style>
+:root{--gray-0:#FFFFFF;--gray-50:#F5F5F5;--gray-100:#EBEBEB;--gray-200:#D9D9D9;--gray-300:#BFBFBF;--gray-400:#999999;--gray-500:#737373;--gray-600:#595959;--gray-700:#3D3D3D;--gray-750:#333333;--gray-800:#2C2C2C;--gray-850:#222222;--gray-900:#1E1E1E;--gray-950:#1A1A1A;--purple-50:#F4F2FF;--purple-100:#E8E3FF;--purple-200:#D0C7FF;--purple-300:#B0A0FF;--purple-400:#9F8AFF;--purple-500:#7B61FF;--purple-600:#6248E8;--purple-700:#4D35C8;--purple-800:#3A278A;--purple-900:#2A1F7A;--blue-50:#EEF6FF;--blue-100:#D0E8FE;--blue-200:#A8D4FD;--blue-300:#75B9FC;--blue-400:#4DAEFB;--blue-500:#18A0FB;--blue-600:#0882D4;--blue-700:#0664A8;--blue-800:#054880;--vg-50:#f7f8f8;--vg-75:#f3f4f5;--vg-300:#d0d3d6;--vg-500:#b0b6bb;--vg-600:#8d9296;--vg-650:#7b7f83;--vg-700:#6a6d70;--vg-750:#585b5e;--vg-950:#121213;--radius-xs:2px;--radius-sm:4px;--radius-md:8px;--radius-lg:12px;--radius-xl:16px;--radius-full:9999px;--ease:cubic-bezier(.4,0,.2,1);--spring:cubic-bezier(.22,.68,0,1.2);--duration-fast:100ms;--duration-base:150ms;--duration-slow:300ms;--font-sans:-apple-system,BlinkMacSystemFont,'Helvetica Neue',sans-serif;--font-mono:Consolas,'Courier New',monospace}
+:root{--surface-canvas:var(--gray-100);--surface-default:var(--gray-0);--surface-raised:var(--gray-50);--surface-sunken:var(--gray-100);--surface-overlay:var(--gray-0);--border-subtle:var(--gray-200);--border-default:var(--gray-300);--border-strong:var(--gray-400);--text-primary:var(--vg-950);--text-secondary:var(--vg-750);--text-tertiary:var(--vg-700);--text-brand:var(--blue-700);--text-disabled:var(--vg-500);--text-inverse:var(--vg-50);--action-primary:var(--purple-600);--action-primary-hover:var(--purple-700);--action-primary-subtle:var(--purple-50);--action-secondary:var(--blue-500);--action-secondary-subtle:var(--blue-50);--state-hover:var(--gray-100);--state-active:rgba(24,160,251,.08);--state-focus:var(--blue-500);--overlay-backdrop:rgba(0,0,0,.25);--overlay-glass:rgba(255,255,255,.88);--overlay-glass-bd:var(--gray-200);--terminal-bg:var(--gray-0);--terminal-text:var(--gray-950);--terminal-grey:var(--gray-400);--terminal-prompt:#3DAD38;--terminal-key:#881391;--terminal-string:#C41A16;--terminal-dir:#0066CC;--terminal-link:#0066CC}
+[data-theme="dark"]{--surface-canvas:var(--gray-900);--surface-default:var(--gray-800);--surface-raised:var(--gray-750);--surface-sunken:var(--gray-850);--surface-overlay:var(--gray-800);--border-subtle:var(--gray-700);--border-default:#464646;--border-strong:var(--gray-600);--text-primary:var(--vg-75);--text-secondary:var(--vg-300);--text-tertiary:var(--vg-600);--text-brand:var(--blue-400);--text-disabled:var(--vg-750);--text-inverse:var(--vg-950);--action-primary-subtle:rgba(98,72,232,.15);--action-secondary-subtle:rgba(24,160,251,.12);--state-hover:rgba(255,255,255,.05);--state-active:rgba(24,160,251,.12);--overlay-backdrop:rgba(0,0,0,.60);--overlay-glass:rgba(40,40,40,.90);--overlay-glass-bd:var(--gray-700);--terminal-bg:#0D0D0D;--terminal-text:#DDDDDD;--terminal-grey:var(--gray-600);--terminal-prompt:#4A9EFF;--terminal-key:#FF79C6;--terminal-string:#F1FA8C;--terminal-dir:#8BE9FD;--terminal-link:#8BE9FD}
+:root{--panel:var(--surface-default);--canvas:var(--surface-canvas);--wbg:var(--surface-default);--whdr:var(--surface-raised);--inp:var(--surface-sunken);--frm:var(--surface-default);--mbox:var(--surface-overlay);--bd:var(--border-subtle);--bd2:var(--border-default);--bd3:var(--border-subtle);--wbd:var(--border-subtle);--mbd:var(--border-subtle);--tx:var(--text-primary);--tx2:var(--text-secondary);--tx3:var(--text-tertiary);--tx-brand:var(--text-brand);--tx-dis:var(--text-disabled);--tx-inv:var(--text-inverse);--hov:var(--state-hover);--act:var(--state-active);--mbg:var(--overlay-backdrop);--glass:var(--overlay-glass);--glass-bd:var(--overlay-glass-bd);--blue:var(--action-secondary);--figma:var(--action-primary);--f:var(--font-sans);--mono:var(--font-mono);--r-xs:var(--radius-xs);--r-sm:var(--radius-sm);--r-md:var(--radius-md);--r-lg:var(--radius-lg);--r-xl:var(--radius-xl);--r-full:var(--radius-full);--tbg:var(--terminal-bg);--ttx:var(--terminal-text);--tgrey:var(--terminal-grey);--tprompt:var(--terminal-prompt);--tkey:var(--terminal-key);--tstr:var(--terminal-string);--tdir:var(--terminal-dir);--tlink:var(--terminal-link);--thdr:var(--surface-canvas);--thdr-bd:var(--border-subtle);--dot:rgba(0,0,0,.05)}
+[data-theme="dark"]{--thdr:#1C1C1C;--thdr-bd:var(--border-subtle);--dot:rgba(255,255,255,.04)}
 .skip-nav{position:absolute;top:-100%;left:0;z-index:99999;padding:8px 16px;background:var(--figma);color:#fff;font-size:14px;font-weight:600;border-radius:0 0 8px 0;text-decoration:none;transition:top .1s}
-.skip-nav:focus{top:0}</style>
+.skip-nav:focus{top:0}
+</style>
 <!-- Restore saved theme before CSS paints — prevents flash of light mode on reload -->
 <script>try{if(localStorage.getItem('ori-theme')==='dark')document.documentElement.setAttribute('data-theme','dark')}catch(e){}</script>
+<!-- Preload icon font — starts downloading immediately instead of after phosphor.css is parsed -->
+<link rel="preload" href="Assets/fonts/phosphor/Phosphor.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="Assets/Media/general/ori-profile.webp" as="image" type="image/webp"/>
 <link rel="sitemap" type="application/xml" href="/sitemap.xml"/>
-<link rel="stylesheet" href="src/tokens.css"/>
 <link rel="stylesheet" href="Assets/fonts/phosphor/phosphor.css"/>
 <link rel="stylesheet" href="src/styles.css"/>
 <script type="application/ld+json">
@@ -1256,6 +1253,6 @@
   </div>
 </div>
 
-<script src="src/main.js"></script>
+<script src="src/main.js" defer></script>
 </body>
 </html>
