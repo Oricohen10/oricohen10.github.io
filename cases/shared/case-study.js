@@ -27,46 +27,6 @@ document.addEventListener('mousemove', function(e) {
 var carIdx   = 0;
 var CAR_TOTAL = 4;
 
-/* ── Parallax state ──────────────────────────────────────────────────────── */
-var parTX = 0, parTY = 0; /* target  */
-var parCX = 0, parCY = 0; /* current (lerped) */
-var parRAF = null;
-
-function parTick() {
-  parCX += (parTX - parCX) * 0.08;
-  parCY += (parTY - parCY) * 0.08;
-  var slide = document.querySelectorAll('.carousel-slide')[carIdx];
-  if (slide) {
-    slide.style.setProperty('--px', parCX.toFixed(2) + 'px');
-    slide.style.setProperty('--py', parCY.toFixed(2) + 'px');
-  }
-  var settled = Math.abs(parCX) < 0.05 && Math.abs(parCY) < 0.05 && parTX === 0 && parTY === 0;
-  if (settled) {
-    parCX = 0; parCY = 0;
-    if (slide) { slide.style.setProperty('--px','0px'); slide.style.setProperty('--py','0px'); }
-    parRAF = null;
-  } else {
-    parRAF = requestAnimationFrame(parTick);
-  }
-}
-
-function parStart() {
-  if (!parRAF) parRAF = requestAnimationFrame(parTick);
-}
-
-function initParallax(wrap) {
-  wrap.addEventListener('mousemove', function(e) {
-    var r = wrap.getBoundingClientRect();
-    parTX = (e.clientX - (r.left + r.width  * 0.5)) / 28;
-    parTY = (e.clientY - (r.top  + r.height * 0.5)) / 28;
-    parStart();
-  }, { passive: true });
-  wrap.addEventListener('mouseleave', function() {
-    parTX = 0; parTY = 0;
-    parStart();
-  });
-}
-
 /* ── Carousel init — inject arrows, zoom button, counter, lightbox ──────── */
 function initCarousel() {
   var wrap = document.getElementById('carousel');
@@ -119,9 +79,6 @@ function initCarousel() {
   footer.innerHTML = '<span class="carousel-counter" id="car-counter">1 / ' + CAR_TOTAL + '</span>';
   wrap.appendChild(footer);
 
-  /* Parallax */
-  initParallax(wrap);
-
   /* Lightbox HTML */
   if (lightboxType === 'image') {
     var lbx = document.createElement('div');
@@ -160,24 +117,10 @@ function carUpdate() {
   if (track)   track.style.transform = 'translateX(-' + (carIdx * 100) + '%)';
   if (counter) counter.textContent = (carIdx + 1) + ' / ' + CAR_TOTAL;
 
-  /* is-active class + parallax reset on slide change */
-  var slides = document.querySelectorAll('.carousel-slide');
-  slides.forEach(function(s, i) {
-    var becoming = (i === carIdx);
-    var was = s.classList.contains('is-active');
-    s.classList.toggle('is-active', becoming);
-    if (becoming && !was) {
-      /* Reset parallax so new slide doesn't inherit old position */
-      parTX = 0; parTY = 0; parCX = 0; parCY = 0;
-      s.style.setProperty('--px', '0px');
-      s.style.setProperty('--py', '0px');
-    }
-  });
-
   /* Show zoom button based on slide content + available lightbox */
   var zoomBtn = document.querySelector('.carousel-zoom');
   if (zoomBtn) {
-    var slide = slides[carIdx];
+    var slide = document.querySelectorAll('.carousel-slide')[carIdx];
     var hasVideo  = slide && slide.querySelector('video');
     var hasImgLbx = !!document.getElementById('lightbox');
     var hasVidLbx = !!document.getElementById('vlbx');
