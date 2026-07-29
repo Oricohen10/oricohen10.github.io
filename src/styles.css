@@ -33,6 +33,7 @@ body{font-family:var(--f);background:var(--canvas);color:var(--tx)}
   opacity:0;transition:opacity .2s;
 }
 #ctag.on{opacity:1}
+[data-theme="dark"] #ctag{background:#f9a8d4;color:#1a1a1a}
 
 /* ── Tooltip ── */
 [data-tip]{position:relative}
