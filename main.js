@@ -251,7 +251,7 @@ function doName() {
   try{ localStorage.setItem(PORTFOLIO_KEY, JSON.stringify({name:n, avatarId:siteAv})); }catch{}
   closeModal(() => setName(n));
 }
-function closeModal(cb) { mBg.classList.add('hide'); setTimeout(() => { mBg.style.display='none'; if(cb) cb(); startIdleDemo(); }, 280); }
+function closeModal(cb) { mBg.classList.add('hide'); setTimeout(() => { mBg.style.display='none'; if(cb) cb(); }, 280); }
 window.reopenModal = function(){
   const u = getPortfolioUser();
   if(u){ siteAv = (u.avatarId !== null && u.avatarId !== undefined) ? u.avatarId : 0; }
@@ -260,16 +260,6 @@ window.reopenModal = function(){
   requestAnimationFrame(()=>{ mBg.classList.remove('hide'); mBg.classList.add('show'); if(nIn) nIn.focus(); });
 };
 
-/* ── Idle cursor demo ── */
-let demoDone  = false;
-let demoTimer = null;
-
-function startIdleDemo() {
-  if (!isDesktop || demoDone) return;
-  demoDone = true;
-  /* Start shortly after modal close — feels immediate */
-  demoTimer = setTimeout(runGhostScript, 800);
-}
 
 /* ── Toast ── */
 const tEl = document.getElementById('toast');
@@ -943,129 +933,6 @@ function hideGhostChat(g) {
   }, 250);
 }
 
-/* ════════════════════════════════════
-   GHOST ONBOARDING SCRIPT
-   Runs once automatically after modal close (desktop only).
-   Phase 1 — Shrek alone drifts to toolbar, casually hovers 2 nav buttons.
-             Donkey keeps drifting randomly in the background.
-   Phase 2 — Figma cursor-chat conversation between Shrek + Donkey,
-             with natural gaps so it feels like a real exchange.
-════════════════════════════════════ */
-function runGhostScript() {
-  const shrek  = GHOST_USERS.find(g => g.id === 'shrek');
-  const donkey = GHOST_USERS.find(g => g.id === 'donkey');
-  if (!shrek?.el || !donkey?.el) return;
-
-  /* Freeze both ghosts — snap to current mid-transition position */
-  [shrek, donkey].forEach(g => {
-    clearTimeout(g._driftTimer);
-    g._driftTimer = null;
-    const cs = getComputedStyle(g.el);
-    g.el.style.transitionDuration = '0s';
-    g.el.style.left = cs.left;
-    g.el.style.top  = cs.top;
-  });
-
-  /* Helper: get viewport-% center of an element */
-  function elPct(el) {
-    const r = el.getBoundingClientRect();
-    return {
-      x: (r.left + r.width  / 2) / window.innerWidth  * 100,
-      y: (r.top  + r.height / 2) / window.innerHeight * 100
-    };
-  }
-
-  /* ── Phase 1: Gentle pass over the nav bar ─────────────────────────────
-     Motion design (inspired by Steve's portfolio):
-       - No targeting individual buttons — cursor just drifts through the zone
-       - Three-beat path: slow approach → dreamy horizontal sweep → float away
-       - Hover states appear/disappear as the cursor CROSSES each button,
-         not as deliberate "land and wait" pauses
-       - Easing is uniformly soft:
-           approach/sweep → cubic-bezier(.25,.46,.45,.94)  standard ease-out
-           floating away  → cubic-bezier(.4,0,.2,1)        smooth decelerate
-  ─────────────────────────────────────────────────────────────────────── */
-  const btn1 = document.getElementById('nav-projects');
-  const btn2 = document.getElementById('nav-about');
-  const btn3 = document.getElementById('nav-contact');
-  document.body.classList.add('demo-running');
-
-  const EASE_FLOAT  = 'cubic-bezier(.25,.46,.45,.94)';
-  const EASE_AWAY   = 'cubic-bezier(.4,0,.2,1)';
-
-  if (btn1 && btn2) {
-    const p1 = elPct(btn1);
-    const p2 = elPct(btn2);
-    const p3 = btn3 ? elPct(btn3) : { x: p2.x + (p2.x - p1.x), y: p2.y };
-
-    /* Beat 1 — slow dreamy drift downward to a point left of the nav.
-       Long duration makes it feel weightless, not robotic. */
-    moveGhostTo(shrek, p1.x - 3, p1.y - 1.5, 3.5, EASE_FLOAT);
-
-    /* Beat 2 — very slow horizontal sweep rightward across the nav.
-       The cursor passes THROUGH the buttons — hover states fire
-       automatically at the right moments within this single move. */
-    setTimeout(() => {
-      moveGhostTo(shrek, p3.x + 4, p3.y - 0.5, 4.0, EASE_FLOAT);
-    }, 3600);
-
-    /* Hover fires as cursor crosses Projects (~0.5s into sweep) */
-    setTimeout(() => {
-      btn1.classList.add('demo-hov');
-      jTipShow(btn1, btn1.dataset.tip);
-    }, 4200);
-
-    /* Leave Projects as cursor moves on (~0.9s into sweep) */
-    setTimeout(() => {
-      btn1.classList.remove('demo-hov');
-      jTipHide();
-    }, 5000);
-
-    /* Hover fires as cursor crosses About (~1.5s into sweep) */
-    setTimeout(() => {
-      btn2.classList.add('demo-hov');
-      jTipShow(btn2, btn2.dataset.tip);
-    }, 5300);
-
-    /* Leave About */
-    setTimeout(() => {
-      btn2.classList.remove('demo-hov');
-      jTipHide();
-      /* Hover Contact if it exists */
-      if (btn3) {
-        btn3.classList.add('demo-hov');
-        jTipShow(btn3, btn3.dataset.tip);
-      }
-    }, 6000);
-
-    /* Leave Contact, clean up */
-    setTimeout(() => {
-      if (btn3) { btn3.classList.remove('demo-hov'); }
-      jTipHide();
-    }, 6700);
-
-    /* Beat 3 — float gently up and away from the nav */
-    setTimeout(() => {
-      document.body.classList.remove('demo-running');
-      moveGhostTo(shrek, 46, 38, 3.0, EASE_AWAY);
-    }, 7200);
-
-  } else {
-    document.body.classList.remove('demo-running');
-  }
-
-  /* ── Phase 2: Figma cursor-chat exchange (starts after Phase 1) ── */
-  const P2 = 11500;
-  setTimeout(() => showGhostChat(shrek,  "What are you doing in my swamp?!"),   P2 + 500);
-  setTimeout(() => hideGhostChat(shrek),                                          P2 + 5000);
-
-  setTimeout(() => showGhostChat(donkey, "...this is a portfolio Shrek \u{1F434}"), P2 + 6500);
-  setTimeout(() => {
-    hideGhostChat(donkey);
-    /* Resume drifting for both after the full exchange */
-    setTimeout(() => { driftGhost(shrek); driftGhost(donkey); }, 400);
-  }, P2 + 11500);
-}
 
 /* ════════════════════════════════════
    COMMENTS  — seed + localStorage
