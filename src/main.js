@@ -118,6 +118,16 @@ document.addEventListener('click', e => {
 });
 
 let dark = false;
+
+/* Restore saved theme on load — syncs JS state with what the <head> script already applied */
+(function() {
+  try {
+    if (localStorage.getItem('ori-theme') === 'dark') {
+      dark = true;
+    }
+  } catch(e) {}
+})();
+
 function swapThemeImages() {
   document.querySelectorAll('img[data-src-dark]').forEach(img => {
     const light = img.dataset.srcLight;
@@ -125,24 +135,26 @@ function swapThemeImages() {
     if (light && d) img.src = dark ? d : light;
   });
 }
-function toggleTheme() {
-  dark = !dark;
+function applyThemeUI() {
   document.documentElement.setAttribute('data-theme', dark ? 'dark' : 'light');
-  /* swap theme-aware thumbnails */
   swapThemeImages();
-  /* sync case study iframe */
   document.querySelectorAll('.proj-iframe').forEach(f=>{try{f.contentWindow.postMessage({type:'theme',dark},'*');}catch(e){}});
-  /* update ghost cursor colors */
   updateGhostColors();
-  document.getElementById('icon-moon').style.display = dark ? 'none' : 'block';
-  document.getElementById('icon-sun').style.display  = dark ? 'block' : 'none';
-  /* sync mobile theme icons */
+  const moonD = document.getElementById('icon-moon');
+  const sunD  = document.getElementById('icon-sun');
+  if (moonD) moonD.style.display = dark ? 'none' : 'block';
+  if (sunD)  sunD.style.display  = dark ? 'block' : 'none';
   const mm = document.getElementById('mv-icon-moon');
   const ms = document.getElementById('mv-icon-sun');
   if (mm) mm.style.display = dark ? 'none' : 'flex';
   if (ms) ms.style.display = dark ? 'flex' : 'none';
   const tt = document.getElementById('mv-theme-text');
   if (tt) tt.textContent = dark ? 'Light mode' : 'Dark mode';
+}
+function toggleTheme() {
+  dark = !dark;
+  try { localStorage.setItem('ori-theme', dark ? 'dark' : 'light'); } catch(e) {}
+  applyThemeUI();
 }
 
 /* ── Clock ── */
@@ -1183,6 +1195,9 @@ function addVisitorPresence(name, avatarId) {
 /* Ghosts only on desktop — touch devices don't need cursor presence */
 initGhosts();
 
+/* Sync all theme-dependent UI if dark mode was restored from localStorage */
+if (dark) applyThemeUI();
+
 window.addEventListener('load', () => {
   initPortraitAvatars();
   initComments();
@@ -1546,6 +1561,26 @@ document.addEventListener('click', function(e) {
     closeSiteMenu();
   }
 }, true);
+
+/* ── Modal focus trap ──
+   While the name modal is open, Tab cycles within it. Escape skips. */
+(function() {
+  const FOCUSABLE = '#name-input, #m-av-grid .m-av-item, #btn-go, #btn-skip';
+  document.addEventListener('keydown', function(e) {
+    const bg = document.getElementById('modal-bg');
+    if (!bg || bg.style.display === 'none') return;
+    if (e.key === 'Escape') { document.getElementById('btn-skip').click(); return; }
+    if (e.key !== 'Tab') return;
+    const els = Array.from(bg.querySelectorAll(FOCUSABLE)).filter(el => !el.disabled && !el.closest('[aria-hidden="true"]'));
+    if (!els.length) return;
+    const first = els[0], last = els[els.length - 1];
+    if (e.shiftKey) {
+      if (document.activeElement === first) { e.preventDefault(); last.focus(); }
+    } else {
+      if (document.activeElement === last) { e.preventDefault(); first.focus(); }
+    }
+  });
+})();
 
 /* ── Keyboard accessibility for primary clickable UI ──
    Window chrome, toolbar buttons, project cards/rows, and view toggles are

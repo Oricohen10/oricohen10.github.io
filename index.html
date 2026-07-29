@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
 <title>Ori Cohen · Product Designer</title>
 <meta name="description" content="Ori Cohen — Product Design Team Lead & Art Director at Verint. Enterprise design systems, AI product design, and the details that hold them together."/>
+<meta name="author" content="Ori Cohen"/>
 <link rel="canonical" href="https://oricohen.co/"/>
 <meta property="og:type" content="website"/>
 <meta property="og:title" content="Ori Cohen · Product Designer"/>
@@ -32,6 +33,8 @@
 }
 .skip-nav{position:absolute;top:-100%;left:0;z-index:99999;padding:8px 16px;background:var(--figma);color:#fff;font-size:14px;font-weight:600;border-radius:0 0 8px 0;text-decoration:none;transition:top .1s}
 .skip-nav:focus{top:0}</style>
+<!-- Restore saved theme before CSS paints — prevents flash of light mode on reload -->
+<script>try{if(localStorage.getItem('ori-theme')==='dark')document.documentElement.setAttribute('data-theme','dark')}catch(e){}</script>
 <link rel="preload" href="Assets/Media/general/ori-profile.webp" as="image" type="image/webp"/>
 <link rel="sitemap" type="application/xml" href="/sitemap.xml"/>
 <link rel="stylesheet" href="src/tokens.css"/>
@@ -172,7 +175,7 @@
         <img src="cases/lux/images/lux-thumb.jpg"
              data-src-light="cases/lux/images/lux-thumb.jpg"
              data-src-dark="cases/lux/images/lux-thumb-dark.jpg"
-             alt="Verint LUX 2.0 Design System - component library overview" width="1280" height="800" style="width:100%;height:100%;object-fit:cover;object-position:center top;display:block">
+             alt="Verint LUX 2.0 Design System - component library overview" width="1280" height="800" loading="lazy" style="width:100%;height:100%;object-fit:cover;object-position:center top;display:block">
       </div>
       <div class="pg-card-body">
         <div class="pg-card-name">Verint Design System</div>
@@ -1153,9 +1156,9 @@
       <div class="mv-proj-thumb">
         <svg viewBox="0 0 360 120" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%;display:block;background:#F9F0FE">
           <!-- component grid: 3 cards -->
-          <rect x="44" y="18" width="78" height="84" rx="8" fill="#9d2293" opacity=".1" stroke="#9d2293" stroke-width="1" opacity=".2"/>
-          <rect x="141" y="18" width="78" height="84" rx="8" fill="#9d2293" opacity=".1" stroke="#9d2293" stroke-width="1" opacity=".2"/>
-          <rect x="238" y="18" width="78" height="84" rx="8" fill="#9d2293" opacity=".1" stroke="#9d2293" stroke-width="1" opacity=".2"/>
+          <rect x="44" y="18" width="78" height="84" rx="8" fill="#9d2293" fill-opacity=".08" stroke="#9d2293" stroke-opacity=".25" stroke-width="1"/>
+          <rect x="141" y="18" width="78" height="84" rx="8" fill="#9d2293" fill-opacity=".08" stroke="#9d2293" stroke-opacity=".25" stroke-width="1"/>
+          <rect x="238" y="18" width="78" height="84" rx="8" fill="#9d2293" fill-opacity=".08" stroke="#9d2293" stroke-opacity=".25" stroke-width="1"/>
           <!-- card internals -->
           <rect x="54" y="30" width="58" height="30" rx="5" fill="#9d2293" opacity=".15"/>
           <rect x="54" y="68" width="40" height="6" rx="3" fill="#9d2293" opacity=".3"/>
