@@ -1003,14 +1003,8 @@ const SEED_CMTS = [
   { id:'s4', name:'Puss in Boots', color:'#D07020',
     text:`My big innocent eyes can't find the CTA button. You hid it too well, señor, almost like my sword, pretty but unclear how to draw.`,
     ts: Date.now() - 8*3600000 },
-  { id:'s5', name:'Lord Farquaad', color:'#8B0000',
-    text:`Some of you may die, but that's a sacrifice I'm willing to make for one more feature by Friday. The PM added 'quick fix' to the sprint. There is no such thing as a quick fix.`,
-    ts: Date.now() - 6*3600000 },
-  { id:'s6', name:'Gingy',         color:'#C87941',
-    text:`NOT THE GUMDROP BUTTONS! Also not another 'small change' from the PM that turned into a full redesign. I'm basically a scope-creep survivor at this point.`,
-    ts: Date.now() - 4*3600000 },
   { id:'s7', name:'Ori Cohen',     color:'#7B61FF', initials:'OC',
-    text:'filed under: valid feedback. will revisit in Q3.',
+    text:'Feel free to leave one of your own - it goes straight to my inbox. I respond faster than Puss draws his sword.',
     ts: Date.now() - 2*3600000 },
 ];
 
