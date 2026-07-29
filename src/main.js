@@ -827,8 +827,8 @@ const SITE_AVATARS=[
    with left/top % (no transforms, no opacity tricks).
 ════════════════════════════════════ */
 const GHOST_USERS = [
-  /* color = light mode, darkColor = dark mode, darkText = label text in dark mode */
-  { id:'shrek',  name:'Shrek',  color:'#2e7a18', darkColor:'#15803d' },
+  /* color = light mode, darkColor = dark mode, darkText = label text in dark mode (required when darkColor is bright) */
+  { id:'shrek',  name:'Shrek',  color:'#2e7a18', darkColor:'#4ade80', darkText:'#1a1a1a' },
   { id:'donkey', name:'Donkey', color:'#b85c10', darkColor:'#f97316', darkText:'#1a1a1a' },
 ];
 
