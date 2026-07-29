@@ -858,6 +858,7 @@ function initGhosts() {
   /* Create the fullscreen overlay that ghosts live inside */
   const layer = document.createElement('div');
   layer.id = 'ghost-layer';
+  layer.setAttribute('aria-hidden', 'true');
   document.body.appendChild(layer);
 
   GHOST_USERS.forEach((g, i) => {
@@ -1555,6 +1556,10 @@ document.addEventListener('click', function(e) {
   document.querySelectorAll(SELECTOR).forEach(function (el) {
     if (!el.hasAttribute('tabindex')) el.setAttribute('tabindex', '0');
     if (!el.hasAttribute('role') && el.hasAttribute('onclick')) el.setAttribute('role', 'button');
+    /* Label icon-only window chrome buttons */
+    if (el.classList.contains('cl') && !el.hasAttribute('aria-label')) el.setAttribute('aria-label', 'Close');
+    if (el.classList.contains('mx') && !el.hasAttribute('aria-label')) el.setAttribute('aria-label', 'Maximize');
+    if (el.classList.contains('mn') && !el.hasAttribute('aria-label')) el.setAttribute('aria-label', 'Minimize');
   });
   document.addEventListener('keydown', function (e) {
     if (e.key !== 'Enter' && e.key !== ' ') return;

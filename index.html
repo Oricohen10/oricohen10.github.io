@@ -84,7 +84,7 @@
 <a href="#main-content" class="skip-nav">Skip to main content</a>
 
 <!-- Cursor — 3 states: arrow (default) · hand (space) · grab (space+drag) -->
-<div id="cursor">
+<div id="cursor" aria-hidden="true">
   <!-- State: arrow (Ori's exact Figma cursor) -->
   <svg id="cur-arrow" width="26" height="28" viewBox="3 2 27 27" fill="none" xmlns="http://www.w3.org/2000/svg">
     <defs>
@@ -125,11 +125,11 @@
 </div>
 
 <!-- Modal -->
-<div id="modal-bg"><div id="modal-box">
+<div id="modal-bg"><div id="modal-box" role="dialog" aria-modal="true" aria-labelledby="modal-q">
   <div class="m-badge"><div class="m-dot"></div>Ori Cohen · Portfolio</div>
-  <p class="m-q">What should I call you while you're here?</p>
-  <div class="m-av-label">My name</div>
-  <input type="text" id="name-input" class="field" placeholder="Recruiter (hopefully)" maxlength="20" autocomplete="off"/>
+  <p class="m-q" id="modal-q">What should I call you while you're here?</p>
+  <div class="m-av-label" id="name-label">My name</div>
+  <input type="text" id="name-input" class="field" placeholder="Recruiter (hopefully)" maxlength="20" autocomplete="off" aria-labelledby="name-label"/>
   <div class="m-av-label">Pick your character</div>
   <div id="m-av-grid" class="m-av-grid"></div>
   <button id="btn-go" disabled>Continue</button>
@@ -137,7 +137,7 @@
 </div></div>
 
 <!-- Toast -->
-<div id="toast"><span id="tmsg"></span></div>
+<div id="toast" role="status" aria-live="polite"><span id="tmsg"></span></div>
 
 <!-- ══════════ FLOATING WINDOWS ══════════ -->
 
@@ -596,7 +596,7 @@
 </div>
 
 <!-- About / Terminal -->
-<div class="win term-win" id="win-about" style="width:660px;height:580px">
+<div class="win term-win" id="win-about" role="dialog" aria-modal="true" aria-label="About" style="width:660px;height:580px">
   <div class="wh" onmousedown="startDrag(event,'win-about')">
     <div class="wcs">
       <div class="wc cl" onclick="closeWin('about')">×</div>
@@ -829,7 +829,7 @@
 <div class="win" id="win-lux-viewer" role="dialog" aria-modal="true" aria-label="Verint Design System Component Viewer" style="width:1100px;height:720px">
   <div class="wh" onmousedown="startDrag(event,'win-lux-viewer')">
     <div class="wcs">
-      <div class="wc cl" onclick="closeWin('lux-viewer')">x</div>
+      <div class="wc cl" onclick="closeWin('lux-viewer')" aria-label="Close">×</div>
       <div class="wc mn" onclick="minimizeWin('lux-viewer')">-</div>
       <div class="wc mx" onclick="maximizeWin('lux-viewer')">+</div>
     </div>
@@ -941,31 +941,31 @@
   <div id="bottombar">
     <!-- Left: nav buttons -->
     <div class="bb-left">
-      <button class="bb-btn" id="nav-projects" data-tip="Projects" onclick="toggleWin('projects')">
-        <i class="ph ph-folder-open"></i>
+      <button class="bb-btn" id="nav-projects" data-tip="Projects" aria-label="Projects" onclick="toggleWin('projects')">
+        <i class="ph ph-folder-open" aria-hidden="true"></i>
       </button>
-      <button class="bb-btn" id="nav-about" data-tip="About" onclick="toggleWin('about')">
-        <i class="ph ph-terminal-window"></i>
+      <button class="bb-btn" id="nav-about" data-tip="About" aria-label="About" onclick="toggleWin('about')">
+        <i class="ph ph-terminal-window" aria-hidden="true"></i>
       </button>
-      <button class="bb-btn" id="nav-contact" data-tip="Contact" onclick="toggleWin('contact')">
-        <i class="ph ph-paper-plane-tilt"></i>
+      <button class="bb-btn" id="nav-contact" data-tip="Contact" aria-label="Contact" onclick="toggleWin('contact')">
+        <i class="ph ph-paper-plane-tilt" aria-hidden="true"></i>
       </button>
-      <button class="bb-btn" id="nav-a11y" data-tip="A11y Game" onclick="toggleWin('a11y')">
-        <i class="ph ph-eye"></i>
+      <button class="bb-btn" id="nav-a11y" data-tip="A11y Game" aria-label="Accessibility Game" onclick="toggleWin('a11y')">
+        <i class="ph ph-eye" aria-hidden="true"></i>
       </button>
-      <button class="bb-btn inactive" id="nav-closeall" data-tip="Close All" onclick="closeAllWins()">
-        <i class="ph ph-x-square"></i>
+      <button class="bb-btn inactive" id="nav-closeall" data-tip="Close All" aria-label="Close all windows" onclick="closeAllWins()">
+        <i class="ph ph-x-square" aria-hidden="true"></i>
       </button>
     </div>
     <!-- Center: clock (absolutely centered) -->
     <div id="tb-clock">--:--</div>
     <!-- Right: theme + zoom -->
     <div class="bb-right">
-      <button id="theme-btn" data-tip="Toggle theme" onclick="toggleTheme()">
-        <i id="icon-moon" class="ph ph-moon"></i>
-        <i id="icon-sun" class="ph ph-sun" style="display:none"></i>
+      <button id="theme-btn" data-tip="Toggle theme" aria-label="Toggle dark mode" onclick="toggleTheme()">
+        <i id="icon-moon" class="ph ph-moon" aria-hidden="true"></i>
+        <i id="icon-sun" class="ph ph-sun" style="display:none" aria-hidden="true"></i>
       </button>
-      <div id="bb-zoom" data-tip="Click to reset zoom" onclick="setZoom(1)">100%</div>
+      <button id="bb-zoom" data-tip="Click to reset zoom" aria-label="Reset zoom" onclick="setZoom(1)">100%</button>
     </div>
   </div>
 </div>

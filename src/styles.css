@@ -646,3 +646,19 @@ i.ph,i.ph-bold,i.ph-fill,i.ph-light{line-height:1;display:flex;align-items:cente
   #fw{min-width:320px}
   #welcome{padding:40px 40px}
 }
+
+/* ── Accessibility: focus-visible rings ── */
+/* Show tooltips on keyboard focus, not just hover */
+[data-tip]:focus-visible::after,[data-tip]:focus-visible::before{opacity:1}
+/* Bottom-bar buttons */
+.bb-btn:focus-visible{outline:2px solid var(--purple-600);outline-offset:2px}
+[data-theme="dark"] .bb-btn:focus-visible{outline-color:var(--purple-400)}
+/* Window chrome dots */
+.wc:focus-visible{outline:2px solid var(--purple-600);outline-offset:2px;border-radius:50%}
+[data-theme="dark"] .wc:focus-visible{outline-color:var(--purple-400)}
+/* Project grid cards */
+.pg-card:focus-visible{outline:2px solid var(--purple-600);outline-offset:3px;border-radius:12px}
+[data-theme="dark"] .pg-card:focus-visible{outline-color:var(--purple-400)}
+/* Project list rows */
+.pl-row:focus-visible{outline:2px solid var(--purple-600);outline-offset:-2px}
+[data-theme="dark"] .pl-row:focus-visible{outline-color:var(--purple-400)}
