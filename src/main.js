@@ -251,7 +251,7 @@ function doName() {
   try{ localStorage.setItem(PORTFOLIO_KEY, JSON.stringify({name:n, avatarId:siteAv})); }catch{}
   closeModal(() => setName(n));
 }
-function closeModal(cb) { mBg.classList.add('hide'); setTimeout(() => { mBg.style.display='none'; if(cb) cb(); }, 280); }
+function closeModal(cb) { mBg.classList.add('hide'); setTimeout(() => { mBg.style.display='none'; if(cb) cb(); setTimeout(playShrekConvo, 2000); }, 280); }
 window.reopenModal = function(){
   const u = getPortfolioUser();
   if(u){ siteAv = (u.avatarId !== null && u.avatarId !== undefined) ? u.avatarId : 0; }
@@ -863,12 +863,12 @@ function initGhosts() {
 }
 
 function driftGhost(g) {
-  if (!g.el) return;
+  if (!g.el || g._frozen) return;
   /* New target: random position within safe viewport bounds */
   const newLeft = 8  + Math.random() * 72; /* 8%-80% */
   const newTop  = 8  + Math.random() * 68; /* 8%-76% */
-  const dur     = 3  + Math.random() * 4;  /* 3-7 s   */
-  const pause   = 1200 + Math.random() * 3200; /* 1.2-4.4 s pause */
+  const dur     = 7  + Math.random() * 6;  /* 7-13 s  */
+  const pause   = 3000 + Math.random() * 4000; /* 3-7 s pause */
 
   /* Override the CSS transition duration for this move */
   g.el.style.transitionDuration = dur.toFixed(2) + 's';
@@ -931,6 +931,40 @@ function hideGhostChat(g) {
     const tag = g.el?.querySelector('.gtag');
     if (tag) tag.style.opacity = '1';
   }, 250);
+}
+
+/* ── Play the Shrek / Donkey welcome conversation ── */
+function playShrekConvo() {
+  const shrek  = GHOST_USERS.find(g => g.id === 'shrek');
+  const donkey = GHOST_USERS.find(g => g.id === 'donkey');
+  if (!shrek?.el || !donkey?.el) return;
+
+  /* Freeze drift for both */
+  shrek._frozen = true; donkey._frozen = true;
+  clearTimeout(shrek._driftTimer); clearTimeout(donkey._driftTimer);
+
+  /* Slide into a conversational position */
+  moveGhostTo(shrek, 18, 32, 1.4);
+  moveGhostTo(donkey, 54, 56, 1.6);
+
+  const SHREK_LINE  = 'What are you doing in my swamp?!';
+  const DONKEY_LINE = 'It’s a portfolio Shrek... :/';
+  const typeMs = (t) => t.length * 50 + 400;
+
+  setTimeout(() => {
+    showGhostChat(shrek, SHREK_LINE);
+    setTimeout(() => {
+      showGhostChat(donkey, DONKEY_LINE);
+      setTimeout(() => {
+        hideGhostChat(shrek);
+        hideGhostChat(donkey);
+        setTimeout(() => {
+          shrek._frozen = false; donkey._frozen = false;
+          driftGhost(shrek); driftGhost(donkey);
+        }, 350);
+      }, typeMs(DONKEY_LINE) + 2200);
+    }, typeMs(SHREK_LINE) + 1400);
+  }, 1600);
 }
 
 
