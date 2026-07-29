@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Agent Factory - Case Study - Ori Cohen</title>
+<meta name="description" content="Designing Verint Agent Factory - the platform for building, managing, and orchestrating AI agents in the enterprise contact center."/>
+<link rel="canonical" href="https://oricohen.co/cases/agent-factory/"/>
+<meta property="og:type" content="article"/>
+<meta property="og:title" content="Agent Factory - Case Study - Ori Cohen"/>
+<meta property="og:description" content="Designing Verint Agent Factory - the platform for building, managing, and orchestrating AI agents in the enterprise contact center."/>
+<meta property="og:url" content="https://oricohen.co/cases/agent-factory/"/>
+<meta property="og:image" content="https://oricohen.co/cases/agent-factory/images/og-image.jpg"/>
+<meta name="twitter:card" content="summary_large_image"/>
+<link rel="stylesheet" href="../../tokens.css"/>
+<link rel="stylesheet" href="../shared/case-study.css"/>
+<script>if(window.self!==window.top){var _s=document.createElement('style');_s.textContent='*{cursor:none!important}';document.head.appendChild(_s);}</script>
+<style>
+/* -- Project accent: Agent Factory = Verint blue ------------------------- */
+:root {
+  --action-primary:        #0664a8;
+  --action-primary-hover:  #054f87;
+  --action-primary-subtle: rgba(6,100,168,.07);
+}
+[data-theme="dark"] {
+  --action-primary:        #60a5fa;
+  --action-primary-hover:  #93c5fd;
+  --action-primary-subtle: rgba(96,165,250,.12);
+}
+
+/* -- Chip variant ------------------------------------------------------- */
+.chip--platform{background:rgba(6,100,168,.1);color:#0664a8}
+[data-theme="dark"] .chip--platform{background:rgba(96,165,250,.15);color:#60a5fa}
+
+/* -- Carousel: light background for screenshots ------------------------- */
+.carousel-wrap{background:var(--surface-raised)}
+</style>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "@id": "https://oricohen.co/cases/agent-factory/",
+  "url": "https://oricohen.co/cases/agent-factory/",
+  "headline": "Agent Factory - Case Study",
+  "description": "Designing Verint Agent Factory - the platform for building, managing, and orchestrating AI agents in the enterprise contact center.",
+  "author": {
+    "@type": "Person",
+    "@id": "https://oricohen.co/#person",
+    "name": "Ori Cohen"
+  },
+  "publisher": {
+    "@type": "Person",
+    "name": "Ori Cohen",
+    "url": "https://oricohen.co/"
+  },
+  "isPartOf": {
+    "@type": "WebSite",
+    "@id": "https://oricohen.co/#website"
+  }
+}
+</script>
+</head>
+<body>
+
+<!-- Back nav (mobile only) -->
+<a href="/" class="back-nav" aria-label="Back to portfolio">
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="15 18 9 12 15 6"/></svg>
+  Back to portfolio
+</a>
+
+<!-- Carousel -->
+<div class="carousel-shell">
+<div class="carousel-wrap" id="carousel" data-total="4" data-lightbox="image">
+  <div class="carousel-track" id="carousel-track">
+
+    <!-- Slide 1: Tools Manager - light -->
+    <div class="carousel-slide" onclick="openLightbox(0)" title="Click to expand">
+      <img src="images/slide-tools-light.jpg"
+           alt="Verint Agent Factory - Add tool provider wizard: Tools step showing discovered tools with opt-in by default setting"
+           width="1600" height="900" loading="eager"/>
+      <div class="carousel-slide-label">Tools Manager</div>
+    </div>
+
+    <!-- Slide 2: Tool Discovery - dark -->
+    <div class="carousel-slide" onclick="openLightbox(1)" title="Click to expand">
+      <img src="images/slide-tools-dark.jpg"
+           alt="Verint Agent Factory - Tool provider configuration showing 9 pages of discovered tools with enable toggles and rate limits"
+           width="1600" height="900" loading="lazy"/>
+      <div class="carousel-slide-label">Tool Discovery</div>
+    </div>
+
+    <!-- Slide 3: placeholder -->
+    <div class="carousel-slide" onclick="openLightbox(2)" title="Click to expand">
+      <svg viewBox="0 0 1600 900" xmlns="http://www.w3.org/2000/svg" style="display:block;width:100%;height:100%;background:#EBEBEB">
+        <g transform="translate(800,450)" fill="none" stroke="#BFBFBF" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="-36" y="-28" width="72" height="56" rx="5"/>
+          <circle cx="-12" cy="-6" r="9"/>
+          <polyline points="36,28 12,-5 -18,28"/>
+          <polyline points="-18,28 -28,12 -36,28"/>
+        </g>
+      </svg>
+    </div>
+
+    <!-- Slide 4: placeholder -->
+    <div class="carousel-slide" onclick="openLightbox(3)" title="Click to expand">
+      <svg viewBox="0 0 1600 900" xmlns="http://www.w3.org/2000/svg" style="display:block;width:100%;height:100%;background:#EBEBEB">
+        <g transform="translate(800,450)" fill="none" stroke="#BFBFBF" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="-36" y="-28" width="72" height="56" rx="5"/>
+          <circle cx="-12" cy="-6" r="9"/>
+          <polyline points="36,28 12,-5 -18,28"/>
+          <polyline points="-18,28 -28,12 -36,28"/>
+        </g>
+      </svg>
+    </div>
+
+  </div><!-- /track -->
+
+  <!-- Arrows -->
+  <button class="carousel-btn prev" id="car-prev" onclick="carMove(-1)" aria-label="Previous slide">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="15 18 9 12 15 6"/></svg>
+  </button>
+  <button class="carousel-btn next" id="car-next" onclick="carMove(1)" aria-label="Next slide">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg>
+  </button>
+
+  <!-- Zoom -->
+  <button class="carousel-zoom" onclick="openLightbox(carIdx)" aria-label="View fullscreen">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg>
+  </button>
+
+  <div class="carousel-footer">
+    <span class="carousel-counter" id="car-counter">1 / 4</span>
+  </div>
+</div><!-- /carousel-wrap -->
+</div><!-- /carousel-shell -->
+
+<!-- Image lightbox -->
+<div class="lbx" id="lightbox" role="dialog" aria-modal="true" aria-label="Image fullscreen" onclick="closeLightbox(event)">
+  <div class="lbx-inner" id="lbx-inner"></div>
+  <button class="lbx-close" onclick="closeLightbox()" aria-label="Close">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+  </button>
+  <button class="lbx-btn lbx-prev" onclick="lbxMove(-1)" aria-label="Previous">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="15 18 9 12 15 6"/></svg>
+  </button>
+  <button class="lbx-btn lbx-next" onclick="lbxMove(1)" aria-label="Next">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg>
+  </button>
+  <div class="lbx-counter" id="lbx-counter"></div>
+</div>
+
+<!-- Body -->
+<div class="cs-body">
+
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <span class="chip chip--platform">AI Platform</span>
+    <div class="sb-fields">
+      <div>
+        <div class="sb-label">Role</div>
+        <div class="sb-value">Product Design Lead</div>
+      </div>
+      <div>
+        <div class="sb-label">Year</div>
+        <div class="sb-value">2024-2025</div>
+      </div>
+      <div>
+        <div class="sb-label">Company</div>
+        <div class="sb-value">Verint</div>
+      </div>
+    </div>
+    <div class="sb-div"></div>
+    <p class="sb-nut">Designing the platform that lets enterprises build, manage, and orchestrate AI agents across the contact center.</p>
+  </aside>
+
+  <!-- Content -->
+  <div class="cs-content">
+
+    <!-- Hero -->
+    <div class="cs-hero">
+      <h1>Building the platform<br/><span class="cs-hero-accent">for AI agent orchestration.</span></h1>
+      <p class="cs-hero-sub">Agent Factory is Verint's enterprise platform for creating and managing AI agents. I led design across the tools manager, prompt manager, AI orchestration, and agent configuration flows - translating complex backend capabilities into an accessible, consistent interface for enterprise administrators.</p>
+    </div>
+
+    <!-- Background -->
+    <div class="cs-section cs-reveal">
+      <div class="cs-section-num">
+        <div class="cs-sec-title">Background</div>
+      </div>
+      <p>[Background content to be added.]</p>
+    </div>
+
+  </div><!-- /cs-content -->
+</div><!-- /cs-body -->
+
+<script src="../shared/case-study.js"></script>
+</body>
+</html>
