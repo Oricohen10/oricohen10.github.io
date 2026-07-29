@@ -612,12 +612,22 @@ i.ph,i.ph-bold,i.ph-fill,i.ph-light{line-height:1;display:flex;align-items:cente
 .mv-proj-card:last-child{margin-bottom:14px}
 .mv-proj-card:active{transform:scale(.98)}
 .mv-proj-thumb{width:100%;height:120px;overflow:hidden;background:var(--inp)}
-.mv-proj-thumb svg{width:100%;height:100%;object-fit:cover}
+.mv-proj-thumb svg{width:100%;height:100%;display:block}
 .mv-proj-info{padding:14px 16px}
 .mv-proj-name{font-size:16px;font-weight:700;color:var(--tx);margin-bottom:3px}
 .mv-proj-sub{font-size:13px;color:var(--tx3)}
 .mv-proj-desc{font-size:13px;color:var(--tx2);line-height:1.6;margin-top:6px}
 .mv-proj-tag{display:inline-block;font-size:11.5px;font-weight:600;color:var(--figma);background:rgba(123,97,255,.1);border-radius:6px;padding:5px 12px;margin-top:10px;letter-spacing:.01em}
+.mv-proj-tag--green{color:#059669;background:rgba(16,185,129,.1)}
+.mv-proj-tag--purple{color:#7e22ce;background:rgba(157,34,147,.1)}
+.mv-proj-tag--soon{color:var(--tx3);background:rgba(0,0,0,.06)}
+[data-theme="dark"] .mv-proj-tag--green{color:#34D399;background:rgba(16,185,129,.12)}
+[data-theme="dark"] .mv-proj-tag--purple{color:#C084FC;background:rgba(157,34,147,.12)}
+[data-theme="dark"] .mv-proj-tag--soon{background:rgba(255,255,255,.07)}
+/* Dark mode: mute the hardcoded light backgrounds on mobile thumbnails */
+[data-theme="dark"] .mv-proj-thumb{filter:brightness(0.55) saturate(0.7)}
+/* Disabled (coming soon) mobile project cards */
+.mv-proj-card--soon{opacity:.5;pointer-events:none}
 /* Mobile terminal (about page) */
 #mv-term{background:var(--tbg);flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;padding:16px 16px 40px}
 #mv-term::-webkit-scrollbar{display:none}
