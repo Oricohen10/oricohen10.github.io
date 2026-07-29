@@ -4,11 +4,13 @@ Portfolio site for Ori Cohen. Live at https://oricohen.co — deployed via GitHu
 
 ## Stack
 - Vanilla HTML/CSS/JS, no build step, no framework
-- `tokens.css` - design token system (primitives + semantic + legacy aliases)
-- `styles.css` - component styles
-- `main.js` - all JS (window manager, canvas pan/zoom, mobile menu, etc.)
+- `src/tokens.css` - design token system (primitives + semantic + legacy aliases)
+- `src/styles.css` - component styles
+- `src/main.js` - all JS (window manager, canvas pan/zoom, mobile menu, etc.)
+- `src/tokens.json` - design token export (reference only, not loaded at runtime)
 - `index.html` - single-page portfolio (desktop + mobile)
 - `cases/lux/index.html` - standalone LUX 2.0 case study
+- `docs/` - README.md, STYLE_GUIDE.md
 
 ## Syncing to GitHub
 Always run after finishing a task:
