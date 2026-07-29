@@ -383,6 +383,7 @@ i.ph,i.ph-bold,i.ph-fill,i.ph-light{line-height:1;display:flex;align-items:cente
   transition:transform .2s,box-shadow .2s;box-shadow:0 4px 16px rgba(0,0,0,.08);
   flex-shrink:0;
 }
+[data-theme="dark"] .pg-card-thumb{background:#1A1412}
 /* ── Chip component ─────────────────────────────────────────
    Reusable color-coded tag. Base + variant class.
    chip--system | chip--product | chip--ai | chip--plugin | chip--dash |
