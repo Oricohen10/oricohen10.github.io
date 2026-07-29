@@ -22,6 +22,8 @@ body{font-family:var(--f);background:var(--canvas);color:var(--tx)}
 
 /* ── Custom cursor — Ori's exact Figma cursor ── */
 #cursor{position:fixed;top:0;left:0;pointer-events:none;z-index:99999;will-change:transform}
+#cur-arrow{color:#DD2590}
+[data-theme="dark"] #cur-arrow{color:#f9a8d4}
 /* Label: sharp-cornered Figma label, hot pink, no border-radius */
 #ctag{
   position:absolute;left:18px;top:18px;
