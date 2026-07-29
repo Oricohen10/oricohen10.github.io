@@ -283,6 +283,12 @@ i.ph,i.ph-bold,i.ph-fill,i.ph-light{line-height:1;display:flex;align-items:cente
 #win-proj-supervisor { --proj-accent: #F97316; }
 #win-proj-plugins    { --proj-accent: #9d2293; }
 #win-proj-copilot    { --proj-accent: #10B981; }
+/* Dark mode - brighter/lighter variants for visibility on dark bg */
+[data-theme="dark"] #win-proj-lux        { --proj-accent: #A78BFA; }
+[data-theme="dark"] #win-proj-myverint   { --proj-accent: #E8718A; }
+[data-theme="dark"] #win-proj-supervisor { --proj-accent: #FB923C; }
+[data-theme="dark"] #win-proj-plugins    { --proj-accent: #C084FC; }
+[data-theme="dark"] #win-proj-copilot    { --proj-accent: #34D399; }
 
 /* Colored window ring per project */
 [id^="win-proj-"] {

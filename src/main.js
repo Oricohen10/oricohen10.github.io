@@ -132,6 +132,8 @@ function toggleTheme() {
   swapThemeImages();
   /* sync case study iframe */
   document.querySelectorAll('.proj-iframe').forEach(f=>{try{f.contentWindow.postMessage({type:'theme',dark},'*');}catch(e){}});
+  /* update ghost cursor colors */
+  updateGhostColors();
   document.getElementById('icon-moon').style.display = dark ? 'none' : 'block';
   document.getElementById('icon-sun').style.display  = dark ? 'block' : 'none';
   /* sync mobile theme icons */
@@ -825,9 +827,29 @@ const SITE_AVATARS=[
    with left/top % (no transforms, no opacity tricks).
 ════════════════════════════════════ */
 const GHOST_USERS = [
-  { id:'shrek',  name:'Shrek',  color:'#2e7a18' },
-  { id:'donkey', name:'Donkey', color:'#b85c10' },
+  /* color = light mode, darkColor = dark mode, darkText = label text in dark mode */
+  { id:'shrek',  name:'Shrek',  color:'#2e7a18', darkColor:'#15803d' },
+  { id:'donkey', name:'Donkey', color:'#b85c10', darkColor:'#f97316', darkText:'#1a1a1a' },
 ];
+
+/* Apply whichever color set matches the current theme to all live ghost cursors */
+function updateGhostColors() {
+  const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+  GHOST_USERS.forEach(g => {
+    if (!g.el) return;
+    const c    = isDark ? g.darkColor : g.color;
+    const text = isDark ? (g.darkText || '#fff') : '#fff';
+    /* cursor arrow fill */
+    const path = g.el.querySelector('svg path:first-child');
+    if (path) path.setAttribute('fill', c);
+    /* name tag */
+    const tag = g.el.querySelector('.gtag');
+    if (tag) { tag.style.background = c; tag.style.color = text; }
+    /* speech bubble (if visible) */
+    const chat = g.el.querySelector('.gchat');
+    if (chat) { chat.style.background = c; chat.style.color = text; }
+  });
+}
 
 function initGhosts() {
   /* Idempotent — bail if already built */
@@ -860,6 +882,9 @@ function initGhosts() {
     /* Kick off drifting — immediate, tiny stagger */
     setTimeout(() => driftGhost(g), i * 80);
   });
+
+  /* Apply correct colors for the current theme right away */
+  updateGhostColors();
 }
 
 function driftGhost(g) {
