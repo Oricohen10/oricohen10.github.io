@@ -163,10 +163,10 @@ i.ph,i.ph-bold,i.ph-fill,i.ph-light{line-height:1;display:flex;align-items:cente
 [data-theme="dark"] .wf-badge{color:#4ADE80;background:rgba(34,197,94,.1);border-color:rgba(34,197,94,.25)}
 .avl-txt{color:#166534}
 [data-theme="dark"] .avl-txt{color:#4ade80}
-/* Supervisor Hub thumbnail - dark theme */
-[data-theme="dark"] .sh-bg{fill:#1a1510}
-[data-theme="dark"] .sh-bar{fill:#0c0a07}
-[data-theme="dark"] .sh-card{fill:#28201a;stroke:#3d3025}
+/* Supervisor Hub thumbnail - dual-theme SVG toggle */
+.sh-thumb-dark{display:none}
+[data-theme="dark"] .sh-thumb-light{display:none}
+[data-theme="dark"] .sh-thumb-dark{display:block}
 .wf-name{font-size:34px;font-weight:900;color:var(--tx);letter-spacing:-1.5px;line-height:1.05;margin-bottom:7px}
 .wf-role{font-size:15px;color:var(--tx2);font-weight:500;letter-spacing:-.01em;line-height:1.4;margin-bottom:10px}
 .wf-bio{font-size:13.5px;color:var(--tx2);line-height:1.75;margin-bottom:20px}
