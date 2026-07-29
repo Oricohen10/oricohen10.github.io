@@ -47,6 +47,14 @@ button{cursor:pointer;font-family:inherit}
   aspect-ratio:16/9; /* image pages override to 16/7 */
   position:relative;
   overflow:hidden;
+  transform:perspective(1200px) rotateX(6deg) scale(0.97);
+  transform-origin:bottom center;
+  transition:transform .5s cubic-bezier(.4,0,.2,1),opacity .4s ease;
+  opacity:.8;
+}
+.carousel-slide.is-active{
+  transform:perspective(1200px) rotateX(0deg) scale(1);
+  opacity:1;
 }
 .carousel-slide video,
 .carousel-slide img,
@@ -54,6 +62,17 @@ button{cursor:pointer;font-family:inherit}
   width:100%;height:100%;
   object-fit:cover;
   display:block;
+}
+/* Parallax layer — img/video only, scale gives headroom to move */
+.carousel-slide img,
+.carousel-slide video{
+  transform:scale(1.05) translate3d(0,0,0);
+  transition:transform .12s ease-out;
+  will-change:transform;
+}
+.carousel-slide.is-active img,
+.carousel-slide.is-active video{
+  transform:scale(1.05) translate3d(var(--px,0px),var(--py,0px),0);
 }
 .carousel-slide svg{pointer-events:none;user-select:none}
 
