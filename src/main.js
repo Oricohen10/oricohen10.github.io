@@ -828,8 +828,8 @@ const SITE_AVATARS=[
 ════════════════════════════════════ */
 const GHOST_USERS = [
   /* color = light mode, darkColor = dark mode, darkText = label text in dark mode (required when darkColor is bright) */
-  { id:'shrek',  name:'Shrek',  color:'#2e7a18', darkColor:'#4ade80', darkText:'#1a1a1a' },
-  { id:'donkey', name:'Donkey', color:'#b85c10', darkColor:'#f97316', darkText:'#1a1a1a' },
+  { id:'shrek',  name:'Shrek',  color:'#2e7a18', darkColor:'#86efac', darkText:'#1a1a1a' },
+  { id:'donkey', name:'Donkey', color:'#b85c10', darkColor:'#fdba74', darkText:'#1a1a1a' },
 ];
 
 /* Apply whichever color set matches the current theme to all live ghost cursors */
