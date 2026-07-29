@@ -943,28 +943,22 @@ function playShrekConvo() {
   shrek._frozen = true; donkey._frozen = true;
   clearTimeout(shrek._driftTimer); clearTimeout(donkey._driftTimer);
 
-  /* Slide into a conversational position */
-  moveGhostTo(shrek, 18, 32, 1.4);
-  moveGhostTo(donkey, 54, 56, 1.6);
-
   const SHREK_LINE  = 'What are you doing in my swamp?!';
   const DONKEY_LINE = 'It’s a portfolio Shrek... :/';
   const typeMs = (t) => t.length * 50 + 400;
 
+  showGhostChat(shrek, SHREK_LINE);
   setTimeout(() => {
-    showGhostChat(shrek, SHREK_LINE);
+    showGhostChat(donkey, DONKEY_LINE);
     setTimeout(() => {
-      showGhostChat(donkey, DONKEY_LINE);
+      hideGhostChat(shrek);
+      hideGhostChat(donkey);
       setTimeout(() => {
-        hideGhostChat(shrek);
-        hideGhostChat(donkey);
-        setTimeout(() => {
-          shrek._frozen = false; donkey._frozen = false;
-          driftGhost(shrek); driftGhost(donkey);
-        }, 350);
-      }, typeMs(DONKEY_LINE) + 2200);
-    }, typeMs(SHREK_LINE) + 1400);
-  }, 1600);
+        shrek._frozen = false; donkey._frozen = false;
+        driftGhost(shrek); driftGhost(donkey);
+      }, 350);
+    }, typeMs(DONKEY_LINE) + 2200);
+  }, typeMs(SHREK_LINE) + 1400);
 }
 
 
