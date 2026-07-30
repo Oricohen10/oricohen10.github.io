@@ -422,7 +422,6 @@ i.ph,i.ph-bold,i.ph-fill,i.ph-light{line-height:1;display:flex;align-items:cente
 .pg-card.pg-card-soon{cursor:default}
 .pg-card.pg-card-soon:hover .pg-card-thumb{transform:none;box-shadow:0 4px 16px rgba(0,0,0,.08)}
 .pg-card-thumb.pg-thumb-soon{
-  aspect-ratio:unset;height:120px;
   background:transparent;border:1.5px dashed var(--bd2);box-shadow:none;
   display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;color:var(--tx3);
   pointer-events:none;
