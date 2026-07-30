@@ -568,6 +568,7 @@ i.ph,i.ph-bold,i.ph-fill,i.ph-light{line-height:1;display:flex;align-items:cente
 #mv-canvas::-webkit-scrollbar{display:none}
 /* Welcome frame card */
 #mv-welcome{width:100%;max-width:420px;background:#fff;border:none;border-radius:28px;padding:52px 48px 48px;box-shadow:0 2px 4px rgba(0,0,0,.04),0 8px 24px rgba(0,0,0,.08),0 24px 64px rgba(0,0,0,.10);transition:background .15s}
+[data-theme="dark"] #mv-welcome{background:var(--panel);box-shadow:0 2px 4px rgba(0,0,0,.2),0 8px 24px rgba(0,0,0,.3),0 24px 64px rgba(0,0,0,.4)}
 /* .mv-nm/.mv-role/.mv-line/.mv-bio/.mv-btns removed — mobile welcome uses .wf-* */
 /* Responsive: scale down hero name on small screens */
 @media (max-width:400px){.wf-name{font-size:28px}}
