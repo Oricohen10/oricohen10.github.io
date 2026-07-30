@@ -567,7 +567,7 @@ i.ph,i.ph-bold,i.ph-fill,i.ph-light{line-height:1;display:flex;align-items:cente
 #mv-canvas{flex:1;display:flex;align-items:center;justify-content:center;padding:20px 16px 80px;overflow-y:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none}
 #mv-canvas::-webkit-scrollbar{display:none}
 /* Welcome frame card */
-#mv-welcome{width:100%;max-width:380px;background:#fff;border:none;border-radius:28px;padding:40px 36px 36px;box-shadow:0 2px 4px rgba(0,0,0,.04),0 8px 24px rgba(0,0,0,.08),0 24px 64px rgba(0,0,0,.10);transition:background .15s}
+#mv-welcome{width:100%;max-width:420px;background:#fff;border:none;border-radius:28px;padding:52px 48px 48px;box-shadow:0 2px 4px rgba(0,0,0,.04),0 8px 24px rgba(0,0,0,.08),0 24px 64px rgba(0,0,0,.10);transition:background .15s}
 /* .mv-nm/.mv-role/.mv-line/.mv-bio/.mv-btns removed — mobile welcome uses .wf-* */
 /* Responsive: scale down hero name on small screens */
 @media (max-width:400px){.wf-name{font-size:28px}}
@@ -652,7 +652,7 @@ i.ph,i.ph-bold,i.ph-fill,i.ph-light{line-height:1;display:flex;align-items:cente
   /* Toast: no desktop bottom bar on mobile */
   #toast{bottom:80px}
   /* Welcome card: tighter on very small screens */
-  #mv-welcome{padding:22px 18px}
+  #mv-welcome{padding:36px 28px 32px}
 }
 /* Tablet (768px-1024px): ensure desktop canvas is usable */
 @media(min-width:768px) and (max-width:1024px){
