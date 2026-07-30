@@ -9,10 +9,18 @@ window.addEventListener('resize', () => {
   _lastBreakpoint = now;
   const app = document.getElementById('app');
   if (now === 'desktop') {
-    app.style.display = '';   // let CSS take over
-    mvCloseAll();             // close any open mobile pages/menu
+    app.style.display = 'flex';  // explicit — CSS cascade alone isn't reliable here
+    // .mv-page elements are position:fixed siblings of #mv (not children), so the
+    // CSS media query hiding #mv doesn't hide them. Skip the slide-out transition
+    // so they vanish instantly instead of covering desktop for 300ms.
+    ['portfolio','about','contact'].forEach(id => {
+      const p = document.getElementById('mv-page-' + id);
+      if (!p) return;
+      p.style.transition = 'none';
+      p.classList.remove('open');
+    });
     mvMenuClose();
-    // Reset any maximized window state, then re-center the frame
+    // Reset any maximized window state
     WIN_IDS.forEach(id => {
       const w = document.getElementById('win-' + id);
       if (!w) return;
@@ -22,10 +30,18 @@ window.addEventListener('resize', () => {
       delete w._placed;
     });
     cascadeX = 60; cascadeY = 50;
-    // Hide custom cursor until first mousemove (it's stuck at 0,0 after mobile)
+    // Hide custom cursor until first mousemove (it was at 0,0 from mobile)
     if (curEl) curEl.style.opacity = '0';
-    // Wait one paint so #app is laid out, then center frame
-    requestAnimationFrame(() => { requestAnimationFrame(() => { centerFrame(); }); });
+    // Force synchronous layout so centerFrame() reads real canvas dimensions
+    void app.offsetHeight;
+    centerFrame();
+    // Restore mv-page transitions after one frame
+    requestAnimationFrame(() => {
+      ['portfolio','about','contact'].forEach(id => {
+        const p = document.getElementById('mv-page-' + id);
+        if (p) p.style.transition = '';
+      });
+    });
   } else {
     app.style.display = 'none';
     closeAllWins();           // close any open desktop windows
