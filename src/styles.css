@@ -376,13 +376,44 @@ i.ph,i.ph-bold,i.ph-fill,i.ph-light{line-height:1;display:flex;align-items:cente
 /* GRID view */
 #view-grid{padding:20px 24px;display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:18px;align-content:start}
 .pg-card{display:flex;flex-direction:column;text-decoration:none;color:inherit}
-.pg-card:hover .pg-card-thumb{transform:translateY(-2px);box-shadow:0 12px 40px rgba(0,0,0,.14)}
+.pg-card:hover .pg-card-thumb{transform:translateY(-2px);box-shadow:0 16px 48px rgba(0,0,0,.18)}
+.pg-card:hover .pg-card-name{color:var(--tx-brand)}
 .pg-card-thumb{
+  position:relative;
   width:100%;aspect-ratio:16/10;border-radius:8px;overflow:hidden;
   border:1px solid var(--bd3);background:#F0F0F0;
   transition:transform .2s,box-shadow .2s;box-shadow:0 4px 16px rgba(0,0,0,.08);
   flex-shrink:0;
 }
+/* Gradient overlay at bottom of image */
+.pg-card-thumb:not(.pg-thumb-soon)::after{
+  content:'';position:absolute;inset:0;pointer-events:none;border-radius:inherit;
+  background:linear-gradient(to top,rgba(0,0,0,.58) 0%,rgba(0,0,0,.1) 42%,transparent 68%);
+  transition:opacity .25s;
+}
+/* Chip on image */
+.pg-card-chip{position:absolute;bottom:10px;left:10px;z-index:2}
+.pg-card-thumb .chip{
+  background:rgba(0,0,0,.52)!important;color:rgba(255,255,255,.96)!important;
+  backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);
+  border:1px solid rgba(255,255,255,.14);
+}
+/* Hover CTA overlay */
+.pg-card-hover{
+  position:absolute;inset:0;z-index:3;
+  display:flex;align-items:center;justify-content:center;
+  background:rgba(0,0,0,.16);backdrop-filter:blur(1px);-webkit-backdrop-filter:blur(1px);
+  opacity:0;transition:opacity .22s;border-radius:inherit;
+}
+.pg-card:hover .pg-card-hover{opacity:1}
+.pg-card-hover-btn{
+  display:flex;align-items:center;gap:6px;
+  background:var(--panel);color:var(--tx);
+  font-size:12px;font-weight:600;padding:8px 18px;border-radius:100px;
+  box-shadow:0 4px 20px rgba(0,0,0,.28);
+  transform:translateY(8px);transition:transform .22s;
+}
+.pg-card:hover .pg-card-hover-btn{transform:translateY(0)}
 [data-theme="dark"] .pg-card-thumb{background:#1A1412}
 /* ── Chip component ─────────────────────────────────────────
    Reusable color-coded tag. Base + variant class.
