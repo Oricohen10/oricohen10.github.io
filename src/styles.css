@@ -636,12 +636,13 @@ i.ph,i.ph-bold,i.ph-fill,i.ph-light{line-height:1;display:flex;align-items:cente
 #mv-term::-webkit-scrollbar{display:none}
 #mv-tcon{font-family:Consolas,'Courier New',monospace;font-size:13px;line-height:1.75;color:var(--ttx)}
 /* Mobile contact */
-.mv-clinks-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:16px}
-.mv-ccard{background:var(--inp);border:1px solid var(--bd);border-radius:14px;padding:20px 12px 18px;display:flex;flex-direction:column;align-items:center;text-align:center;text-decoration:none;color:inherit;gap:0;transition:background .12s,transform .12s;-webkit-tap-highlight-color:transparent}
-.mv-ccard:active{transform:scale(.97);background:var(--hov)}
-.mv-ccard-ico{width:44px;height:44px;border-radius:12px;background:var(--panel);border:1px solid var(--bd);display:flex;align-items:center;justify-content:center;font-size:20px;color:var(--tx2);margin-bottom:12px}
-.mv-ccard-lbl{font-size:13px;font-weight:700;color:var(--tx);letter-spacing:-.1px}
-.mv-ccard-val{font-size:11px;color:var(--tx2);margin-top:4px;line-height:1.35;word-break:break-all}
+.mv-clinks-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:16px}
+.mv-ccard{background:var(--panel);border:1px solid var(--bd3);border-radius:16px;padding:22px 14px 20px;display:flex;flex-direction:column;align-items:center;text-align:center;text-decoration:none;color:inherit;gap:0;box-shadow:0 1px 3px rgba(0,0,0,.06),0 4px 12px rgba(0,0,0,.04);transition:transform .12s,box-shadow .12s;-webkit-tap-highlight-color:transparent}
+.mv-ccard:active{transform:scale(.96);box-shadow:0 1px 2px rgba(0,0,0,.06)}
+.mv-ccard-ico{width:52px;height:52px;border-radius:14px;background:rgba(6,100,168,.08);display:flex;align-items:center;justify-content:center;font-size:22px;color:var(--tx-brand);margin-bottom:14px}
+[data-theme="dark"] .mv-ccard-ico{background:rgba(96,165,250,.12);color:#60a5fa}
+.mv-ccard-lbl{font-size:14px;font-weight:700;color:var(--tx);letter-spacing:-.2px}
+.mv-ccard-val{font-size:11.5px;color:var(--tx2);margin-top:5px;line-height:1.4;word-break:break-all}
 @media(max-width:767px){
   #app{display:none}#mv{display:flex}
   #cursor,#modal-bg,#ghost-layer{display:none!important}
