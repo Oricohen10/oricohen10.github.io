@@ -161,7 +161,7 @@ i.ph,i.ph-bold,i.ph-fill,i.ph-light{line-height:1;display:flex;align-items:cente
 #welcome>div{max-width:520px;width:100%}
 /* Welcome frame ── badge (chip) */
 /* Badge — green = availability/open-to-work signal, not brand purple */
-.wf-badge{display:inline-flex;align-items:center;gap:7px;font-size:12px;font-weight:500;letter-spacing:-.1px;color:#166534;background:rgba(22,163,74,.07);border:1px solid rgba(21,128,61,.3);padding:6px 13px;border-radius:var(--r-full);margin-bottom:20px}
+.wf-badge{display:inline-flex;align-items:center;gap:7px;font-size:12px;font-weight:500;letter-spacing:-.1px;color:#166534;background:rgba(22,163,74,.07);border:1px solid rgba(21,128,61,.3);padding:6px 13px;border-radius:var(--r-full);margin-bottom:24px}
 .wf-bdot{width:7px;height:7px;background:#15803d;border-radius:50%;animation:pulse 2s infinite;flex-shrink:0}
 [data-theme="dark"] .wf-badge{color:#4ADE80;background:rgba(34,197,94,.1);border-color:rgba(34,197,94,.25)}
 .avl-txt{color:#166534}
@@ -170,9 +170,9 @@ i.ph,i.ph-bold,i.ph-fill,i.ph-light{line-height:1;display:flex;align-items:cente
 .sh-thumb-dark{display:none}
 [data-theme="dark"] .sh-thumb-light{display:none}
 [data-theme="dark"] .sh-thumb-dark{display:block}
-.wf-name{font-size:34px;font-weight:900;color:var(--tx);letter-spacing:-1.5px;line-height:1.05;margin-bottom:7px}
-.wf-role{font-size:15px;color:var(--tx2);font-weight:500;letter-spacing:-.01em;line-height:1.4;margin-bottom:10px}
-.wf-bio{font-size:13.5px;color:var(--tx2);line-height:1.75;margin-bottom:20px}
+.wf-name{font-size:34px;font-weight:900;color:var(--tx);letter-spacing:-1.5px;line-height:1.05;margin-bottom:8px}
+.wf-role{font-size:15px;color:var(--tx2);font-weight:500;letter-spacing:-.01em;line-height:1.4;margin-bottom:14px}
+.wf-bio{font-size:13.5px;color:var(--tx2);line-height:1.75;margin-bottom:28px}
 .wf-hint{display:none}
 .wf-ctas{display:flex;gap:10px;flex-wrap:wrap}
 
@@ -566,7 +566,7 @@ i.ph,i.ph-bold,i.ph-fill,i.ph-light{line-height:1;display:flex;align-items:cente
 #mv-canvas{flex:1;display:flex;align-items:center;justify-content:center;padding:20px 16px 80px;overflow-y:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none}
 #mv-canvas::-webkit-scrollbar{display:none}
 /* Welcome frame card */
-#mv-welcome{width:100%;max-width:360px;background:var(--panel);border:1px solid var(--bd);border-radius:16px;padding:36px 32px;box-shadow:0 8px 40px rgba(0,0,0,.12);transition:background .15s,border-color .15s}
+#mv-welcome{width:100%;max-width:380px;background:var(--panel);border:1px solid var(--bd);border-radius:28px;padding:40px 36px 36px;box-shadow:0 4px 6px rgba(0,0,0,.04),0 16px 48px rgba(0,0,0,.10);transition:background .15s,border-color .15s}
 /* .mv-nm/.mv-role/.mv-line/.mv-bio/.mv-btns removed — mobile welcome uses .wf-* */
 /* Responsive: scale down hero name on small screens */
 @media (max-width:400px){.wf-name{font-size:28px}}
