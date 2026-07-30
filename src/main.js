@@ -12,6 +12,18 @@ window.addEventListener('resize', () => {
     app.style.display = '';   // let CSS take over
     mvCloseAll();             // close any open mobile pages/menu
     mvMenuClose();
+    // Reset any maximized window state, then re-center the frame
+    WIN_IDS.forEach(id => {
+      const w = document.getElementById('win-' + id);
+      if (!w) return;
+      w.classList.remove('show', 'collapsed', 'maximized', 'mac-anim');
+      w.style.display = 'none';
+      w._maximized = false;
+      delete w._placed;
+    });
+    cascadeX = 60; cascadeY = 50;
+    // Wait one paint so #app is laid out, then center frame
+    requestAnimationFrame(() => { requestAnimationFrame(() => { centerFrame(); }); });
   } else {
     app.style.display = 'none';
     closeAllWins();           // close any open desktop windows
