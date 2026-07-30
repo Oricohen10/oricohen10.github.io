@@ -379,41 +379,11 @@ i.ph,i.ph-bold,i.ph-fill,i.ph-light{line-height:1;display:flex;align-items:cente
 .pg-card:hover .pg-card-thumb{transform:translateY(-2px);box-shadow:0 16px 48px rgba(0,0,0,.18)}
 .pg-card:hover .pg-card-name{color:var(--tx-brand)}
 .pg-card-thumb{
-  position:relative;
   width:100%;aspect-ratio:16/10;border-radius:8px;overflow:hidden;
   border:1px solid var(--bd3);background:#F0F0F0;
   transition:transform .2s,box-shadow .2s;box-shadow:0 4px 16px rgba(0,0,0,.08);
   flex-shrink:0;
 }
-/* Gradient overlay at bottom of image */
-.pg-card-thumb:not(.pg-thumb-soon)::after{
-  content:'';position:absolute;inset:0;pointer-events:none;border-radius:inherit;
-  background:linear-gradient(to top,rgba(0,0,0,.58) 0%,rgba(0,0,0,.1) 42%,transparent 68%);
-  transition:opacity .25s;
-}
-/* Chip on image */
-.pg-card-chip{position:absolute;bottom:10px;left:10px;z-index:2}
-.pg-card-thumb .chip{
-  background:rgba(0,0,0,.52)!important;color:rgba(255,255,255,.96)!important;
-  backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);
-  border:1px solid rgba(255,255,255,.14);
-}
-/* Hover CTA overlay */
-.pg-card-hover{
-  position:absolute;inset:0;z-index:3;
-  display:flex;align-items:center;justify-content:center;
-  background:rgba(0,0,0,.16);backdrop-filter:blur(1px);-webkit-backdrop-filter:blur(1px);
-  opacity:0;transition:opacity .22s;border-radius:inherit;
-}
-.pg-card:hover .pg-card-hover{opacity:1}
-.pg-card-hover-btn{
-  display:flex;align-items:center;gap:6px;
-  background:var(--panel);color:var(--tx);
-  font-size:12px;font-weight:600;padding:8px 18px;border-radius:100px;
-  box-shadow:0 4px 20px rgba(0,0,0,.28);
-  transform:translateY(8px);transition:transform .22s;
-}
-.pg-card:hover .pg-card-hover-btn{transform:translateY(0)}
 [data-theme="dark"] .pg-card-thumb{background:#1A1412}
 /* ── Chip component ─────────────────────────────────────────
    Reusable color-coded tag. Base + variant class.
@@ -642,8 +612,8 @@ i.ph,i.ph-bold,i.ph-fill,i.ph-light{line-height:1;display:flex;align-items:cente
 .mv-proj-card{background:var(--panel);border:1px solid var(--bd);border-radius:14px;margin:14px 14px 0;overflow:hidden;cursor:pointer;transition:transform .1s,box-shadow .1s;-webkit-tap-highlight-color:transparent;display:block;text-decoration:none;color:inherit}
 .mv-proj-card:last-child{margin-bottom:14px}
 .mv-proj-card:active{transform:scale(.98)}
-.mv-proj-thumb{width:100%;height:120px;overflow:hidden;background:var(--inp)}
-.mv-proj-thumb svg{width:100%;height:100%;display:block}
+.mv-proj-thumb{width:100%;height:160px;overflow:hidden;background:#F0F0F0}
+.mv-proj-thumb svg,.mv-proj-thumb img{width:100%;height:100%;object-fit:cover;display:block}
 .mv-proj-info{padding:14px 16px}
 .mv-proj-name{font-size:16px;font-weight:700;color:var(--tx);margin-bottom:3px}
 .mv-proj-sub{font-size:13px;color:var(--tx3)}
@@ -655,8 +625,8 @@ i.ph,i.ph-bold,i.ph-fill,i.ph-light{line-height:1;display:flex;align-items:cente
 [data-theme="dark"] .mv-proj-tag--green{color:#34D399;background:rgba(16,185,129,.12)}
 [data-theme="dark"] .mv-proj-tag--purple{color:#C084FC;background:rgba(157,34,147,.12)}
 [data-theme="dark"] .mv-proj-tag--soon{background:rgba(255,255,255,.07)}
-/* Dark mode: mute the hardcoded light backgrounds on mobile thumbnails */
-[data-theme="dark"] .mv-proj-thumb{filter:brightness(0.55) saturate(0.7)}
+/* Dark mode: slightly dim mobile thumbnails */
+[data-theme="dark"] .mv-proj-thumb{filter:brightness(0.75) saturate(0.85)}
 /* Disabled (coming soon) mobile project cards */
 .mv-proj-card--soon{opacity:.5;pointer-events:none}
 /* Mobile terminal (about page) */
