@@ -635,10 +635,11 @@ i.ph,i.ph-bold,i.ph-fill,i.ph-light{line-height:1;display:flex;align-items:cente
 /* Mobile contact */
 .mv-clink{display:flex;align-items:center;gap:14px;padding:14px 16px;border-bottom:1px solid var(--bd3);text-decoration:none;color:inherit;-webkit-tap-highlight-color:transparent;transition:background .1s}
 .mv-clink:active{background:var(--hov)}
-.mv-cico{width:40px;height:40px;border-radius:10px;background:var(--panel);border:1px solid var(--bd);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.mv-cico{width:36px;height:36px;border-radius:8px;background:var(--inp);border:1px solid var(--bd);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:16px}
 .mv-cico svg{width:18px;height:18px}
-.mv-clbl{font-size:15px;font-weight:700;color:var(--tx)}
-.mv-cval{font-size:13px;color:var(--tx2);margin-top:2px}
+.mv-clbl{font-size:13px;font-weight:600;color:var(--tx)}
+.mv-cval{font-size:12px;color:var(--tx2);margin-top:1px}
+.mv-clink-arr{font-size:14px;color:var(--tx3);margin-left:auto;flex-shrink:0}
 @media(max-width:767px){
   #app{display:none}#mv{display:flex}
   #cursor,#modal-bg,#ghost-layer{display:none!important}
