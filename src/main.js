@@ -22,6 +22,8 @@ window.addEventListener('resize', () => {
       delete w._placed;
     });
     cascadeX = 60; cascadeY = 50;
+    // Hide custom cursor until first mousemove (it's stuck at 0,0 after mobile)
+    if (curEl) curEl.style.opacity = '0';
     // Wait one paint so #app is laid out, then center frame
     requestAnimationFrame(() => { requestAnimationFrame(() => { centerFrame(); }); });
   } else {
@@ -198,12 +200,12 @@ function setCursorState(state) {
   ctagEl.style.opacity = state==='arrow' ? '' : '0';
 }
 
-if (isDesktop) {
-  window.addEventListener('mousemove', e => {
-    const [ox, oy] = CUR_OFFSET[curState] || [4, 4];
-    curEl.style.transform = `translate(${e.clientX - ox}px,${e.clientY - oy}px)`;
-  }, { passive: true });
-}
+window.addEventListener('mousemove', e => {
+  if (_lastBreakpoint !== 'desktop') return;
+  const [ox, oy] = CUR_OFFSET[curState] || [4, 4];
+  curEl.style.transform = `translate(${e.clientX - ox}px,${e.clientY - oy}px)`;
+  if (curEl.style.opacity === '0') curEl.style.opacity = '';
+}, { passive: true });
 function setName(name) {
   ctagEl.textContent = name; ctagEl.classList.add('on');
   const u = getPortfolioUser();
