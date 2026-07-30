@@ -1054,11 +1054,14 @@ window.addEventListener('resize', () => {
 // ═══════════════════════════════════════════════════════
 buildSidebar();
 
-// Auto-select first component
-if (CATEGORIES.length > 0 && CATEGORIES[0].components.length > 0) {
-  const first = CATEGORIES[0].components[0];
-  selectComp(CATEGORIES[0].id, first.id);
-}
+// Auto-select first Buttons component
+(function() {
+  const cat  = CATEGORIES.find(c => c.id === 'components');
+  const comp = cat && cat.components.find(c => c.subfolder === 'Buttons');
+  if (cat && comp) selectComp(cat.id, comp.id);
+  else if (CATEGORIES.length > 0 && CATEGORIES[0].components.length > 0)
+    selectComp(CATEGORIES[0].id, CATEGORIES[0].components[0].id);
+})();
 
 // ── MOBILE SIDEBAR TOGGLE ──
 function toggleMobileSidebar() {
