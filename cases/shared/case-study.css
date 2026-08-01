@@ -548,7 +548,7 @@ button{cursor:pointer;font-family:inherit}
   display:flex;align-items:flex-start;gap:20px;
   margin-top:24px;
   padding:22px 24px;
-  background:var(--canvas,#F5F5F5);
+  background:var(--surface-raised,#F5F5F5);
   border:1px solid var(--border-subtle);
   border-radius:16px;
 }
