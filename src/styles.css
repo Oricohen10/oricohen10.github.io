@@ -464,6 +464,8 @@ i.ph,i.ph-bold,i.ph-fill,i.ph-light{line-height:1;display:flex;align-items:cente
 /* ════════════════════════════════════
    PROJECT DETAIL WINDOWS
 ════════════════════════════════════ */
+/* Enforce minimum width so the 2-column case-study grid never collapses */
+#win-proj-lux,#win-proj-myverint,#win-proj-copilot,#win-proj-plugins,#win-proj-supervisor{min-width:800px}
 .proj-iframe{width:100%;flex:1;border:none;display:block;background:var(--frm)}
 .proj-placeholder{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:32px 24px;text-align:center;gap:16px}
 .proj-ph-thumb{width:100%;max-width:480px;aspect-ratio:16/10;border-radius:12px;overflow:hidden;border:1px solid var(--bd3);box-shadow:0 8px 32px rgba(0,0,0,.12);margin-bottom:8px}
@@ -474,28 +476,30 @@ i.ph,i.ph-bold,i.ph-fill,i.ph-light{line-height:1;display:flex;align-items:cente
 .proj-ph-wip{font-size:12px;color:var(--tx3);padding:8px 16px;background:var(--inp);border-radius:6px;border:1px solid var(--bd)}
 
 /* ════════════════════════════════════
-   TERMINAL  —  real terminal style
+   TERMINAL  —  about terminal
 ════════════════════════════════════ */
-.term-win{background:#111!important}
-.term-win .wh{background:#1A1A1A!important;border-bottom:1px solid #2A2A2A!important}
-.term-win .wt{color:#666!important}
-.term-win .wb{background:#111!important;padding:14px 20px 28px}
-#tcon{font-family:'VT323',Consolas,'Courier New',monospace;font-size:22px;line-height:1.65;color:#DDDDDD}
+#tcon{font-family:'VT323',Consolas,'Courier New',monospace;font-size:22px;line-height:1.65;color:var(--tx)}
 .tline{white-space:pre-wrap;word-break:break-word}
 .tline.empty{height:.6em;display:block}
-.t-prompt{color:#4A9EFF;font-weight:700}
-.t-grey{color:#666}
-.t-cmd{color:#EEEEEE}
-.t-key{color:#FF79C6}
-.t-str{color:#F1FA8C}
-.t-num{color:#BD93F9}
-[data-theme="dark"] .t-num{color:#BD93F9}
-.t-dir{color:#8BE9FD;font-weight:700}
-.tlink{color:#4A9EFF;text-decoration:none}
+.t-prompt{color:#0664a8;font-weight:700}
+.t-grey{color:var(--tx3)}
+.t-cmd{color:var(--tx)}
+.t-key{color:#7c3aed}
+.t-str{color:#047857}
+.t-num{color:#7c3aed}
+.t-dir{color:#0e7490;font-weight:700}
+.tlink{color:#0664a8;text-decoration:none}
 .tlink:hover{text-decoration:underline}
-.tcur{display:inline-block;width:10px;height:18px;background:#4A9EFF;vertical-align:text-bottom;animation:blink .9s step-end infinite;margin-left:1px}
+.tcur{display:inline-block;width:10px;height:18px;background:#0664a8;vertical-align:text-bottom;animation:blink .9s step-end infinite;margin-left:1px}
 @keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
-.t-login{color:#444;font-size:1em}
+.t-login{color:var(--tx3);font-size:1em}
+[data-theme="dark"] .t-prompt{color:#60a5fa}
+[data-theme="dark"] .t-key{color:#c084fc}
+[data-theme="dark"] .t-str{color:#4ade80}
+[data-theme="dark"] .t-num{color:#c084fc}
+[data-theme="dark"] .t-dir{color:#22d3ee}
+[data-theme="dark"] .tlink{color:#60a5fa}
+[data-theme="dark"] .tcur{background:#60a5fa}
 
 /* ── Ghost cursors — atmospheric on canvas, below all chrome ── */
 #ghost-layer{position:fixed;top:0;left:0;width:100vw;height:100vh;pointer-events:none;z-index:510;overflow:hidden}

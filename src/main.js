@@ -636,6 +636,8 @@ function front(w) { w.style.zIndex = ++wZ; }
    WINDOW RESIZE (border drag)
 ════════════════════════════════════ */
 const WIN_MIN_W = 280, WIN_MAX_W = 1400, WIN_MIN_H = 180, WIN_MAX_H = 900;
+const PROJ_WIN_IDS = new Set(['win-proj-lux','win-proj-myverint','win-proj-copilot','win-proj-plugins','win-proj-supervisor']);
+function winMinW(win){ return PROJ_WIN_IDS.has(win.id) ? 800 : WIN_MIN_W; }
 let winResize = null;
 
 function showNativeCursor() { curEl.style.display = 'none'; }
@@ -691,8 +693,9 @@ document.addEventListener('mousemove', e => {
     const { win: rw, dir: rd, sx, sy, ox, oy, ow, oh } = winResize;
     const dx = e.clientX - sx, dy = e.clientY - sy;
     let nx = ox, ny = oy, nw = ow, nh = oh;
-    if (rd.includes('e')) nw = clamp(ow + dx, WIN_MIN_W, WIN_MAX_W);
-    if (rd.includes('w')) { nw = clamp(ow - dx, WIN_MIN_W, WIN_MAX_W); nx = ox + ow - nw; }
+    const minW = winMinW(rw);
+    if (rd.includes('e')) nw = clamp(ow + dx, minW, WIN_MAX_W);
+    if (rd.includes('w')) { nw = clamp(ow - dx, minW, WIN_MAX_W); nx = ox + ow - nw; }
     if (rd.includes('s')) nh = clamp(oh + dy, WIN_MIN_H, WIN_MAX_H);
     if (rd.includes('n')) { nh = clamp(oh - dy, WIN_MIN_H, WIN_MAX_H); ny = oy + oh - nh; }
     rw.style.width  = nw + 'px'; rw.style.height = nh + 'px';

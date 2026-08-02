@@ -25,9 +25,9 @@ button{cursor:pointer;font-family:inherit}
 
 /* ── Carousel shell ───────────────────────────────────────────────────────── */
 .carousel-shell{
-  max-width:none;
-  margin:0;
-  padding:0;
+  max-width:1040px;
+  margin:0 auto;
+  padding:28px 28px 0;
 }
 
 /* ── Carousel wrap ────────────────────────────────────────────────────────── */
@@ -35,9 +35,8 @@ button{cursor:pointer;font-family:inherit}
   position:relative;
   overflow:hidden;
   background:#0D0D0D; /* default for video pages; image pages override */
-  border:none;
-  border-bottom:1px solid var(--border-subtle);
-  border-radius:0;
+  border:1px solid var(--border-subtle);
+  border-radius:var(--r-xl);
 }
 .carousel-track{
   display:flex;
@@ -602,8 +601,7 @@ button{cursor:pointer;font-family:inherit}
 @media(max-width:720px){
   .back-nav{display:flex}
   .cs-body{grid-template-columns:1fr;gap:28px;padding:24px 18px 80px}
-  .carousel-shell{padding:0}
-  .carousel-wrap{border-radius:0}
+  .carousel-shell{padding:20px 18px 0}
   .sidebar{position:sticky;top:0;z-index:10;background:var(--surface-default);padding-bottom:20px;border-bottom:1px solid var(--border-subtle);margin-bottom:8px}
   .cs-hero h1{font-size:24px}
   .cs-hero-sub{font-size:16px}
@@ -616,7 +614,7 @@ button{cursor:pointer;font-family:inherit}
 }
 @media(max-width:480px){
   .cs-body{padding:20px 16px 80px}
-  .carousel-shell{padding:0}
+  .carousel-shell{padding:16px 16px 0}
   .carousel-btn{width:30px;height:30px}
   .carousel-btn svg{width:14px;height:14px}
   .stat-grid{grid-template-columns:1fr}
