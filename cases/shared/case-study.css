@@ -270,8 +270,9 @@ button{cursor:pointer;font-family:inherit}
 
 /* ── Sidebar ──────────────────────────────────────────────────────────────── */
 .sidebar{
-  position:sticky;top:61px;
+  position:sticky;top:24px;
   height:fit-content;
+  align-self:start;
   display:flex;flex-direction:column;gap:20px;
 }
 .chip{
@@ -600,7 +601,7 @@ button{cursor:pointer;font-family:inherit}
   .back-nav{display:flex}
   .cs-body{grid-template-columns:1fr;gap:28px;padding:24px 18px 80px}
   .carousel-shell{padding:20px 18px 0}
-  .sidebar{position:static}
+  .sidebar{position:sticky;top:0;z-index:10;background:var(--surface-default);padding-bottom:20px;border-bottom:1px solid var(--border-subtle);margin-bottom:8px}
   .cs-hero h1{font-size:24px}
   .cs-hero-sub{font-size:16px}
   .cs-section p{font-size:16px}
