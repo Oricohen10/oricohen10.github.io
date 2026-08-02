@@ -1,3 +1,4 @@
+@font-face{font-family:'VT323';font-style:normal;font-weight:400;font-display:swap;src:url('../Assets/fonts/VT323-Regular.ttf') format('truetype')}
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
 html,body{width:100%;height:100%;overflow:hidden}
 html,body,*{cursor:none!important}
@@ -478,7 +479,7 @@ i.ph,i.ph-bold,i.ph-fill,i.ph-light{line-height:1;display:flex;align-items:cente
 .term-win{background:var(--tbg)}
 .term-win .wh{background:var(--thdr);border-bottom:1px solid var(--thdr-bd)}
 .term-win .wb{background:var(--tbg);padding:14px 20px 28px}
-#tcon{font-family:Consolas,'Courier New',monospace;font-size:14.5px;line-height:1.75;color:var(--ttx)}
+#tcon{font-family:'VT323',Consolas,'Courier New',monospace;font-size:18px;line-height:1.7;color:var(--ttx)}
 .tline{white-space:pre-wrap;word-break:break-word}
 .tline.empty{height:.6em;display:block}
 .t-prompt{color:var(--tprompt);font-weight:700}
