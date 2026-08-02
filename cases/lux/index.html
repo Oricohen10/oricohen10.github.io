@@ -216,40 +216,12 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
     </div>
 
     <!-- Section 1: Background -->
-    <div class="cs-section cs-section--split cs-reveal">
-      <div class="cs-split-text">
-        <div class="cs-section-num">
-          <div class="cs-sec-title">Background</div>
-        </div>
-        <p>LUX 1.0 carried seven years of design debt. No tokens, no dark mode, no responsive design. The same "primary" button existed in four different hex values across the platform - none of them shared, all of them hardcoded directly into component stylesheets.</p>
-        <p>Rebuilding it became one of Verint's top-20 strategic goals. We started from scratch: a new token architecture, Verint's first motion library, full accessibility coverage, and dark mode.</p>
+    <div class="cs-section cs-reveal">
+      <div class="cs-section-num">
+        <div class="cs-sec-title">Background</div>
       </div>
-      <div class="cs-split-visual" aria-hidden="true">
-        <svg viewBox="0 0 296 196" xmlns="http://www.w3.org/2000/svg">
-          <rect width="296" height="196" fill="var(--surface-raised,#F5F5F5)"/>
-          <text x="148" y="20" text-anchor="middle" font-family="-apple-system,BlinkMacSystemFont,'Helvetica Neue',sans-serif" font-size="8.5" font-weight="700" letter-spacing=".1em" fill="var(--text-tertiary,#A1A1AA)">LUX 1.0 - HARDCODED VALUES</text>
-          <!-- Button 1 -->
-          <rect x="16" y="32" width="120" height="40" rx="8" fill="#005F8E"/>
-          <text x="76" y="50" text-anchor="middle" font-family="-apple-system,BlinkMacSystemFont,sans-serif" font-size="11" font-weight="600" fill="rgba(255,255,255,.9)">Action</text>
-          <text x="76" y="63" text-anchor="middle" font-family="'Courier New',Courier,monospace" font-size="9" fill="rgba(255,255,255,.6)">#005F8E</text>
-          <!-- Button 2 -->
-          <rect x="160" y="32" width="120" height="40" rx="8" fill="#0064CC"/>
-          <text x="220" y="50" text-anchor="middle" font-family="-apple-system,BlinkMacSystemFont,sans-serif" font-size="11" font-weight="600" fill="rgba(255,255,255,.9)">Action</text>
-          <text x="220" y="63" text-anchor="middle" font-family="'Courier New',Courier,monospace" font-size="9" fill="rgba(255,255,255,.6)">#0064CC</text>
-          <!-- Button 3 -->
-          <rect x="16" y="84" width="120" height="40" rx="8" fill="#18A0FB"/>
-          <text x="76" y="102" text-anchor="middle" font-family="-apple-system,BlinkMacSystemFont,sans-serif" font-size="11" font-weight="600" fill="rgba(255,255,255,.9)">Action</text>
-          <text x="76" y="115" text-anchor="middle" font-family="'Courier New',Courier,monospace" font-size="9" fill="rgba(255,255,255,.6)">#18A0FB</text>
-          <!-- Button 4 -->
-          <rect x="160" y="84" width="120" height="40" rx="8" fill="#336699"/>
-          <text x="220" y="102" text-anchor="middle" font-family="-apple-system,BlinkMacSystemFont,sans-serif" font-size="11" font-weight="600" fill="rgba(255,255,255,.9)">Action</text>
-          <text x="220" y="115" text-anchor="middle" font-family="'Courier New',Courier,monospace" font-size="9" fill="rgba(255,255,255,.6)">#336699</text>
-          <!-- Divider -->
-          <line x1="16" y1="143" x2="280" y2="143" stroke="var(--border-subtle,#E4E4E7)" stroke-width="1"/>
-          <text x="148" y="161" text-anchor="middle" font-family="-apple-system,BlinkMacSystemFont,sans-serif" font-size="11" fill="var(--text-secondary,#71717A)">The same "primary" button across 4 products.</text>
-          <text x="148" y="178" text-anchor="middle" font-family="-apple-system,BlinkMacSystemFont,sans-serif" font-size="11" fill="var(--text-secondary,#71717A)">4 different hex values. None of them tokens.</text>
-        </svg>
-      </div>
+      <p>LUX 1.0 carried seven years of design debt. No tokens. No dark mode. No responsive design. Accessibility gaps on nearly every component. It still worked - but it was starting to block product teams who needed to move faster and support more contexts.</p>
+      <p>Rebuilding it became one of Verint's top-20 strategic goals. We started from scratch: a new token architecture, Verint's first motion design library, full accessibility coverage, and dark mode - a first in the company's history.</p>
     </div>
 
     <!-- Section 2: Challenge -->
@@ -262,51 +234,12 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
     </div>
 
     <!-- Section 3: Solution -->
-    <div class="cs-section cs-section--split cs-section--flip cs-reveal">
-      <div class="cs-split-text">
-        <div class="cs-section-num">
-          <div class="cs-sec-title">Solution</div>
-        </div>
-        <p>I structured the work into 2-week sprints - system architecture first, then tokens, then components and patterns. A core team with weekly committee reviews kept quality consistent and unblocked decisions fast.</p>
-        <p>The pipeline from Figma to Storybook to GitHub runs fully automated - one token change in Figma, one PR, one merge. A designer changes a color and it's live in production without filing a ticket.</p>
+    <div class="cs-section cs-reveal">
+      <div class="cs-section-num">
+        <div class="cs-sec-title">Solution</div>
       </div>
-      <div class="cs-split-visual" aria-hidden="true">
-        <svg viewBox="0 0 296 168" xmlns="http://www.w3.org/2000/svg">
-          <rect width="296" height="168" fill="var(--surface-raised,#F5F5F5)"/>
-          <!-- Column labels -->
-          <text x="48" y="18" text-anchor="middle" font-family="-apple-system,BlinkMacSystemFont,'Helvetica Neue',sans-serif" font-size="8" font-weight="700" letter-spacing=".1em" fill="var(--text-tertiary,#A1A1AA)">PRIMITIVE</text>
-          <text x="160" y="18" text-anchor="middle" font-family="-apple-system,BlinkMacSystemFont,'Helvetica Neue',sans-serif" font-size="8" font-weight="700" letter-spacing=".1em" fill="var(--text-tertiary,#A1A1AA)">SEMANTIC</text>
-          <text x="257" y="18" text-anchor="middle" font-family="-apple-system,BlinkMacSystemFont,'Helvetica Neue',sans-serif" font-size="8" font-weight="700" letter-spacing=".1em" fill="var(--text-tertiary,#A1A1AA)">COMPONENT</text>
-          <!-- Box 1: Primitive -->
-          <rect x="8" y="26" width="80" height="74" rx="8" fill="var(--surface-default,#fff)" stroke="var(--border-subtle,#E4E4E7)" stroke-width="1"/>
-          <rect x="20" y="38" width="24" height="24" rx="6" fill="#18A0FB"/>
-          <text x="20" y="78" font-family="-apple-system,BlinkMacSystemFont,sans-serif" font-size="9.5" font-weight="700" fill="var(--text-primary,#18181B)">blue-400</text>
-          <text x="20" y="91" font-family="'Courier New',Courier,monospace" font-size="8.5" fill="var(--text-tertiary,#A1A1AA)">#18A0FB</text>
-          <!-- Arrow 1 -->
-          <line x1="90" y1="63" x2="110" y2="63" stroke="var(--border-default,#D4D4D8)" stroke-width="1.5"/>
-          <polygon points="110,59.5 118,63 110,66.5" fill="var(--border-default,#D4D4D8)"/>
-          <!-- Box 2: Semantic -->
-          <rect x="118" y="26" width="84" height="74" rx="8" fill="var(--surface-default,#fff)" stroke="var(--border-subtle,#E4E4E7)" stroke-width="1"/>
-          <rect x="130" y="38" width="24" height="24" rx="6" fill="rgba(98,72,232,.12)"/>
-          <text x="130" y="78" font-family="-apple-system,BlinkMacSystemFont,sans-serif" font-size="8.5" font-weight="700" fill="#6248E8">--action-</text>
-          <text x="130" y="91" font-family="-apple-system,BlinkMacSystemFont,sans-serif" font-size="8.5" font-weight="700" fill="#6248E8">  primary</text>
-          <!-- Arrow 2 -->
-          <line x1="204" y1="63" x2="220" y2="63" stroke="var(--border-default,#D4D4D8)" stroke-width="1.5"/>
-          <polygon points="220,59.5 228,63 220,66.5" fill="var(--border-default,#D4D4D8)"/>
-          <!-- Box 3: Components -->
-          <rect x="228" y="18" width="60" height="90" rx="8" fill="var(--surface-default,#fff)" stroke="var(--border-subtle,#E4E4E7)" stroke-width="1"/>
-          <rect x="236" y="28" width="44" height="20" rx="5" fill="#18A0FB"/>
-          <text x="258" y="42" text-anchor="middle" font-family="-apple-system,BlinkMacSystemFont,sans-serif" font-size="9" font-weight="600" fill="white">Button</text>
-          <rect x="236" y="54" width="44" height="20" rx="5" fill="rgba(24,160,251,.13)"/>
-          <text x="258" y="68" text-anchor="middle" font-family="-apple-system,BlinkMacSystemFont,sans-serif" font-size="9" font-weight="600" fill="#18A0FB">Badge</text>
-          <rect x="236" y="80" width="44" height="20" rx="5" fill="rgba(24,160,251,.06)"/>
-          <text x="258" y="94" text-anchor="middle" font-family="-apple-system,BlinkMacSystemFont,sans-serif" font-size="9" fill="var(--text-tertiary,#A1A1AA)">+38 more</text>
-          <!-- Divider -->
-          <line x1="8" y1="115" x2="288" y2="115" stroke="var(--border-subtle,#E4E4E7)" stroke-width="1"/>
-          <text x="148" y="133" text-anchor="middle" font-family="-apple-system,BlinkMacSystemFont,sans-serif" font-size="11" fill="var(--text-secondary,#71717A)">Change one primitive in Figma.</text>
-          <text x="148" y="150" text-anchor="middle" font-family="-apple-system,BlinkMacSystemFont,sans-serif" font-size="11" font-weight="600" fill="var(--text-primary,#18181B)">Every component across 40+ products updates.</text>
-        </svg>
-      </div>
+      <p>I structured the work into 2-week sprints - system architecture first, then tokens, then components and patterns. I didn't run it alone: a core team with weekly committee reviews kept quality consistent and unblocked decisions fast.</p>
+      <p>Alongside the component library, we built Verint's first motion design library - easing curves, duration tokens, and micro-animation specs for every interaction state. The pipeline from Figma to Storybook to GitHub runs fully automated - one token change in Figma, one PR, one merge.</p>
     </div>
 
     <!-- Stat cards -->
@@ -338,42 +271,12 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
     </div>
 
     <!-- Section 4: Result -->
-    <div class="cs-section cs-section--split cs-reveal">
-      <div class="cs-split-text">
-        <div class="cs-section-num">
-          <div class="cs-sec-title">Result</div>
-        </div>
-        <p>LUX 2.0 is live across 40+ Verint products. Zero hardcoded values in the system. Product teams that once waited days for a color fix now merge it themselves in under a minute - no ticket, no developer, no delay.</p>
-        <p>Dark mode shipped on day one - the first in Verint's history. The motion library gave every product team a shared language for animation. For the first time, every interaction across the platform follows the same timing, the same easing, the same spec.</p>
+    <div class="cs-section cs-reveal">
+      <div class="cs-section-num">
+        <div class="cs-sec-title">Result</div>
       </div>
-      <div class="cs-split-visual" aria-hidden="true">
-        <svg viewBox="0 0 296 188" xmlns="http://www.w3.org/2000/svg">
-          <rect width="296" height="188" fill="var(--surface-raised,#F5F5F5)"/>
-          <text x="148" y="18" text-anchor="middle" font-family="-apple-system,BlinkMacSystemFont,'Helvetica Neue',sans-serif" font-size="8.5" font-weight="700" letter-spacing=".1em" fill="var(--text-tertiary,#A1A1AA)">FIRST DARK MODE IN VERINT'S HISTORY</text>
-          <!-- Light card -->
-          <rect x="12" y="26" width="128" height="118" rx="10" fill="#FFFFFF" stroke="#E4E4E7" stroke-width="1"/>
-          <rect x="24" y="40" width="52" height="8" rx="4" fill="#E4E4E7"/>
-          <rect x="24" y="54" width="92" height="7" rx="3.5" fill="#F1F5F9"/>
-          <rect x="24" y="66" width="74" height="7" rx="3.5" fill="#F1F5F9"/>
-          <rect x="24" y="78" width="60" height="7" rx="3.5" fill="#F1F5F9"/>
-          <rect x="24" y="98" width="70" height="28" rx="7" fill="#18A0FB"/>
-          <text x="59" y="116" text-anchor="middle" font-family="-apple-system,BlinkMacSystemFont,sans-serif" font-size="10" font-weight="600" fill="white">Action</text>
-          <text x="76" y="160" text-anchor="middle" font-family="-apple-system,BlinkMacSystemFont,sans-serif" font-size="9.5" fill="var(--text-tertiary,#A1A1AA)">LIGHT</text>
-          <!-- Center divider -->
-          <line x1="148" y1="26" x2="148" y2="150" stroke="var(--border-subtle,#E4E4E7)" stroke-width="1" stroke-dasharray="4,3"/>
-          <!-- Dark card -->
-          <rect x="156" y="26" width="128" height="118" rx="10" fill="#18181B" stroke="rgba(255,255,255,.08)" stroke-width="1"/>
-          <rect x="168" y="40" width="52" height="8" rx="4" fill="#2D2D30"/>
-          <rect x="168" y="54" width="92" height="7" rx="3.5" fill="#252528"/>
-          <rect x="168" y="66" width="74" height="7" rx="3.5" fill="#252528"/>
-          <rect x="168" y="78" width="60" height="7" rx="3.5" fill="#252528"/>
-          <rect x="168" y="98" width="70" height="28" rx="7" fill="#18A0FB"/>
-          <text x="203" y="116" text-anchor="middle" font-family="-apple-system,BlinkMacSystemFont,sans-serif" font-size="10" font-weight="600" fill="white">Action</text>
-          <text x="220" y="160" text-anchor="middle" font-family="-apple-system,BlinkMacSystemFont,sans-serif" font-size="9.5" fill="var(--text-tertiary,#A1A1AA)">DARK</text>
-          <!-- Caption -->
-          <text x="148" y="178" text-anchor="middle" font-family="-apple-system,BlinkMacSystemFont,sans-serif" font-size="11" fill="var(--text-secondary,#71717A)">Same tokens. Zero theme-specific code.</text>
-        </svg>
-      </div>
+      <p>LUX 2.0 is live across 40+ Verint products. Zero hardcoded values in the system. Product teams that once waited days for a color fix now merge it themselves in under a minute - no ticket, no developer, no delay.</p>
+      <p>Dark mode shipped on day one - the first in Verint's history. The motion library gave every product team a shared language for animation that hadn't existed before. For the first time, every interaction across the platform follows the same timing, the same easing, the same spec.</p>
     </div>
 
     <!-- AI Usage -->
