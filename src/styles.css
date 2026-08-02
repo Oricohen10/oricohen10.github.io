@@ -479,7 +479,7 @@ i.ph,i.ph-bold,i.ph-fill,i.ph-light{line-height:1;display:flex;align-items:cente
 .term-win{background:var(--tbg)}
 .term-win .wh{background:var(--thdr);border-bottom:1px solid var(--thdr-bd)}
 .term-win .wb{background:var(--tbg);padding:14px 20px 28px}
-#tcon{font-family:'VT323',Consolas,'Courier New',monospace;font-size:18px;line-height:1.7;color:var(--ttx)}
+#tcon{font-family:'VT323',Consolas,'Courier New',monospace;font-size:22px;line-height:1.65;color:var(--ttx)}
 .tline{white-space:pre-wrap;word-break:break-word}
 .tline.empty{height:.6em;display:block}
 .t-prompt{color:var(--tprompt);font-weight:700}
