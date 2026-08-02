@@ -322,6 +322,17 @@ button{cursor:pointer;font-family:inherit}
 .cs-section p:last-child{margin-bottom:0}
 .cs-section p strong{color:var(--text-primary);font-weight:600}
 
+/* ── Split sections ──────────────────────────────────────────────────────── */
+.cs-section--split{display:grid;grid-template-columns:1fr 1fr;gap:36px;align-items:center}
+.cs-split-text{min-width:0}
+.cs-split-visual{border-radius:14px;overflow:hidden;border:1px solid var(--border-subtle)}
+.cs-split-visual svg{display:block;width:100%;height:auto}
+.cs-section--flip .cs-split-visual{order:-1}
+@media(max-width:580px){
+  .cs-section--split{grid-template-columns:1fr;gap:20px}
+  .cs-section--flip .cs-split-visual{order:0}
+}
+
 /* ── Plugin blocks ────────────────────────────────────────────────────────── */
 .plugins-list{
   display:flex;flex-direction:column;gap:16px;
