@@ -476,25 +476,27 @@ i.ph,i.ph-bold,i.ph-fill,i.ph-light{line-height:1;display:flex;align-items:cente
 /* ════════════════════════════════════
    TERMINAL  —  real terminal style
 ════════════════════════════════════ */
-.term-win{background:var(--tbg)}
-.term-win .wh{background:var(--thdr);border-bottom:1px solid var(--thdr-bd)}
-.term-win .wb{background:var(--tbg);padding:14px 20px 28px}
-#tcon{font-family:'VT323',Consolas,'Courier New',monospace;font-size:22px;line-height:1.65;color:var(--ttx)}
+.term-win{background:#0C0C0C!important}
+.term-win .wh{background:#111!important;border-bottom:1px solid #1C3A1C!important}
+.term-win .wt{color:#3D6B3D!important}
+.term-win .wb{background:#0C0C0C!important;padding:14px 20px 28px;position:relative}
+.term-win .wb::after{content:'';position:absolute;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 3px,rgba(0,0,0,.06) 3px,rgba(0,0,0,.06) 4px);pointer-events:none;z-index:1}
+#tcon{font-family:'VT323',Consolas,'Courier New',monospace;font-size:22px;line-height:1.65;color:#B8F0B0;text-shadow:0 0 5px rgba(100,220,80,.2)}
 .tline{white-space:pre-wrap;word-break:break-word}
 .tline.empty{height:.6em;display:block}
-.t-prompt{color:var(--tprompt);font-weight:700}
-.t-grey{color:var(--tgrey)}
-.t-cmd{color:var(--ttx)}
-.t-key{color:var(--tkey)}
-.t-str{color:var(--tstr)}
-.t-num{color:#1C00CF}
-[data-theme="dark"] .t-num{color:#BD93F9}
-.t-dir{color:var(--tdir);font-weight:700}
-.tlink{color:var(--tlink);text-decoration:none}
+.t-prompt{color:#5EE85E;font-weight:700;text-shadow:0 0 8px rgba(94,232,94,.5)}
+.t-grey{color:#3D6B3D}
+.t-cmd{color:#D0F0D0}
+.t-key{color:#B8F0B0}
+.t-str{color:#7FE87F}
+.t-num{color:#A8FF40;text-shadow:0 0 6px rgba(168,255,64,.35)}
+[data-theme="dark"] .t-num{color:#A8FF40}
+.t-dir{color:#5EE85E;font-weight:700}
+.tlink{color:#5EE85E;text-decoration:none}
 .tlink:hover{text-decoration:underline}
-.tcur{display:inline-block;width:7px;height:13px;background:var(--tprompt);vertical-align:text-bottom;animation:blink .9s step-end infinite;margin-left:1px}
+.tcur{display:inline-block;width:10px;height:18px;background:#5EE85E;vertical-align:text-bottom;animation:blink .9s step-end infinite;margin-left:1px;box-shadow:0 0 6px #5EE85E}
 @keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
-.t-login{color:var(--tgrey);font-size:12px}
+.t-login{color:#2D4D2D;font-size:1em}
 
 /* ── Ghost cursors — atmospheric on canvas, below all chrome ── */
 #ghost-layer{position:fixed;top:0;left:0;width:100vw;height:100vh;pointer-events:none;z-index:510;overflow:hidden}
