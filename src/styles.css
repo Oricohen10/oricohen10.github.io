@@ -477,24 +477,29 @@ i.ph,i.ph-bold,i.ph-fill,i.ph-light{line-height:1;display:flex;align-items:cente
 
 /* ════════════════════════════════════
    TERMINAL  —  about terminal
-   Dark charcoal bg, amber accents (inspired by Steve Folkes)
+   Dark bg, Consolas body, Press Start 2P headers, purple accent
 ════════════════════════════════════ */
 .term-win .wb{padding:14px 20px 28px;background:#2b2b2b}
-#tcon{font-family:'VT323',Consolas,'Courier New',monospace;font-size:22px;line-height:1.65;color:#e5e5e5}
+#tcon{font-family:Consolas,'Courier New',monospace;font-size:14px;line-height:1.85;color:#e5e5e5}
 .tline{white-space:pre-wrap;word-break:break-word}
-.tline.empty{height:.6em;display:block}
-.t-prompt{color:#ffaa55;font-weight:700}
-.t-grey{color:#949494}
+.tline.empty{height:.5em;display:block}
+.t-prompt{color:#9F8AFF;font-weight:700}
+.t-grey{color:#848484}
 .t-cmd{color:#e5e5e5}
 .t-key{color:#c084fc}
 .t-str{color:#4ade80}
-.t-num{color:#c084fc}
-.t-dir{color:#ffaa55;font-weight:700}
+.t-num{color:#9F8AFF}
+/* Press Start 2P — section headers */
+.t-dir{font-family:'Press Start 2P',monospace;font-size:11px;color:#9F8AFF;display:block;padding:10px 0 4px}
+/* Press Start 2P — main name title */
+.t-name{font-family:'Press Start 2P',monospace;font-size:14px;color:#9F8AFF;display:block;padding:6px 0}
+/* Decorative ════ lines */
+.t-deco{color:#9F8AFF;opacity:.6}
 .tlink{color:#60a5fa;text-decoration:none}
 .tlink:hover{text-decoration:underline}
-.tcur{display:inline-block;width:10px;height:18px;background:#ffaa55;vertical-align:text-bottom;animation:blink .9s step-end infinite;margin-left:1px}
+.tcur{display:inline-block;width:9px;height:14px;background:#9F8AFF;vertical-align:text-bottom;animation:blink .9s step-end infinite;margin-left:1px}
 @keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
-.t-login{color:#949494;font-size:1em}
+.t-login{color:#848484}
 
 /* ── Ghost cursors — atmospheric on canvas, below all chrome ── */
 #ghost-layer{position:fixed;top:0;left:0;width:100vw;height:100vh;pointer-events:none;z-index:510;overflow:hidden}

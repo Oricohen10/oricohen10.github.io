@@ -546,8 +546,8 @@ function openWin(id) {
   const b = document.getElementById('nav-' + id);
   if (b) b.classList.add('on');
   if (id === 'about' && !window._termStarted) startTerm();
-  /* Load Press Start 2P font on first A11y game open */
-  if (id === 'a11y' && !window._psfLoaded) {
+  /* Load Press Start 2P for About terminal + A11y game */
+  if ((id === 'about' || id === 'a11y') && !window._psfLoaded) {
     window._psfLoaded = true;
     const lk = document.createElement('link');
     lk.rel = 'stylesheet'; lk.crossOrigin = 'anonymous';
@@ -723,16 +723,16 @@ const TERM = [
   {h:'<span class="t-login">Last login: Wed Jul 22 11:42:33 on ttys003</span>'},
   {h:''},
   {h:'<span class="t-prompt">ori@portfolio</span> <span class="t-grey">~</span> <span class="t-prompt">%</span> <span class="t-cmd">cat about.txt</span>', pause:120},
-  {h:'<span class="t-dir">╔══════════════════════════════════════╗</span>'},
-  {h:'<span class="t-dir">║  ░▒▓   ORI COHEN · DESIGN LEAD   ▓▒░  ║</span>'},
-  {h:'<span class="t-dir">╚══════════════════════════════════════╝</span>'},
+  {h:'<span class="t-deco">════════════════════════════════════════════════════════</span>'},
+  {h:'<span class="t-name">ORI COHEN · DESIGN LEAD</span>'},
+  {h:'<span class="t-deco">════════════════════════════════════════════════════════</span>'},
   {h:''},
   {h:'Product Design Lead with <span class="t-num">5+</span> years shipping enterprise SaaS at scale.'},
   {h:'Systems thinker, hands-on maker - the person who closes'},
   {h:'the gap between design and engineering.'},
   {h:''},
   {h:'<span class="t-prompt">ori@portfolio</span> <span class="t-grey">~</span> <span class="t-prompt">%</span> <span class="t-cmd">cat background.txt</span>', pause:90},
-  {h:'<span class="t-dir">══ BACKGROUND ═══════════════════════════════════</span>'},
+  {h:'<span class="t-dir">BACKGROUND</span>'},
   {h:''},
   {h:'<span class="t-prompt">Product Designer → Design Team Lead · Verint</span>'},
   {h:'<span class="t-grey">2022–Present</span>'},
@@ -755,7 +755,7 @@ const TERM = [
   {h:'discretion, and close attention to detail.'},
   {h:''},
   {h:'<span class="t-prompt">ori@portfolio</span> <span class="t-grey">~</span> <span class="t-prompt">%</span> <span class="t-cmd">cat currently.txt</span>', pause:90},
-  {h:'<span class="t-dir">══ CURRENTLY ════════════════════════════════════</span>'},
+  {h:'<span class="t-dir">CURRENTLY</span>'},
   {h:''},
   {h:'Design Team Lead at <a class="tlink" href="https://verint.com" target="_blank">Verint</a>. I design for contact center agents'},
   {h:'by day and build internal tools and AI workflows for my team'},
