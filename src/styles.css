@@ -477,9 +477,9 @@ i.ph,i.ph-bold,i.ph-fill,i.ph-light{line-height:1;display:flex;align-items:cente
 
 /* ════════════════════════════════════
    TERMINAL  —  about terminal
-   Dark bg, Consolas body, Press Start 2P headers, purple accent
+   Dark bg, Consolas body, ansi_shadow ASCII art headers, purple accent
 ════════════════════════════════════ */
-.term-win .wb{padding:14px 20px 28px;background:#2b2b2b}
+.term-win .wb{padding:14px 20px 28px;background:#2b2b2b;overflow-x:auto}
 #tcon{font-family:Consolas,'Courier New',monospace;font-size:14px;line-height:1.85;color:#e5e5e5}
 .tline{white-space:pre-wrap;word-break:break-word}
 .tline.empty{height:.5em;display:block}
@@ -489,10 +489,10 @@ i.ph,i.ph-bold,i.ph-fill,i.ph-light{line-height:1;display:flex;align-items:cente
 .t-key{color:#c084fc}
 .t-str{color:#4ade80}
 .t-num{color:#9F8AFF}
-/* Press Start 2P — section headers */
-.t-dir{font-family:'Press Start 2P',monospace;font-size:11px;color:#9F8AFF;display:block;padding:10px 0 4px}
-/* Press Start 2P — main name title */
-.t-name{font-family:'Press Start 2P',monospace;font-size:14px;color:#9F8AFF;display:block;padding:6px 0}
+/* ansi_shadow figlet — ASCII art headers, one row per .tline */
+.t-dir{font-family:Consolas,'Courier New',monospace;font-size:13px;color:#9F8AFF;display:block;line-height:1.1;white-space:pre}
+/* Subtitle below ASCII art name */
+.t-name{color:#9F8AFF;display:block;padding:2px 0 6px;font-size:13px}
 /* Decorative ════ lines */
 .t-deco{color:#9F8AFF;opacity:.6}
 .tlink{color:#60a5fa;text-decoration:none}
