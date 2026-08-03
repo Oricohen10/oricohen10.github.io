@@ -491,6 +491,8 @@ i.ph,i.ph-bold,i.ph-fill,i.ph-light{line-height:1;display:flex;align-items:cente
 .t-num{color:#9F8AFF}
 /* ansi_shadow figlet — ASCII art headers, one row per .tline */
 .t-dir{font-family:Consolas,'Courier New',monospace;font-size:11px;color:#9F8AFF;display:block;line-height:1.15;white-space:pre}
+/* Section separator lines — BACKGROUND / CURRENTLY */
+.t-sec{font-family:Consolas,'Courier New',monospace;font-size:14px;color:#9F8AFF;display:block;white-space:pre;letter-spacing:.04em}
 /* Subtitle below ASCII art name */
 .t-name{color:#9F8AFF;display:block;padding:3px 0 8px}
 .tlink{color:#60a5fa;text-decoration:none}
