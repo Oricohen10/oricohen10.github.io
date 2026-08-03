@@ -477,30 +477,24 @@ i.ph,i.ph-bold,i.ph-fill,i.ph-light{line-height:1;display:flex;align-items:cente
 
 /* ════════════════════════════════════
    TERMINAL  —  about terminal
+   Dark charcoal bg, amber accents (inspired by Steve Folkes)
 ════════════════════════════════════ */
-.term-win .wb{padding:14px 20px 28px}
-#tcon{font-family:'VT323',Consolas,'Courier New',monospace;font-size:22px;line-height:1.65;color:var(--tx)}
+.term-win .wb{padding:14px 20px 28px;background:#2b2b2b}
+#tcon{font-family:'VT323',Consolas,'Courier New',monospace;font-size:22px;line-height:1.65;color:#e5e5e5}
 .tline{white-space:pre-wrap;word-break:break-word}
 .tline.empty{height:.6em;display:block}
-.t-prompt{color:#0664a8;font-weight:700}
-.t-grey{color:var(--tx3)}
-.t-cmd{color:var(--tx)}
-.t-key{color:#7c3aed}
-.t-str{color:#047857}
-.t-num{color:#7c3aed}
-.t-dir{color:#0e7490;font-weight:700}
-.tlink{color:#0664a8;text-decoration:none}
+.t-prompt{color:#ffaa55;font-weight:700}
+.t-grey{color:#949494}
+.t-cmd{color:#e5e5e5}
+.t-key{color:#c084fc}
+.t-str{color:#4ade80}
+.t-num{color:#c084fc}
+.t-dir{color:#ffaa55;font-weight:700}
+.tlink{color:#60a5fa;text-decoration:none}
 .tlink:hover{text-decoration:underline}
-.tcur{display:inline-block;width:10px;height:18px;background:#0664a8;vertical-align:text-bottom;animation:blink .9s step-end infinite;margin-left:1px}
+.tcur{display:inline-block;width:10px;height:18px;background:#ffaa55;vertical-align:text-bottom;animation:blink .9s step-end infinite;margin-left:1px}
 @keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
-.t-login{color:var(--tx3);font-size:1em}
-[data-theme="dark"] .t-prompt{color:#60a5fa}
-[data-theme="dark"] .t-key{color:#c084fc}
-[data-theme="dark"] .t-str{color:#4ade80}
-[data-theme="dark"] .t-num{color:#c084fc}
-[data-theme="dark"] .t-dir{color:#22d3ee}
-[data-theme="dark"] .tlink{color:#60a5fa}
-[data-theme="dark"] .tcur{background:#60a5fa}
+.t-login{color:#949494;font-size:1em}
 
 /* ── Ghost cursors — atmospheric on canvas, below all chrome ── */
 #ghost-layer{position:fixed;top:0;left:0;width:100vw;height:100vh;pointer-events:none;z-index:510;overflow:hidden}
