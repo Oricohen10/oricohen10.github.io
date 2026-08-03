@@ -38,6 +38,15 @@ button{cursor:pointer;font-family:inherit}
   border:1px solid var(--border-subtle);
   border-radius:var(--r-xl);
 }
+/* Image carousels: light surface bg + clickable cursor */
+.carousel-wrap[data-lightbox="image"]{background:var(--surface-raised)}
+.carousel-wrap[data-lightbox="image"] .carousel-slide{cursor:pointer}
+
+/* ── Placeholder SVG — token-backed ──────────────────────────────────────── */
+/* Wrap SVG in a <div class="cs-placeholder-img"> to get themed fill/stroke */
+.cs-placeholder-img svg{width:100%;height:100%;display:block}
+.cs-placeholder-img .ph-bg{fill:var(--surface-raised)}
+.cs-placeholder-img .ph-icon{fill:none;stroke:var(--border-default);stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
 .carousel-track{
   display:flex;
   transition:transform .38s cubic-bezier(.4,0,.2,1);

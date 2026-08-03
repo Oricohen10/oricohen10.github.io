@@ -36,10 +36,6 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
 /* Scroll-to-top: bright purple bg needs dark icon for 3:1 contrast */
 [data-theme="dark"] #scroll-top { color: #1a1a1a; }
 
-/* -- Carousel overrides for image slides -------------------------------- */
-.carousel-wrap{background:var(--surface-raised)}
-.carousel-slide{cursor:pointer}
-
 /* -- Chip variant ------------------------------------------------------- */
 .chip--system{background:rgba(91,63,199,.1);color:#5b3fc7}
 [data-theme="dark"] .chip--system{background:rgba(167,139,250,.14);color:#a78bfa}
@@ -114,59 +110,67 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
 
 <!-- Carousel -->
 <div class="carousel-shell">
-<div class="carousel-wrap" id="carousel" data-total="4">
+<div class="carousel-wrap" id="carousel" data-total="4" data-lightbox="image">
   <div class="carousel-track" id="carousel-track">
 
     <!-- Slide 1: Add Tool Provider dialog -->
-    <div class="carousel-slide" title="Coming soon">
-      <svg viewBox="0 0 960 420" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%;background:#f0f0f0">
-        <rect width="960" height="420" fill="#EBEBEB"/>
-        <g transform="translate(480,210)" fill="none" stroke="#BFBFBF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
-          <rect x="-28" y="-22" width="56" height="44" rx="4"/>
-          <circle cx="-9" cy="-5" r="7"/>
-          <polyline points="28,22 10,-4 -14,22"/>
-          <polyline points="-14,22 -22,10 -28,22"/>
-        </g>
-      </svg>
+    <div class="carousel-slide" onclick="openLightbox(0)" title="Click to expand">
+      <div class="cs-placeholder-img">
+        <svg viewBox="0 0 960 420" xmlns="http://www.w3.org/2000/svg">
+          <rect class="ph-bg" width="960" height="420"/>
+          <g class="ph-icon" transform="translate(480,210)">
+            <rect x="-28" y="-22" width="56" height="44" rx="4"/>
+            <circle cx="-9" cy="-5" r="7"/>
+            <polyline points="28,22 10,-4 -14,22"/>
+            <polyline points="-14,22 -22,10 -28,22"/>
+          </g>
+        </svg>
+      </div>
     </div>
 
     <!-- Slide 2: Tool Discovery detail -->
-    <div class="carousel-slide" title="Coming soon">
-      <svg viewBox="0 0 960 420" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%;background:#f0f0f0">
-        <rect width="960" height="420" fill="#EBEBEB"/>
-        <g transform="translate(480,210)" fill="none" stroke="#BFBFBF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
-          <rect x="-28" y="-22" width="56" height="44" rx="4"/>
-          <circle cx="-9" cy="-5" r="7"/>
-          <polyline points="28,22 10,-4 -14,22"/>
-          <polyline points="-14,22 -22,10 -28,22"/>
-        </g>
-      </svg>
+    <div class="carousel-slide" onclick="openLightbox(1)" title="Click to expand">
+      <div class="cs-placeholder-img">
+        <svg viewBox="0 0 960 420" xmlns="http://www.w3.org/2000/svg">
+          <rect class="ph-bg" width="960" height="420"/>
+          <g class="ph-icon" transform="translate(480,210)">
+            <rect x="-28" y="-22" width="56" height="44" rx="4"/>
+            <circle cx="-9" cy="-5" r="7"/>
+            <polyline points="28,22 10,-4 -14,22"/>
+            <polyline points="-14,22 -22,10 -28,22"/>
+          </g>
+        </svg>
+      </div>
     </div>
 
     <!-- Slide 3: Dark Mode -->
     <div class="carousel-slide" onclick="openLightbox(2)" title="Click to expand">
-      <svg viewBox="0 0 960 420" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%;background:#f0f0f0">
-        <rect width="960" height="420" fill="#EBEBEB"/>
-        <g transform="translate(480,210)" fill="none" stroke="#BFBFBF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
-          <rect x="-28" y="-22" width="56" height="44" rx="4"/>
-          <circle cx="-9" cy="-5" r="7"/>
-          <polyline points="28,22 10,-4 -14,22"/>
-          <polyline points="-14,22 -22,10 -28,22"/>
-        </g>
-      </svg>
+      <div class="cs-placeholder-img">
+        <svg viewBox="0 0 960 420" xmlns="http://www.w3.org/2000/svg">
+          <rect class="ph-bg" width="960" height="420"/>
+          <g class="ph-icon" transform="translate(480,210)">
+            <rect x="-28" y="-22" width="56" height="44" rx="4"/>
+            <circle cx="-9" cy="-5" r="7"/>
+            <polyline points="28,22 10,-4 -14,22"/>
+            <polyline points="-14,22 -22,10 -28,22"/>
+          </g>
+        </svg>
+      </div>
     </div>
 
     <!-- Slide 4: Motion Library -->
     <div class="carousel-slide" onclick="openLightbox(3)" title="Click to expand">
-      <svg viewBox="0 0 960 420" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%;background:#f0f0f0">
-        <rect width="960" height="420" fill="#EBEBEB"/>
-        <g transform="translate(480,210)" fill="none" stroke="#BFBFBF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
-          <rect x="-28" y="-22" width="56" height="44" rx="4"/>
-          <circle cx="-9" cy="-5" r="7"/>
-          <polyline points="28,22 10,-4 -14,22"/>
-          <polyline points="-14,22 -22,10 -28,22"/>
-        </g>
-      </svg>
+      <div class="cs-placeholder-img">
+        <svg viewBox="0 0 960 420" xmlns="http://www.w3.org/2000/svg">
+          <rect class="ph-bg" width="960" height="420"/>
+          <g class="ph-icon" transform="translate(480,210)">
+            <rect x="-28" y="-22" width="56" height="44" rx="4"/>
+            <circle cx="-9" cy="-5" r="7"/>
+            <polyline points="28,22 10,-4 -14,22"/>
+            <polyline points="-14,22 -22,10 -28,22"/>
+          </g>
+        </svg>
+      </div>
     </div>
 
   </div><!-- /track -->
