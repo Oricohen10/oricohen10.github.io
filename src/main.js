@@ -5,14 +5,22 @@ if (!isDesktop) document.getElementById('app').style.display = 'none';
 let _lastBreakpoint = isDesktop ? 'desktop' : 'mobile';
 window.addEventListener('resize', () => {
   const now = window.innerWidth >= 768 ? 'desktop' : 'mobile';
-  if (now === _lastBreakpoint) return;
+  if (now === _lastBreakpoint) {
+    if (now === 'desktop') centerFrame();
+    return;
+  }
   _lastBreakpoint = now;
   const app = document.getElementById('app');
   if (now === 'desktop') {
     app.style.display = 'flex';  // explicit — CSS cascade alone isn't reliable here
-    // .mv-page elements are position:fixed siblings of #mv (not children), so the
-    // CSS media query hiding #mv doesn't hide them. Skip the slide-out transition
-    // so they vanish instantly instead of covering desktop for 300ms.
+    // Clear any counter-zoom inline styles left by mobile pinch-zoom
+    app.style.transform = '';
+    app.style.transformOrigin = '';
+    app.style.width = '';
+    app.style.height = '';
+    // Close and clean up all mobile pages.
+    // Note: a @media(min-width:768px) CSS rule also forces display:none on .mv-page
+    // and #mv-menu as a belt-and-suspenders guarantee they never cover the canvas.
     ['portfolio','about','contact'].forEach(id => {
       const p = document.getElementById('mv-page-' + id);
       if (!p) return;
@@ -45,6 +53,11 @@ window.addEventListener('resize', () => {
   } else {
     app.style.display = 'none';
     closeAllWins();           // close any open desktop windows
+    // Cancel any running terminal animation chain and reset for next mobile visit
+    window._mvTermGen = (window._mvTermGen || 0) + 1; // invalidates all in-flight next() callbacks
+    window._mvTermStarted = false;
+    const con = document.getElementById('mv-tcon');
+    if (con) con.innerHTML = '';
   }
 });
 
@@ -192,7 +205,12 @@ function tick() {
   document.getElementById('tb-clock').textContent = new Date().toLocaleTimeString('he-IL',
     {hour:'2-digit',minute:'2-digit',hour12:false,timeZone:'Asia/Jerusalem'});
 }
-tick(); setInterval(tick, 1000);
+tick();
+let _clockIv = setInterval(tick, 1000);
+document.addEventListener('visibilitychange', () => {
+  if (document.hidden) { clearInterval(_clockIv); _clockIv = null; }
+  else { tick(); _clockIv = setInterval(tick, 1000); }
+});
 
 /* ── Cursor — Figma-style 3-state system ── */
 const curEl  = document.getElementById('cursor');
@@ -341,6 +359,39 @@ function setZoom(z, cx, cy) {
   panY = oy - (oy - panY) * (zoom / oldZ);
   applyCanvas();
 }
+
+/* Reset to 100% and re-center on the frontmost open window */
+function resetZoom() {
+  const openWins = Array.from(document.querySelectorAll('.win'))
+    .filter(w => w.style.display === 'flex')
+    .sort((a, b) => (+b.style.zIndex || 0) - (+a.style.zIndex || 0));
+  if (openWins.length) {
+    zoom = 1;
+    const ca = canvasEl.getBoundingClientRect();
+    const w = openWins[0];
+    const wL = parseFloat(w.style.left) || 0;
+    const wT = parseFloat(w.style.top)  || 0;
+    panX = ca.width  / 2 - (wL + w.offsetWidth  / 2);
+    panY = ca.height / 2 - (wT + w.offsetHeight / 2);
+    applyCanvas();
+  } else {
+    centerFrame(); // no wins open — center the welcome frame
+  }
+}
+
+/* Escape closes the topmost open window */
+window.addEventListener('keydown', e => {
+  if (e.key !== 'Escape') return;
+  if (e.target.matches('input,textarea,select')) return;
+  const bg = document.getElementById('modal-bg');
+  if (bg && bg.style.display !== 'none') return; // name modal open
+  const wins = Array.from(document.querySelectorAll('.win'))
+    .filter(w => w.style.display === 'flex')
+    .sort((a, b) => (+b.style.zIndex || 0) - (+a.style.zIndex || 0));
+  if (!wins.length) return;
+  e.preventDefault();
+  closeWin(wins[0].id.replace('win-', ''));
+});
 
 /* Wheel / trackpad:
    - Pinch (ctrlKey) = zoom, more responsive
@@ -492,6 +543,19 @@ function clamp(v, lo, hi) { return Math.max(lo, Math.min(hi, v)); }
 window.addEventListener('load', () => {
   applyFrame();
   centerFrame();
+  // If returning from a case study on mobile, open the projects page
+  if (window.location.hash === '#projects' && window.innerWidth < 768) {
+    mvPageOpen('portfolio');
+    history.replaceState(null, '', window.location.pathname);
+  }
+  // Accessibility: patch .wc (window control) divs with role/keyboard support
+  document.querySelectorAll('.wc').forEach(function(el) {
+    el.setAttribute('role', 'button');
+    el.setAttribute('tabindex', '0');
+    el.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); el.click(); }
+    });
+  });
 });
 
 /* ════════════════════════════════════
@@ -730,7 +794,9 @@ const TERM = [
   {h:'<span class="t-dir">██║   ██║██╔══██╗██║    ██║     ██║   ██║██╔══██║██╔══╝  ██║╚██╗██║</span>'},
   {h:'<span class="t-dir">╚██████╔╝██║  ██║██║    ╚██████╗╚██████╔╝██║  ██║███████╗██║ ╚████║</span>'},
   {h:'<span class="t-dir"> ╚═════╝ ╚═╝  ╚═╝╚═╝     ╚═════╝ ╚═════╝ ╚═╝  ╚═╝╚══════╝╚═╝  ╚═══╝</span>'},
-  {h:'<span class="t-name">Design Lead · Verint</span>'},
+  {h:'<span class="t-banner">╔════════════════════════════════════════════════════════════════╗</span>'},
+  {h:'<span class="t-banner">║  ▓▓▒░   DESIGN TEAM LEAD  ·  5+ YEARS  ENTERPRISE SAAS   ░▒▓▓  ║</span>'},
+  {h:'<span class="t-banner">╚════════════════════════════════════════════════════════════════╝</span>'},
   {h:''},
   {h:'I spent three years in classified security at the Prime'},
   {h:'Minister\'s office before I ever opened Figma.'},
@@ -816,15 +882,18 @@ function startTerm() {
    MOBILE TERMINAL (About page)
 ════════════════════════════════════ */
 window._mvTermStarted = false;
+window._mvTermGen = 0;
 
 function startMvTerm() {
   if (window._mvTermStarted) return;
   window._mvTermStarted = true;
+  const myGen = ++window._mvTermGen; // generation token — if reset() fires, gen increments and this chain bails
   const con = document.getElementById('mv-tcon');
   const wb  = document.getElementById('mv-term');
   if (!con || !wb) return;
   let i = 0;
   function next() {
+    if (window._mvTermGen !== myGen) return; // cancelled — a newer reset happened, bail silently
     if (i >= TERM.length) return;
     const item = TERM[i++];
     const div = document.createElement('div');

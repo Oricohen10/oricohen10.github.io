@@ -10,7 +10,7 @@
 
 /* ── Reset ────────────────────────────────────────────────────────────────── */
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-html{scroll-behavior:smooth}
+html{scroll-behavior:smooth;overflow-x:hidden}
 body{
   font-family:var(--font-sans);
   background:var(--surface-default);
@@ -182,14 +182,17 @@ button{cursor:pointer;font-family:inherit}
 @keyframes lbxIn{from{opacity:0}to{opacity:1}}
 .lbx-inner{
   position:relative;
-  max-width:calc(100vw - 80px);
+  max-width:calc(100vw - 120px);
   max-height:calc(100vh - 60px);
   display:flex;align-items:center;justify-content:center;
 }
 .lbx-inner svg,
 .lbx-inner img{
+  width:auto;
+  height:auto;
   max-width:100%;
   max-height:calc(100vh - 60px);
+  object-fit:contain;
   border-radius:6px;
   box-shadow:0 8px 60px rgba(0,0,0,.6);
   display:block;
@@ -211,17 +214,19 @@ button{cursor:pointer;font-family:inherit}
   position:fixed;top:50%;transform:translateY(-50%);
   width:42px;height:42px;
   display:flex;align-items:center;justify-content:center;
-  background:rgba(255,255,255,.12);
-  border:1px solid rgba(255,255,255,.18);
+  background:rgba(20,20,20,.72);
+  border:1px solid rgba(255,255,255,.25);
   border-radius:50%;
   color:#fff;
   transition:background .12s;
   z-index:10000;
+  backdrop-filter:blur(4px);
+  -webkit-backdrop-filter:blur(4px);
 }
-.lbx-btn:hover{background:rgba(255,255,255,.22)}
+.lbx-btn:hover{background:rgba(30,30,30,.90)}
 .lbx-btn svg{width:18px;height:18px;display:block}
-.lbx-prev{left:18px}
-.lbx-next{right:18px}
+.lbx-prev{left:14px}
+.lbx-next{right:14px}
 .lbx-counter{
   position:fixed;bottom:22px;left:50%;transform:translateX(-50%);
   font-size:11px;font-weight:700;letter-spacing:.06em;
@@ -611,7 +616,8 @@ button{cursor:pointer;font-family:inherit}
   .back-nav{display:flex}
   .cs-body{grid-template-columns:1fr;gap:28px;padding:24px 18px 80px}
   .carousel-shell{padding:20px 18px 0}
-  .sidebar{position:sticky;top:0;z-index:10;background:var(--surface-default);padding-bottom:20px;border-bottom:1px solid var(--border-subtle);margin-bottom:8px}
+  .sidebar{position:static;top:auto;height:auto;padding-bottom:20px;border-bottom:1px solid var(--border-subtle);margin-bottom:8px}
+  .sb-fields{display:grid;grid-template-columns:1fr 1fr;gap:14px 20px}
   .cs-hero h1{font-size:24px}
   .cs-hero-sub{font-size:16px}
   .cs-section p{font-size:16px}

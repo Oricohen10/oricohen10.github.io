@@ -1,4 +1,4 @@
-@font-face{font-family:'VT323';font-style:normal;font-weight:400;font-display:swap;src:url('../Assets/fonts/VT323-Regular.ttf') format('truetype')}
+@font-face{font-family:'VT323';font-style:normal;font-weight:400;font-display:swap;src:url('../Assets/fonts/VT323-Regular.woff2') format('woff2'),url('../Assets/fonts/VT323-Regular.ttf') format('truetype')}
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
 html,body{width:100%;height:100%;overflow:hidden}
 html,body,*{cursor:none!important}
@@ -46,8 +46,8 @@ body{font-family:var(--f);background:var(--canvas);color:var(--tx)}
 [data-tip].demo-hov::after,[data-tip].demo-hov::before{opacity:1}
 
 /* ── Modal ── */
-#modal-bg{position:fixed;inset:0;z-index:2000;display:flex;align-items:center;justify-content:center;background:var(--mbg);backdrop-filter:blur(3px);opacity:0;transition:opacity .3s,background .15s}
-#modal-bg.show{opacity:1}
+#modal-bg{position:fixed;inset:0;z-index:2000;display:flex;align-items:center;justify-content:center;background:var(--mbg);backdrop-filter:blur(3px);opacity:0;pointer-events:none;transition:opacity .3s,background .15s}
+#modal-bg.show{opacity:1;pointer-events:auto}
 #modal-bg.hide{opacity:0;pointer-events:none}
 #modal-box{background:var(--mbox);border:1px solid var(--mbd);border-radius:16px;padding:28px 28px 24px;width:400px;box-shadow:0 32px 80px rgba(0,0,0,.22),0 0 0 1px rgba(0,0,0,.04);transform:scale(.92) translateY(20px);transition:transform .4s cubic-bezier(.34,1.56,.64,1),background .15s,border-color .15s}
 #modal-bg.show #modal-box{transform:scale(1) translateY(0)}
@@ -493,6 +493,8 @@ i.ph,i.ph-bold,i.ph-fill,i.ph-light{line-height:1;display:flex;align-items:cente
 .t-dir{font-family:Consolas,'Courier New',monospace;font-size:11px;color:#9F8AFF;display:block;line-height:1.15;white-space:pre}
 /* Section separator lines — BACKGROUND / CURRENTLY */
 .t-sec{font-family:Consolas,'Courier New',monospace;font-size:14px;color:#9F8AFF;display:block;white-space:pre;letter-spacing:.04em}
+/* Decorative banner box — appears after ASCII art name */
+.t-banner{font-family:Consolas,'Courier New',monospace;font-size:16px;color:#9F8AFF;display:block;white-space:pre;line-height:1.2;letter-spacing:0;padding-top:3px}
 /* Subtitle below ASCII art name */
 .t-name{color:#9F8AFF;display:block;padding:3px 0 8px}
 .tlink{color:#60a5fa;text-decoration:none}
@@ -638,9 +640,16 @@ i.ph,i.ph-bold,i.ph-fill,i.ph-light{line-height:1;display:flex;align-items:cente
 /* Disabled (coming soon) mobile project cards */
 .mv-proj-card--soon{opacity:.5;pointer-events:none}
 /* Mobile terminal (about page) */
-#mv-term{background:var(--tbg);flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;padding:16px 16px 40px}
+#mv-term{background:#2b2b2b;flex:1;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;scrollbar-width:none;padding:14px 16px 40px}
 #mv-term::-webkit-scrollbar{display:none}
-#mv-tcon{font-family:Consolas,'Courier New',monospace;font-size:13px;line-height:1.75;color:var(--ttx)}
+#mv-tcon{font-family:Consolas,'Courier New',monospace;font-size:13px;line-height:1.85;color:#e5e5e5}
+/* Scale down wide decorative elements to fit mobile viewport */
+#mv-tcon .t-dir{font-size:8px}
+#mv-tcon .t-banner{font-size:10px;overflow-x:hidden}
+/* Section separators — clip trailing dashes instead of expanding */
+#mv-tcon .t-sec{overflow:hidden;white-space:nowrap}
+/* Regular lines wrap instead of overflowing */
+#mv-tcon .tline{white-space:pre-wrap;word-break:break-word}
 /* Mobile contact */
 .mv-clinks-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:16px}
 .mv-ccard{background:var(--panel);border:1px solid var(--bd3);border-radius:16px;padding:22px 14px 20px;display:flex;flex-direction:column;align-items:center;text-align:center;text-decoration:none;color:inherit;gap:0;box-shadow:0 1px 3px rgba(0,0,0,.06),0 4px 12px rgba(0,0,0,.04);transition:transform .12s,box-shadow .12s;-webkit-tap-highlight-color:transparent}
@@ -660,6 +669,13 @@ i.ph,i.ph-bold,i.ph-fill,i.ph-light{line-height:1;display:flex;align-items:cente
   #toast{bottom:80px}
   /* Welcome card: tighter on very small screens */
   #mv-welcome{padding:36px 28px 32px}
+}
+/* Desktop: force-hide mobile overlay pages — they are fixed siblings of #mv,
+   NOT inside it, so the max-width:767px rule above doesn't hide them.
+   Using display:none ensures they can never cover or block the canvas. */
+@media(min-width:768px){
+  .mv-page{display:none!important}
+  #mv-menu{display:none!important}
 }
 /* Tablet (768px-1024px): ensure desktop canvas is usable */
 @media(min-width:768px) and (max-width:1024px){

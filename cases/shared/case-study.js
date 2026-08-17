@@ -11,6 +11,14 @@
  * counter, lightbox) so each page only needs the slides themselves.
  */
 
+/* ── Back nav: on mobile, append #projects so main.js opens the projects page */
+document.addEventListener('DOMContentLoaded', function() {
+  var backNav = document.querySelector('.back-nav');
+  if (backNav && window.innerWidth < 768) {
+    backNav.href = backNav.href.replace(/index\.html(#.*)?$/, 'index.html#projects');
+  }
+});
+
 /* ── Theme sync — parent portfolio sends postMessage ─────────────────────── */
 window.addEventListener('message', function(e) {
   if (e.data && e.data.type === 'theme') {
@@ -78,6 +86,20 @@ function initCarousel() {
   footer.className = 'carousel-footer';
   footer.innerHTML = '<span class="carousel-counter" id="car-counter">1 / ' + CAR_TOTAL + '</span>';
   wrap.appendChild(footer);
+
+  /* Accessibility: carousel-slide divs with onclick need role/keyboard */
+  var slides = wrap.querySelectorAll('.carousel-slide');
+  slides.forEach(function(slide, i) {
+    if (slide.getAttribute('onclick')) {
+      slide.setAttribute('role', 'button');
+      slide.setAttribute('tabindex', '0');
+      (function(idx) {
+        slide.addEventListener('keydown', function(e) {
+          if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openLightbox(idx); }
+        });
+      })(i);
+    }
+  });
 
   /* Lightbox HTML */
   if (lightboxType === 'image') {
@@ -239,7 +261,14 @@ function lbxRender() {
   var slide = slides[lbxIdx];
   var el = slide && slide.firstElementChild ? slide.firstElementChild.cloneNode(true) : null;
   inner.innerHTML = '';
-  if (el) inner.appendChild(el);
+  if (el) {
+    // Strip HTML width/height so CSS controls sizing without distortion
+    if (el.tagName === 'IMG') {
+      el.removeAttribute('width');
+      el.removeAttribute('height');
+    }
+    inner.appendChild(el);
+  }
   if (counter) counter.textContent = (lbxIdx + 1) + ' / ' + CAR_TOTAL;
 }
 

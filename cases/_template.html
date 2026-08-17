@@ -86,8 +86,15 @@
 /* .carousel-wrap{background:var(--surface-raised)} */
 
 /* ── OPTIONAL: Carousel aspect ratio ─────────────────────────────────────── */
-/* Default is 16/9. Override for different content ratios */
-/* .carousel-slide{aspect-ratio:16/7} */
+/*
+ * Image spec (carousel shell max-width 1040px, padding 28px each side = 984px display):
+ *
+ *   ALL projects → 16:9
+ *   Figma frame:  984×554px
+ *   Export @2x:   1968×1107px  (JPEG)
+ *
+ *   OG/social image: 1200×630px
+ */
 
 /* ── OPTIONAL: LUX-specific sidebar elements (sb-tag, sb-cta) ────────────── */
 /* Copy from cases/lux/index.html if needed */
@@ -120,9 +127,9 @@
 <body>
 
 <!-- Back nav (mobile only) -->
-<a href="/" class="back-nav" aria-label="Back to portfolio">
+<a href="../../index.html" class="back-nav" aria-label="Back to projects">
   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
-  Back to portfolio
+  Back to projects
 </a>
 
 <!--
@@ -154,14 +161,14 @@
 
     <!-- IMAGE SLIDE example -->
     <div class="carousel-slide">
-      <img src="images/screenshot.jpg" alt="Description of screenshot" width="1024" height="576" loading="lazy"/>
+      <img src="images/screenshot.jpg" alt="Description of screenshot" width="1968" height="1107" loading="lazy"/>
       <div class="carousel-slide-label">Slide label</div>
     </div>
 
     <!-- CLICKABLE IMAGE SLIDE (for image lightbox) example -->
     <!--
     <div class="carousel-slide" onclick="openLightbox(2)" title="Click to expand">
-      <img src="images/screenshot.jpg" alt="Description" width="1024" height="576" loading="lazy"/>
+      <img src="images/screenshot.jpg" alt="Description" width="1968" height="1107" loading="lazy"/>
     </div>
     -->
 

@@ -29,10 +29,15 @@
 .skip-nav{position:absolute;top:-100%;left:0;z-index:99999;padding:8px 16px;background:var(--figma);color:#fff;font-size:14px;font-weight:600;border-radius:0 0 8px 0;text-decoration:none;transition:top .1s}
 .skip-nav:focus{top:0}
 </style>
+<!-- Preconnect to Google Fonts — loaded on demand for A11y game, but speeds DNS/TLS when it fires -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <!-- Restore saved theme before CSS paints — prevents flash of light mode on reload -->
 <script>try{if(localStorage.getItem('ori-theme')==='dark')document.documentElement.setAttribute('data-theme','dark')}catch(e){}</script>
 <!-- Preload icon font — starts downloading immediately instead of after phosphor.css is parsed -->
 <link rel="preload" href="Assets/fonts/phosphor/Phosphor.woff2" as="font" type="font/woff2" crossorigin>
+<!-- Preload VT323 WOFF2 for terminal animation -->
+<link rel="preload" href="Assets/fonts/VT323-Regular.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="Assets/Media/general/ori-profile.webp" as="image" type="image/webp"/>
 <link rel="sitemap" type="application/xml" href="/sitemap.xml"/>
 <link rel="stylesheet" href="Assets/fonts/phosphor/phosphor.css"/>
@@ -169,9 +174,9 @@
     <!-- 1. Verint Design System 2.0 -->
     <div class="pg-card" role="button" tabindex="0" onclick="openWin('proj-lux')" onkeydown="if(event.key==='Enter'||event.key===' ')openWin('proj-lux')">
       <div class="pg-card-thumb">
-        <img src="cases/lux/images/lux-thumb.jpg"
-             data-src-light="cases/lux/images/lux-thumb.jpg"
-             data-src-dark="cases/lux/images/lux-thumb-dark.jpg"
+        <img src="cases/lux/images/lux-thumb.webp"
+             data-src-light="cases/lux/images/lux-thumb.webp"
+             data-src-dark="cases/lux/images/lux-thumb-dark.webp"
              alt="Verint LUX 2.0 Design System - component library overview" width="1280" height="800" loading="lazy" style="width:100%;height:100%;object-fit:cover;object-position:center top;display:block">
       </div>
       <div class="pg-card-body">
@@ -182,9 +187,9 @@
     <!-- 2. My Verint -->
     <div class="pg-card" role="button" tabindex="0" onclick="openWin('proj-myverint')" onkeydown="if(event.key==='Enter'||event.key===' ')openWin('proj-myverint')">
       <div class="pg-card-thumb">
-        <img src="cases/myverint/images/thumbnail.jpg"
-             data-src-light="cases/myverint/images/thumbnail.jpg"
-             data-src-dark="cases/myverint/images/thumbnail-dark.jpg"
+        <img src="cases/myverint/images/thumbnail.webp"
+             data-src-light="cases/myverint/images/thumbnail.webp"
+             data-src-dark="cases/myverint/images/thumbnail-dark.webp"
              alt="My Verint mobile app - AI assistant and schedule management for contact center employees" width="1600" height="1000" loading="lazy"/>
       </div>
       <div class="pg-card-body">
@@ -195,9 +200,9 @@
     <!-- 3. Verint Copilot -->
     <div class="pg-card" role="button" tabindex="0" onclick="openWin('proj-copilot')" onkeydown="if(event.key==='Enter'||event.key===' ')openWin('proj-copilot')">
       <div class="pg-card-thumb">
-        <img src="cases/copilot/images/thumbnail.jpg"
-             data-src-light="cases/copilot/images/thumbnail.jpg"
-             data-src-dark="cases/copilot/images/thumbnail-dark.jpg"
+        <img src="cases/copilot/images/thumbnail.webp"
+             data-src-light="cases/copilot/images/thumbnail.webp"
+             data-src-dark="cases/copilot/images/thumbnail-dark.webp"
              alt="Verint Agent Copilot - real-time AI panel for contact center agents" width="1600" height="1000" loading="lazy"/>
       </div>
       <div class="pg-card-body">
@@ -208,9 +213,9 @@
     <!-- 4. LUX Plugins -->
     <div class="pg-card" role="button" tabindex="0" onclick="openWin('proj-plugins')" onkeydown="if(event.key==='Enter'||event.key===' ')openWin('proj-plugins')">
       <div class="pg-card-thumb">
-        <img src="cases/plugins/images/thumbnail.jpg"
-             data-src-light="cases/plugins/images/thumbnail.jpg"
-             data-src-dark="cases/plugins/images/thumbnail-dark.jpg"
+        <img src="cases/plugins/images/thumbnail.webp"
+             data-src-light="cases/plugins/images/thumbnail.webp"
+             data-src-dark="cases/plugins/images/thumbnail-dark.webp"
              alt="LUX Plugins - Figma plugin UIs for token sync, layout creation, table generation, and icon search" width="640" height="360" loading="lazy"/>
       </div>
       <div class="pg-card-body">
@@ -362,7 +367,7 @@
         <span class="pl-hdr-cell">Type</span>
       </div>
       <!-- LUX Plugins -->
-      <div class="pl-row" onclick="openWin('proj-plugins')">
+      <div class="pl-row" onclick="openWin('proj-plugins')" role="button" tabindex="0" onkeydown="if(event.key==='Enter'||event.key===' ')openWin('proj-plugins')">
         <div class="pl-name-cell">
 <span class="pl-name">LUX Plugins</span>
         </div>
@@ -370,7 +375,7 @@
         <span class="chip chip--plugin">Figma Plugin</span>
       </div>
       <!-- My Verint -->
-      <div class="pl-row" onclick="openWin('proj-myverint')">
+      <div class="pl-row" onclick="openWin('proj-myverint')" role="button" tabindex="0" onkeydown="if(event.key==='Enter'||event.key===' ')openWin('proj-myverint')">
         <div class="pl-name-cell">
 <span class="pl-name">My Verint</span>
         </div>
@@ -378,7 +383,7 @@
         <span class="chip chip--mobile">Mobile</span>
       </div>
       <!-- Supervisor Hub -->
-      <div class="pl-row" onclick="openWin('proj-supervisor')">
+      <div class="pl-row" onclick="openWin('proj-supervisor')" role="button" tabindex="0" onkeydown="if(event.key==='Enter'||event.key===' ')openWin('proj-supervisor')">
         <div class="pl-name-cell">
 <span class="pl-name">Supervisor Hub</span>
         </div>
@@ -386,7 +391,7 @@
         <span class="chip chip--dash">Dashboard</span>
       </div>
       <!-- Verint Copilot -->
-      <div class="pl-row" onclick="openWin('proj-copilot')">
+      <div class="pl-row" onclick="openWin('proj-copilot')" role="button" tabindex="0" onkeydown="if(event.key==='Enter'||event.key===' ')openWin('proj-copilot')">
         <div class="pl-name-cell">
 <span class="pl-name">Verint Copilot</span>
         </div>
@@ -394,7 +399,7 @@
         <span class="chip chip--ai">AI / Product</span>
       </div>
       <!-- Verint Design System 2.0 -->
-      <div class="pl-row" onclick="openWin('proj-lux')">
+      <div class="pl-row" onclick="openWin('proj-lux')" role="button" tabindex="0" onkeydown="if(event.key==='Enter'||event.key===' ')openWin('proj-lux')">
         <div class="pl-name-cell">
 <span class="pl-name">Verint Design System</span>
         </div>
@@ -637,7 +642,7 @@
         <span style="width:6px;height:6px;border-radius:50%;background:#1BC47D;animation:pulse 1.8s infinite;flex-shrink:0"></span>
         <span class="avl-txt" style="font-size:11px;font-weight:600">Available for the right work</span>
       </div>
-      <p style="margin:0;font-size:12px;color:var(--tx3);line-height:1.65;max-width:240px">Good design starts with a conversation. If it matters to the people using it, I want to hear about it.</p>
+      <p style="margin:0;font-size:12px;color:var(--tx3);line-height:1.6;max-width:240px">Good design starts with a conversation. I'd love to have one. Reach out.</p>
     </div>
     <!-- Contact links -->
     <a class="clink" href="mailto:oricohenw@gmail.com">
@@ -960,7 +965,7 @@
         <i id="icon-moon" class="ph ph-moon" aria-hidden="true"></i>
         <i id="icon-sun" class="ph ph-sun" style="display:none" aria-hidden="true"></i>
       </button>
-      <button id="bb-zoom" data-tip="Click to reset zoom" aria-label="Reset zoom" onclick="setZoom(1)">100%</button>
+      <button id="bb-zoom" data-tip="Click to reset zoom" aria-label="Reset zoom" onclick="resetZoom()">100%</button>
     </div>
   </div>
 </div>
@@ -1067,7 +1072,7 @@
   <div class="mv-pb">
     <a class="mv-proj-card" href="cases/lux/index.html">
       <div class="mv-proj-thumb">
-        <img src="cases/lux/images/lux-thumb.jpg" data-src-light="cases/lux/images/lux-thumb.jpg" data-src-dark="cases/lux/images/lux-thumb-dark.jpg" alt="Verint LUX 2.0 Design System" width="720" height="240" loading="lazy" style="width:100%;height:100%;object-fit:cover;object-position:center top;display:block">
+        <img src="cases/lux/images/lux-thumb.webp" data-src-light="cases/lux/images/lux-thumb.webp" data-src-dark="cases/lux/images/lux-thumb-dark.webp" alt="Verint LUX 2.0 Design System" width="720" height="240" loading="lazy" style="width:100%;height:100%;object-fit:cover;object-position:center top;display:block">
       </div>
       <div class="mv-proj-info">
         <div class="mv-proj-name">Verint Design System</div>
@@ -1078,7 +1083,7 @@
     </a>
     <a class="mv-proj-card" href="cases/myverint/index.html">
       <div class="mv-proj-thumb">
-        <img src="cases/myverint/images/thumbnail.jpg" data-src-light="cases/myverint/images/thumbnail.jpg" data-src-dark="cases/myverint/images/thumbnail-dark.jpg" alt="My Verint mobile app" width="720" height="240" loading="lazy" style="width:100%;height:100%;object-fit:cover;display:block">
+        <img src="cases/myverint/images/thumbnail.webp" data-src-light="cases/myverint/images/thumbnail.webp" data-src-dark="cases/myverint/images/thumbnail-dark.webp" alt="My Verint mobile app" width="720" height="240" loading="lazy" style="width:100%;height:100%;object-fit:cover;display:block">
       </div>
       <div class="mv-proj-info">
         <div class="mv-proj-name">My Verint</div>
@@ -1089,7 +1094,7 @@
     </a>
     <a class="mv-proj-card" href="cases/copilot/index.html">
       <div class="mv-proj-thumb">
-        <img src="cases/copilot/images/thumbnail.jpg" data-src-light="cases/copilot/images/thumbnail.jpg" data-src-dark="cases/copilot/images/thumbnail-dark.jpg" alt="Verint Agent Copilot" width="720" height="240" loading="lazy" style="width:100%;height:100%;object-fit:cover;display:block">
+        <img src="cases/copilot/images/thumbnail.webp" data-src-light="cases/copilot/images/thumbnail.webp" data-src-dark="cases/copilot/images/thumbnail-dark.webp" alt="Verint Agent Copilot" width="720" height="240" loading="lazy" style="width:100%;height:100%;object-fit:cover;display:block">
       </div>
       <div class="mv-proj-info">
         <div class="mv-proj-name">Verint Copilot</div>
@@ -1100,7 +1105,7 @@
     </a>
     <a class="mv-proj-card" href="cases/plugins/index.html">
       <div class="mv-proj-thumb">
-        <img src="cases/plugins/images/thumbnail.jpg" data-src-light="cases/plugins/images/thumbnail.jpg" data-src-dark="cases/plugins/images/thumbnail-dark.jpg" alt="LUX Figma Plugins" width="720" height="240" loading="lazy" style="width:100%;height:100%;object-fit:cover;display:block">
+        <img src="cases/plugins/images/thumbnail.webp" data-src-light="cases/plugins/images/thumbnail.webp" data-src-dark="cases/plugins/images/thumbnail-dark.webp" alt="LUX Figma Plugins" width="720" height="240" loading="lazy" style="width:100%;height:100%;object-fit:cover;display:block">
       </div>
       <div class="mv-proj-info">
         <div class="mv-proj-name">LUX Plugins</div>
@@ -1166,7 +1171,7 @@
         <span style="width:6px;height:6px;border-radius:50%;background:#1BC47D;flex-shrink:0;animation:pulse 1.8s infinite"></span>
         <span class="avl-txt" style="font-size:11px;font-weight:600">Available for the right work</span>
       </div>
-      <p style="margin:0;font-size:12px;color:var(--tx3);line-height:1.65;max-width:240px">Good design starts with a conversation. If it matters to the people using it, I want to hear about it.</p>
+      <p style="margin:0;font-size:12px;color:var(--tx3);line-height:1.6;max-width:240px">Good design starts with a conversation. I'd love to have one. Reach out.</p>
     </div>
     <div class="mv-clinks-grid">
       <a class="mv-ccard" href="mailto:oricohenw@gmail.com">

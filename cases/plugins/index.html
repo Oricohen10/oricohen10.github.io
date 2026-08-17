@@ -64,9 +64,9 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
 <body>
 
 <!-- Back nav (mobile only) -->
-<a href="/" class="back-nav" aria-label="Back to portfolio">
+<a href="../../index.html" class="back-nav" aria-label="Back to projects">
   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="15 18 9 12 15 6"/></svg>
-  Back to portfolio
+  Back to projects
 </a>
 
 <!-- Carousel -->
@@ -76,7 +76,7 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
 
     <!-- Slide 1: Token Sync -->
     <div class="carousel-slide">
-      <video muted playsinline poster="images/token-sync-poster.jpg" id="vid-0">
+      <video muted playsinline preload="none" poster="images/token-sync-poster.webp" id="vid-0">
         <source src="videos/token-sync.mp4" type="video/mp4"/>
       </video>
       <button class="car-play" onclick="playVid(0)" aria-label="Play Token Sync video">
@@ -90,7 +90,7 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
 
     <!-- Slide 2: Layout Creator -->
     <div class="carousel-slide">
-      <video muted playsinline poster="images/layout-creator-poster.jpg" id="vid-1">
+      <video muted playsinline preload="none" poster="images/layout-creator-poster.webp" id="vid-1">
         <source src="videos/layout-creator.mp4" type="video/mp4"/>
       </video>
       <button class="car-play" onclick="playVid(1)" aria-label="Play Layout Creator video">
@@ -104,7 +104,7 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
 
     <!-- Slide 3: Table Creator -->
     <div class="carousel-slide">
-      <video muted playsinline poster="images/table-creator-poster.jpg" id="vid-2">
+      <video muted playsinline preload="none" poster="images/table-creator-poster.webp" id="vid-2">
         <source src="videos/table-creator.mp4" type="video/mp4"/>
       </video>
       <button class="car-play" onclick="playVid(2)" aria-label="Play Table Creator video">
@@ -118,7 +118,7 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
 
     <!-- Slide 4: Icon Library Picker -->
     <div class="carousel-slide">
-      <video muted playsinline poster="images/icons-generator-poster.jpg" id="vid-3">
+      <video muted playsinline preload="none" poster="images/icons-generator-poster.webp" id="vid-3">
         <source src="videos/icons-generator.mp4" type="video/mp4"/>
       </video>
       <button class="car-play" onclick="playVid(3)" aria-label="Play Icon Library Picker video">
@@ -353,6 +353,6 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
   </svg>
 </button>
 
-<script src="../shared/case-study.js"></script>
+<script src="../shared/case-study.js" defer></script>
 </body>
 </html>
