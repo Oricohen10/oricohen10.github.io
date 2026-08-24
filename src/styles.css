@@ -658,6 +658,30 @@ i.ph,i.ph-bold,i.ph-fill,i.ph-light{line-height:1;display:flex;align-items:cente
 [data-theme="dark"] .mv-ccard-ico{background:rgba(96,165,250,.12);color:#60a5fa}
 .mv-ccard-lbl{font-size:14px;font-weight:700;color:var(--tx);letter-spacing:-.2px}
 .mv-ccard-val{font-size:11.5px;color:var(--tx2);margin-top:5px;line-height:1.4;word-break:break-all}
+/* List view: stack on mobile */
+@media(max-width:600px){
+  .pl-hdr{display:none}
+  #view-list{padding:0}
+  .pl-row{
+    grid-template-columns:1fr auto;
+    grid-template-rows:auto auto;
+    grid-template-areas:"name chip" "desc chip";
+    padding:14px 16px;
+    gap:3px 10px;
+    align-items:start;
+  }
+  .pl-name-cell{grid-area:name}
+  .pl-desc{grid-area:desc;font-size:12px}
+  .pl-row > .chip{grid-area:chip;align-self:center;margin-top:0}
+}
+@media(max-width:480px){
+  .mv-proj-thumb{height:130px}
+  .mv-proj-info{padding:12px 14px}
+  .mv-proj-name{font-size:14.5px}
+  .mv-proj-desc{font-size:12.5px}
+  .mv-proj-card{margin:10px 12px 0;border-radius:12px}
+  .mv-proj-card:last-child{margin-bottom:12px}
+}
 @media(max-width:767px){
   #app{display:none}#mv{display:flex}
   #cursor,#modal-bg,#ghost-layer{display:none!important}

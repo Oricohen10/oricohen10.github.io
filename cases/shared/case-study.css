@@ -614,25 +614,27 @@ button{cursor:pointer;font-family:inherit}
 /* ── Responsive ───────────────────────────────────────────────────────────── */
 @media(max-width:720px){
   .back-nav{display:flex}
-  .cs-body{grid-template-columns:1fr;gap:28px;padding:24px 18px 80px}
-  .carousel-shell{padding:20px 18px 0}
+  .cs-body{grid-template-columns:1fr;gap:28px;padding:24px 20px 80px}
+  .carousel-shell{padding:20px 20px 0}
   .sidebar{position:static;top:auto;height:auto;padding-bottom:20px;border-bottom:1px solid var(--border-subtle);margin-bottom:8px}
   .sb-fields{display:grid;grid-template-columns:1fr 1fr;gap:14px 20px}
   .cs-hero h1{font-size:24px}
-  .cs-hero-sub{font-size:16px}
-  .cs-section p{font-size:16px}
-  .ai-text,.ai-card-text{font-size:16px}
+  .cs-hero-sub{font-size:15px}
+  .cs-section p{font-size:15px}
+  .ai-text,.ai-card-text{font-size:15px}
   .stat-grid{grid-template-columns:1fr 1fr}
   .stat-grid .stat-card:last-child{grid-column:1/-1}
-  .plugin-block{padding:24px 24px 24px 28px}
-  .plugin-title{font-size:19px}
+  .plugin-block{padding:18px 18px 18px 22px}
+  .plugin-title{font-size:17px}
 }
 @media(max-width:480px){
-  .cs-body{padding:20px 16px 80px}
-  .carousel-shell{padding:16px 16px 0}
+  .cs-body{padding:20px 18px 80px}
+  .carousel-shell{padding:16px 18px 0}
   .carousel-btn{width:30px;height:30px}
   .carousel-btn svg{width:14px;height:14px}
   .stat-grid{grid-template-columns:1fr}
   .stat-grid .stat-card:last-child{grid-column:auto}
   .ai-card{flex-direction:column;gap:10px}
+  .cs-section p{font-size:14.5px}
+  .ai-text,.ai-card-text{font-size:14.5px}
 }

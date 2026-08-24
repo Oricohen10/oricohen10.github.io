@@ -590,6 +590,7 @@ function sortProjectTable(btn) {
 }
 
 function openWin(id) {
+  if (window.innerWidth < 768) return; // windows are desktop-only
   const w = document.getElementById('win-' + id);
   if (!w) return;
   w._opener = document.activeElement;
