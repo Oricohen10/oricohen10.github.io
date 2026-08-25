@@ -466,7 +466,7 @@ button{cursor:pointer;font-family:inherit}
 .diff-lines{padding:4px 0}
 .diff-line{
   display:block;font-family:monospace;font-size:10.5px;
-  padding:1.5px 14px;white-space:pre;
+  padding:1.5px 14px;white-space:pre-wrap;word-break:break-all;
 }
 .diff-line.add{background:rgba(21,128,61,.07);color:#166534}
 .diff-line.del{background:rgba(239,68,68,.07);color:#b91c1c}
@@ -624,8 +624,18 @@ button{cursor:pointer;font-family:inherit}
   .ai-text,.ai-card-text{font-size:15px}
   .stat-grid{grid-template-columns:1fr 1fr}
   .stat-grid .stat-card:last-child{grid-column:1/-1}
+  .stat-num{font-size:36px}
   .plugin-block{padding:18px 18px 18px 22px}
   .plugin-title{font-size:17px}
+  /* Pipeline: compact steps */
+  .pv-flow{gap:4px}
+  .pv-step{padding:10px 6px;min-width:56px}
+  .pv-name{font-size:10px}
+  .pv-icon{font-size:18px}
+  .pv-arr{font-size:11px}
+  /* PR card: allow title to wrap, stack head */
+  .pr-head{flex-wrap:wrap;gap:6px}
+  .pr-merged{align-self:flex-start}
 }
 @media(max-width:480px){
   .cs-body{padding:20px 18px 80px}
@@ -634,7 +644,12 @@ button{cursor:pointer;font-family:inherit}
   .carousel-btn svg{width:14px;height:14px}
   .stat-grid{grid-template-columns:1fr}
   .stat-grid .stat-card:last-child{grid-column:auto}
+  .stat-num{font-size:32px}
   .ai-card{flex-direction:column;gap:10px}
   .cs-section p{font-size:14.5px}
   .ai-text,.ai-card-text{font-size:14.5px}
+  /* Pipeline: even more compact */
+  .pv-step{min-width:48px;padding:8px 4px}
+  .pv-name{font-size:9px}
+  .pv-badge{font-size:8px;padding:2px 5px}
 }
