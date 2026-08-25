@@ -26,6 +26,22 @@ die() { log "ERROR: $1"; exit 1; }
 command -v git >/dev/null || die "git not found on PATH"
 
 # ---------------------------------------------------------------------------
+# --push-only: deliver commits that already exist, never create one.
+#
+# This is the mode the launchd timer runs in. Claude commits with a real
+# message from the Cowork session but cannot push (the sandbox has no network
+# route to github.com and no credentials). The timer picks the commit up and
+# delivers it. Uncommitted edits are deliberately left alone, so work in
+# progress never gets swept into a junk commit and nothing half-finished
+# reaches the live site.
+# ---------------------------------------------------------------------------
+PUSH_ONLY=0
+if [ "${1:-}" = "--push-only" ]; then
+  PUSH_ONLY=1
+  shift
+fi
+
+# ---------------------------------------------------------------------------
 # Clear a stale index.lock. A Cowork session editing files through the FUSE
 # mount can leave one behind. Only safe to remove when no git is running.
 # ---------------------------------------------------------------------------
@@ -50,7 +66,13 @@ else
   UNPUSHED=1
 fi
 
-if [ -z "$DIRTY" ] && [ "$UNPUSHED" -eq 0 ]; then
+if [ "$PUSH_ONLY" -eq 1 ]; then
+  if [ "$UNPUSHED" -eq 0 ]; then
+    log "nothing committed to push"
+    exit 0
+  fi
+  [ -n "$DIRTY" ] && log "note: uncommitted edits present, leaving them alone"
+elif [ -z "$DIRTY" ] && [ "$UNPUSHED" -eq 0 ]; then
   log "clean and in sync - nothing to do"
   exit 0
 fi
@@ -58,7 +80,7 @@ fi
 # ---------------------------------------------------------------------------
 # Commit local changes
 # ---------------------------------------------------------------------------
-if [ -n "$DIRTY" ]; then
+if [ -n "$DIRTY" ] && [ "$PUSH_ONLY" -eq 0 ]; then
   MSG="${1:-Cowork auto-sync [$(date '+%H:%M %d/%m')]}"
   git add -A || die "git add failed"
   git commit -q -m "$MSG" || die "git commit failed"

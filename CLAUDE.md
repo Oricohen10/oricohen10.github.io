@@ -37,6 +37,24 @@ The sandbox has **no network route to github.com and no credentials**, so the
 final `git push` always has to happen on the user's machine - either by running
 `tools/sync.sh` in Terminal or via the launchd timer.
 
+### The normal workflow (timer installed)
+Ori asks for changes to be pushed from the chat. So:
+1. Make the edits.
+2. `git add` and `git commit` with a real, descriptive message. This works from
+   the session as long as file deletion is enabled for the folder.
+3. Stop there. Do **not** try to push and do not ask Ori to run a command.
+
+A launchd agent runs `tools/sync.sh --push-only` every 60 seconds. It delivers
+committed work and never creates a commit itself, so anything left uncommitted
+stays local and off the live site. Tell Ori it will be live in about a minute.
+
+Check the timer is actually running before relying on it:
+```bash
+launchctl list | grep portfolio-sync
+tail -5 ~/Library/Logs/oricohen-portfolio-sync.log
+```
+If it is not loaded, fall back to asking Ori to run `bash tools/sync.sh`.
+
 ---
 
 ## Rules - never break these

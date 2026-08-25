@@ -2,15 +2,17 @@
 #
 # install-autosync.sh - make sync.sh run on its own, via launchd.
 #
-#   bash tools/install-autosync.sh            install, 5 minute interval
-#   bash tools/install-autosync.sh 900        install, 15 minute interval
+#   bash tools/install-autosync.sh            install, checks every 60s
+#   bash tools/install-autosync.sh 300        install, checks every 5 min
 #   bash tools/install-autosync.sh off        uninstall
 #
-# Heads up before you turn this on: this repo deploys to a live site on every
-# push. A timer means every intermediate state you save goes public, and your
-# history fills with "auto-sync" commits. That is fine for a portfolio and it
-# is what the previous setup did, but if you would rather keep control, skip
-# this and just run `bash tools/sync.sh "message"` when you are ready.
+# The agent runs sync.sh in --push-only mode: it delivers commits that already
+# exist and never creates one. So a Cowork session can commit with a real
+# message, and this picks it up and pushes within a minute.
+#
+# That means work in progress stays local. Only something deliberately
+# committed reaches the live site, which is the important difference from the
+# old auto-sync that committed everything on a timer.
 #
 set -uo pipefail
 
@@ -18,7 +20,7 @@ REPO="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 LABEL="co.oricohen.portfolio-sync"
 PLIST="$HOME/Library/LaunchAgents/$LABEL.plist"
 LOG="$HOME/Library/Logs/oricohen-portfolio-sync.log"
-INTERVAL="${1:-300}"
+INTERVAL="${1:-60}"
 
 if [ "$INTERVAL" = "off" ]; then
   launchctl bootout "gui/$(id -u)/$LABEL" 2>/dev/null \
@@ -47,6 +49,7 @@ cat > "$PLIST" <<PLISTEOF
   <array>
     <string>/bin/bash</string>
     <string>$REPO/tools/sync.sh</string>
+    <string>--push-only</string>
   </array>
   <key>WorkingDirectory</key>   <string>$REPO</string>
   <key>StartInterval</key>      <integer>$INTERVAL</integer>
