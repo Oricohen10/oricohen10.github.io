@@ -10,14 +10,32 @@ Portfolio site for Ori Cohen. Live at https://oricohen.co — deployed via GitHu
 - `src/tokens.json` - design token export (reference only, not loaded at runtime)
 - `index.html` - single-page portfolio (desktop + mobile)
 - `cases/lux/index.html` - standalone LUX 2.0 case study
-- `docs/` - README.md, STYLE_GUIDE.md
+- `README.md`, `STYLE_GUIDE.md` - at repo root (the old `docs/` copy was removed)
+- `tools/sync.sh` - commit and push helper
+- `tools/install-autosync.sh` - optional launchd timer for sync.sh
 
 ## Syncing to GitHub
-Always run after finishing a task:
+After finishing a task, run from the repo root:
 ```bash
-bash /sessions/blissful-adoring-thompson/mnt/oricohen10.github.io/.cowork-sync.sh
+bash tools/sync.sh "what changed"
 ```
-Git operations go through `/sessions/blissful-adoring-thompson/repo-work/` (not mnt directly - FUSE lock).
+It commits, rebases onto `origin/<branch>`, then pushes. No force push - the
+rebase is what keeps the remote from diverging, which is the problem the old
+workflow papered over with `push --force`.
+
+Auth comes from the `gh` credential helper (`gh auth setup-git`). There is no
+token in the remote URL. If a push fails, check `gh auth status` first.
+
+### Working through a Cowork FUSE mount
+File edits work normally. Git needs two things:
+- File deletion must be enabled for the folder, or `git rm` fails with
+  `Operation not permitted`.
+- A crashed session can leave `.git/index.lock` behind. `tools/sync.sh` clears
+  a stale lock automatically when no git process is running.
+
+The sandbox has **no network route to github.com and no credentials**, so the
+final `git push` always has to happen on the user's machine - either by running
+`tools/sync.sh` in Terminal or via the launchd timer.
 
 ---
 
