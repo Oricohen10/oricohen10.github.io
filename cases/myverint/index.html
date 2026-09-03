@@ -48,33 +48,14 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
    All colour comes from the shared tokens, so both themes work.          */
 
 /* ══ Page container ════════════════════════════════════════════════════
-   The window is 1320px but the shared .cs-body caps at 1100, so ~220px
-   of it went unused. That cap - not the padding - was the tight feeling.
-   Scoped to this page so the other case studies are untouched.         */
+   The overflow-x:clip that makes sticky work and the sidebar max-height
+   guard now live in cases/shared/case-study.css, so all five pages get
+   them. Width stays local: this page has no carousel, so it can use the
+   full 1320px window, while the other four are still capped at 1100 to
+   stay flush with their 1040px carousel. z-index puts the content above
+   the ambient field.                                                   */
 .cs-body{max-width:1280px;padding:48px 44px 120px;gap:56px;
   position:relative;z-index:1}
-
-/* ── The actual reason sticky was dead ────────────────────────────────
-   The shared stylesheet sets overflow-x:hidden on BOTH html and body.
-   A browser cannot honour overflow-x:hidden with overflow-y:visible, so
-   it computes overflow-y to auto - which makes <body> a scroll container.
-   position:sticky then resolves against body, and body is content-height,
-   so there is nothing to scroll inside it and the sticky never engages.
-   The viewport is scrolling <html>, not body.
-
-   overflow-x:clip does the same clipping WITHOUT establishing a scroll
-   container, so sticky keeps working. The old portfolio already used clip
-   on html for exactly this reason; the shared file regressed to hidden.
-
-   Scoped here rather than fixed in the shared file, so the other case
-   studies are untouched until you want it rolled out.                  */
-html,body{overflow-x:clip}
-
-/* height:fit-content + align-self:start is what lets a sticky GRID ITEM
-   travel at all. max-height guards the case where the sidebar grows
-   taller than the viewport, at which point sticky silently stops. */
-.sidebar{position:sticky;top:28px;align-self:start;height:fit-content;
-  max-height:calc(100vh - 56px);overflow-y:auto;scrollbar-width:thin}
 .sidebar::-webkit-scrollbar{width:6px}
 .sidebar::-webkit-scrollbar-thumb{background:var(--border-default);border-radius:3px}
 
@@ -656,17 +637,51 @@ html,body{overflow-x:clip}
      four wait for idle, so entering the section costs 246kB rather than
      2.5MB, and switching tabs is still instant once idle has run. */
   var loaded = false;
+
+  /* Every recording opened with a ~0.47s fade in from black. Once src is
+     set the element has a current frame, so the browser paints that frame
+     and stops honouring the poster - a video that is loaded but not
+     playing therefore rendered as a pure black rectangle. The clips are
+     now trimmed so frame 0 is real content, and this function no longer
+     leaves a video in that state silently:
+
+     - No v.load(). Assigning src already runs the resource selection
+       algorithm; calling load() re-runs it, fires abort/emptied, and a
+       play() issued in the same tick rejects with AbortError ("interrupted
+       by a new load request"). The empty catch() then swallowed it and the
+       video sat paused forever.
+     - A rejected play() is retried once on canplay instead of ignored.
+     - Under reduced motion src is never assigned at all, so the poster
+       stays on screen. A still frame is the right treatment there; a black
+       rectangle is not.                                                  */
+  function tryPlay(v){
+    var pr = v.play();
+    if (!pr || !pr.catch) return;
+    pr.catch(function(){
+      v.addEventListener('canplay', function once(){
+        v.removeEventListener('canplay', once);
+        var p2 = v.play();
+        if (p2 && p2.catch) p2.catch(function(){});
+      });
+    });
+  }
+  /* Loading and playing are separate on purpose. Calling play() and then
+     pause() in the same tick rejects the play promise with the same
+     AbortError, and the retry above would then fight the pause. */
   function loadVid(v){
     if (!v || v.src || !v.dataset.src) return;
+    if (reduce) return;            /* keep the poster, do not paint frame 0 */
     v.src = v.dataset.src;
-    v.load();
-    if (!reduce) { var pr = v.play(); if (pr && pr.catch) pr.catch(function(){}); }
   }
   var lazy = new IntersectionObserver(function(e){
     if (!e[0].isIntersecting || loaded) return;
     loaded = true; lazy.disconnect();
     var active = sec.querySelector('.sc-screen-vid.vid-active') || vids[0];
     loadVid(active);
+    if (!reduce && active.src) tryPlay(active);
+    /* The other four are fetched but never played, so they are ready to
+       crossfade to without four extra decoders running behind an
+       opacity:0. activate() starts whichever one becomes visible. */
     var rest = function(){ vids.forEach(loadVid); };
     if (window.requestIdleCallback) requestIdleCallback(rest, { timeout: 2500 });
     else setTimeout(rest, 1200);
@@ -685,10 +700,15 @@ html,body{overflow-x:clip}
        ask-ai/performance/schedule but the videos sit in DOM order
        ai/schedule/performance, so index arithmetic paired Performance with
        the Schedule recording and vice versa. */
+    /* Crossfade is opacity only - no load(), no currentTime reset, so
+       switching stays instant. The hidden four are paused rather than left
+       running: five simultaneous 1020px decoders cost real battery for
+       four frames nobody can see, and resuming is a keyframe away. */
     vids.forEach(function(v){
       var on = v.dataset.for === id;
       v.classList.toggle('vid-active', on);
-      if (on) loadVid(v);   /* in case idle has not fired yet */
+      if (on) { loadVid(v); if (!reduce && v.src) tryPlay(v); }
+      else if (!v.paused) v.pause();
     });
   }
 
@@ -717,8 +737,16 @@ html,body{overflow-x:clip}
     var io = new IntersectionObserver(function(es){
       es.forEach(function(e){
         if (e.isIntersecting){
-          if (e.target.readyState < 2) e.target.load();
-          var p = e.target.play(); if (p && p.catch) p.catch(function(){});
+          /* This one uses <source> and preload="metadata", so a load() is
+             genuinely needed when nothing has been fetched yet - but only
+             then, and never in the same tick as the play() below. */
+          if (e.target.readyState < 1) {
+            e.target.load();
+            e.target.addEventListener('loadeddata', function once(){
+              e.target.removeEventListener('loadeddata', once);
+              tryPlay(e.target);
+            });
+          } else tryPlay(e.target);
         } else e.target.pause();
       });
     }, { threshold: 0.3 });
@@ -729,7 +757,9 @@ html,body{overflow-x:clip}
      step begins; the bar slides to the active step and the copy brightens.
      The backwards-jump check catches the loop restarting, otherwise the
      highlight would stick on step 04 forever after the first pass.      */
-  var AI_STEP_TIMES = [1.5, 6, 12, 19];
+  /* Shifted by the 0.467s fade-in that was trimmed off the front of the
+     recording. Marks in the source timeline were 1.5 / 6 / 12 / 19. */
+  var AI_STEP_TIMES = [1.03, 5.53, 11.53, 18.53];
   var demo = document.getElementById('aiDemoVid');
   var track = document.getElementById('aiStepsTrack');
   var bar = document.getElementById('stepActiveBar');

@@ -134,14 +134,23 @@ Where a rule is currently only implemented on myverint it says so.
   identical. Only the media component changes with the artifact.
 
 ### Live bugs to fix when touching a case study
-- **`overflow-x:hidden` on html/body kills `position:sticky`.** The
-  browser computes `overflow-y` to `auto`, making body a scroll
-  container; sticky then resolves against a content-height body and never
-  engages. Use `overflow-x:clip`. **The sidebar is currently broken on
-  lux, copilot, plugins and agent-factory for this reason** - myverint
-  patches it locally.
-- **`.cs-body` caps at `max-width:1100px`** inside a 1320px window, so
-  ~220px goes unused. myverint overrides to 1280px locally.
+- ~~**`overflow-x:hidden` on html/body kills `position:sticky`.**~~ Fixed
+  in `cases/shared/case-study.css` (Sept 2026), so all five pages now get
+  it. The mechanism, for when it regresses: a browser cannot honour
+  `overflow-x:hidden` with `overflow-y:visible`, so it computes
+  `overflow-y` to `auto`, body becomes a scroll container, and sticky
+  resolves against a content-height body and never engages. `clip`
+  suppresses the same overflow without creating a scroll container.
+- A sticky **grid item** also needs `height:fit-content` **and** a
+  `max-height` cap. Without the cap it has no travel room the moment its
+  content is taller than the viewport, and it scrolls away like a static
+  block. Both now live in the shared `.sidebar` rule.
+- **`.cs-body` caps at `max-width:1100px`** and myverint overrides to
+  1280px. That is deliberate, not a bug to roll out: `.carousel-shell`
+  caps at 1040, so a 1280 body leaves the carousel visibly inset, and
+  widening the carousel renders the 1968px sources below the 2x they are
+  cut for. Fold 1280 into the shared sheet only once the carousels are
+  gone.
 - **`.diff-item::before` paints a 4px accent bar.** If the card styling is
   removed, that bar stays and lands on top of whatever sits at `left:0`.
   Overriding a card means overriding its pseudo-elements too.
@@ -191,6 +200,17 @@ rgba(0,0,0,.8)`.
   winning because the MP4 was over-encoded at 350-500 kbps.
 - Posters: **WebP q82.** Roughly 60% smaller than the JPEG equivalent.
 - Source resolution should be ~2x the rendered CSS width. No larger.
+- **Trim any fade-in from black before encoding, and cut the poster from
+  the new frame 0.** Screen recordings from the phone open with a ~0.47s
+  fade. That matters more than it sounds: once `src` is assigned the
+  element has a current frame, so the browser paints that frame and
+  **stops honouring the poster**. A video that is loaded but not playing
+  therefore renders as a pure black rectangle, indistinguishable from a
+  404 or a codec failure. Check frame 0's mean luma, do not eyeball it.
+- Re-encoding from the already-compressed copy is a second generation.
+  The first-generation sources are in the `old-portfolio` folder under
+  `<Project>/videos/`. Encode from those and verify SSIM against the
+  **trimmed** original, not the untrimmed one.
 
 ### Media loading
 - Poster only at first paint. Active media on intersection. Everything
@@ -202,6 +222,24 @@ rgba(0,0,0,.8)`.
   diverge - it paired Performance with the Schedule recording.
 - A `hidden` panel never intersects, so switching tabs has to start its
   media explicitly.
+- **Never call `load()` in the same tick as `play()`.** Assigning `src`
+  already runs the resource selection algorithm; `load()` re-runs it and
+  fires `abort`/`emptied`, so the `play()` promise rejects with
+  `AbortError: The play() request was interrupted by a new load request`.
+  An empty `.catch()` then swallows it and the video sits paused on frame
+  0 forever, with no console error. Retry a rejected `play()` on
+  `canplay` rather than ignoring it.
+- Same trap in reverse: **`play()` then `pause()` in one tick** also
+  rejects the promise, and a retry handler will fight the pause. Keep
+  loading and playing as separate functions.
+- Under `prefers-reduced-motion`, **do not assign `src` at all** - leave
+  the poster on screen. Assigning it replaces a good still with frame 0,
+  which is the black-rectangle bug above. A still frame is the correct
+  reduced-motion treatment; a dead black rectangle is not.
+- Only the visible video should be playing. Five 1020px decoders running
+  behind `opacity:0` cost real battery for frames nobody sees. Pausing
+  the hidden ones is not the same mistake as reloading them - it keeps
+  `currentTime` and resumes a keyframe away.
 
 ### Motion
 - Every decorative animation needs a `prefers-reduced-motion` guard, and
@@ -219,6 +257,29 @@ Static filename scans **cannot see runtime-constructed paths**. A scan
 flagged five in-use `.webm` files as dead because they were only reached
 through `src.replace('.mp4','.webm')`. Check for string construction
 before deleting any asset.
+
+### Checking your own work
+Brace counts and tag balance prove nothing about correctness. Two bugs
+shipped in `888dc57` were both **syntactically valid CSS**: a deleted
+rule left its selector prefix dangling onto the next rule, and an
+inserted rule split `.ai-step.active .ai-step-title` into an unqualified
+`.ai-step-title`. Balanced braces, zero warnings, broken page.
+
+What actually catches these:
+- Split the stylesheet **by cascade context** (base, then each `@media`)
+  and flag any selector declared twice within one context. A media query
+  repeating a base selector is correct; the same selector twice in one
+  context almost never is.
+- Flag any selector containing a newline. Both bugs produced one.
+- **Strip comments before scanning.** A check for `overflow-x:hidden`
+  matched the comment explaining why `hidden` was wrong. Same class of
+  error as a grep for `carousel-slide` matching `carousel-slide-label`.
+- Read the **deployed** file, not the local one, when the complaint is
+  about the live site. `python3 -m http.server` sends no cache headers,
+  so the browser may be showing stale HTML; add `?v=N` when testing.
+- When media looks broken, measure the asset before touching the code:
+  codec profile and `pix_fmt` via ffprobe, and frame 0's mean luma. The
+  black-rectangle bug above looked exactly like a missing file.
 
 ---
 

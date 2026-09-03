@@ -10,7 +10,13 @@
 
 /* ── Reset ────────────────────────────────────────────────────────────────── */
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-html{scroll-behavior:smooth;overflow-x:hidden}
+/* clip, not hidden. A browser cannot honour overflow-x:hidden alongside
+   overflow-y:visible, so it computes overflow-y to auto and body becomes a
+   scroll container. position:sticky in the subtree then resolves against a
+   content-height body and never engages - which is why the case-study
+   sidebar had never actually stuck on any page. overflow-x:clip suppresses
+   horizontal overflow without creating a scroll container. */
+html{scroll-behavior:smooth;overflow-x:clip}
 body{
   font-family:var(--font-sans);
   background:var(--surface-default);
@@ -18,7 +24,7 @@ body{
   -webkit-font-smoothing:antialiased;
   line-height:1.5;
   min-height:100vh;
-  overflow-x:hidden;
+  overflow-x:clip;
 }
 img{display:block;max-width:100%}
 button{cursor:pointer;font-family:inherit}
@@ -271,9 +277,15 @@ button{cursor:pointer;font-family:inherit}
 .vlbx-close svg{width:16px;height:16px;display:block}
 
 /* ── Layout ───────────────────────────────────────────────────────────────── */
+/* Stays at 1100 while these pages still lead with a carousel: .carousel-shell
+   caps at 1040, so a 1280 body would leave the carousel visibly inset, and
+   widening the carousel would render the 1968px sources below the 2x they are
+   cut for. myverint overrides to 1280 locally because it has no carousel.
+   Fold this back in once the carousels are gone.
+   minmax(0,1fr) rather than 1fr so a wide child cannot blow the column out. */
 .cs-body{
   display:grid;
-  grid-template-columns:200px 1fr;
+  grid-template-columns:200px minmax(0,1fr);
   gap:48px;
   padding:40px 36px 100px;
   max-width:1100px;
@@ -283,9 +295,17 @@ button{cursor:pointer;font-family:inherit}
 }
 
 /* ── Sidebar ──────────────────────────────────────────────────────────────── */
+/* A sticky grid item with align-self:start and no height cap has no travel
+   room once its content is taller than the viewport, so it scrolls away like
+   a static block. The max-height plus its own scroll area is what actually
+   keeps it pinned. Needs overflow-x:clip on html/body to work at all - see
+   the reset at the top of this file. */
 .sidebar{
-  position:sticky;top:24px;
+  position:sticky;top:28px;
   height:fit-content;
+  max-height:calc(100vh - 56px);
+  overflow-y:auto;
+  scrollbar-width:thin;
   align-self:start;
   display:flex;flex-direction:column;gap:20px;
 }
