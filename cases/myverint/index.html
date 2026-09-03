@@ -51,7 +51,8 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
    The window is 1320px but the shared .cs-body caps at 1100, so ~220px
    of it went unused. That cap - not the padding - was the tight feeling.
    Scoped to this page so the other case studies are untouched.         */
-.cs-body{max-width:1280px;padding:48px 44px 120px;gap:56px}
+.cs-body{max-width:1280px;padding:48px 44px 120px;gap:56px;
+  position:relative;z-index:1}
 
 /* ── The actual reason sticky was dead ────────────────────────────────
    The shared stylesheet sets overflow-x:hidden on BOTH html and body.
@@ -107,8 +108,7 @@ html,body{overflow-x:clip}
                to{transform:translate3d(-16vmax,10vmax,0) scale(1.22)}}
 @keyframes mvB{from{transform:translate3d(0,0,0) scale(1.14)}
                to{transform:translate3d(14vmax,-12vmax,0) scale(.94)}}
-/* content sits above the field */
-.cs-body{position:relative;z-index:1}
+/* content sits above the field (z-index is on .cs-body above) */
 .back-nav,#scroll-top{z-index:3}
 :root{
   --mv-dot:    color-mix(in srgb, var(--text-primary) 9%, transparent);
@@ -165,7 +165,6 @@ html,body{overflow-x:clip}
 /* The recordings already contain the real status bar and island, so drawing
    our own on top gives you two. Same rule the original used. */
 .sc-phone-screen.has-video .sc-phone-island{display:none}
-.sc-phone-screen.has-video
 .sc-screen-vid{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
   opacity:0;transition:opacity .4s ease}
 .sc-screen-vid.vid-active{opacity:1}
@@ -213,13 +212,12 @@ html,body{overflow-x:clip}
 .ai-step-num{font-size:12px;font-weight:700;letter-spacing:.08em;min-width:26px;
   padding-top:3px;color:var(--text-tertiary);font-variant-numeric:tabular-nums;
   transition:color .3s}
-.ai-step-body{min-width:0}
 .ai-step-title{font-size:15px;font-weight:700;color:var(--text-secondary);
   margin-bottom:5px;transition:color .3s}
 .ai-step-desc{font-size:14px;line-height:1.65;color:var(--text-tertiary);transition:color .3s}
+.ai-step-body{min-width:0}
 .ai-step.active .ai-step-num{color:var(--action-primary)}
-.ai-step.active .ai-step-body{min-width:0}
-.ai-step-title{color:var(--text-primary)}
+.ai-step.active .ai-step-title{color:var(--text-primary)}
 .ai-step.active .ai-step-desc{color:var(--text-secondary)}
 
 /* ══ Mobile - same solution as the original: tabs become a horizontal
@@ -246,7 +244,6 @@ html,body{overflow-x:clip}
   .sc-desc{width:100%;position:static;padding:0}
   .mv-feature{grid-template-columns:1fr;gap:28px}
   .mv-feature .sc-phone{order:0;margin:0 auto}
-    .sc-tabs-wrap{max-width:none;justify-self:stretch}
 }
 @media(prefers-reduced-motion:reduce){
   .mv-field i{animation:none}
