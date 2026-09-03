@@ -39,8 +39,8 @@
   }
 }
 </script>
-<link rel="stylesheet" href="../../src/tokens.css?v=202609032115"/>
-<link rel="stylesheet" href="../shared/case-study.css?v=202609032115"/>
+<link rel="stylesheet" href="../../src/tokens.css?v=202609032132"/>
+<link rel="stylesheet" href="../shared/case-study.css?v=202609032132"/>
 <script>try{if(localStorage.getItem('ori-theme')==='dark')document.documentElement.setAttribute('data-theme','dark')}catch(e){}
 if(window.self!==window.top){var _s=document.createElement('style');_s.textContent='*{cursor:none!important}';document.head.appendChild(_s);}</script>
 <style>
@@ -59,6 +59,137 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
 /* -- Chip variant ------------------------------------------------------- */
 .chip--plugin{background:rgba(157,34,147,.1);color:#9d2293}
 [data-theme="dark"] .chip--plugin{background:rgba(232,121,249,.14);color:#e879f9}
+/* ══ Token Sync bench ═══════════════════════════════════════════════════
+   The plugin's claim, performed rather than narrated. Chrome colours are a
+   picture of an application window, so like the phone bezel on myverint they
+   stay dark in both themes.                                              */
+.tb{margin-top:26px}
+.tb-frame{border-radius:14px;overflow:hidden;
+  background:#1A1B1E;border:1px solid #313337;
+  box-shadow:0 18px 40px rgba(18,18,19,.22)}
+[data-theme="dark"] .tb-frame{box-shadow:0 40px 80px rgba(0,0,0,.7)}
+.tb-bar{display:flex;align-items:center;gap:11px;padding:10px 14px;
+  background:#232427;border-bottom:1px solid #313337}
+.tb-dots{display:flex;gap:6px}
+.tb-dots i{width:9px;height:9px;border-radius:50%;background:#3A3C40}
+.tb-file{font-size:11.5px;color:#9AA0A6;flex:1;min-width:0;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tb-badge-fig{font-size:9px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;
+  color:#C9CDD2;background:#33353A;padding:3px 8px;border-radius:4px}
+.tb-body{display:grid;grid-template-columns:minmax(0,1fr) 236px}
+
+/* canvas */
+.tb-canvas{padding:24px 22px 22px;min-height:250px;
+  background:
+    radial-gradient(circle,rgba(255,255,255,.055) 1px,transparent 1px) 0 0/17px 17px,
+    #202124}
+.tb-canvas-label{font-size:9.5px;font-weight:800;letter-spacing:.13em;
+  text-transform:uppercase;color:#949AA1;margin-bottom:16px}
+.tb-swatches{display:flex;flex-direction:column;gap:9px}
+.tb-sw{display:flex;align-items:center;gap:12px;padding:10px 13px;border-radius:9px;
+  background:#26282B;border:1px solid #32353A}
+.tb-chip{width:30px;height:30px;border-radius:7px;flex-shrink:0;
+  background:#66AFFF;box-shadow:inset 0 0 0 1px rgba(255,255,255,.1);
+  transition:background .55s cubic-bezier(.4,0,.2,1)}
+.tb-chip--400{background:#66AFFF}
+.tb-sw-n{font-size:12.5px;font-weight:600;color:#E4E7EA;flex:1;min-width:0}
+.tb-sw-v{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;
+  font-size:11.5px;color:#9AA0A6;font-variant-numeric:tabular-nums}
+/* Dimmed with colour, not opacity: at opacity .5 this row's value text was
+   2.48:1. The chip can fade - it carries no information. */
+.tb-sw--static{background:#232528}
+.tb-sw--static .tb-sw-n{color:#949AA1;font-weight:500}
+.tb-sw--static .tb-sw-v{color:#8E949B}
+.tb-sw--static .tb-chip{opacity:.55}
+.tb-note{margin-top:16px;font-size:11.5px;line-height:1.65;color:#8B9198;max-width:46ch}
+
+/* plugin panel */
+.tb-panel{padding:16px 15px;background:#1E1F22;border-left:1px solid #313337;
+  display:flex;flex-direction:column}
+.tb-panel-head{display:flex;align-items:center;gap:8px}
+.tb-plug{font-size:15px;line-height:1}
+.tb-panel-t{font-size:13px;font-weight:700;color:#EDEFF1}
+.tb-panel-sub{font-size:10px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;
+  color:#949AA1;margin:9px 0 11px}
+.tb-check{display:flex;align-items:flex-start;gap:8px;padding:9px 10px;margin-bottom:7px;
+  border-radius:7px;background:#26282B;border:1px solid #32353A}
+.tb-check input{margin-top:2px;accent-color:#2563EB;flex-shrink:0}
+.tb-check span{display:flex;flex-direction:column;gap:2px;min-width:0}
+.tb-check b{font-size:11.5px;font-weight:600;color:#E4E7EA}
+.tb-check em{font-style:normal;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;
+  font-size:10px;color:#8B9198}
+.tb-run{margin-top:8px;width:100%;font:inherit;font-size:12.5px;font-weight:700;
+  padding:10px 12px;border:0;border-radius:8px;cursor:pointer;
+  background:var(--action-primary);color:#fff;
+  transition:background .16s,opacity .16s}
+.tb-run:hover{background:var(--action-primary-hover)}
+/* The dark accent is a bright magenta: white on it is 3.34:1, and 2.34:1 on
+   the hover tint. Dark ink gets 5.52:1 and 7.89:1. */
+[data-theme="dark"] .tb-run{color:#141414}
+.tb-run:focus-visible{outline:2px solid #fff;outline-offset:2px}
+/* Disabled is styled, not faded. opacity:.5 composites the label AND the fill
+   toward the page, so the pair collapsed to 2.48:1 - and this button still
+   reports state ("Pushed"), so it has to stay readable. */
+.tb-run[disabled]{cursor:default;background:var(--surface-raised);
+  color:var(--text-secondary);box-shadow:inset 0 0 0 1px var(--border-default)}
+[data-theme="dark"] .tb-run[disabled]{color:var(--text-secondary)}
+.tb-status{margin-top:auto;padding-top:12px;font-size:10.5px;color:#8B9198;
+  font-variant-numeric:tabular-nums}
+.tb-status.on{color:#7EE2A8}
+
+/* pipeline */
+.tb-pipe{display:flex;align-items:stretch;gap:5px;margin-top:14px;
+  overflow-x:auto;padding-bottom:2px;scrollbar-width:none}
+.tb-pipe::-webkit-scrollbar{display:none}
+.tb-pstep{flex:1 1 0;min-width:0;display:flex;flex-direction:column;align-items:center;
+  gap:5px;text-align:center;padding:11px 8px;border-radius:11px;
+  background:var(--surface-default);border:1.5px solid var(--border-subtle);
+  transition:border-color .3s,box-shadow .3s,transform .3s}
+[data-theme="dark"] .tb-pstep{background:var(--surface-raised);border-color:var(--border-default)}
+/* The icon is the only thing that fades - it is decorative, so dimming it
+   costs no legibility. The label and the badge stay at full strength. */
+.tb-pstep span{font-size:19px;line-height:1;opacity:.4;transition:opacity .3s}
+.tb-pstep.on span,.tb-pstep.done span{opacity:1}
+.tb-pstep b{font-size:11px;font-weight:700;color:var(--text-primary);
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
+.tb-pstep em{font-style:normal;font-size:8.5px;font-weight:700;letter-spacing:.06em;
+  text-transform:uppercase;color:var(--text-secondary)}
+.tb-pstep.on{opacity:1;border-color:var(--action-primary);transform:translateY(-2px);
+  box-shadow:0 0 0 3px var(--action-primary-subtle)}
+.tb-pstep.done{opacity:1;border-color:color-mix(in srgb,var(--action-primary) 34%,transparent)}
+.tb-parr{align-self:center;flex-shrink:0;font-size:13px;font-weight:600;
+  color:var(--text-tertiary)}
+
+/* the pull request, revealed */
+.tb-pr{display:none;margin-top:16px}
+.tb-pr.on{display:block;animation:tbIn .42s cubic-bezier(.4,0,.2,1) both}
+@keyframes tbIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.tb-reset{margin-top:12px;font:inherit;font-size:12px;font-weight:600;
+  padding:8px 15px;border-radius:100px;cursor:pointer;
+  background:transparent;border:1px solid var(--border-default);color:var(--text-secondary)}
+.tb-reset:hover{color:var(--text-primary);border-color:var(--action-primary)}
+
+/* the real recording, one click away */
+.tb-real{margin-top:18px}
+.tb-real summary{display:inline-flex;align-items:center;gap:7px;cursor:pointer;
+  font-size:12.5px;font-weight:600;color:var(--text-secondary);
+  padding:7px 14px;border-radius:100px;border:1px solid var(--border-subtle);
+  background:var(--surface-raised);list-style:none}
+.tb-real summary::-webkit-details-marker{display:none}
+.tb-real summary::before{content:"\25B8";font-size:10px;color:var(--action-primary)}
+.tb-real[open] summary::before{content:"\25BE"}
+.tb-real summary:hover{color:var(--text-primary);border-color:var(--action-primary)}
+
+@media(prefers-reduced-motion:reduce){
+  .tb-chip,.tb-pstep{transition:none}
+  .tb-pr.on{animation:none}
+}
+@media(max-width:820px){
+  .tb-body{grid-template-columns:1fr}
+  .tb-panel{border-left:0;border-top:1px solid #313337}
+  .tb-pstep{min-width:74px;flex:0 0 auto}
+  .tb-pipe{gap:3px}
+}
 </style>
 </head>
 <body>
@@ -131,82 +262,119 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
           </div>
           <h3 class="plugin-title">Token Sync</h3>
           <p class="plugin-desc">Pushes updated design tokens from Figma directly into the pipeline. One click and tokens.json commits, the GitHub Action fires, and Storybook rebuilds. No developer needed.</p>
-          <figure class="cs-media">
-            <video class="cs-media-vid" data-src="videos/token-sync.mp4"
-                   poster="images/token-sync-poster.webp" width="1920" height="1080"
-                   muted loop playsinline preload="none"
-                   aria-label="Token Sync plugin panel open in Figma, pushing updated design tokens to GitHub"></video>
-            <figcaption>Token Sync running inside Figma: selecting the changed variables and pushing them to the pipeline in one action.</figcaption>
-          </figure>
-
-          <!-- Pipeline visual -->
-          <div class="pv-wrap">
-            <div class="pv-label">How the pipeline works</div>
-            <div class="pv-flow">
-              <div class="pv-step" data-step="1">
-                <span class="pv-icon">&#127912;</span>
-                <span class="pv-name">Figma Variables</span>
-                <span class="pv-badge">Manual</span>
+          <!-- ══ Token Sync bench - the plugin, operable ══════════════════
+               Not a recording of the plugin: the plugin's own claim, performed.
+               Press Push and the swatches on the canvas actually change colour,
+               the pipeline advances a step at a time, and the pull request that
+               opens carries the same diff the real one did. Every value here -
+               #66AFFF to #2563EB, the file names, the +4/-4 - is the real
+               change from the real PR, not decoration.                      -->
+          <div class="tb" id="tb">
+            <div class="tb-frame">
+              <!-- Figma chrome. Dark in both themes: it is a picture of an
+                   application window, not part of this page. -->
+              <div class="tb-bar">
+                <span class="tb-dots"><i></i><i></i><i></i></span>
+                <span class="tb-file">LUX 2.0 &#183; Foundations / Color</span>
+                <span class="tb-badge-fig">Figma</span>
               </div>
-              <span class="pv-arr">&#8594;</span>
-              <div class="pv-step" data-step="2">
-                <span class="pv-icon">&#128268;</span>
-                <span class="pv-name">Token Sync</span>
-                <span class="pv-badge">Manual</span>
-              </div>
-              <span class="pv-arr">&#8594;</span>
-              <div class="pv-step" data-step="3">
-                <span class="pv-icon">&#128221;</span>
-                <span class="pv-name">TS Generation</span>
-                <span class="pv-badge auto">Auto</span>
-              </div>
-              <span class="pv-arr">&#8594;</span>
-              <div class="pv-step" data-step="4">
-                <span class="pv-icon">&#128570;</span>
-                <span class="pv-name">GitHub Push</span>
-                <span class="pv-badge auto">Auto</span>
-              </div>
-              <span class="pv-arr">&#8594;</span>
-              <div class="pv-step" data-step="5">
-                <span class="pv-icon">&#128640;</span>
-                <span class="pv-name">Live on Main</span>
-                <span class="pv-badge auto">Auto</span>
+              <div class="tb-body">
+                <!-- canvas -->
+                <div class="tb-canvas">
+                  <div class="tb-canvas-label">Color primitives</div>
+                  <div class="tb-swatches">
+                    <div class="tb-sw"><span class="tb-chip" data-tok="blue500"></span>
+                      <span class="tb-sw-n">colorBlue500</span>
+                      <span class="tb-sw-v" data-val="blue500">#66AFFF</span></div>
+                    <div class="tb-sw"><span class="tb-chip" data-tok="interactive"></span>
+                      <span class="tb-sw-n">interactive.default</span>
+                      <span class="tb-sw-v" data-val="interactive">#66AFFF</span></div>
+                    <div class="tb-sw tb-sw--static"><span class="tb-chip tb-chip--400"></span>
+                      <span class="tb-sw-n">colorBlue400</span>
+                      <span class="tb-sw-v">#66AFFF</span></div>
+                  </div>
+                  <div class="tb-note" id="tb-note">Two variables are edited but not
+                    yet in code. That gap is what the plugin closes.</div>
+                </div>
+                <!-- plugin panel -->
+                <div class="tb-panel">
+                  <div class="tb-panel-head">
+                    <span class="tb-plug">&#128268;</span>
+                    <span class="tb-panel-t">Token Sync</span>
+                  </div>
+                  <div class="tb-panel-sub">2 changed variables</div>
+                  <label class="tb-check"><input type="checkbox" checked disabled/>
+                    <span><b>colorBlue500</b><em>#66AFFF &#8594; #2563EB</em></span></label>
+                  <label class="tb-check"><input type="checkbox" checked disabled/>
+                    <span><b>interactive.default</b><em>#66AFFF &#8594; #2563EB</em></span></label>
+                  <button class="tb-run" id="tb-run">Push to GitHub</button>
+                  <div class="tb-status" id="tb-status" role="status" aria-live="polite">Ready</div>
+                </div>
               </div>
             </div>
 
-            <!-- Mock GitHub PR -->
-            <div class="pr-card">
-              <div class="pr-head">
-                <div class="pr-title-row">
-                  <div class="pr-title">tokens: update brand-primary and interactive-default</div>
-                  <div class="pr-meta">Opened automatically by verint-token-sync &middot; +4 -4 &middot; primitives.ts, semanticsLight.ts, semanticsDark.ts</div>
-                </div>
-                <span class="pr-merged">
-                  <svg width="10" height="10" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M5 3.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0zm0 2.122a2.25 2.25 0 1 0-1.5 0v.878A2.25 2.25 0 0 0 5.75 8.5h1.5v2.128a2.251 2.251 0 1 0 1.5 0V8.5h1.5a2.25 2.25 0 0 0 2.25-2.25v-.878a2.25 2.25 0 1 0-1.5 0v.878a.75.75 0 0 1-.75.75h-4.5A.75.75 0 0 1 5 6.25v-.878z"/></svg>
-                  Merged
-                </span>
-              </div>
-              <div class="pr-diff-block">
-                <div class="diff-file-head">
-                  <span>&#128216; primitives.ts</span>
-                  <span class="diff-add-count">+1</span>
-                  <span class="diff-del-count">-1</span>
-                </div>
-                <div class="diff-lines">
-                  <span class="diff-line ctx"> 4 &nbsp;export const primitives = &#123;</span>
-                  <span class="diff-line del"> 5- &nbsp; colorBlue500: '#66AFFF',</span>
-                  <span class="diff-line add"> 5+ &nbsp; colorBlue500: '#2563EB',</span>
-                  <span class="diff-line ctx"> 6 &nbsp; colorBlue400: '#66AFFF',</span>
-                </div>
-              </div>
-              <div class="pr-foot">
-                <span class="pr-foot-check">&#10003;</span>
-                <span>Auto-merged by GitHub Actions</span>
-                <span class="pr-foot-badge">TypeScript valid</span>
-                <span class="pr-foot-badge">Storybook preview</span>
-              </div>
+            <!-- pipeline -->
+            <div class="tb-pipe" id="tb-pipe" aria-hidden="true">
+              <div class="tb-pstep"><span>&#127912;</span><b>Figma Variables</b><em>Manual</em></div>
+              <div class="tb-parr">&#8594;</div>
+              <div class="tb-pstep"><span>&#128268;</span><b>Token Sync</b><em>Manual</em></div>
+              <div class="tb-parr">&#8594;</div>
+              <div class="tb-pstep"><span>&#128221;</span><b>TS Generation</b><em>Auto</em></div>
+              <div class="tb-parr">&#8594;</div>
+              <div class="tb-pstep"><span>&#128570;</span><b>GitHub Push</b><em>Auto</em></div>
+              <div class="tb-parr">&#8594;</div>
+              <div class="tb-pstep"><span>&#128640;</span><b>Live on Main</b><em>Auto</em></div>
             </div>
 
+            <!-- the pull request it opened -->
+            <div class="tb-pr" id="tb-pr">
+              <div class="pr-card">
+                <div class="pr-head">
+                  <div class="pr-title-row">
+                    <div class="pr-title">tokens: update brand-primary and interactive-default</div>
+                    <div class="pr-meta">Opened automatically by verint-token-sync &#183; +4 -4 &#183; primitives.ts, semanticsLight.ts, semanticsDark.ts</div>
+                  </div>
+                  <span class="pr-merged">
+                    <svg width="10" height="10" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M5 3.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0zm0 2.122a2.25 2.25 0 1 0-1.5 0v.878A2.25 2.25 0 0 0 5.75 8.5h1.5v2.128a2.251 2.251 0 1 0 1.5 0V8.5h1.5a2.25 2.25 0 0 0 2.25-2.25v-.878a2.25 2.25 0 1 0-1.5 0v.878a.75.75 0 0 1-.75.75h-4.5A.75.75 0 0 1 5 6.25v-.878z"/></svg>
+                    Merged
+                  </span>
+                </div>
+                <div class="pr-diff-block">
+                  <div class="diff-file-head">
+                    <span>&#128216; primitives.ts</span>
+                    <span class="diff-add-count">+1</span>
+                    <span class="diff-del-count">-1</span>
+                  </div>
+                  <div class="diff-lines">
+                    <span class="diff-line ctx"> 4 &nbsp;export const primitives = &#123;</span>
+                    <span class="diff-line del"> 5- &nbsp; colorBlue500: '#66AFFF',</span>
+                    <span class="diff-line add"> 5+ &nbsp; colorBlue500: '#2563EB',</span>
+                    <span class="diff-line ctx"> 6 &nbsp; colorBlue400: '#66AFFF',</span>
+                  </div>
+                </div>
+                <div class="pr-foot">
+                  <span class="pr-foot-check">&#10003;</span>
+                  <span>Auto-merged by GitHub Actions</span>
+                  <span class="pr-foot-badge">TypeScript valid</span>
+                  <span class="pr-foot-badge">Storybook preview</span>
+                </div>
+              </div>
+              <button class="tb-reset" id="tb-reset">Run it again</button>
+            </div>
+
+            <!-- The simulation is the set piece, but the plugin is a real thing
+                 that shipped, so the recording stays one click away rather than
+                 being cut. -->
+            <details class="tb-real">
+              <summary>Watch the real plugin, in Figma</summary>
+              <figure class="cs-media">
+                <video class="cs-media-vid" data-src="videos/token-sync.mp4"
+                       poster="images/token-sync-poster.webp" width="1920" height="1080"
+                       muted loop playsinline preload="none"
+                       aria-label="Token Sync plugin panel open in Figma, pushing updated design tokens to GitHub"></video>
+                <figcaption>The shipped plugin running in Figma: selecting the changed variables and pushing them to the pipeline in one action.</figcaption>
+              </figure>
+            </details>
           </div>
         </div>
 
@@ -319,6 +487,110 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
   </svg>
 </button>
 
-<script src="../shared/case-study.js?v=202609032115" defer></script>
+<script src="../shared/case-study.js?v=202609032132" defer></script>
+
+<script>
+/* ══ Token Sync bench ═══════════════════════════════════════════════════════
+   The page's headline claim is "a designer changes a colour in Figma and sees
+   it live in code". This performs it: press Push, the canvas swatches actually
+   change to the new value, the pipeline advances one step at a time, and the
+   pull request that opens carries the same diff the real one did.
+
+   Every value is the real change - #66AFFF to #2563EB, the file list, the
+   +4/-4 - so nothing here is invented to look impressive.
+
+   Under prefers-reduced-motion the whole sequence resolves immediately rather
+   than being withheld: the point is the outcome, not the animation.       */
+(function(){
+  var root = document.getElementById('tb');
+  if (!root) return;
+
+  var run    = document.getElementById('tb-run');
+  var reset  = document.getElementById('tb-reset');
+  var status = document.getElementById('tb-status');
+  var note   = document.getElementById('tb-note');
+  var pr     = document.getElementById('tb-pr');
+  var steps  = root.querySelectorAll('.tb-pstep');
+  var chips  = root.querySelectorAll('.tb-chip[data-tok]');
+  var vals   = root.querySelectorAll('.tb-sw-v[data-val]');
+
+  var OLD = '#66AFFF', NEW = '#2563EB';
+  var LABELS = ['Reading Figma variables',
+                'Generating TypeScript',
+                'Committing to primitives.ts',
+                'Opening pull request',
+                'Merged - live on main'];
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var timers = [], running = false;
+
+  function clearTimers(){ timers.forEach(clearTimeout); timers = []; }
+
+  function paint(hex){
+    chips.forEach(function(c){ c.style.background = hex; });
+    vals.forEach(function(v){ v.textContent = hex; });
+  }
+
+  function setStep(i){
+    steps.forEach(function(s,n){
+      s.classList.toggle('on', n === i);
+      s.classList.toggle('done', n < i);
+    });
+    status.textContent = LABELS[i] || '';
+  }
+
+  function finish(){
+    steps.forEach(function(s){ s.classList.remove('on'); s.classList.add('done'); });
+    status.textContent = 'Merged - live on main';
+    status.classList.add('on');
+    note.textContent = 'The variables and the code now agree. No ticket, no '
+                     + 'developer, no waiting - the whole round trip was one click.';
+    paint(NEW);
+    pr.classList.add('on');
+    run.disabled = true;
+    run.textContent = 'Pushed';
+    running = false;
+  }
+
+  function start(){
+    if (running) return;
+    running = true;
+    run.disabled = true;
+    run.textContent = 'Pushing...';
+    status.classList.remove('on');
+    pr.classList.remove('on');
+
+    if (reduce) { finish(); return; }
+
+    /* The colour lands on the commit step, not on the button press - that is
+       where it lands in the real pipeline too. */
+    for (var i = 0; i < LABELS.length; i++) {
+      (function(n){
+        timers.push(setTimeout(function(){
+          setStep(n);
+          if (n === 2) paint(NEW);
+          if (n === LABELS.length - 1) timers.push(setTimeout(finish, 620));
+        }, 620 * n + 180));
+      })(i);
+    }
+  }
+
+  function rewind(){
+    clearTimers();
+    running = false;
+    steps.forEach(function(s){ s.classList.remove('on','done'); });
+    pr.classList.remove('on');
+    paint(OLD);
+    status.textContent = 'Ready';
+    status.classList.remove('on');
+    note.textContent = 'Two variables are edited but not yet in code. '
+                     + 'That gap is what the plugin closes.';
+    run.disabled = false;
+    run.textContent = 'Push to GitHub';
+  }
+
+  run.addEventListener('click', start);
+  reset.addEventListener('click', function(){ rewind(); run.focus(); });
+})();
+</script>
 </body>
 </html>
