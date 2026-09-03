@@ -42,25 +42,23 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
 [data-theme="dark"] .chip--mobile{background:rgba(232,113,138,.14);color:#E8718A}
 
 
-/* ── Inline media modules ────────────────────────────────────────────────
-   Replaces the carousel. Media now sits beside the claim it evidences
-   instead of being front-loaded in a tray where slides 2-4 never get seen.
-   All colour comes from the shared tokens, so both themes work.          */
+/* Inline media modules replace the carousel: media sits beside the claim it
+   evidences instead of being front-loaded in a tray where slides 2-4 never
+   get seen. All colour comes from the shared tokens, so both themes work.
 
-/* ══ Page container ════════════════════════════════════════════════════
-   Width, padding, overflow-x:clip and the sidebar max-height guard are all
-   in cases/shared/case-study.css now - the 1280 cap was only local while
-   the other pages still had carousels to stay flush with.              */
+   Page width, padding, overflow-x:clip, the sidebar sticky guard and the
+   ambient field all live in cases/shared/case-study.css now - none of them
+   was ever page-specific. What is left below is the tab module and the Ask
+   AI module, which are genuinely particular to this project.            */
 .sidebar::-webkit-scrollbar{width:6px}
 .sidebar::-webkit-scrollbar-thumb{background:var(--border-default);border-radius:3px}
 
-/* ══ Ambient field ════════════════════════════════════════════════════
-   Now in cases/shared/case-study.css as .cs-field, so every case study
-   gets the dot lattice and the drifting wash in its own accent. Nothing
-   here was page-specific - it all read var(--action-primary) already. */
-
-/* The section keeps its extra breathing room, no longer its own backdrop */
-.mv-sec{position:relative;padding:76px 0 84px}
+/* No vertical padding. .cs-content already sets a 52px gap between every
+   section, and 76/84 on top of that put The Design roughly three times
+   further from its neighbours than any other pair on the page. The module
+   gets its breathing room from .mv-show's own margin-top instead, which
+   costs nothing at the section boundary. */
+.mv-sec{position:relative}
 
 /* ── three columns ─────────────────────────────────────────────────────
    No breakout: the module starts at .cs-content's left edge, so the tab
@@ -163,7 +161,6 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
       scrolling pill row, phone centres, detail goes full width ════════ */
 @media(max-width:900px){
   .cs-body{padding:24px 20px 80px}
-  .mv-sec{padding:52px 0 56px}
   .mv-show{display:flex;flex-direction:column;gap:28px;align-items:stretch;margin-top:32px}
   .sc-tabs-wrap{overflow:hidden;width:100%;align-self:stretch}
   .sc-tabs{flex-direction:row;overflow-x:auto;overflow-y:hidden;
@@ -182,7 +179,12 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
   .sc-phone-island{width:104px;height:28px;top:13px}
   .sc-desc{width:100%;position:static;padding:0}
   .mv-feature{grid-template-columns:1fr;gap:28px}
-  .mv-feature .sc-phone{order:0;margin:0 auto}
+  /* Reading order on one column: heading and intro copy (both outside
+     .mv-feature), then the mockup, then the steps. The steps describe what
+     the recording shows, so they have to follow it - the DOM is text-first
+     for the desktop two-column layout, which puts them before it by
+     default. order:-1 on the phone is what corrects that. */
+  .mv-feature .sc-phone{order:-1;margin:0 auto}
 }
 @media(prefers-reduced-motion:reduce){
   .sc-screen-vid{transition:none}
