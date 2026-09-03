@@ -1,6 +1,6 @@
 # oricohen.co - Project Rules
 
-Portfolio site for Ori Cohen. Live at https://oricohen.co — deployed via GitHub Pages.
+Portfolio site for Ori Cohen. Live at https://oricohen.co - deployed via GitHub Pages.
 
 ## Stack
 - Vanilla HTML/CSS/JS, no build step, no framework
@@ -111,6 +111,114 @@ The inline style block in index.html contains fallback values loaded before toke
 - `.~lock.*`
 - `cases/lux/images/og-image.webp`
 - `.cowork-sync.sh`
+
+---
+
+## Case study rules (established Sept 2026 on cases/myverint)
+
+These came out of rebuilding My Verint. They apply to every case study.
+Where a rule is currently only implemented on myverint it says so.
+
+### Structure
+- **No carousel.** Media sits beside the claim it evidences. A carousel
+  front-loads all the evidence before any of the argument, and almost
+  nobody advances one - slides 2-4 are effectively invisible.
+- **One judgement per section.** Promote the thing that matters, demote
+  the rest. Three equal metrics or three equal cards is a refusal to
+  decide, and it is what reads as generated.
+- **Reflections are margin notes, not alerts.** `PROCESS` / `RESEARCH`
+  style labels, not `01`/`02` - numbers imply a sequence these do not
+  have. Never a filled circle with `!`; that is an error affordance.
+- **Media modules may differ per project; the page grammar may not.**
+  Type scale, spacing rhythm, section order, nav and lightbox stay
+  identical. Only the media component changes with the artifact.
+
+### Live bugs to fix when touching a case study
+- **`overflow-x:hidden` on html/body kills `position:sticky`.** The
+  browser computes `overflow-y` to `auto`, making body a scroll
+  container; sticky then resolves against a content-height body and never
+  engages. Use `overflow-x:clip`. **The sidebar is currently broken on
+  lux, copilot, plugins and agent-factory for this reason** - myverint
+  patches it locally.
+- **`.cs-body` caps at `max-width:1100px`** inside a 1320px window, so
+  ~220px goes unused. myverint overrides to 1280px locally.
+- **`.diff-item::before` paints a 4px accent bar.** If the card styling is
+  removed, that bar stays and lands on top of whatever sits at `left:0`.
+  Overriding a card means overriding its pseudo-elements too.
+
+### The specificity trap
+`.cs-section p` in the shared sheet is **(0,1,1)** - one class plus one
+type. A local rule of the form `.my-class` is **(0,1,0)** and **loses**,
+silently, for `color`, `font-size`, `line-height` and `margin`. Only
+properties the shared rule does not set (e.g. `font-weight`) get through,
+which makes it look like the rule half-worked. Any local override on a
+`<p>` inside `.cs-section` needs two classes: `.parent .child`.
+
+### Ambient field
+- One **fixed**, page-wide layer: dot lattice plus two drifting radial
+  washes in the project accent. Not per-section - masking per section
+  makes the texture pulse on and off at every boundary.
+- **Light and dark are not the same treatment.** Glow is additive. On
+  near-black there is headroom to add light, so accent dots read as
+  luminosity; on white a dark dot subtracts light and reads as dirt.
+  Light: neutral dots ~9%, accent washes 10%/8%. Dark: accent dots ~28%,
+  washes 22%/17%.
+- **Wash opacity is capped by contrast, not by taste.** Two overlapping
+  washes at 10% put `--text-secondary` at 5.00:1. At 12% it is 4.49:1 and
+  fails. Presence beyond that must come from **motion amplitude and size**,
+  which cost nothing in contrast.
+
+### The device frame
+- Bezel colours are a **physical object**, not page chrome - they stay
+  dark in both themes. A dark phone on a light page is correct.
+- **Hide the Dynamic Island when the screen shows video.** The recordings
+  already contain the real status bar; drawing our own gives two.
+  `.has-video .sc-phone-island{display:none}`.
+
+### Elevation
+Shadows are **not symmetric between themes**. On white a shadow must be
+short and faint or it reads as a grey smear; on near-black it needs depth
+to register at all. Use a token per theme, never one shared value.
+Reference: light `0 18px 40px rgba(18,18,19,.16)`, dark `0 48px 96px
+rgba(0,0,0,.8)`.
+
+### Media encoding
+- Video: **H.264, CRF 26, `-preset slow`, `-movflags +faststart`, no audio
+  track.** Verify with SSIM against the source; >0.99 is visually
+  lossless. Do not guess a bitrate.
+- **Do not ship WebM alongside MP4 without measuring.** Once H.264 is
+  encoded properly, VP9 lost on every file here - the WebM was only
+  winning because the MP4 was over-encoded at 350-500 kbps.
+- Posters: **WebP q82.** Roughly 60% smaller than the JPEG equivalent.
+- Source resolution should be ~2x the rendered CSS width. No larger.
+
+### Media loading
+- Poster only at first paint. Active media on intersection. Everything
+  else on `requestIdleCallback`. Entering a section should not cost the
+  whole section's media.
+- **Tab-to-media binding must be by id, never by index.** Bind
+  `data-for="performance"` on the media and match on the attribute. Index
+  arithmetic breaks silently the moment the tab order and the DOM order
+  diverge - it paired Performance with the Schedule recording.
+- A `hidden` panel never intersects, so switching tabs has to start its
+  media explicitly.
+
+### Motion
+- Every decorative animation needs a `prefers-reduced-motion` guard, and
+  reveals must resolve to their final state rather than staying at
+  `opacity:0`.
+- **A transformed ancestor breaks `position:sticky` in its subtree.**
+  `.cs-reveal` sets `transform:translateY(0)` when visible - still a
+  transform. Do not put `cs-reveal` on a section containing a sticky
+  element.
+- Crossfade between videos with **opacity only** - no pause, play or
+  restart. Reloading on every switch adds decode latency.
+
+### Dead-code scanning
+Static filename scans **cannot see runtime-constructed paths**. A scan
+flagged five in-use `.webm` files as dead because they were only reached
+through `src.replace('.mp4','.webm')`. Check for string construction
+before deleting any asset.
 
 ---
 

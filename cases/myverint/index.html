@@ -34,12 +34,282 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
 }
 /* Bright rose bg needs dark icon/text for contrast */
 [data-theme="dark"] #scroll-top { color: #1a1a1a; }
-[data-theme="dark"] .diff-num    { color: #1a1a1a; }
+/* The reflection markers are margin labels now, not filled circles, so the
+   old dark-on-rose override is gone. */
 
 /* -- Chip variant ------------------------------------------------------- */
 .chip--mobile{background:rgba(139,26,46,.1);color:#8B1A2E}
 [data-theme="dark"] .chip--mobile{background:rgba(232,113,138,.14);color:#E8718A}
 
+
+/* ── Inline media modules ────────────────────────────────────────────────
+   Replaces the carousel. Media now sits beside the claim it evidences
+   instead of being front-loaded in a tray where slides 2-4 never get seen.
+   All colour comes from the shared tokens, so both themes work.          */
+
+/* ══ Page container ════════════════════════════════════════════════════
+   The window is 1320px but the shared .cs-body caps at 1100, so ~220px
+   of it went unused. That cap - not the padding - was the tight feeling.
+   Scoped to this page so the other case studies are untouched.         */
+.cs-body{max-width:1280px;padding:48px 44px 120px;gap:56px}
+
+/* ── The actual reason sticky was dead ────────────────────────────────
+   The shared stylesheet sets overflow-x:hidden on BOTH html and body.
+   A browser cannot honour overflow-x:hidden with overflow-y:visible, so
+   it computes overflow-y to auto - which makes <body> a scroll container.
+   position:sticky then resolves against body, and body is content-height,
+   so there is nothing to scroll inside it and the sticky never engages.
+   The viewport is scrolling <html>, not body.
+
+   overflow-x:clip does the same clipping WITHOUT establishing a scroll
+   container, so sticky keeps working. The old portfolio already used clip
+   on html for exactly this reason; the shared file regressed to hidden.
+
+   Scoped here rather than fixed in the shared file, so the other case
+   studies are untouched until you want it rolled out.                  */
+html,body{overflow-x:clip}
+
+/* height:fit-content + align-self:start is what lets a sticky GRID ITEM
+   travel at all. max-height guards the case where the sidebar grows
+   taller than the viewport, at which point sticky silently stops. */
+.sidebar{position:sticky;top:28px;align-self:start;height:fit-content;
+  max-height:calc(100vh - 56px);overflow-y:auto;scrollbar-width:thin}
+.sidebar::-webkit-scrollbar{width:6px}
+.sidebar::-webkit-scrollbar-thumb{background:var(--border-default);border-radius:3px}
+
+/* ══ Ambient field - page-wide ═════════════════════════════════════════
+   Fixed to the viewport rather than bounded to one section, so the dots
+   and the drifting project colour accompany every scroll instead of
+   fading in and out. body's background paints the canvas, so a fixed
+   child at z-index 0 sits above it and below the content.
+
+   Light and dark are not the same treatment. Glow is additive: on
+   near-black there is headroom to add light, so accent dots read as
+   luminosity. On white a dark dot subtracts light and reads as dirt, so
+   light mode uses near-neutral dots at a third the strength.          */
+.mv-field{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+.mv-field::before{content:"";position:absolute;inset:0;
+  background-image:radial-gradient(circle,var(--mv-dot) 1px,transparent 1px);
+  background-size:22px 22px}
+.mv-field i{position:absolute;display:block;border-radius:50%}
+.mv-field i:nth-child(1){width:64vmax;height:64vmax;top:-22vmax;right:-16vmax;
+  background:radial-gradient(circle closest-side,var(--mv-wash-a),transparent 70%);
+  animation:mvA 17s ease-in-out infinite alternate}
+.mv-field i:nth-child(2){width:56vmax;height:56vmax;bottom:-20vmax;left:-16vmax;
+  background:radial-gradient(circle closest-side,var(--mv-wash-b),transparent 70%);
+  animation:mvB 23s ease-in-out infinite alternate}
+/* Presence here comes from travel and size, not opacity. Opacity is capped
+   by contrast: in light mode 8% per wash keeps secondary text at 4.5:1 even
+   if both overlap, and 10% already fails once a third wash is added. Motion
+   amplitude costs nothing, so the drift is large (14-16vmax vs the 5vmax it
+   was) and both washes sit in opposite corners, away from the text column. */
+@keyframes mvA{from{transform:translate3d(0,0,0) scale(1)}
+               to{transform:translate3d(-16vmax,10vmax,0) scale(1.22)}}
+@keyframes mvB{from{transform:translate3d(0,0,0) scale(1.14)}
+               to{transform:translate3d(14vmax,-12vmax,0) scale(.94)}}
+/* content sits above the field */
+.cs-body{position:relative;z-index:1}
+.back-nav,#scroll-top{z-index:3}
+:root{
+  --mv-dot:    color-mix(in srgb, var(--text-primary) 9%, transparent);
+  --mv-wash-a: color-mix(in srgb, var(--action-primary) 10%, transparent);
+  --mv-wash-b: color-mix(in srgb, var(--action-primary) 8%,  transparent);
+}
+[data-theme="dark"]{
+  --mv-dot:    color-mix(in srgb, var(--action-primary) 28%, transparent);
+  --mv-wash-a: color-mix(in srgb, var(--action-primary) 22%, transparent);
+  --mv-wash-b: color-mix(in srgb, var(--action-primary) 17%, transparent);
+}
+/* The section keeps its extra breathing room, no longer its own backdrop */
+.mv-sec{position:relative;padding:76px 0 84px}
+
+/* ── three columns ─────────────────────────────────────────────────────
+   No breakout: the module starts at .cs-content's left edge, so the tab
+   list lines up with the heading and body copy above it rather than with
+   the page edge. The only slack was the sidebar gutter on the left, and
+   using it broke that alignment. Right-column width comes from sizing the
+   phone at the original's 264px instead of 300px. */
+.mv-show{display:grid;grid-template-columns:168px auto minmax(0,1fr);
+  gap:52px;align-items:center;margin-top:64px}
+.sc-tabs-wrap{position:relative;align-self:start;width:100%}
+.sc-tabs{display:flex;flex-direction:column;gap:4px;position:sticky;top:80px}
+.sc-tab{display:flex;align-items:center;gap:8px;padding:13px 15px;cursor:pointer;
+  border-radius:var(--radius-lg);font-size:15px;font-weight:500;
+  color:var(--text-secondary);transition:background .18s,color .18s}
+.sc-tab:hover{background:var(--action-primary-subtle);color:var(--text-primary)}
+.sc-tab.active{background:var(--action-primary-subtle);color:var(--action-primary);font-weight:700}
+.sc-tab:focus-visible{outline:2px solid var(--action-primary);outline-offset:2px}
+.sc-tab-label{min-width:0}   /* no flex:1 - the badge hugs the label */
+.sc-tab-badge{font-size:11px;font-weight:700;padding:2px 8px;border-radius:var(--radius-full);
+  background:var(--action-primary);color:#fff;letter-spacing:.04em}
+
+/* ── the device. Bezel colours are a physical object, not page chrome, so
+      they stay dark in both themes - a dark phone on a light page is
+      correct. Ported from the original frame. ──────────────────────────── */
+.sc-phone-col{display:flex;justify-content:center}
+.sc-phone{width:264px;height:558px;border-radius:52px;flex-shrink:0;position:relative;
+  background:linear-gradient(160deg,#222,#1A1A1A);
+  border:2px solid rgba(255,255,255,.13);
+  box-shadow:0 0 0 1px rgba(18,18,19,.5),0 26px 56px rgba(18,18,19,.22),0 6px 16px rgba(18,18,19,.10),
+             inset 0 1px 0 rgba(255,255,255,.08)}
+[data-theme="dark"] .sc-phone{
+  box-shadow:0 0 0 1px rgba(0,0,0,.9),0 40px 80px rgba(0,0,0,.7),inset 0 1px 0 rgba(255,255,255,.08)}
+.sc-phone::before{content:"";position:absolute;right:-4px;top:108px;width:3px;height:68px;
+  background:rgba(255,255,255,.14);border-radius:0 4px 4px 0}
+.sc-phone::after{content:"";position:absolute;left:-4px;top:88px;width:3px;height:36px;
+  background:rgba(255,255,255,.11);border-radius:4px 0 0 4px;
+  box-shadow:0 50px 0 rgba(255,255,255,.11),0 94px 0 rgba(255,255,255,.11)}
+.sc-phone-screen{position:absolute;inset:10px;border-radius:41px;overflow:hidden;background:#000}
+.sc-phone-island{position:absolute;top:14px;left:50%;transform:translateX(-50%);
+  width:100px;height:27px;background:#000;border-radius:18px;z-index:10}
+/* The recordings already contain the real status bar and island, so drawing
+   our own on top gives you two. Same rule the original used. */
+.sc-phone-screen.has-video .sc-phone-island{display:none}
+.sc-phone-screen.has-video
+.sc-screen-vid{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
+  opacity:0;transition:opacity .4s ease}
+.sc-screen-vid.vid-active{opacity:1}
+.sc-phone-hint{display:none}
+@media(min-width:901px) and (prefers-reduced-motion:no-preference){
+  .sc-phone{animation:floatPhone 5s cubic-bezier(.45,0,.55,1) infinite}
+}
+@keyframes floatPhone{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+
+.sc-desc{display:flex;flex-direction:column;gap:20px;align-self:start;text-align:left;min-width:0}
+.sc-desc-tab{display:none}
+.sc-desc-tab.active{display:block}
+.sc-desc-eyebrow{font-size:12px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;
+  color:var(--action-primary);margin-bottom:8px}
+.sc-desc-name{font-size:26px;font-weight:700;letter-spacing:-.5px;color:var(--text-primary);
+  line-height:1.2;margin-bottom:10px}
+.sc-desc-body{font-size:15px;line-height:1.75;color:var(--text-secondary);
+  margin-bottom:22px;max-width:52ch}
+.sc-bullets{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:15px}
+.sc-bullets li{padding-left:14px;border-left:2px solid var(--action-primary-subtle)}
+.sc-bl-title{font-size:14px;font-weight:700;color:var(--text-primary);margin-bottom:2px}
+.sc-bl-desc{font-size:14px;line-height:1.6;color:var(--text-secondary)}
+
+/* ══ Ask AI - mockup left, steps right, with a video-synced indicator ══
+   The bar and the .active states are driven by video.currentTime, ported
+   from the original: AI_STEP_TIMES marks when each step begins.         */
+/* Same device frame as The Design, so the two sections match. The video
+   fills the screen inset; the island is hidden because the recording has
+   the real status bar baked in. */
+.mv-vid{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
+  object-position:center top;background:#000}
+.mv-feature{display:grid;grid-template-columns:264px minmax(0,1fr);gap:72px;
+  align-items:center;margin-top:52px}
+.mv-feature .sc-phone{order:-1}   /* visually left; DOM stays text-first */
+
+.ai-steps-track{position:relative;padding-left:22px}
+.ai-steps-track::before{content:"";position:absolute;left:0;top:0;bottom:0;width:2px;
+  background:var(--border-default);border-radius:1px}
+.step-active-bar{position:absolute;left:0;top:0;width:2px;border-radius:1px;
+  background:var(--action-primary);
+  transition:top .4s cubic-bezier(.4,0,.2,1),height .4s cubic-bezier(.4,0,.2,1)}
+.ai-step{display:flex;gap:20px;padding:22px 0;
+  border-bottom:1px solid var(--border-subtle)}
+.ai-step:last-child{border-bottom:none}
+.ai-step-num{font-size:12px;font-weight:700;letter-spacing:.08em;min-width:26px;
+  padding-top:3px;color:var(--text-tertiary);font-variant-numeric:tabular-nums;
+  transition:color .3s}
+.ai-step-body{min-width:0}
+.ai-step-title{font-size:15px;font-weight:700;color:var(--text-secondary);
+  margin-bottom:5px;transition:color .3s}
+.ai-step-desc{font-size:14px;line-height:1.65;color:var(--text-tertiary);transition:color .3s}
+.ai-step.active .ai-step-num{color:var(--action-primary)}
+.ai-step.active .ai-step-body{min-width:0}
+.ai-step-title{color:var(--text-primary)}
+.ai-step.active .ai-step-desc{color:var(--text-secondary)}
+
+/* ══ Mobile - same solution as the original: tabs become a horizontal
+      scrolling pill row, phone centres, detail goes full width ════════ */
+@media(max-width:900px){
+  .cs-body{padding:24px 20px 80px}
+  .mv-sec{padding:52px 0 56px}
+  .mv-show{display:flex;flex-direction:column;gap:28px;align-items:stretch;margin-top:32px}
+  .sc-tabs-wrap{overflow:hidden;width:100%;align-self:stretch}
+  .sc-tabs{flex-direction:row;overflow-x:auto;overflow-y:hidden;
+    -webkit-overflow-scrolling:touch;gap:7px;position:static;padding:2px 0 6px;
+    scrollbar-width:none}
+  .sc-tabs::-webkit-scrollbar{display:none}
+  .sc-tab{flex-shrink:0;padding:9px 15px;border-radius:var(--radius-full);
+    background:var(--surface-raised);border:1px solid var(--border-subtle);font-size:13px}
+  .sc-tab.active{background:var(--action-primary-subtle);
+    border-color:color-mix(in srgb,var(--action-primary) 28%,transparent)}
+  .sc-tab-label{white-space:nowrap;font-size:13px;font-weight:600}
+  .sc-tab-badge{display:none}
+  .sc-phone-col{flex-direction:column;align-items:center}
+  .sc-phone{width:272px;height:574px;border-radius:54px}
+  .sc-phone-screen{inset:10px;border-radius:44px}
+  .sc-phone-island{width:104px;height:28px;top:13px}
+  .sc-desc{width:100%;position:static;padding:0}
+  .mv-feature{grid-template-columns:1fr;gap:28px}
+  .mv-feature .sc-phone{order:0;margin:0 auto}
+    .sc-tabs-wrap{max-width:none;justify-self:stretch}
+}
+@media(prefers-reduced-motion:reduce){
+  .mv-field i{animation:none}
+  .sc-screen-vid{transition:none}
+  .sc-phone{animation:none}
+}
+/* ══ What I'd do differently ═══════════════════════════════════════════
+   Three levels, three colours. Previously the margin label and the body
+   copy were both --text-secondary, so there were only two levels and the
+   whole block read as flat grey. The label now carries the accent, which
+   also ties it to the section title.
+
+   Contrast on the washed background, worst case (both washes overlapping):
+     label   accent      6.73:1 light / 4.89:1 dark (hover step - plain
+                         accent is 3.52:1 in dark and fails)
+     lesson  primary    13.71:1 light / 9.37:1 dark
+     body    secondary   5.00:1 light / 6.87:1 dark
+
+   Spacing uses align-items:baseline rather than a hand-tuned padding-top,
+   so the label's baseline sits on the lesson's first baseline whatever
+   either font-size becomes.                                             */
+.diff-item{display:grid;grid-template-columns:7.5em minmax(0,1fr);
+  gap:0 2.4em;align-items:baseline;
+  background:none;border:0;border-radius:0;box-shadow:none;overflow:visible;
+  padding:2.2em 0;margin:0;border-top:1px solid var(--border-subtle)}
+/* no rule directly under the section heading */
+.diff-item:first-of-type{border-top:0;margin-top:1.4em;padding-top:0}
+.diff-item:last-of-type{padding-bottom:.4em}
+/* The shared rule paints a 4px accent bar via ::before at left:0. With the
+   card gone it sat on top of the label's first letter - PROCESS read as
+   ROCESS. It belonged to the card, so it goes with the card. */
+.diff-item::before{display:none}
+.diff-item:hover{box-shadow:none}
+
+.diff-marg{font-size:.75rem;font-weight:700;letter-spacing:.11em;
+  text-transform:uppercase;color:var(--action-primary);line-height:1.4;
+  padding:0}
+[data-theme="dark"] .diff-marg{color:var(--action-primary-hover)}
+
+.diff-body{min-width:0}
+/* SPECIFICITY: these are <p> inside .cs-section, and the shared
+   .cs-section p rule is (0,1,1) - one class plus one type. A bare
+   .diff-lesson is (0,1,0) and LOSES, so colour, font-size, line-height
+   and margin were all silently coming from the shared rule. Only
+   font-weight got through, because nothing competed for it - which is
+   exactly why the lesson looked bold but still grey and body-sized.
+   Two classes gives (0,2,0), which beats (0,1,1) on class count.
+
+   No max-width: the 40ch cap was forcing these onto two lines. The longer
+   lesson is ~613px at 19px against a ~778px column, so both fit.
+   --text-primary is #121213 (verified in tokens.css: --vg-950). A literal
+   #000 would not invert for dark mode. */
+.diff-body .diff-lesson{font-size:1.1875rem;line-height:1.35;font-weight:700;
+  letter-spacing:-.014em;color:var(--text-primary);
+  margin:0 0 .6em;text-wrap:nowrap}
+.diff-body .diff-text{font-size:.9375rem;line-height:1.75;
+  color:var(--text-secondary);margin:0;max-width:64ch;text-wrap:pretty}
+
+@media(max-width:760px){
+  .diff-item{grid-template-columns:1fr;gap:.55em 0;padding:1.7em 0}
+  .diff-item:first-of-type{margin-top:1.1em}
+  .diff-body .diff-lesson{font-size:1.0625rem;text-wrap:pretty}  /* wrapping is fine on mobile */
+}
 
 </style>
 <script type="application/ld+json">
@@ -75,80 +345,16 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
 </head>
 <body>
 
+<!-- Ambient field: fixed, so the dots and the drifting project colour
+     stay with you the whole way down the page -->
+<div class="mv-field" aria-hidden="true"><i></i><i></i></div>
+
 <!-- Back nav (mobile only) -->
 <a href="../../index.html" class="back-nav" aria-label="Back to projects">
   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="15 18 9 12 15 6"/></svg>
   Back to projects
 </a>
 
-<!-- Carousel -->
-<div class="carousel-shell">
-<div class="carousel-wrap" id="carousel" data-total="4" data-lightbox="image">
-  <div class="carousel-track" id="carousel-track">
-
-    <!-- Slide 1 -->
-    <div class="carousel-slide" onclick="openLightbox(0)" title="Click to expand">
-      <div class="cs-placeholder-img">
-        <svg viewBox="0 0 960 540" xmlns="http://www.w3.org/2000/svg">
-          <rect class="ph-bg" width="960" height="540"/>
-          <g class="ph-icon" transform="translate(480,270)">
-            <rect x="-28" y="-22" width="56" height="44" rx="4"/>
-            <circle cx="-9" cy="-5" r="7"/>
-            <polyline points="28,22 10,-4 -14,22"/>
-            <polyline points="-14,22 -22,10 -28,22"/>
-          </g>
-        </svg>
-      </div>
-    </div>
-
-    <!-- Slide 2 -->
-    <div class="carousel-slide" onclick="openLightbox(1)" title="Click to expand">
-      <div class="cs-placeholder-img">
-        <svg viewBox="0 0 960 540" xmlns="http://www.w3.org/2000/svg">
-          <rect class="ph-bg" width="960" height="540"/>
-          <g class="ph-icon" transform="translate(480,270)">
-            <rect x="-28" y="-22" width="56" height="44" rx="4"/>
-            <circle cx="-9" cy="-5" r="7"/>
-            <polyline points="28,22 10,-4 -14,22"/>
-            <polyline points="-14,22 -22,10 -28,22"/>
-          </g>
-        </svg>
-      </div>
-    </div>
-
-    <!-- Slide 3 -->
-    <div class="carousel-slide" onclick="openLightbox(2)" title="Click to expand">
-      <div class="cs-placeholder-img">
-        <svg viewBox="0 0 960 540" xmlns="http://www.w3.org/2000/svg">
-          <rect class="ph-bg" width="960" height="540"/>
-          <g class="ph-icon" transform="translate(480,270)">
-            <rect x="-28" y="-22" width="56" height="44" rx="4"/>
-            <circle cx="-9" cy="-5" r="7"/>
-            <polyline points="28,22 10,-4 -14,22"/>
-            <polyline points="-14,22 -22,10 -28,22"/>
-          </g>
-        </svg>
-      </div>
-    </div>
-
-    <!-- Slide 4 -->
-    <div class="carousel-slide" onclick="openLightbox(3)" title="Click to expand">
-      <div class="cs-placeholder-img">
-        <svg viewBox="0 0 960 540" xmlns="http://www.w3.org/2000/svg">
-          <rect class="ph-bg" width="960" height="540"/>
-          <g class="ph-icon" transform="translate(480,270)">
-            <rect x="-28" y="-22" width="56" height="44" rx="4"/>
-            <circle cx="-9" cy="-5" r="7"/>
-            <polyline points="28,22 10,-4 -14,22"/>
-            <polyline points="-14,22 -22,10 -28,22"/>
-          </g>
-        </svg>
-      </div>
-    </div>
-
-  </div><!-- /track -->
-</div><!-- /carousel-wrap -->
-</div><!-- /carousel-shell -->
 
 <!-- Body -->
 <div class="cs-body">
@@ -207,7 +413,7 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
     </div>
 
     <!-- Section 3: Solution -->
-    <div class="cs-section cs-reveal">
+    <div class="cs-section">
       <div class="cs-section-num">
         <div class="cs-sec-title">Solution</div>
       </div>
@@ -215,6 +421,152 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
       <p>Alongside that, we built My Verint's first mobile design system: color tokens, type scales, responsive behaviors, motion specs, and documentation. A shared language the team had never had.</p>
       <p>The biggest outcome: Ask Verint users now complete all their tasks through the AI tab - in natural language, without navigating a single screen. The design work made that possible. The data validated every mobile-first call we made.</p>
     </div>
+    <!-- Section: The Design -->
+    <div class="cs-section cs-reveal mv-sec">
+      <div class="cs-section-num">
+        <div class="cs-sec-title">The Design</div>
+      </div>
+      <p>MyVerint organizes every workflow into five purpose-built tabs. Agents, managers, and back-office teams each get a view designed around their role, with an AI assistant that ties it all together.</p>
+      <div class="mv-show">
+<div class="sc-tabs-wrap">
+      <div class="sc-tabs" id="scTabs" role="tablist" aria-label="My Verint tabs">
+        <div class="sc-tab active" data-tab="ask-ai" role="tab" tabindex="0" aria-selected="true"><div class="sc-tab-label">Ask AI</div><div class="sc-tab-badge">New</div></div>
+        <div class="sc-tab" data-tab="performance" role="tab" tabindex="-1" aria-selected="false"><div class="sc-tab-label">Performance</div></div>
+        <div class="sc-tab" data-tab="schedule" role="tab" tabindex="-1" aria-selected="false"><div class="sc-tab-label">Schedule</div></div>
+        <div class="sc-tab" data-tab="requests" role="tab" tabindex="-1" aria-selected="false"><div class="sc-tab-label">Requests</div></div>
+        <div class="sc-tab" data-tab="more" role="tab" tabindex="-1" aria-selected="false"><div class="sc-tab-label">More</div></div>
+      </div>
+      </div>
+<div class="sc-phone-col">
+        <div class="sc-phone" id="scPhone">
+          <div class="sc-phone-screen has-video" id="scPhoneScreen">
+            <div class="sc-phone-island" id="scPhoneIsland"></div>
+            <video class="sc-screen-vid vid-active" id="scScreenVid" data-for="ask-ai" data-src="videos/ai-tab.mp4" poster="images/ai-tab-poster.webp" muted loop playsinline preload="none" aria-label="Ask AI tab - asking for a schedule in plain language and acting on the answer inline"></video>
+            <video class="sc-screen-vid" id="scScreenVid2" data-for="schedule" data-src="videos/schedule-tab.mp4" poster="images/schedule-tab-poster.webp" muted loop playsinline preload="none" aria-label="Schedule tab - month calendar with shifts colour-coded by type"></video>
+            <video class="sc-screen-vid" id="scScreenVid3" data-for="performance" data-src="videos/performance-tab.mp4" poster="images/performance-tab-poster.webp" muted loop playsinline preload="none" aria-label="Performance tab - personal KPI detail with an AI coaching insight"></video>
+            <video class="sc-screen-vid" id="scScreenVid4" data-for="requests" data-src="videos/requests-tab.mp4" poster="images/requests-tab-poster.webp" muted loop playsinline preload="none" aria-label="Requests tab - time off, shift swaps and flex time with status badges"></video>
+            <video class="sc-screen-vid" id="scScreenVid5" data-for="more" data-src="videos/more-tab.mp4" poster="images/more-tab-poster.webp" muted loop playsinline preload="none" aria-label="More tab - messages and announcements inbox"></video>
+          </div>
+        </div>
+        <span class="sc-phone-hint">Tap to enlarge</span>
+      </div>
+<div class="sc-desc" id="scDesc">
+
+        <div class="sc-desc-tab active" data-for="ask-ai" role="tabpanel">
+          <div class="sc-desc-eyebrow">Conversational AI</div>
+          <div class="sc-desc-name">Ask AI</div>
+          <div class="sc-desc-body">The conversational entry point for every task. Employees ask in natural language and get answers backed by live WFO data, without ever leaving the chat.</div>
+          <ul class="sc-bullets">
+            <li><div class="sc-bl-title">Natural language input</div><div class="sc-bl-desc">Ask anything the way you would ask a colleague</div></li>
+            <li><div class="sc-bl-title">Live WFO data</div><div class="sc-bl-desc">Leave balances, schedules, and KPIs surfaced inline</div></li>
+            <li><div class="sc-bl-title">One-tap actions</div><div class="sc-bl-desc">Submit a request, approve, or confirm in a single tap</div></li>
+            <li><div class="sc-bl-title">Full conversation history</div><div class="sc-bl-desc">Every action logged with context and timestamp</div></li>
+          </ul>
+        </div>
+
+        <div class="sc-desc-tab" data-for="schedule" role="tabpanel">
+          <div class="sc-desc-eyebrow">Time &amp; Shifts</div>
+          <div class="sc-desc-name">Schedule</div>
+          <div class="sc-desc-body">A full calendar view of upcoming shifts, color-coded by type. Employees can read their week at a glance and take action without switching apps.</div>
+          <ul class="sc-bullets">
+            <li><div class="sc-bl-title">Month and week views</div><div class="sc-bl-desc">Switch between views to match how far ahead you plan</div></li>
+            <li><div class="sc-bl-title">Shift type color coding</div><div class="sc-bl-desc">Read your week at a glance without counting rows</div></li>
+            <li><div class="sc-bl-title">Shift swap requests</div><div class="sc-bl-desc">Initiate a change directly from any shift in the calendar</div></li>
+            <li><div class="sc-bl-title">Activity feed</div><div class="sc-bl-desc">Schedule changes and approvals surface in real time</div></li>
+          </ul>
+        </div>
+
+        <div class="sc-desc-tab" data-for="performance" role="tabpanel">
+          <div class="sc-desc-eyebrow">Personal KPIs</div>
+          <div class="sc-desc-name">Performance</div>
+          <div class="sc-desc-body">Personal KPI dashboard with AI-powered coaching insights. Agents see where they stand and what to fix, without a manager walking them through it.</div>
+          <ul class="sc-bullets">
+            <li><div class="sc-bl-title">Personal KPI cards</div><div class="sc-bl-desc">Key metrics with trend indicators, no manager needed</div></li>
+            <li><div class="sc-bl-title">AI coaching insights</div><div class="sc-bl-desc">Specific, actionable suggestions based on your data</div></li>
+            <li><div class="sc-bl-title">Team benchmark comparison</div><div class="sc-bl-desc">See where you stand relative to your peers</div></li>
+            <li><div class="sc-bl-title">Historical trends</div><div class="sc-bl-desc">Week-over-week and month-over-month performance views</div></li>
+          </ul>
+        </div>
+
+        <div class="sc-desc-tab" data-for="requests" role="tabpanel">
+          <div class="sc-desc-eyebrow">Leave &amp; Approvals</div>
+          <div class="sc-desc-name">Requests</div>
+          <div class="sc-desc-body">All time-off, shift change, and schedule requests in one place. No more separate portals, no more calling HR for a status update.</div>
+          <ul class="sc-bullets">
+            <li><div class="sc-bl-title">All request types in one place</div><div class="sc-bl-desc">Time off, shift swap, and flexible start: one flow for all</div></li>
+            <li><div class="sc-bl-title">Real-time status tracking</div><div class="sc-bl-desc">Pending, approved, or rejected: always visible</div></li>
+            <li><div class="sc-bl-title">Automatic routing</div><div class="sc-bl-desc">Requests reach the right approver without any manual steps</div></li>
+            <li><div class="sc-bl-title">Push notifications</div><div class="sc-bl-desc">Status changes surface immediately on the employee&rsquo;s phone</div></li>
+          </ul>
+        </div>
+
+        <div class="sc-desc-tab" data-for="more" role="tabpanel">
+          <div class="sc-desc-eyebrow">Additional Features</div>
+          <div class="sc-desc-name">More</div>
+          <div class="sc-desc-body">A consolidated hub for the features employees and managers reach for beyond their daily core workflow.</div>
+          <ul class="sc-bullets">
+            <li><div class="sc-bl-title">Messages &amp; announcements</div><div class="sc-bl-desc">Priority-sorted team updates, role-targeted and with read confirmation</div></li>
+            <li><div class="sc-bl-title">Coaching &amp; training</div><div class="sc-bl-desc">Assigned learning content and manager feedback surfaced in context</div></li>
+            <li><div class="sc-bl-title">Gamification &amp; badges</div><div class="sc-bl-desc">Performance streaks, team rankings, and recognition: visible on the go</div></li>
+            <li><div class="sc-bl-title">Profile &amp; settings</div><div class="sc-bl-desc">Personal preferences, notification controls, and account management</div></li>
+          </ul>
+        </div>
+
+      </div>
+      </div>
+    </div>
+
+    <!-- Section: Ask AI (depth - the turn) -->
+    <div class="cs-section cs-reveal">
+      <div class="cs-section-num">
+        <div class="cs-sec-title">The feature that changed everything.</div>
+      </div>
+      <p>Ask AI started as a shortcut and became the primary way people use the app. Instead of navigating to one of those five tabs, employees just ask - and the other four became fallbacks.</p>
+      <div class="mv-feature">
+        <div class="ai-steps-track" id="aiStepsTrack">
+          <div class="step-active-bar" id="stepActiveBar" aria-hidden="true"></div>
+          <div class="ai-step" id="aiStep1">
+            <div class="ai-step-num">01</div>
+            <div class="ai-step-body">
+              <div class="ai-step-title">Just ask.</div>
+              <div class="ai-step-desc">No forms, no navigation, no menu digging. The employee types a question the way they would ask a colleague.</div>
+            </div>
+          </div>
+          <div class="ai-step" id="aiStep2">
+            <div class="ai-step-num">02</div>
+            <div class="ai-step-body">
+              <div class="ai-step-title">The AI knows what you mean.</div>
+              <div class="ai-step-desc">Intent, data domain, parameters. It works out which date, which leave type, which employee, without the user spelling it out.</div>
+            </div>
+          </div>
+          <div class="ai-step" id="aiStep3">
+            <div class="ai-step-num">03</div>
+            <div class="ai-step-body">
+              <div class="ai-step-title">Live data, right in the conversation.</div>
+              <div class="ai-step-desc">Real-time data from Verint's WFO platform surfaces inline - leave balances, schedules, KPIs - exactly where they are needed.</div>
+            </div>
+          </div>
+          <div class="ai-step" id="aiStep4">
+            <div class="ai-step-num">04</div>
+            <div class="ai-step-body">
+              <div class="ai-step-title">One tap closes the loop.</div>
+              <div class="ai-step-desc">The AI proposes the action and surfaces a single confirmation chip. One tap submits the request and notifies the manager.</div>
+            </div>
+          </div>
+        </div>
+        <div class="sc-phone">
+          <div class="sc-phone-screen has-video">
+            <div class="sc-phone-island" aria-hidden="true"></div>
+            <video class="mv-vid" id="aiDemoVid" muted loop playsinline preload="metadata"
+                   poster="images/ask-ai-demo-poster.webp"
+                   aria-label="Ask AI resolving a time-off request in one conversation">
+              <source src="videos/ask-ai-demo.mp4" type="video/mp4"/>
+            </video>
+          </div>
+        </div>
+      </div>
+    </div>
+
 
     <!-- Section 4: Result -->
     <div class="cs-section cs-reveal" id="result">
@@ -259,12 +611,18 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
         <div class="cs-sec-title">What I'd do differently</div>
       </div>
       <div class="diff-item">
-        <div class="diff-num">!</div>
-        <p class="diff-text"><strong>Bring data to stakeholder conversations before the wireframes.</strong> I spent weeks arguing mobile-first scope on instinct and logic. A few user interviews and usage analytics - showing where and how people actually used the app - would have replaced those debates with a single slide and moved the project faster.</p>
+        <div class="diff-marg">Process</div>
+        <div class="diff-body">
+        <p class="diff-lesson">Bring data to stakeholder conversations before the wireframes.</p>
+        <p class="diff-text">I spent weeks arguing mobile-first scope on instinct and logic. A few user interviews and usage analytics - showing where and how people actually used the app - would have replaced those debates with a single slide and moved the project faster.</p>
+      </div>
       </div>
       <div class="diff-item">
-        <div class="diff-num">!</div>
-        <p class="diff-text"><strong>Involve real contact center agents earlier.</strong> Our testing happened too late, which meant assumptions got baked in before we could validate them. Earlier access to actual users - not internal proxies - would have let us test the core premise before committing to the design direction.</p>
+        <div class="diff-marg">Research</div>
+        <div class="diff-body">
+        <p class="diff-lesson">Involve real contact center agents earlier.</p>
+        <p class="diff-text">Our testing happened too late, which meant assumptions got baked in before we could validate them. Earlier access to actual users - not internal proxies - would have let us test the core premise before committing to the design direction.</p>
+      </div>
       </div>
     </div>
 
@@ -278,5 +636,136 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
 </button>
 
 <script src="../shared/case-study.js" defer></script>
+<script>
+/* "The Design" tabs - opacity crossfade only.
+   Adopted from the original implementation: every video runs continuously
+   and switching changes opacity, nothing else. Pausing and replaying on
+   each switch adds decode latency and makes the tabs feel sticky. */
+(function(){
+  var sec = document.querySelector('.mv-sec');
+  if (!sec) return;
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var tabs = Array.prototype.slice.call(sec.querySelectorAll('.sc-tab'));
+  var vids = Array.prototype.slice.call(sec.querySelectorAll('.sc-screen-vid'));
+  var descs = Array.prototype.slice.call(sec.querySelectorAll('.sc-desc-tab'));
+
+  /* Load all five only once the section is near the viewport, so the page
+     does not pull 7MB on first paint. */
+  /* WebM is gone: once the H.264 was encoded at CRF 26 it beat VP9 on
+     every file (246kB vs 267kB and so on), so the second format, the
+     canPlayType probe and the runtime string swap were all dead weight.
+
+     Loading is staged. The visible tab loads on intersection; the other
+     four wait for idle, so entering the section costs 246kB rather than
+     2.5MB, and switching tabs is still instant once idle has run. */
+  var loaded = false;
+  function loadVid(v){
+    if (!v || v.src || !v.dataset.src) return;
+    v.src = v.dataset.src;
+    v.load();
+    if (!reduce) { var pr = v.play(); if (pr && pr.catch) pr.catch(function(){}); }
+  }
+  var lazy = new IntersectionObserver(function(e){
+    if (!e[0].isIntersecting || loaded) return;
+    loaded = true; lazy.disconnect();
+    var active = sec.querySelector('.sc-screen-vid.vid-active') || vids[0];
+    loadVid(active);
+    var rest = function(){ vids.forEach(loadVid); };
+    if (window.requestIdleCallback) requestIdleCallback(rest, { timeout: 2500 });
+    else setTimeout(rest, 1200);
+  }, { threshold: 0.12 });
+  lazy.observe(sec);
+
+  function activate(id){
+    tabs.forEach(function(t){
+      var on = t.dataset.tab === id;
+      t.classList.toggle('active', on);
+      t.setAttribute('aria-selected', on ? 'true' : 'false');
+      t.tabIndex = on ? 0 : -1;
+    });
+    descs.forEach(function(d){ d.classList.toggle('active', d.dataset.for === id); });
+    /* Match on data-for, never on index. The tab list is ordered
+       ask-ai/performance/schedule but the videos sit in DOM order
+       ai/schedule/performance, so index arithmetic paired Performance with
+       the Schedule recording and vice versa. */
+    vids.forEach(function(v){
+      var on = v.dataset.for === id;
+      v.classList.toggle('vid-active', on);
+      if (on) loadVid(v);   /* in case idle has not fired yet */
+    });
+  }
+
+  tabs.forEach(function(t, i){
+    t.addEventListener('click', function(){ activate(t.dataset.tab); });
+    t.addEventListener('keydown', function(e){
+      var k = e.key, n = null;
+      if (k === 'ArrowDown' || k === 'ArrowRight') n = (i + 1) % tabs.length;
+      else if (k === 'ArrowUp' || k === 'ArrowLeft') n = (i - 1 + tabs.length) % tabs.length;
+      else if (k === 'Home') n = 0;
+      else if (k === 'End') n = tabs.length - 1;
+      else if (k === 'Enter' || k === ' ') { e.preventDefault(); activate(t.dataset.tab); return; }
+      if (n === null) return;
+      e.preventDefault(); tabs[n].focus(); activate(tabs[n].dataset.tab);
+    });
+  });
+
+  /* The standalone Ask AI video below still plays only while on screen. */
+  /* Exclude the tab videos by SECTION, not by frame. Both phones now use
+     .sc-phone-screen, so filtering on the frame silently dropped the Ask AI
+     video from the playlist - it never played, so timeupdate never fired
+     and the step indicator never moved. */
+  var solo = Array.prototype.filter.call(document.querySelectorAll('.mv-vid'),
+    function(v){ return !v.closest('.mv-sec'); });
+  if (solo.length && !reduce){
+    var io = new IntersectionObserver(function(es){
+      es.forEach(function(e){
+        if (e.isIntersecting){
+          if (e.target.readyState < 2) e.target.load();
+          var p = e.target.play(); if (p && p.catch) p.catch(function(){});
+        } else e.target.pause();
+      });
+    }, { threshold: 0.3 });
+    solo.forEach(function(v){ io.observe(v); });
+  }
+  /* ── Video-synced step indicator ────────────────────────────────────────
+     Ported from the original. AI_STEP_TIMES marks the second at which each
+     step begins; the bar slides to the active step and the copy brightens.
+     The backwards-jump check catches the loop restarting, otherwise the
+     highlight would stick on step 04 forever after the first pass.      */
+  var AI_STEP_TIMES = [1.5, 6, 12, 19];
+  var demo = document.getElementById('aiDemoVid');
+  var track = document.getElementById('aiStepsTrack');
+  var bar = document.getElementById('stepActiveBar');
+  if (demo && track && bar){
+    var aiSteps = [1,2,3,4].map(function(i){ return document.getElementById('aiStep'+i); });
+    var lastT = 0, curStep = -1;
+
+    function setStep(n){
+      aiSteps.forEach(function(s,i){ if (s) s.classList.toggle('active', i+1 === n); });
+      var el = aiSteps[n-1];
+      if (n >= 1 && el){
+        bar.style.top = (el.getBoundingClientRect().top - track.getBoundingClientRect().top) + 'px';
+        bar.style.height = el.offsetHeight + 'px';
+      } else {
+        bar.style.height = '0';
+      }
+    }
+
+    demo.addEventListener('timeupdate', function(){
+      var t = demo.currentTime;
+      if (t < lastT - 3) curStep = -1;   /* loop restarted */
+      lastT = t;
+      var step = 0;
+      for (var i = 0; i < AI_STEP_TIMES.length; i++) if (t >= AI_STEP_TIMES[i]) step = i + 1;
+      if (step !== curStep){ curStep = step; setStep(step); }
+    });
+
+    /* Under reduced motion the video never plays, so show step 01 rather
+       than leaving every step dimmed with no indicator at all. */
+    if (reduce) setStep(1);
+    window.addEventListener('resize', function(){ if (curStep >= 1) setStep(curStep); });
+  }
+})();
+</script>
 </body>
 </html>
