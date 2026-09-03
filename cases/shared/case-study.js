@@ -328,3 +328,49 @@ document.addEventListener('DOMContentLoaded', function() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   });
 });
+
+/* ── Inline media ──────────────────────────────────────────────────────────
+   Drives <video class="cs-media-vid" data-src="..."> in .cs-media figures.
+   Every rule here was paid for on the myverint rebuild:
+
+   - Nothing is fetched until the figure is near the viewport. data-src, not
+     src, so a page with five clips costs one poster at first paint.
+   - Never call load() in the same tick as play(). Assigning src already runs
+     the resource selection algorithm; load() re-runs it, fires abort/emptied,
+     and the play() promise rejects with AbortError - which an empty .catch()
+     then swallows, leaving the video paused on frame 0 with no console error.
+     A rejected play() is retried on canplay instead.
+   - Under prefers-reduced-motion, src is never assigned at all, so the poster
+     stays. Assigning it would replace a good still with frame 0, and any clip
+     that opens on a fade from black then renders as a dead black rectangle.
+   - Only what is on screen plays. Off-screen clips are paused, not unloaded,
+     so currentTime survives and resuming is a keyframe away.               */
+(function() {
+  var vids = document.querySelectorAll('.cs-media-vid');
+  if (!vids.length) return;
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  function tryPlay(v) {
+    var pr = v.play();
+    if (!pr || !pr.catch) return;
+    pr.catch(function() {
+      v.addEventListener('canplay', function once() {
+        v.removeEventListener('canplay', once);
+        var p2 = v.play();
+        if (p2 && p2.catch) p2.catch(function() {});
+      });
+    });
+  }
+
+  var io = new IntersectionObserver(function(entries) {
+    entries.forEach(function(e) {
+      var v = e.target;
+      if (!e.isIntersecting) { if (!v.paused) v.pause(); return; }
+      if (reduce) return;                      /* keep the poster */
+      if (!v.src && v.dataset.src) v.src = v.dataset.src;
+      tryPlay(v);
+    });
+  }, { threshold: 0.25 });
+
+  Array.prototype.forEach.call(vids, function(v) { io.observe(v); });
+})();

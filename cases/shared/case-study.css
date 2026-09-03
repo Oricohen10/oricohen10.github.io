@@ -29,7 +29,121 @@ body{
 img{display:block;max-width:100%}
 button{cursor:pointer;font-family:inherit}
 
+/* ── Ambient field ────────────────────────────────────────────────────────── */
+/* One fixed, page-wide layer: a dot lattice plus two radial washes drifting
+   in the project accent. Fixed to the viewport rather than bounded per
+   section - masking it per section makes the texture pulse on and off at
+   every boundary. body paints the canvas, so a fixed child at z-index 0
+   sits above it and below the content.
+
+   Everything here reads var(--action-primary), so each page's accent flows
+   through from its own :root block. Add
+     <div class="cs-field" aria-hidden="true"><i></i><i></i></div>
+   as the first child of <body>, and give the page's own content wrapper
+   position:relative;z-index:1.
+
+   Light and dark are not the same treatment. Glow is additive: on near-black
+   there is headroom to add light, so accent dots read as luminosity. On white
+   a dark dot subtracts light and reads as dirt, so light mode uses
+   near-neutral dots at a third the strength. */
+:root{
+  --cs-dot:    color-mix(in srgb, var(--text-primary) 9%, transparent);
+  --cs-wash-a: color-mix(in srgb, var(--action-primary) 10%, transparent);
+  --cs-wash-b: color-mix(in srgb, var(--action-primary) 8%,  transparent);
+}
+/* 20/15 in dark, not the 22/17 myverint shipped with. Once this is shared, the
+   cap has to hold for the lightest accent on the site, and green carries the
+   most luminance of any hue (0.7152 of the coefficient). Copilot's #34d399
+   lifted the near-black canvas far enough that --text-secondary fell to
+   4.39:1 where both washes overlap - a fail. 20/15 puts the worst case at
+   4.69:1 and costs nothing visible on the other four. */
+[data-theme="dark"]{
+  --cs-dot:    color-mix(in srgb, var(--action-primary) 28%, transparent);
+  --cs-wash-a: color-mix(in srgb, var(--action-primary) 20%, transparent);
+  --cs-wash-b: color-mix(in srgb, var(--action-primary) 15%, transparent);
+}
+.cs-field{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+.cs-field::before{content:"";position:absolute;inset:0;
+  background-image:radial-gradient(circle,var(--cs-dot) 1px,transparent 1px);
+  background-size:22px 22px}
+.cs-field i{position:absolute;display:block;border-radius:50%}
+.cs-field i:nth-child(1){width:64vmax;height:64vmax;top:-22vmax;right:-16vmax;
+  background:radial-gradient(circle closest-side,var(--cs-wash-a),transparent 70%);
+  animation:csFieldA 17s ease-in-out infinite alternate}
+.cs-field i:nth-child(2){width:56vmax;height:56vmax;bottom:-20vmax;left:-16vmax;
+  background:radial-gradient(circle closest-side,var(--cs-wash-b),transparent 70%);
+  animation:csFieldB 23s ease-in-out infinite alternate}
+/* Presence comes from travel and size, not opacity. Opacity is capped by
+   contrast: in light mode 10%/8% keeps --text-secondary at 5.00:1 even where
+   both washes overlap, and 12% already drops it to 4.49:1 and fails. Motion
+   amplitude costs nothing, so the drift is large and both washes sit in
+   opposite corners, away from the text column. */
+@keyframes csFieldA{from{transform:translate3d(0,0,0) scale(1)}
+                      to{transform:translate3d(-16vmax,10vmax,0) scale(1.22)}}
+@keyframes csFieldB{from{transform:translate3d(0,0,0) scale(1.14)}
+                      to{transform:translate3d(14vmax,-12vmax,0) scale(.94)}}
+@media(prefers-reduced-motion:reduce){
+  .cs-field i{animation:none}
+}
+/* The field is behind everything, so anything that must sit above it needs a
+   stacking context of its own. .cs-body gets its z-index in the Layout block
+   below, alongside its width - one declaration per selector per context. */
+.back-nav,#scroll-top{z-index:3}
+
+/* ── Inline media ─────────────────────────────────────────────────────────── */
+/* What replaces the carousel. Media sits beside the claim it evidences rather
+   than being front-loaded in a tray where slides 2-4 are never seen.
+
+   <figure class="cs-media">
+     <video class="cs-media-vid" data-src="videos/x.mp4"
+            poster="images/x-poster.webp" muted loop playsinline
+            preload="none" aria-label="..."></video>
+     <figcaption>What this shows and why it matters</figcaption>
+   </figure>
+
+   data-src rather than src: nothing is fetched until the figure is near the
+   viewport. Use <img> in place of <video> for stills - same frame, same
+   caption treatment. */
+.cs-media{margin:26px 0 0;position:relative}
+.cs-media > video,
+.cs-media > img{
+  width:100%;height:auto;display:block;
+  border-radius:var(--radius-lg);
+  border:1px solid var(--border-subtle);
+  background:var(--surface-raised);
+  /* Shadows are not symmetric between themes. On white a shadow must be
+     short and faint or it reads as a grey smear; on near-black it needs
+     depth to register at all. */
+  box-shadow:0 18px 40px rgba(18,18,19,.16);
+}
+[data-theme="dark"] .cs-media > video,
+[data-theme="dark"] .cs-media > img{
+  box-shadow:0 48px 96px rgba(0,0,0,.8);
+}
+.cs-media figcaption{
+  margin-top:12px;
+  font-size:13px;line-height:1.6;
+  color:var(--text-tertiary);
+  text-wrap:pretty;
+  max-width:62ch;
+}
+/* Side-by-side variant: media and the claim it evidences on one row.
+   Add .cs-media--right to put the media on the right, text left. */
+.cs-media-row{
+  display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);
+  gap:44px;align-items:center;margin-top:34px;
+}
+.cs-media-row .cs-media{margin:0}
+.cs-media-row--flip .cs-media{order:-1}
+@media(max-width:860px){
+  .cs-media-row{grid-template-columns:1fr;gap:24px}
+  .cs-media-row--flip .cs-media{order:0}
+}
+
 /* ── Carousel shell ───────────────────────────────────────────────────────── */
+/* Retired. No page uses .carousel-* any more - media is inline per the block
+   above. Kept until the last case study has its media re-placed, then delete
+   this block and initCarousel() in case-study.js together. */
 .carousel-shell{
   max-width:1040px;
   margin:0 auto;
@@ -277,21 +391,21 @@ button{cursor:pointer;font-family:inherit}
 .vlbx-close svg{width:16px;height:16px;display:block}
 
 /* ── Layout ───────────────────────────────────────────────────────────────── */
-/* Stays at 1100 while these pages still lead with a carousel: .carousel-shell
-   caps at 1040, so a 1280 body would leave the carousel visibly inset, and
-   widening the carousel would render the 1968px sources below the 2x they are
-   cut for. myverint overrides to 1280 locally because it has no carousel.
-   Fold this back in once the carousels are gone.
+/* 1280, not 1100. The window these pages open in is min(1320px, 100vw-300px),
+   so the old 1100 cap left ~220px of the frame permanently empty. It was only
+   held at 1100 to stay flush with the 1040px carousel; the carousels are gone.
    minmax(0,1fr) rather than 1fr so a wide child cannot blow the column out. */
 .cs-body{
   display:grid;
   grid-template-columns:200px minmax(0,1fr);
-  gap:48px;
-  padding:40px 36px 100px;
-  max-width:1100px;
+  gap:56px;
+  padding:48px 44px 120px;
+  max-width:1280px;
   width:100%;
   margin:0 auto;
   box-sizing:border-box;
+  position:relative;   /* above the ambient field */
+  z-index:1;
 }
 
 /* ── Sidebar ──────────────────────────────────────────────────────────────── */

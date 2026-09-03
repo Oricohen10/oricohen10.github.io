@@ -33,7 +33,6 @@
 [data-theme="dark"] .chip--platform{background:rgba(96,165,250,.15);color:#60a5fa}
 
 /* -- Carousel: light background for screenshots ------------------------- */
-.carousel-wrap{background:var(--surface-raised)}
 </style>
 <script type="application/ld+json">
 {
@@ -61,6 +60,7 @@
 </script>
 </head>
 <body>
+<div class="cs-field" aria-hidden="true"><i></i><i></i></div>
 
 <!-- Back nav (mobile only) -->
 <a href="/" class="back-nav" aria-label="Back to portfolio">
@@ -69,53 +69,6 @@
 </a>
 
 <!-- Carousel -->
-<div class="carousel-shell">
-<div class="carousel-wrap" id="carousel" data-total="4" data-lightbox="image">
-  <div class="carousel-track" id="carousel-track">
-
-    <!-- Slide 1: Tools Manager - light -->
-    <div class="carousel-slide" onclick="openLightbox(0)" title="Click to expand">
-      <img src="images/slide-tools-light.jpg"
-           alt="Verint Agent Factory - Add tool provider wizard: Tools step showing discovered tools with opt-in by default setting"
-           width="1600" height="900" loading="eager"/>
-      <div class="carousel-slide-label">Tools Manager</div>
-    </div>
-
-    <!-- Slide 2: Tool Discovery - dark -->
-    <div class="carousel-slide" onclick="openLightbox(1)" title="Click to expand">
-      <img src="images/slide-tools-dark.jpg"
-           alt="Verint Agent Factory - Tool provider configuration showing 9 pages of discovered tools with enable toggles and rate limits"
-           width="1600" height="900" loading="lazy"/>
-      <div class="carousel-slide-label">Tool Discovery</div>
-    </div>
-
-    <!-- Slide 3: placeholder -->
-    <div class="carousel-slide" onclick="openLightbox(2)" title="Click to expand">
-      <svg viewBox="0 0 1600 900" xmlns="http://www.w3.org/2000/svg" style="display:block;width:100%;height:100%;background:#EBEBEB">
-        <g transform="translate(800,450)" fill="none" stroke="#BFBFBF" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
-          <rect x="-36" y="-28" width="72" height="56" rx="5"/>
-          <circle cx="-12" cy="-6" r="9"/>
-          <polyline points="36,28 12,-5 -18,28"/>
-          <polyline points="-18,28 -28,12 -36,28"/>
-        </g>
-      </svg>
-    </div>
-
-    <!-- Slide 4: placeholder -->
-    <div class="carousel-slide" onclick="openLightbox(3)" title="Click to expand">
-      <svg viewBox="0 0 1600 900" xmlns="http://www.w3.org/2000/svg" style="display:block;width:100%;height:100%;background:#EBEBEB">
-        <g transform="translate(800,450)" fill="none" stroke="#BFBFBF" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
-          <rect x="-36" y="-28" width="72" height="56" rx="5"/>
-          <circle cx="-12" cy="-6" r="9"/>
-          <polyline points="36,28 12,-5 -18,28"/>
-          <polyline points="-18,28 -28,12 -36,28"/>
-        </g>
-      </svg>
-    </div>
-
-  </div><!-- /track -->
-</div><!-- /carousel-wrap -->
-</div><!-- /carousel-shell -->
 
 <!-- Body -->
 <div class="cs-body">
