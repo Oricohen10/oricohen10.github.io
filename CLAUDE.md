@@ -258,6 +258,32 @@ flagged five in-use `.webm` files as dead because they were only reached
 through `src.replace('.mp4','.webm')`. Check for string construction
 before deleting any asset.
 
+### Cache busting is not optional here
+The case studies load in **iframes** from `index.html`, and they pull
+`src/tokens.css` and `cases/shared/case-study.{css,js}` from outside the
+page. There is no build step, so nothing fingerprints those URLs.
+
+**After touching `cases/shared/*` or any case-study markup, run:**
+```bash
+bash tools/bump-cache.sh
+```
+before committing. `tools/sync.sh` also does it automatically when it is
+the thing creating the commit, but Claude commits directly, so Claude has
+to run it.
+
+Skipping it does worse than delay a feature. **Moving CSS out of a page's
+inline `<style>` and into the shared sheet is a regression for anyone with
+a warm cache**: the inline copy ships with the HTML and disappears at
+once, while the shared sheet that replaces it is still the old cached file
+with no rule for the new class. That is how the ambient dot field vanished
+from myverint - where it had been working - at the same moment the other
+four pages failed to gain it. Stale iframe HTML did the same for the
+carousel removal: gone from the server, still on screen.
+
+Only subresource and iframe URLs get `?v=`. Canonical links, `og:url` and
+`sitemap.xml` must stay clean - a query there splits the page's identity
+for search engines.
+
 ### Checking your own work
 Brace counts and tag balance prove nothing about correctness. Two bugs
 shipped in `888dc57` were both **syntactically valid CSS**: a deleted

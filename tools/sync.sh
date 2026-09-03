@@ -82,6 +82,16 @@ fi
 # ---------------------------------------------------------------------------
 if [ -n "$DIRTY" ] && [ "$PUSH_ONLY" -eq 0 ]; then
   MSG="${1:-Cowork auto-sync [$(date '+%H:%M %d/%m')]}"
+
+  # A change to the shared CSS/JS or to a case study's markup is invisible to
+  # anyone holding a warm cache, because the iframes and the shared files carry
+  # no fingerprint. Re-stamp before committing so the commit and the stamp
+  # travel together. Never in --push-only: that mode must not create content.
+  if echo "$DIRTY" | grep -qE 'cases/shared/|cases/[a-z-]+/index\.html|^.. index\.html'; then
+    bash tools/bump-cache.sh
+    DIRTY="$(git status --porcelain)"
+  fi
+
   git add -A || die "git add failed"
   git commit -q -m "$MSG" || die "git commit failed"
   log "committed: $MSG"
