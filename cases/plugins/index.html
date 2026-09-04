@@ -39,8 +39,8 @@
   }
 }
 </script>
-<link rel="stylesheet" href="../../src/tokens.css?v=202609041118"/>
-<link rel="stylesheet" href="../shared/case-study.css?v=202609041118"/>
+<link rel="stylesheet" href="../../src/tokens.css?v=202609041128"/>
+<link rel="stylesheet" href="../shared/case-study.css?v=202609041128"/>
 <script>try{if(localStorage.getItem('ori-theme')==='dark')document.documentElement.setAttribute('data-theme','dark')}catch(e){}
 if(window.self!==window.top){var _s=document.createElement('style');_s.textContent='*{cursor:none!important}';document.head.appendChild(_s);}</script>
 <style>
@@ -110,8 +110,12 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
 .vs-item-x em{font-style:normal;font-size:11px;line-height:1.45;color:var(--text-secondary)}
 
 /* ── stage ─────────────────────────────────────────────────────────────── */
-.vs-main{min-width:0;display:flex;flex-direction:column}
-.vs-window{position:relative;overflow:hidden;aspect-ratio:16/9;background:#141517}
+/* One inset for the whole right-hand side, so the video and the writing under
+   it share a left edge. Before, the video was full-bleed to the container
+   while the caption was inset 26px, which left the text aligned to nothing. */
+.vs-main{min-width:0;display:flex;flex-direction:column;padding:18px}
+.vs-window{position:relative;overflow:hidden;aspect-ratio:16/9;background:#141517;
+  border-radius:var(--radius-lg)}
 /* Four slides, so the track is 400% tall and a step is 25% of itself. Tied to
    there being exactly four - a fifth makes this 20%. */
 .vs-track{position:absolute;inset:0;height:400%;
@@ -148,7 +152,7 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
 .vs.paused .vs-i-play{display:flex}
 
 /* ── caption, inside the same container ───────────────────────────────── */
-.vs-caps{padding:24px 26px 28px;min-width:0}
+.vs-caps{padding:22px 0 4px;min-width:0}
 .vs-cap{display:none}
 .vs-cap.on{display:block;animation:vsCap .45s cubic-bezier(.4,0,.2,1) both}
 @keyframes vsCap{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
@@ -167,13 +171,23 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
 .pf{margin-top:26px;padding-top:22px;border-top:1px solid var(--border-subtle)}
 .pf-label{font-size:10px;font-weight:800;letter-spacing:.12em;
   text-transform:uppercase;color:var(--text-secondary);margin-bottom:14px}
-.pf-flow{display:flex;align-items:stretch;gap:6px;
-  overflow-x:auto;padding-bottom:4px;scrollbar-width:thin}
+/* Three columns, two rows. Six cards in one row never fit: at the widest
+   window each would get 93.8px against a 104px minimum, so the row overflowed
+   and step 6 scrolled out of sight - which is exactly what it looked like.
+   Three across gives 143 to 217px per card at every width down to an 800px
+   window, so nothing truncates and nothing clamps.
 
-.pf-step{flex:1 1 0;min-width:104px;
-  display:flex;flex-direction:column;align-items:center;gap:6px;
+   Every card is its own grid with a fixed row template, so the icon, name,
+   sub-line and badge sit on the same four baselines across all six - the
+   badges were floating at different heights because "Figma Variables", "TS
+   Generation" and "GitHub Actions" wrap to two lines and the others do not. */
+.pf-flow{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:10px 16px}
+.pf-step{position:relative;
+  display:grid;grid-template-rows:auto auto 1fr auto;justify-items:center;
+  gap:5px;
   font:inherit;text-align:center;cursor:pointer;
-  padding:14px 10px 12px;border-radius:var(--radius-lg);
+  padding:14px 12px 12px;border-radius:var(--radius-lg);
   background:var(--surface-default);
   border:1px solid var(--border-subtle);
   transition:border-color .18s,box-shadow .18s,transform .18s}
@@ -185,32 +199,28 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
 .pf-step[aria-expanded="true"]{
   border-color:var(--action-primary);
   box-shadow:0 0 0 3px var(--action-primary-subtle)}
+/* The arrow lives in the gap as a pseudo-element rather than as its own grid
+   item, so it costs no column width. It is dropped after every third card,
+   where the row wraps and an arrow pointing right would be wrong. */
+.pf-step::after{content:"";position:absolute;top:50%;right:-16px;
+  width:16px;height:1px;background:var(--border-default)}
+.pf-step:nth-child(3n)::after,
+.pf-step:last-child::after{display:none}
 .pf-icon{font-size:21px;line-height:1}
-.pf-name{font-size:12px;font-weight:700;color:var(--text-primary);
-  line-height:1.25;
-  /* two lines, then ellipsis - the full sentence is in the title attribute */
-  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;
-  overflow:hidden}
-.pf-sub{font-size:10.5px;line-height:1.35;color:var(--text-secondary)}
+.pf-name{font-size:12.5px;font-weight:700;color:var(--text-primary);line-height:1.3}
+.pf-sub{font-size:10.5px;line-height:1.35;color:var(--text-secondary);align-self:start}
 .pf-badge{font-size:8.5px;font-weight:800;letter-spacing:.07em;
   text-transform:uppercase;padding:3px 7px;border-radius:var(--radius-full);
   white-space:nowrap}
 .pf-step[data-type="manual"] .pf-badge,#pf-d-badge[data-type="manual"]{
   background:var(--action-primary-subtle);color:var(--action-primary)}
-/* the light accent on its own 7% tint is 4.4:1 in dark, so dark steps up */
+/* the light accent on its own tint is 4.4:1 in dark, so dark steps up */
 [data-theme="dark"] .pf-step[data-type="manual"] .pf-badge,
 [data-theme="dark"] #pf-d-badge[data-type="manual"]{color:#ee9bfb}
 .pf-step[data-type="auto"] .pf-badge,#pf-d-badge[data-type="auto"]{
   background:rgba(21,128,61,.1);color:#146c33}
 [data-theme="dark"] .pf-step[data-type="auto"] .pf-badge,
 [data-theme="dark"] #pf-d-badge[data-type="auto"]{background:rgba(74,222,128,.13);color:#7ee2a8}
-/* Tertiary, not secondary at 50% opacity. The faded version measured 2.25:1
-   in light mode. These are aria-hidden decoration, so WCAG technically lets
-   them off - but an arrow nobody can see is not communicating flow either,
-   and dimming text with opacity is the mistake this file has already made
-   three times today. Tertiary is 5.21:1 and still clearly subordinate. */
-.pf-arr{align-self:center;flex-shrink:0;font-size:13px;
-  color:var(--text-tertiary)}
 
 /* ── the step detail, inline ───────────────────────────────────────────── */
 .pf-detail{margin-top:14px;padding:18px 20px 16px;
@@ -242,14 +252,19 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
   background:var(--action-primary-subtle);color:var(--text-primary)}
 .pf-d-nav{display:flex;align-items:center;gap:12px;margin-top:14px;
   padding-top:12px;border-top:1px solid var(--border-subtle)}
-.pf-d-btn{font:inherit;font-size:12px;font-weight:600;cursor:pointer;
-  padding:6px 12px;border-radius:var(--radius-full);
-  background:transparent;border:1px solid var(--border-default);
-  color:var(--text-secondary);transition:color .15s,border-color .15s}
-.pf-d-btn:hover:not([disabled]){color:var(--text-primary);border-color:var(--action-primary)}
-.pf-d-btn:focus-visible{outline:2px solid var(--action-primary);outline-offset:2px}
-.pf-d-btn[disabled]{cursor:default;opacity:1;color:var(--text-tertiary);
-  border-color:var(--border-subtle)}
+/* Icon only. "Previous" and "Next" as pill buttons were the heaviest thing in
+   the panel and they sat either side of the dots competing with them - three
+   controls saying the same thing. */
+.pf-d-btn{width:28px;height:28px;flex-shrink:0;border:0;border-radius:50%;
+  cursor:pointer;display:flex;align-items:center;justify-content:center;
+  background:transparent;color:var(--text-secondary);
+  transition:background .15s,color .15s}
+.pf-d-btn:hover:not([disabled]){background:var(--action-primary-subtle);color:var(--text-primary)}
+.pf-d-btn:focus-visible{outline:2px solid var(--action-primary);outline-offset:1px}
+/* Styled, not faded: opacity on a button drags glyph and fill toward the page
+   together. Tertiary passes on both surfaces at 4.77:1 and 7.17:1. */
+.pf-d-btn[disabled]{cursor:default;color:var(--text-tertiary);background:transparent}
+.pf-d-btn svg{width:15px;height:15px;display:block}
 .pf-d-dots{display:flex;gap:5px;margin:0 auto}
 .pf-d-dots i{width:6px;height:6px;border-radius:50%;background:var(--border-default)}
 .pf-d-dots i.on{background:var(--action-primary);transform:scale(1.25)}
@@ -270,6 +285,7 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
    takes the full container. */
 @media(max-width:900px){
   .vs{grid-template-columns:1fr}
+  .vs-main{padding:14px}
   .vs-rail{flex-direction:row;overflow-x:auto;scrollbar-width:none;
     border-right:0;border-bottom:1px solid var(--border-subtle);
     padding:10px}
@@ -277,16 +293,31 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
   .vs-item{width:auto;flex-shrink:0;padding:9px 12px 9px 15px}
   .vs-item-x em{display:none}          /* the tag is the first thing to go */
   .vs-item-x b{white-space:nowrap}
-  .vs-caps{padding:18px 18px 22px}
+  .vs-caps{padding:18px 0 2px}
   /* the controls stop being a hover affordance on touch, so they stay put */
   .vs-ctl{opacity:1;pointer-events:auto}
+  /* two across rather than three: at this width three cards are under 120px
+     and the two-line names start clamping again */
+  .pf-flow{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .pf-step:nth-child(3n)::after{display:block}
+  .pf-step:nth-child(2n)::after{display:none}
 }
 @media(max-width:560px){
   .vs-rail{padding:8px}
   .vs-item{padding:8px 10px 8px 13px}
   .vs-item-x b{font-size:12.5px}
-  .vs-caps{padding:16px 15px 20px}
+  .vs-caps{padding:16px 0 2px}
   .vs-cap-h{font-size:17px}
+  /* one column on a phone. The connector line would point at nothing, so the
+     cards simply stack in order. */
+  .pf-flow{grid-template-columns:1fr;gap:8px}
+  .pf-step{grid-template-rows:none;grid-template-columns:auto 1fr auto;
+    justify-items:start;align-items:center;gap:4px 12px;text-align:left;
+    padding:12px 14px}
+  .pf-step::after{display:none !important}
+  .pf-icon{grid-row:span 2}
+  .pf-badge{grid-row:span 2;align-self:center}
+  .pf-sub{align-self:auto}
   .vs-caps .vs-cap-p{font-size:14px}
 }
 
@@ -443,7 +474,6 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
                   <span class="pf-sub">Edit a value</span>
                   <span class="pf-badge">Manual</span>
                 </button>
-                <span class="pf-arr" aria-hidden="true">&#8594;</span>
                 <button class="pf-step" data-s="2" data-type="manual"
                         title="One click in Verint Token Sync" aria-expanded="false">
                   <span class="pf-icon" aria-hidden="true">🔌</span>
@@ -451,7 +481,6 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
                   <span class="pf-sub">One click</span>
                   <span class="pf-badge">Manual</span>
                 </button>
-                <span class="pf-arr" aria-hidden="true">&#8594;</span>
                 <button class="pf-step" data-s="3" data-type="auto"
                         title="Four TypeScript files generated in the browser" aria-expanded="false">
                   <span class="pf-icon" aria-hidden="true">📝</span>
@@ -459,7 +488,6 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
                   <span class="pf-sub">4 files, in-browser</span>
                   <span class="pf-badge">Auto</span>
                 </button>
-                <span class="pf-arr" aria-hidden="true">&#8594;</span>
                 <button class="pf-step" data-s="4" data-type="auto"
                         title="Plugin pushes to GitHub and opens a PR" aria-expanded="false">
                   <span class="pf-icon" aria-hidden="true">😺</span>
@@ -467,7 +495,6 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
                   <span class="pf-sub">Branch + PR</span>
                   <span class="pf-badge">Auto</span>
                 </button>
-                <span class="pf-arr" aria-hidden="true">&#8594;</span>
                 <button class="pf-step" data-s="5" data-type="auto"
                         title="GitHub Actions validates and auto-merges" aria-expanded="false">
                   <span class="pf-icon" aria-hidden="true">⚙️</span>
@@ -475,7 +502,6 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
                   <span class="pf-sub">Validate + merge</span>
                   <span class="pf-badge">Auto</span>
                 </button>
-                <span class="pf-arr" aria-hidden="true">&#8594;</span>
                 <button class="pf-step" data-s="6" data-type="auto"
                         title="Tokens live on main in under 60 seconds" aria-expanded="false">
                   <span class="pf-icon" aria-hidden="true">🚀</span>
@@ -496,9 +522,9 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
                 </div>
                 <div class="pf-d-body" id="pf-d-body"></div>
                 <div class="pf-d-nav">
-                  <button class="pf-d-btn" id="pf-d-prev">Previous</button>
+                  <button class="pf-d-btn" id="pf-d-prev" aria-label="Previous step"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="15 18 9 12 15 6"/></svg></button>
                   <span class="pf-d-dots" id="pf-d-dots" aria-hidden="true"></span>
-                  <button class="pf-d-btn" id="pf-d-next">Next</button>
+                  <button class="pf-d-btn" id="pf-d-next" aria-label="Next step"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg></button>
                 </div>
               </div>
             </div>
@@ -575,7 +601,7 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
   </svg>
 </button>
 
-<script src="../shared/case-study.js?v=202609041118" defer></script>
+<script src="../shared/case-study.js?v=202609041128" defer></script>
 
 <script>
 /* ══ The reel ═══════════════════════════════════════════════════════════════
