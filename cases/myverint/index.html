@@ -16,8 +16,8 @@
 <meta name="author" content="Ori Cohen"/>
 <meta name="twitter:title" content="My Verint - Case Study - Ori Cohen"/>
 <meta name="twitter:description" content="How Ori Cohen redesigned My Verint - merging two disconnected mobile apps into a unified, AI-powered experience for 10,000+ contact center employees."/>
-<link rel="stylesheet" href="../../src/tokens.css?v=202609040930"/>
-<link rel="stylesheet" href="../shared/case-study.css?v=202609040930"/>
+<link rel="stylesheet" href="../../src/tokens.css?v=202609040937"/>
+<link rel="stylesheet" href="../shared/case-study.css?v=202609040937"/>
 <script>try{if(localStorage.getItem('ori-theme')==='dark')document.documentElement.setAttribute('data-theme','dark')}catch(e){}
 if(window.self!==window.top){var _s=document.createElement('style');_s.textContent='*{cursor:none!important}';document.head.appendChild(_s);}</script>
 <style>
@@ -105,7 +105,7 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
 .sc-screen-vid{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
   opacity:0;transition:opacity .4s ease}
 .sc-screen-vid.vid-active{opacity:1}
-@media(min-width:901px) and (prefers-reduced-motion:no-preference){
+@media(min-width:1261px) and (prefers-reduced-motion:no-preference){
   .sc-phone{animation:floatPhone 5s cubic-bezier(.45,0,.55,1) infinite}
 }
 @keyframes floatPhone{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
@@ -158,7 +158,24 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
 
 /* ══ Mobile - same solution as the original: tabs become a horizontal
       scrolling pill row, phone centres, detail goes full width ════════ */
-@media(max-width:900px){
+/* 1260, not 900, and the criterion is characters per line rather than "does
+   not overflow". The module is 168px of tabs + 264px of phone + 104px of
+   gaps = 536px before the description gets anything, and .sc-desc-body is
+   15px, so 50 characters - the floor in the project's typesetting rules -
+   needs 375px. That is 911px of content, which is a 1255px window.
+
+   This is not an edge case. index.html opens a project window at
+   min(1320px, 100vw - 300px), so:
+
+     1440px screen -> 1140px window -> 35 chars per line
+     1512px screen -> 1212px window -> 44 chars per line
+     1728px screen -> 1320px window -> 59 chars per line
+
+   The three-column layout was therefore broken by default on any 14- or
+   15-inch MacBook, not only when the window was dragged narrower. Below
+   1260 the module uses its single-column form, which gives the description
+   the full content width instead of a 260px ribbon. */
+@media(max-width:1260px){
   .cs-body{padding:24px 20px 80px}
   .mv-show{display:flex;flex-direction:column;gap:28px;align-items:stretch;margin-top:32px}
   .sc-tabs-wrap{overflow:hidden;width:100%;align-self:stretch}
@@ -570,7 +587,7 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
   </svg>
 </button>
 
-<script src="../shared/case-study.js?v=202609040930" defer></script>
+<script src="../shared/case-study.js?v=202609040937" defer></script>
 <script>
 /* "The Design" tabs - opacity crossfade only.
    Adopted from the original implementation: every video runs continuously

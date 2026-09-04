@@ -39,8 +39,8 @@
   }
 }
 </script>
-<link rel="stylesheet" href="../../src/tokens.css?v=202609040930"/>
-<link rel="stylesheet" href="../shared/case-study.css?v=202609040930"/>
+<link rel="stylesheet" href="../../src/tokens.css?v=202609040937"/>
+<link rel="stylesheet" href="../shared/case-study.css?v=202609040937"/>
 <script>try{if(localStorage.getItem('ori-theme')==='dark')document.documentElement.setAttribute('data-theme','dark')}catch(e){}
 if(window.self!==window.top){var _s=document.createElement('style');_s.textContent='*{cursor:none!important}';document.head.appendChild(_s);}</script>
 <style>
@@ -177,7 +177,15 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
   .vs-cap.on{animation:none}
   .vs-arrow:hover{transform:none}
 }
-@media(max-width:900px){
+/* 1260, the same breakpoint myverint uses, so both case studies change shape
+   at the same width rather than each having its own. The reel could survive a
+   little narrower - the rail and controls cost 280px and the stage stays
+   legible to about 420px - but matching is worth more than the 100px, and it
+   is better either way: stacked, the stage gets the whole content column
+   (796px at a 1140px window) instead of the 516px the three-column form
+   would leave it, and these are 1920x1080 captures where width is
+   legibility. */
+@media(max-width:1260px){
   /* Stage, then controls and rail side by side under it. The rail keeps its
      labels - they are the only thing naming the plugins. */
   .vs{grid-template-columns:1fr;
@@ -398,7 +406,7 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
   </svg>
 </button>
 
-<script src="../shared/case-study.js?v=202609040930" defer></script>
+<script src="../shared/case-study.js?v=202609040937" defer></script>
 
 <script>
 /* ══ Vertical slide reel ════════════════════════════════════════════════════

@@ -510,9 +510,27 @@ button{cursor:pointer;font-family:inherit}
 #scroll-top:hover{background:var(--action-primary-hover)}
 
 /* ── Responsive ───────────────────────────────────────────────────────────── */
-@media(max-width:720px){
-  .back-nav{display:flex}
-  .cs-body{grid-template-columns:1fr;gap:28px;padding:24px 20px 80px}
+/* These pages are read inside a RESIZABLE WINDOW, not only on a device, and
+   main.js lets a project window go down to 800px wide. So the breakpoints have
+   to be driven by how much room the layout actually needs, not by phone sizes.
+
+   Measured, with .cs-body at 200px sidebar + 56px gap + 88px padding:
+
+     window   content   myverint description column
+      1320      976 px      440 px
+      1220      876 px      340 px
+      1140      796 px      260 px   <- the floor for a readable column
+      1090      746 px      210 px   <- one word per line
+       900      556 px       20 px
+       860      516 px      -20 px   <- overflows, and the overflow is
+                                        unreachable because we clip x to keep
+                                        position:sticky working
+
+   The modules used to flip at 900px, which left 800-1140 broken. They flip at
+   1140 now, and the page itself goes single column at 1000 so the content gets
+   the sidebar's width back before things get tight. */
+@media(max-width:1000px){
+  .cs-body{grid-template-columns:1fr;gap:28px;padding:32px 24px 90px}
   /* ── The meta block becomes one card ──────────────────────────────────
      On mobile this stack used to carry four separate rules: the accent bar
      down the left of the fields, the .sb-div above the nutshell, the
@@ -547,6 +565,13 @@ button{cursor:pointer;font-family:inherit}
   .sb-value{color:var(--text-primary);font-size:14px;font-weight:600}
   .sb-div{display:none}
   .sb-nut{margin:0;font-size:13.5px;line-height:1.7}
+}
+/* Genuinely small screens: the type scale steps down and the mobile back
+   nav appears. Not tied to the window resize above - a 900px window on a
+   desktop should not get phone-sized type. */
+@media(max-width:720px){
+  .back-nav{display:flex}
+  .cs-body{gap:28px;padding:24px 20px 80px}
   .cs-hero h1{font-size:24px}
   .cs-hero-sub{font-size:15px}
   .cs-section p{font-size:15px}
