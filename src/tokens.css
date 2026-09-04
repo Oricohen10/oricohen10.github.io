@@ -156,7 +156,13 @@
   /* Text — dark mode inversions of Verint text tokens */
   --text-primary:   var(--vg-75);        /* #f3f4f5 — near-white on dark */
   --text-secondary: var(--vg-300);       /* #d0d3d6 — muted on dark */
-  --text-tertiary:  var(--vg-600);       /* #8d9296 — faint on dark */
+  /* vg-500, not vg-600. #8d9296 failed AA on every dark surface it is used on:
+     4.45:1 on --surface-default, 4.02:1 on --surface-raised, both needing
+     4.5:1. #b0b6bb clears all five dark surfaces, worst case 6.17:1 on
+     --surface-raised. The cost is a flatter step down from --text-secondary
+     (1.36:1 rather than 2.09:1), which is the right trade: a slightly
+     subtler hierarchy beats unreadable metadata. */
+  --text-tertiary:  var(--vg-500);       /* #b0b6bb — faint on dark, still AA */
   --text-brand:     var(--blue-400);     /* #4daefb — lighter blue for dark bg */
   --text-disabled:  var(--vg-750);       /* #585b5e — muted disabled */
   --text-inverse:   var(--vg-950);       /* #121213 — text on light elements within dark theme */

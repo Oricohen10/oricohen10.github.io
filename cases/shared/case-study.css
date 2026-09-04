@@ -4,7 +4,7 @@
  * Each page sets its own accent via:
  *   :root { --action-primary: ...; --action-primary-hover: ...; --action-primary-subtle: ...; }
  *
- * Page-specific overrides (carousel bg, aspect-ratio, chip variant, etc.)
+ * Page-specific overrides (accent, chip variant, per-project media modules)
  * live in a small <style> block at the top of each page.
  */
 
@@ -143,255 +143,11 @@ button{cursor:pointer;font-family:inherit}
   .cs-media-row--flip .cs-media{order:0}
 }
 
-/* ── Carousel shell ───────────────────────────────────────────────────────── */
-/* Retired. No page uses .carousel-* any more - media is inline per the block
-   above. Kept until the last case study has its media re-placed, then delete
-   this block and initCarousel() in case-study.js together. */
-.carousel-shell{
-  max-width:1040px;
-  margin:0 auto;
-  padding:28px 28px 0;
-}
-
-/* ── Carousel wrap ────────────────────────────────────────────────────────── */
-.carousel-wrap{
-  position:relative;
-  overflow:hidden;
-  background:#0D0D0D; /* default for video pages; image pages override */
-  border:1px solid var(--border-subtle);
-  border-radius:var(--r-xl);
-}
-/* Image carousels: light surface bg + clickable cursor */
-.carousel-wrap[data-lightbox="image"]{background:var(--surface-raised)}
-.carousel-wrap[data-lightbox="image"] .carousel-slide{cursor:pointer}
-
-/* ── Placeholder SVG - token-backed ──────────────────────────────────────── */
-/* Wrap SVG in a <div class="cs-placeholder-img"> to get themed fill/stroke */
-.cs-placeholder-img svg{width:100%;height:100%;display:block}
-.cs-placeholder-img .ph-bg{fill:var(--surface-raised)}
-.cs-placeholder-img .ph-icon{fill:none;stroke:var(--border-default);stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
-.carousel-track{
-  display:flex;
-  transition:transform .38s cubic-bezier(.4,0,.2,1);
-  will-change:transform;
-}
-.carousel-slide{
-  flex:0 0 100%;
-  aspect-ratio:16/9; /* image pages override to 16/7 */
-  position:relative;
-  overflow:hidden;
-}
-.carousel-slide video,
-.carousel-slide img,
-.carousel-slide svg{
-  width:100%;height:100%;
-  object-fit:cover;
-  display:block;
-}
-.carousel-slide svg{pointer-events:none;user-select:none}
-
-/* Play button */
-.car-play{
-  position:absolute;
-  top:50%;left:50%;
-  transform:translate(-50%,-50%);
-  width:62px;height:62px;border-radius:50%;
-  background:rgba(255,255,255,.95);
-  border:none;
-  display:flex;align-items:center;justify-content:center;
-  box-shadow:0 6px 32px rgba(0,0,0,.38);
-  transition:transform .15s,opacity .18s;
-  z-index:5;
-}
-.car-play:hover{transform:translate(-50%,-50%) scale(1.1)}
-.car-play.hidden{opacity:0;pointer-events:none}
-.car-play svg{width:22px;height:22px;margin-left:2px}
-
-/* Pause button */
-.car-pause{
-  position:absolute;
-  top:50%;left:50%;
-  transform:translate(-50%,-50%);
-  width:52px;height:52px;border-radius:50%;
-  background:rgba(0,0,0,.48);
-  border:none;
-  display:flex;align-items:center;justify-content:center;
-  box-shadow:0 4px 20px rgba(0,0,0,.3);
-  transition:opacity .18s,transform .15s;
-  z-index:6;
-  opacity:0;pointer-events:none;
-}
-.car-pause.playing{pointer-events:auto}
-.carousel-slide:hover .car-pause.playing{opacity:1}
-.car-pause:hover{transform:translate(-50%,-50%) scale(1.08)}
-
-/* Slide label */
-.carousel-slide-label{
-  position:absolute;
-  bottom:14px;left:50%;transform:translateX(-50%);
-  font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
-  color:#fff;
-  background:rgba(0,0,0,.48);
-  backdrop-filter:blur(6px);
-  -webkit-backdrop-filter:blur(6px);
-  padding:4px 14px;border-radius:100px;
-  white-space:nowrap;pointer-events:none;
-}
-
-/* Arrow buttons */
-.carousel-btn{
-  position:absolute;top:50%;transform:translateY(-50%);
-  z-index:10;
-  width:36px;height:36px;
-  display:flex;align-items:center;justify-content:center;
-  background:rgba(255,255,255,.88);
-  border:1px solid rgba(0,0,0,.1);
-  border-radius:50%;
-  backdrop-filter:blur(8px);
-  -webkit-backdrop-filter:blur(8px);
-  color:#1a1a2e;
-  transition:background .12s,transform .12s;
-  box-shadow:0 1px 6px rgba(0,0,0,.12);
-}
-[data-theme="dark"] .carousel-btn{background:rgba(44,44,44,.88);color:#f3f4f5;border-color:rgba(255,255,255,.1)}
-.carousel-btn:hover{background:rgba(255,255,255,1);transform:translateY(-50%) scale(1.05)}
-[data-theme="dark"] .carousel-btn:hover{background:rgba(60,60,60,1)}
-.carousel-btn.prev{left:14px}
-.carousel-btn.next{right:14px}
-.carousel-btn svg{width:16px;height:16px;display:block;flex-shrink:0}
-
-/* Counter */
-.carousel-footer{
-  position:absolute;bottom:10px;right:14px;
-  display:flex;align-items:center;
-  pointer-events:none;
-}
-.carousel-counter{
-  font-size:12px;font-weight:600;letter-spacing:.02em;
-  color:rgba(255,255,255,.9);
-  background:rgba(0,0,0,.35);
-  border-radius:20px;padding:3px 10px;
-  pointer-events:none;
-  backdrop-filter:blur(4px);
-  -webkit-backdrop-filter:blur(4px);
-}
-
-/* Zoom button */
-.carousel-zoom{
-  position:absolute;bottom:14px;left:14px;z-index:10;
-  width:32px;height:32px;
-  display:flex;align-items:center;justify-content:center;
-  background:rgba(255,255,255,.88);
-  border:1px solid rgba(0,0,0,.1);
-  border-radius:50%;
-  box-shadow:0 1px 4px rgba(0,0,0,.14);
-  color:#1a1a2e;
-  transition:background .12s,transform .12s;
-}
-.carousel-zoom:hover{background:rgba(255,255,255,1);transform:scale(1.08)}
-.carousel-zoom svg{width:15px;height:15px;display:block}
-[data-theme="dark"] .carousel-zoom{background:rgba(44,44,44,.88);color:#f3f4f5;border-color:rgba(255,255,255,.12)}
-[data-theme="dark"] .carousel-zoom:hover{background:rgba(60,60,60,1)}
-
-/* ── Image lightbox (.lbx) ────────────────────────────────────────────────── */
-.lbx{
-  display:none;
-  position:fixed;inset:0;z-index:9999;
-  background:rgba(0,0,0,.9);
-  align-items:center;justify-content:center;
-  animation:lbxIn .18s ease;
-}
-.lbx.open{display:flex}
-@keyframes lbxIn{from{opacity:0}to{opacity:1}}
-.lbx-inner{
-  position:relative;
-  max-width:calc(100vw - 120px);
-  max-height:calc(100vh - 60px);
-  display:flex;align-items:center;justify-content:center;
-}
-.lbx-inner svg,
-.lbx-inner img{
-  width:auto;
-  height:auto;
-  max-width:100%;
-  max-height:calc(100vh - 60px);
-  object-fit:contain;
-  border-radius:6px;
-  box-shadow:0 8px 60px rgba(0,0,0,.6);
-  display:block;
-}
-.lbx-close{
-  position:fixed;top:18px;right:22px;
-  width:36px;height:36px;
-  display:flex;align-items:center;justify-content:center;
-  background:rgba(255,255,255,.12);
-  border:1px solid rgba(255,255,255,.18);
-  border-radius:50%;
-  color:#fff;
-  transition:background .12s;
-  z-index:10000;
-}
-.lbx-close:hover{background:rgba(255,255,255,.22)}
-.lbx-close svg{width:16px;height:16px;display:block}
-.lbx-btn{
-  position:fixed;top:50%;transform:translateY(-50%);
-  width:42px;height:42px;
-  display:flex;align-items:center;justify-content:center;
-  background:rgba(20,20,20,.72);
-  border:1px solid rgba(255,255,255,.25);
-  border-radius:50%;
-  color:#fff;
-  transition:background .12s;
-  z-index:10000;
-  backdrop-filter:blur(4px);
-  -webkit-backdrop-filter:blur(4px);
-}
-.lbx-btn:hover{background:rgba(30,30,30,.90)}
-.lbx-btn svg{width:18px;height:18px;display:block}
-.lbx-prev{left:14px}
-.lbx-next{right:14px}
-.lbx-counter{
-  position:fixed;bottom:22px;left:50%;transform:translateX(-50%);
-  font-size:11px;font-weight:700;letter-spacing:.06em;
-  color:rgba(255,255,255,.5);
-  z-index:10000;
-}
-@media(max-width:480px){
-  .lbx-btn,.lbx-prev,.lbx-next{display:none}
-}
-
-/* ── Video lightbox (.vlbx) ───────────────────────────────────────────────── */
-.vlbx{
-  display:none;
-  position:fixed;inset:0;z-index:9999;
-  background:rgba(0,0,0,.92);
-  align-items:center;justify-content:center;
-  animation:lbxIn .18s ease;
-}
-.vlbx.open{display:flex}
-.vlbx-inner{
-  position:relative;
-  max-width:calc(100vw - 80px);
-  width:min(960px,calc(100vw - 80px));
-}
-.vlbx-inner video{
-  width:100%;border-radius:8px;
-  box-shadow:0 8px 60px rgba(0,0,0,.6);
-  display:block;
-}
-.vlbx-close{
-  position:fixed;top:18px;right:22px;
-  width:36px;height:36px;
-  display:flex;align-items:center;justify-content:center;
-  background:rgba(255,255,255,.12);
-  border:1px solid rgba(255,255,255,.18);
-  border-radius:50%;
-  color:#fff;
-  transition:background .12s;
-  z-index:10000;
-}
-.vlbx-close:hover{background:rgba(255,255,255,.22)}
-.vlbx-close svg{width:16px;height:16px;display:block}
+/* The carousel, the placeholder SVG styling and both lightboxes were removed
+   in Sept 2026 - roughly 350 lines. Every case study places its media inline
+   now, via .cs-media above or a module of its own. Checked before deleting:
+   no page carries .carousel-*, .lbx-*, .vlbx-* or .cs-placeholder-img markup,
+   and the JS that drove them went with it. */
 
 /* ── Layout ───────────────────────────────────────────────────────────────── */
 /* 1280, not 1100. The window these pages open in is min(1320px, 100vw-300px),
@@ -752,7 +508,6 @@ button{cursor:pointer;font-family:inherit}
 @media(max-width:720px){
   .back-nav{display:flex}
   .cs-body{grid-template-columns:1fr;gap:28px;padding:24px 20px 80px}
-  .carousel-shell{padding:20px 20px 0}
   /* ── The meta block becomes one card ──────────────────────────────────
      On mobile this stack used to carry four separate rules: the accent bar
      down the left of the fields, the .sb-div above the nutshell, the
@@ -808,9 +563,6 @@ button{cursor:pointer;font-family:inherit}
 }
 @media(max-width:480px){
   .cs-body{padding:20px 18px 80px}
-  .carousel-shell{padding:16px 18px 0}
-  .carousel-btn{width:30px;height:30px}
-  .carousel-btn svg{width:14px;height:14px}
   .stat-grid{grid-template-columns:1fr}
   .stat-grid .stat-card:last-child{grid-column:auto}
   .stat-num{font-size:32px}
