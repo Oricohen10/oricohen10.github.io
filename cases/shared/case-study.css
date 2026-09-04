@@ -103,7 +103,8 @@ button{cursor:pointer;font-family:inherit}
 
    data-src rather than src: nothing is fetched until the figure is near the
    viewport. Use <img> in place of <video> for stills - same frame, same
-   caption treatment. */
+   caption treatment. Full width only; there was a side-by-side variant here
+   that no page ever used, so it went. */
 .cs-media{margin:26px 0 0;position:relative}
 .cs-media > video,
 .cs-media > img{
@@ -129,18 +130,6 @@ button{cursor:pointer;font-family:inherit}
   color:var(--text-secondary);
   text-wrap:pretty;
   max-width:62ch;
-}
-/* Side-by-side variant: media and the claim it evidences on one row.
-   Add .cs-media--right to put the media on the right, text left. */
-.cs-media-row{
-  display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);
-  gap:44px;align-items:center;margin-top:34px;
-}
-.cs-media-row .cs-media{margin:0}
-.cs-media-row--flip .cs-media{order:-1}
-@media(max-width:860px){
-  .cs-media-row{grid-template-columns:1fr;gap:24px}
-  .cs-media-row--flip .cs-media{order:0}
 }
 
 /* The carousel, the placeholder SVG styling and both lightboxes were removed
@@ -284,105 +273,12 @@ button{cursor:pointer;font-family:inherit}
   line-height:1.75;max-width:560px;
 }
 
-/* ── Pipeline visual ──────────────────────────────────────────────────────── */
-.pv-wrap{
-  margin-top:28px;padding-top:24px;
-  border-top:1px dashed var(--border-subtle);
-}
-.pv-label{
-  font-size:10px;font-weight:700;letter-spacing:.1em;
-  text-transform:uppercase;color:var(--text-tertiary);
-  margin-bottom:16px;
-}
-.pv-flow{
-  display:flex;align-items:stretch;flex-wrap:nowrap;gap:6px;
-  margin-bottom:20px;
-  overflow-x:auto;
-  padding-bottom:2px;
-}
-.pv-step{
-  flex:1 1 0;min-width:0;
-  display:flex;flex-direction:column;align-items:center;gap:8px;
-  background:#fff;
-  border:1.5px solid #e5e7eb;
-  border-radius:12px;
-  padding:14px 10px 14px;
-  text-align:center;
-  transition:border-color .2s,box-shadow .2s;
-}
-[data-theme="dark"] .pv-step{background:var(--surface-raised);border-color:var(--border-default)}
-.pv-step[data-step="2"]{border-color:color-mix(in srgb, var(--action-primary) 28%, transparent)}
-.pv-step[data-step="3"]{border-color:color-mix(in srgb, var(--action-primary) 50%, transparent);box-shadow:0 0 8px color-mix(in srgb, var(--action-primary) 10%, transparent)}
-.pv-step[data-step="4"]{border-color:color-mix(in srgb, var(--action-primary) 70%, transparent);box-shadow:0 0 12px color-mix(in srgb, var(--action-primary) 18%, transparent)}
-.pv-step[data-step="5"]{border-color:var(--action-primary);box-shadow:0 0 18px color-mix(in srgb, var(--action-primary) 28%, transparent),0 0 6px color-mix(in srgb, var(--action-primary) 18%, transparent)}
-.pv-icon{font-size:24px;line-height:1}
-.pv-name{font-size:12px;font-weight:700;color:var(--text-primary);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
-.pv-badge{
-  font-size:9px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;
-  padding:3px 8px;border-radius:100px;
-  background:var(--action-primary-subtle);color:var(--action-primary);
-  white-space:nowrap;
-}
-.pv-badge.auto{background:rgba(21,128,61,.1);color:#15803d}
-[data-theme="dark"] .pv-badge.auto{background:rgba(74,222,128,.12);color:#4ade80}
-.pv-arr{
-  color:var(--text-tertiary);font-size:14px;font-weight:600;
-  flex-shrink:0;align-self:center;
-}
-
-/* ── PR card ──────────────────────────────────────────────────────────────── */
-.pr-card{
-  background:var(--surface-default);
-  border:1px solid var(--border-subtle);
-  border-radius:10px;overflow:hidden;
-}
-.pr-head{
-  display:flex;align-items:flex-start;justify-content:space-between;gap:8px;
-  padding:12px 14px;border-bottom:1px solid var(--border-subtle);
-}
-.pr-title-row{flex:1}
-.pr-title{font-size:12px;font-weight:700;color:var(--text-primary);font-family:monospace;margin-bottom:3px}
-.pr-meta{font-size:10.5px;color:var(--text-secondary)}
-.pr-merged{
-  display:inline-flex;align-items:center;gap:4px;flex-shrink:0;
-  font-size:10px;font-weight:700;
-  padding:3px 9px;border-radius:100px;
-  background:#6e40c9;color:#fff;
-}
-.pr-diff-block{border-bottom:1px solid var(--border-subtle)}
-.diff-file-head{
-  display:flex;align-items:center;gap:7px;
-  padding:6px 14px;
-  background:var(--canvas,#F5F5F5);
-  border-bottom:1px solid var(--border-subtle);
-  font-size:10.5px;font-weight:600;font-family:monospace;color:var(--text-secondary);
-}
-.diff-add-count{color:#15803d;font-weight:700}
-.diff-del-count{color:#b91c1c;font-weight:700}
-[data-theme="dark"] .diff-add-count{color:#4ade80}
-[data-theme="dark"] .diff-del-count{color:#f87171}
-.diff-lines{padding:4px 0}
-.diff-line{
-  display:block;font-family:monospace;font-size:10.5px;
-  padding:1.5px 14px;white-space:pre-wrap;word-break:break-all;
-}
-.diff-line.add{background:rgba(21,128,61,.07);color:#166534}
-.diff-line.del{background:rgba(239,68,68,.07);color:#b91c1c}
-[data-theme="dark"] .diff-line.add{background:rgba(74,222,128,.08);color:#4ade80}
-[data-theme="dark"] .diff-line.del{background:rgba(248,113,113,.08);color:#f87171}
-.diff-line.ctx{color:var(--text-tertiary)}
-.pr-foot{
-  display:flex;align-items:center;gap:8px;flex-wrap:wrap;
-  padding:9px 14px;
-  font-size:10.5px;color:var(--text-secondary);
-}
-.pr-foot-check{color:#15803d;font-size:12px;font-weight:700}
-[data-theme="dark"] .pr-foot-check{color:#4ade80}
-.pr-foot-badge{
-  font-size:9px;font-weight:700;padding:2px 7px;border-radius:4px;
-  background:rgba(21,128,61,.1);color:#15803d;
-}
-[data-theme="dark"] .pr-foot-badge{background:rgba(74,222,128,.12);color:#4ade80}
+/* The pipeline diagram and the mock GitHub PR card were removed in Sept 2026
+   along with the Token Sync bench they belonged to - the plugins page is a
+   video reel now. Roughly 130 lines. Checked first: no page carries .pv-*,
+   .pr-* or the .diff-line / .diff-file-head diff classes. Note those are a
+   different family from .diff-item / .diff-marg / .diff-lesson / .diff-text,
+   which are the reflection block below and very much in use. */
 
 /* ── Stat cards ───────────────────────────────────────────────────────────── */
 .stat-grid{
@@ -409,52 +305,72 @@ button{cursor:pointer;font-family:inherit}
 }
 .stat-title{font-size:14px;font-weight:700;color:var(--text-primary);margin-bottom:6px}
 .stat-desc{font-size:12px;color:var(--text-secondary);line-height:1.6;padding:0 6px 20px;flex:1}
-/* Optional footer link inside a stat card (used in LUX) */
-.stat-more{
-  display:block;
-  width:calc(100% + 40px);
-  margin-left:-20px;
-  padding:12px 0 13px;
-  border-top:1px solid var(--border-subtle);
-  font-size:12.5px;font-weight:600;
-  color:var(--text-tertiary);
-  text-decoration:none;
-  transition:color .12s,background .12s;
-  text-align:center;
-}
-.stat-more:hover{color:var(--text-primary);background:var(--surface-raised)}
 
-/* ── "What I'd do differently" cards ─────────────────────────────────────── */
+/* ── "What I'd do differently" ───────────────────────────────────────────── */
+/* Margin notes, not cards and not alerts. A filled circle with "!" is an error
+   affordance, and a reflection is not an error; numbered chips imply a sequence
+   these do not have. A short uppercase label in the margin says what kind of
+   lesson it is and gets out of the way.
+
+   Three levels, three colours: the label carries the accent, which ties it to
+   the section title, the lesson is primary, the body is secondary. Before,
+   the label and the body were both secondary, so there were only two levels
+   and the block read as flat grey.
+
+   Contrast on the washed ambient background, worst case with both washes
+   overlapping: label 6.73:1 light and 4.89:1 dark, lesson 13.71:1 and 9.37:1,
+   body 5.00:1 and 6.87:1.
+
+   Markup:
+     <div class="diff-item">
+       <div class="diff-marg">Process</div>
+       <div class="diff-body">
+         <p class="diff-lesson">The lesson, in one sentence.</p>
+         <p class="diff-text">What happened and what it cost.</p>
+       </div>
+     </div>                                                                  */
 .diff-item{
-  position:relative;
-  background:var(--surface-default);
-  border:1px solid var(--border-subtle);
-  border-radius:16px;
-  padding:24px 24px 24px 76px;
-  margin-bottom:14px;
-  box-shadow:0 1px 6px rgba(0,0,0,.04);
-  overflow:hidden;
-  transition:box-shadow .2s;
+  display:grid;grid-template-columns:7.5em minmax(0,1fr);
+  gap:0 2.4em;
+  /* baseline, not a hand-tuned padding-top, so the label's baseline sits on
+     the lesson's first baseline whatever either font-size becomes */
+  align-items:baseline;
+  padding:2.2em 0;
 }
-[data-theme="dark"] .diff-item{box-shadow:none}
-.diff-item:hover{box-shadow:0 6px 24px rgba(0,0,0,.09)}
-[data-theme="dark"] .diff-item:hover{box-shadow:0 0 0 1px var(--action-primary)}
-.diff-item:last-child{margin-bottom:0}
-.diff-item::before{
-  content:'';position:absolute;top:0;left:0;bottom:0;width:4px;
-  background:var(--action-primary);border-radius:4px 0 0 4px;
+/* The rule goes BETWEEN items, via the adjacent sibling combinator.
+   :first-of-type does not work here: .cs-section-num is the first div child of
+   the section, so the first .diff-item is the second div and never matched the
+   reset - which is why a divider kept appearing directly under the section
+   heading. */
+.diff-item + .diff-item{border-top:1px solid var(--border-subtle)}
+.diff-item:first-of-type{padding-top:0;margin-top:1.4em}
+.diff-item:last-of-type{padding-bottom:.4em}
+.diff-marg{
+  font-size:.75rem;font-weight:700;letter-spacing:.11em;
+  text-transform:uppercase;color:var(--action-primary);
+  line-height:1.35;
 }
-.diff-num{
-  position:absolute;left:20px;top:24px;
-  width:32px;height:32px;
-  display:flex;align-items:center;justify-content:center;
-  border-radius:50%;background:var(--action-primary);color:#fff;
-  font-size:14px;font-weight:800;
+/* the plain accent is 3.52:1 on the dark wash and fails; the hover step is the
+   lighter of the pair in dark mode and clears it */
+[data-theme="dark"] .diff-marg{color:var(--action-primary-hover)}
+.diff-body{min-width:0}
+/* Two classes, not one. .cs-section p in this sheet is (0,1,1) and beats a
+   single class on colour, size, leading and margin - a one-class override
+   looks like it half-worked. */
+.diff-body .diff-lesson{
+  font-size:1.1875rem;line-height:1.35;font-weight:700;
+  letter-spacing:-.014em;color:var(--text-primary);
+  margin:0 0 .6em;text-wrap:nowrap;
 }
-.diff-text{font-size:14px;color:var(--text-secondary);line-height:1.8;text-wrap:pretty}
-.diff-text strong{color:var(--text-primary);font-weight:700;display:block;margin-bottom:5px;font-size:15px}
-@media(max-width:720px){
-  .diff-text{font-size:15px}
+.diff-body .diff-text{
+  font-size:.9375rem;line-height:1.75;color:var(--text-secondary);
+  margin:0;max-width:64ch;text-wrap:pretty;
+}
+@media(max-width:760px){
+  .diff-item{grid-template-columns:1fr;gap:.55em 0;padding:1.7em 0}
+  .diff-item:first-of-type{margin-top:1.1em}
+  /* wrapping the lesson is fine once it has the full width */
+  .diff-body .diff-lesson{font-size:1.0625rem;text-wrap:pretty}
 }
 
 /* ── AI card ──────────────────────────────────────────────────────────────── */
@@ -466,15 +382,15 @@ button{cursor:pointer;font-family:inherit}
   border:1px solid var(--border-subtle);
   border-radius:16px;
 }
-.ai-octopus,.ai-icon{flex-shrink:0;margin-top:2px;width:40px;height:auto;display:block}
+.ai-icon{flex-shrink:0;margin-top:2px;width:40px;height:auto;display:block}
 .ai-icon svg{width:40px;height:auto;display:block}
 .ai-card-body{flex:1}
-.ai-card-label,.ai-label{
+.ai-card-label{
   font-size:10px;font-weight:800;letter-spacing:.12em;
   text-transform:uppercase;color:var(--text-primary);
   margin-bottom:10px;
 }
-.ai-card-text,.ai-text{font-size:14.5px;color:var(--text-secondary);line-height:1.85;text-wrap:pretty}
+.ai-card-text{font-size:14.5px;color:var(--text-secondary);line-height:1.85;text-wrap:pretty}
 
 /* ── Scroll reveal ────────────────────────────────────────────────────────── */
 @media(prefers-reduced-motion:no-preference){
@@ -575,21 +491,12 @@ button{cursor:pointer;font-family:inherit}
   .cs-hero h1{font-size:24px}
   .cs-hero-sub{font-size:15px}
   .cs-section p{font-size:15px}
-  .ai-text,.ai-card-text{font-size:15px}
+  .ai-card-text{font-size:15px}
   .stat-grid{grid-template-columns:1fr 1fr}
   .stat-grid .stat-card:last-child{grid-column:1/-1}
   .stat-num{font-size:36px}
   .plugin-block{padding:18px 18px 18px 22px}
   .plugin-title{font-size:17px}
-  /* Pipeline: compact steps */
-  .pv-flow{gap:4px}
-  .pv-step{padding:10px 6px;min-width:56px}
-  .pv-name{font-size:10px}
-  .pv-icon{font-size:18px}
-  .pv-arr{font-size:11px}
-  /* PR card: allow title to wrap, stack head */
-  .pr-head{flex-wrap:wrap;gap:6px}
-  .pr-merged{align-self:flex-start}
 }
 @media(max-width:480px){
   .cs-body{padding:20px 18px 80px}
@@ -598,9 +505,5 @@ button{cursor:pointer;font-family:inherit}
   .stat-num{font-size:32px}
   .ai-card{flex-direction:column;gap:10px}
   .cs-section p{font-size:14.5px}
-  .ai-text,.ai-card-text{font-size:14.5px}
-  /* Pipeline: even more compact */
-  .pv-step{min-width:48px;padding:8px 4px}
-  .pv-name{font-size:9px}
-  .pv-badge{font-size:8px;padding:2px 5px}
+  .ai-card-text{font-size:14.5px}
 }
