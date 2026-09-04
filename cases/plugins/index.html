@@ -39,8 +39,8 @@
   }
 }
 </script>
-<link rel="stylesheet" href="../../src/tokens.css?v=202609041016"/>
-<link rel="stylesheet" href="../shared/case-study.css?v=202609041016"/>
+<link rel="stylesheet" href="../../src/tokens.css?v=202609041107"/>
+<link rel="stylesheet" href="../shared/case-study.css?v=202609041107"/>
 <script>try{if(localStorage.getItem('ori-theme')==='dark')document.documentElement.setAttribute('data-theme','dark')}catch(e){}
 if(window.self!==window.top){var _s=document.createElement('style');_s.textContent='*{cursor:none!important}';document.head.appendChild(_s);}</script>
 <style>
@@ -59,34 +59,54 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
 /* -- Chip variant ------------------------------------------------------- */
 .chip--plugin{background:rgba(157,34,147,.1);color:#9d2293}
 [data-theme="dark"] .chip--plugin{background:rgba(232,121,249,.14);color:#e879f9}
-/* ══ Vertical slide reel ════════════════════════════════════════════════
-   Layout: stage | controls | rail. The stage holds a window with a track of
-   four full-size slides; stepping translates the track vertically so the
-   outgoing recording leaves upward as the next arrives from below.
+/* ══ The reel ═══════════════════════════════════════════════════════════
+   One container holds the rail, the stage and the caption, so the writing
+   reads as part of the recording rather than as text that happens to follow
+   it. Rail left, stage right, caption under the stage.                    */
+.vs{margin-top:28px;
+  display:grid;grid-template-columns:236px minmax(0,1fr);
+  gap:0;
+  border:1px solid var(--border-subtle);
+  border-radius:var(--radius-xl);
+  background:var(--surface-default);
+  overflow:hidden}
+[data-theme="dark"] .vs{background:var(--surface-raised)}
 
-   The player bar is overlaid inside each slide rather than stacked above the
-   video. That is not only cosmetic: it keeps every slide exactly a 16:9 box,
-   which is what lets the step be a pure CSS percentage with no pixel
-   measurement and no resize handler.                                      */
-/* Two rows on purpose. With the captions inside the stage column, the
-   controls centred against stage+caption and sat below the video's middle;
-   the reference has them level with it. Explicit areas put the caption on its
-   own row so row 1 is exactly as tall as the window. */
-.vs{display:grid;margin-top:28px;
-  grid-template-columns:minmax(0,1fr) 46px 194px;
-  grid-template-areas:"win ctrl rail"
-                      "cap cap  cap";
-  column-gap:20px;row-gap:0}
-.vs-caps{grid-area:cap;min-width:0}
+/* ── rail, on the left ─────────────────────────────────────────────────── */
+.vs-rail{display:flex;flex-direction:column;gap:2px;
+  padding:14px 12px;
+  border-right:1px solid var(--border-subtle);
+  background:color-mix(in srgb, var(--action-primary) 3%, transparent)}
+[data-theme="dark"] .vs-rail{
+  background:color-mix(in srgb, var(--action-primary) 7%, transparent)}
+.vs-item{position:relative;display:flex;align-items:flex-start;gap:10px;
+  width:100%;font:inherit;text-align:left;cursor:pointer;
+  padding:11px 11px 11px 14px;border:0;border-radius:var(--radius-md);
+  background:transparent;transition:background .18s}
+.vs-item:hover{background:var(--action-primary-subtle)}
+.vs-item.on{background:var(--action-primary-subtle)}
+.vs-item:focus-visible{outline:2px solid var(--action-primary);outline-offset:-2px}
+/* The selected tint is light by necessity, so it cannot be the only signal -
+   this bar is what makes the state unambiguous. */
+.vs-item.on::before{content:"";position:absolute;left:3px;top:12px;bottom:12px;
+  width:2px;border-radius:2px;background:var(--action-primary)}
+.vs-item-n{font-size:10px;font-weight:800;letter-spacing:.1em;
+  color:var(--text-secondary);padding-top:2px;flex-shrink:0}
+.vs-item.on .vs-item-n{color:var(--action-primary)}
+/* The selected row sits on the accent tint over the accent-tinted panel -
+   two washes deep - which puts #e879f9 at 4.26:1 and fails. One step lighter
+   clears it at 5.34:1. */
+[data-theme="dark"] .vs-item.on .vs-item-n{color:#ee9bfb}
+.vs-item-x{display:flex;flex-direction:column;gap:2px;min-width:0}
+.vs-item-x b{font-size:13.5px;font-weight:600;color:var(--text-secondary);line-height:1.35}
+.vs-item.on .vs-item-x b{color:var(--text-primary);font-weight:800}
+.vs-item-x em{font-style:normal;font-size:11px;line-height:1.45;color:var(--text-secondary)}
 
-/* the window and the track */
-.vs-window{grid-area:win;position:relative;overflow:hidden;aspect-ratio:16/9;
-  border-radius:var(--radius-lg);border:1px solid var(--border-subtle);
-  background:#141517;
-  box-shadow:0 18px 40px rgba(18,18,19,.16)}
-[data-theme="dark"] .vs-window{box-shadow:0 48px 96px rgba(0,0,0,.8)}
-/* Four slides, so the track is 400% tall and one step is 25% of itself.
-   Tied to there being exactly four - a fifth makes this 20%. */
+/* ── stage ─────────────────────────────────────────────────────────────── */
+.vs-main{min-width:0;display:flex;flex-direction:column}
+.vs-window{position:relative;overflow:hidden;aspect-ratio:16/9;background:#141517}
+/* Four slides, so the track is 400% tall and a step is 25% of itself. Tied to
+   there being exactly four - a fifth makes this 20%. */
 .vs-track{position:absolute;inset:0;height:400%;
   transform:translateY(calc(var(--i) * -25%));
   transition:transform .62s cubic-bezier(.65,0,.35,1)}
@@ -94,112 +114,184 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
 .vs-slide video{position:absolute;inset:0;width:100%;height:100%;
   object-fit:cover;display:block;background:#141517}
 
-/* overlaid player bar, same idea as the reference */
-.vs-bar{position:absolute;top:0;left:0;right:0;z-index:2;
-  display:flex;align-items:center;gap:8px;
-  padding:9px 13px;font-size:11.5px;font-weight:600;color:#F2F4F6;
-  background:linear-gradient(to bottom,rgba(10,11,12,.82),rgba(10,11,12,0));
-  text-shadow:0 1px 3px rgba(0,0,0,.6)}
-.vs-bar-n{font-weight:800;letter-spacing:.09em;color:#E879F9;flex-shrink:0}
-.vs-bar-t{margin-left:auto;font-weight:500;color:#D3D7DB;flex-shrink:0;
-  white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-
-/* the caption travels with the step, in the same direction */
-.vs-cap{display:none}
-.vs-cap.on{display:block;animation:vsCap .5s cubic-bezier(.4,0,.2,1) both}
-@keyframes vsCap{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
-.vs-cap-h{font-size:19px;font-weight:800;letter-spacing:-.3px;
-  color:var(--text-primary);margin:18px 0 7px}
-/* Two classes, not one. .cs-section p in the shared sheet is (0,1,1) and
-   beats a single class on colour, size, leading and margin. */
-.vs-caps .vs-cap-p{font-size:14.5px;line-height:1.75;color:var(--text-secondary);
-  margin:0;max-width:64ch;text-wrap:pretty}
-
-/* controls between stage and rail, level with the window's centre */
-.vs-ctrl{grid-area:ctrl;display:flex;flex-direction:column;align-items:center;gap:11px;
-  justify-self:center;align-self:center}
-.vs-arrow{width:34px;height:34px;flex-shrink:0;border:0;border-radius:50%;
+/* ── hover controls ───────────────────────────────────────────────────────
+   Shown on hover and on keyboard focus. focus-within matters: without it the
+   buttons would be reachable by Tab but invisible while focused. */
+.vs-ctl{position:absolute;inset:auto 0 0 0;z-index:3;
+  display:flex;align-items:center;gap:8px;padding:12px 14px;
+  background:linear-gradient(to top,rgba(8,9,10,.72),rgba(8,9,10,0));
+  opacity:0;transition:opacity .2s;pointer-events:none}
+.vs-window:hover .vs-ctl,
+.vs-window:focus-within .vs-ctl{opacity:1;pointer-events:auto}
+.vs-btn{width:34px;height:34px;flex-shrink:0;border:0;border-radius:50%;
   cursor:pointer;display:flex;align-items:center;justify-content:center;
-  background:var(--action-primary);color:#fff;transition:background .16s,transform .16s}
-.vs-arrow:hover{background:var(--action-primary-hover);transform:scale(1.07)}
-.vs-arrow:focus-visible{outline:2px solid var(--action-primary);outline-offset:3px}
-/* The dark accent is a bright magenta - white on it is 3.34:1, and 3.56:1 on
-   the hover tint. Dark ink gets 5.52:1 and 5.18:1. Same fix #scroll-top
-   already needed on myverint's rose. */
-[data-theme="dark"] .vs-arrow{color:#141414}
-/* Styled, not faded: opacity drags the glyph and the fill toward the page
-   together, and the pair lands under 3:1. */
-.vs-arrow[disabled]{cursor:default;background:var(--surface-raised);
-  color:var(--text-secondary);box-shadow:inset 0 0 0 1px var(--border-default);
-  transform:none}
-[data-theme="dark"] .vs-arrow[disabled]{color:var(--text-secondary)}
-.vs-arrow svg{width:15px;height:15px;display:block}
-.vs-count{display:flex;flex-direction:column;align-items:center;gap:3px;
-  font-size:12px;font-variant-numeric:tabular-nums lining-nums}
-.vs-count b{font-weight:800;color:var(--text-primary)}
-.vs-count i{width:14px;height:1px;background:var(--border-default)}
-/* secondary, not tertiary, on all four of these micro-labels: dark
-   --text-tertiary is 4.45:1 on --surface-default and 4.02:1 on
-   --surface-raised, so it fails AA at this size. Secondary is 9.29:1. */
-.vs-count span{color:var(--text-secondary)}
+  /* Fixed dark chrome, not tokens: these sit on video, whose brightness is
+     unknown and changes frame to frame, so the button has to bring its own
+     contrast. White on near-black is 15.3:1 regardless of what is behind. */
+  background:rgba(18,19,20,.82);color:#fff;
+  transition:background .16s,transform .16s}
+.vs-btn:hover{background:rgba(18,19,20,.95);transform:scale(1.07)}
+.vs-btn:focus-visible{outline:2px solid #fff;outline-offset:2px}
+.vs-btn svg{width:16px;height:16px;display:block}
+.vs-exp{margin-left:auto}
+/* one button, two glyphs - whichever matches the current state */
+.vs-i-pause{display:flex}
+.vs-i-play{display:none}
+.vs.paused .vs-i-pause{display:none}
+.vs.paused .vs-i-play{display:flex}
 
-/* rail - all four visible, no scrolling. Twelve items justify a moving
-   strip; four do not, and a strip of four with peeking neighbours just
-   looks like something failed to load. */
-.vs-rail{grid-area:rail;display:flex;flex-direction:column;gap:3px;align-self:center}
-.vs-item{position:relative;display:flex;align-items:flex-start;gap:10px;
-  width:100%;font:inherit;text-align:left;cursor:pointer;
-  padding:11px 11px 11px 13px;border:0;border-radius:var(--radius-md);
-  background:transparent;transition:background .18s}
-.vs-item:hover{background:var(--action-primary-subtle)}
-.vs-item.on{background:var(--action-primary-subtle)}
-.vs-item:focus-visible{outline:2px solid var(--action-primary);outline-offset:-2px}
-/* The selected tint is deliberately light, so it cannot be the only signal.
-   The bar is what makes the state unambiguous. */
-.vs-item.on::before{content:"";position:absolute;left:3px;top:12px;bottom:12px;
-  width:2px;border-radius:2px;background:var(--action-primary)}
-.vs-item-n{font-size:10px;font-weight:800;letter-spacing:.1em;
-  color:var(--text-secondary);padding-top:2px;flex-shrink:0}
-.vs-item.on .vs-item-n{color:var(--action-primary)}
-/* On the dark tint the accent itself is only 3.69:1. --action-primary-hover
-   is the lighter of the pair in dark mode, which lands it at 5.00:1. */
-[data-theme="dark"] .vs-item.on .vs-item-n{color:#e879f9}
-.vs-item-x{display:flex;flex-direction:column;gap:2px;min-width:0}
-.vs-item-x b{font-size:13px;font-weight:600;color:var(--text-secondary);
-  line-height:1.35}
-.vs-item.on .vs-item-x b{color:var(--text-primary);font-weight:800}
-.vs-item-x em{font-style:normal;font-size:11px;line-height:1.45;
-  color:var(--text-secondary)}
-.vs-item.on .vs-item-x em{color:var(--text-secondary)}
+/* ── caption, inside the same container ───────────────────────────────── */
+.vs-caps{padding:22px 24px 26px;border-top:1px solid var(--border-subtle);min-width:0}
+.vs-cap{display:none}
+.vs-cap.on{display:block;animation:vsCap .45s cubic-bezier(.4,0,.2,1) both}
+@keyframes vsCap{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.vs-cap-h{font-size:19px;font-weight:800;letter-spacing:-.3px;
+  color:var(--text-primary);margin:0 0 9px}
+/* Two classes, not one. .cs-section p in the shared sheet is (0,1,1) and beats
+   a single class on colour, size, leading and margin. */
+.vs-caps .vs-cap-p{font-size:14.5px;line-height:1.75;color:var(--text-secondary);
+  margin:0 0 .9em;max-width:68ch;text-wrap:pretty}
+.vs-caps .vs-cap-p:last-of-type{margin-bottom:0}
+
+/* ── the pipeline and the pull request, for Token Sync only ───────────── */
+.pv-wrap{
+  margin-top:28px;padding-top:24px;
+  border-top:1px dashed var(--border-subtle);
+}
+.pv-label{
+  font-size:10px;font-weight:700;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--text-tertiary);
+  margin-bottom:16px;
+}
+.pv-flow{
+  display:flex;align-items:stretch;flex-wrap:nowrap;gap:6px;
+  margin-bottom:20px;
+  overflow-x:auto;
+  padding-bottom:2px;
+}
+.pv-step{
+  flex:1 1 0;min-width:0;
+  display:flex;flex-direction:column;align-items:center;gap:8px;
+  background:#fff;
+  border:1.5px solid #e5e7eb;
+  border-radius:12px;
+  padding:14px 10px 14px;
+  text-align:center;
+  transition:border-color .2s,box-shadow .2s;
+}
+[data-theme="dark"] .pv-step{background:var(--surface-raised);border-color:var(--border-default)}
+.pv-step[data-step="2"]{border-color:color-mix(in srgb, var(--action-primary) 28%, transparent)}
+.pv-step[data-step="3"]{border-color:color-mix(in srgb, var(--action-primary) 50%, transparent);box-shadow:0 0 8px color-mix(in srgb, var(--action-primary) 10%, transparent)}
+.pv-step[data-step="4"]{border-color:color-mix(in srgb, var(--action-primary) 70%, transparent);box-shadow:0 0 12px color-mix(in srgb, var(--action-primary) 18%, transparent)}
+.pv-step[data-step="5"]{border-color:var(--action-primary);box-shadow:0 0 18px color-mix(in srgb, var(--action-primary) 28%, transparent),0 0 6px color-mix(in srgb, var(--action-primary) 18%, transparent)}
+.pv-icon{font-size:24px;line-height:1}
+.pv-name{font-size:12px;font-weight:700;color:var(--text-primary);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
+.pv-badge{
+  font-size:9px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;
+  padding:3px 8px;border-radius:100px;
+  background:var(--action-primary-subtle);color:var(--action-primary);
+  white-space:nowrap;
+}
+.pv-badge.auto{background:rgba(21,128,61,.1);color:#15803d}
+[data-theme="dark"] .pv-badge.auto{background:rgba(74,222,128,.12);color:#4ade80}
+.pv-arr{
+  color:var(--text-tertiary);font-size:14px;font-weight:600;
+  flex-shrink:0;align-self:center;
+}
+
+/* ── PR card ──────────────────────────────────────────────────────────────── */
+.pr-card{
+  background:var(--surface-default);
+  border:1px solid var(--border-subtle);
+  border-radius:10px;overflow:hidden;
+}
+.pr-head{
+  display:flex;align-items:flex-start;justify-content:space-between;gap:8px;
+  padding:12px 14px;border-bottom:1px solid var(--border-subtle);
+}
+.pr-title-row{flex:1}
+.pr-title{font-size:12px;font-weight:700;color:var(--text-primary);font-family:monospace;margin-bottom:3px}
+.pr-meta{font-size:10.5px;color:var(--text-secondary)}
+.pr-merged{
+  display:inline-flex;align-items:center;gap:4px;flex-shrink:0;
+  font-size:10px;font-weight:700;
+  padding:3px 9px;border-radius:100px;
+  background:#6e40c9;color:#fff;
+}
+.pr-diff-block{border-bottom:1px solid var(--border-subtle)}
+.diff-file-head{
+  display:flex;align-items:center;gap:7px;
+  padding:6px 14px;
+  background:var(--canvas,#F5F5F5);
+  border-bottom:1px solid var(--border-subtle);
+  font-size:10.5px;font-weight:600;font-family:monospace;color:var(--text-secondary);
+}
+.diff-add-count{color:#15803d;font-weight:700}
+.diff-del-count{color:#b91c1c;font-weight:700}
+[data-theme="dark"] .diff-add-count{color:#4ade80}
+[data-theme="dark"] .diff-del-count{color:#f87171}
+.diff-lines{padding:4px 0}
+.diff-line{
+  display:block;font-family:monospace;font-size:10.5px;
+  padding:1.5px 14px;white-space:pre-wrap;word-break:break-all;
+}
+.diff-line.add{background:rgba(21,128,61,.07);color:#166534}
+.diff-line.del{background:rgba(239,68,68,.07);color:#b91c1c}
+[data-theme="dark"] .diff-line.add{background:rgba(74,222,128,.08);color:#4ade80}
+[data-theme="dark"] .diff-line.del{background:rgba(248,113,113,.08);color:#f87171}
+.diff-line.ctx{color:var(--text-tertiary)}
+.pr-foot{
+  display:flex;align-items:center;gap:8px;flex-wrap:wrap;
+  padding:9px 14px;
+  font-size:10.5px;color:var(--text-secondary);
+}
+.pr-foot-check{color:#15803d;font-size:12px;font-weight:700}
+[data-theme="dark"] .pr-foot-check{color:#4ade80}
+.pr-foot-badge{
+  font-size:9px;font-weight:700;padding:2px 7px;border-radius:4px;
+  background:rgba(21,128,61,.1);color:#15803d;
+}
+[data-theme="dark"] .pr-foot-badge{background:rgba(74,222,128,.12);color:#4ade80}
+
+
+/* the recovered block was written for a card with its own padding; inside the
+   caption it only needs the rule above it */
+.vs-caps .pv-wrap{margin-top:22px;padding-top:20px}
 
 @media(prefers-reduced-motion:reduce){
   .vs-track{transition:none}
   .vs-cap.on{animation:none}
-  .vs-arrow:hover{transform:none}
+  .vs-btn:hover{transform:none}
 }
-/* 1260, the same breakpoint myverint uses, so both case studies change shape
-   at the same width rather than each having its own. The reel could survive a
-   little narrower - the rail and controls cost 280px and the stage stays
-   legible to about 420px - but matching is worth more than the 100px, and it
-   is better either way: stacked, the stage gets the whole content column
-   (796px at a 1140px window) instead of the 516px the three-column form
-   would leave it, and these are 1920x1080 captures where width is
-   legibility. */
-@media(max-width:1260px){
-  /* Stage, then controls and rail side by side under it. The rail keeps its
-     labels - they are the only thing naming the plugins. */
-  .vs{grid-template-columns:1fr;
-    grid-template-areas:"win" "cap" "ctrl" "rail";
-    row-gap:16px}
-  .vs-ctrl{flex-direction:row;justify-self:start;align-self:auto;gap:14px}
-  .vs-count{flex-direction:row;gap:6px}
-  .vs-count i{width:1px;height:12px}
-  .vs-rail{gap:2px}
-  .vs-item{padding:10px 10px 10px 13px}
+/* Full screen: the browser scales .vs-window to the display, so the track and
+   the slides follow it without any extra rules. */
+.vs-window:fullscreen{aspect-ratio:auto;width:100vw;height:100vh}
+.vs-window:fullscreen .vs-ctl{padding:20px 24px}
+
+/* ── narrow: rail above the stage ─────────────────────────────────────────
+   Below 900 the two-column form leaves the stage too little width for a
+   1920x1080 capture to stay legible, so the rail goes on top and the stage
+   takes the full container. */
+@media(max-width:900px){
+  .vs{grid-template-columns:1fr}
+  .vs-rail{flex-direction:row;overflow-x:auto;scrollbar-width:none;
+    border-right:0;border-bottom:1px solid var(--border-subtle);
+    padding:10px}
+  .vs-rail::-webkit-scrollbar{display:none}
+  .vs-item{width:auto;flex-shrink:0;padding:9px 12px 9px 15px}
+  .vs-item-x em{display:none}          /* the tag is the first thing to go */
+  .vs-item-x b{white-space:nowrap}
+  .vs-caps{padding:18px 18px 22px}
+  /* the controls stop being a hover affordance on touch, so they stay put */
+  .vs-ctl{opacity:1;pointer-events:auto}
 }
-@media(max-width:520px){
-  .vs-bar-t{display:none}
-  .vs-item-x em{display:none}
+@media(max-width:560px){
+  .vs-rail{padding:8px}
+  .vs-item{padding:8px 10px 8px 13px}
+  .vs-item-x b{font-size:12.5px}
+  .vs-caps{padding:16px 15px 20px}
+  .vs-cap-h{font-size:17px}
+  .vs-caps .vs-cap-p{font-size:14px}
 }
 
 </style>
@@ -264,72 +356,24 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
       </div>
       <p>Each plugin targets one gap. Together they cover the full design-to-production loop without leaving Figma.</p>
 
-      <!-- ══ Vertical slide reel ════════════════════════════════════════════
-           One stage, four plugins, and the switch is a vertical translate of a
-           single track rather than a crossfade - the outgoing recording leaves
-           upward while the next one arrives from below, as one continuous
-           movement. The rail settles on the new item immediately while the
-           track is still travelling, which is what stops it reading as a
-           plain master-detail swap.
+      <!-- ══ The reel ════════════════════════════════════════════════════════
+           Rail on the left, stage on the right, and the caption directly under
+           the stage inside the same bordered container - so the writing reads
+           as belonging to the recording above it rather than floating after it.
 
-           The track is exactly 4 slides tall, so a step is 25% of its own
-           height. That keeps the transform in CSS and responsive with no
-           pixel measurement - but it does mean the 25% below is tied to
-           there being four slides. Add a fifth and it has to become 20%.  -->
+           Selecting a plugin translates a single vertical track, so the
+           outgoing recording leaves upward as the next arrives from below. The
+           track is exactly four slides tall, which is why a step is 25% of its
+           own height; a fifth slide makes that 20%.
+
+           Token Sync carries the pipeline diagram and the merged pull request
+           because it is the headline claim of the whole project - a designer
+           changes a colour and it reaches production without a developer. The
+           other three are one paragraph each. Captions therefore differ in
+           height, and the container grows when Token Sync is selected. That is
+           deliberate: the alternative is padding three of them to match the
+           one that has something to say.                                    -->
       <div class="vs" id="vs" style="--i:0">
-        <div class="vs-window">
-            <div class="vs-track" id="vs-track">
-            <div class="vs-slide" data-i="0">
-              <div class="vs-bar"><span class="vs-bar-n">01</span>Token Sync <span class="vs-bar-t">Figma to GitHub in 60 seconds</span></div>
-              <video data-src="videos/token-sync.mp4" poster="images/token-sync-poster.webp"
-                     width="1920" height="1080" muted loop playsinline preload="none"
-                     aria-label="Token Sync running in Figma"></video>
-            </div>
-            <div class="vs-slide" data-i="1">
-              <div class="vs-bar"><span class="vs-bar-n">02</span>Layout Creator <span class="vs-bar-t">Scaffold any layout in seconds</span></div>
-              <video data-src="videos/layout-creator.mp4" poster="images/layout-creator-poster.webp"
-                     width="1920" height="1080" muted loop playsinline preload="none"
-                     aria-label="Layout Creator running in Figma"></video>
-            </div>
-            <div class="vs-slide" data-i="2">
-              <div class="vs-bar"><span class="vs-bar-n">03</span>Table Creator <span class="vs-bar-t">Responsive and fully editable</span></div>
-              <video data-src="videos/table-creator.mp4" poster="images/table-creator-poster.webp"
-                     width="1920" height="1080" muted loop playsinline preload="none"
-                     aria-label="Table Creator running in Figma"></video>
-            </div>
-            <div class="vs-slide" data-i="3">
-              <div class="vs-bar"><span class="vs-bar-n">04</span>Icon Library Picker <span class="vs-bar-t">1,281 icons, instantly searchable</span></div>
-              <video data-src="videos/icons-generator.mp4" poster="images/icons-generator-poster.webp"
-                     width="1920" height="1080" muted loop playsinline preload="none"
-                     aria-label="Icon Library Picker running in Figma"></video>
-            </div>
-            </div>
-        </div>
-        <div class="vs-caps">
-          <div class="vs-cap on" data-i="0">
-            <h3 class="vs-cap-h">Token Sync</h3>
-            <p class="vs-cap-p">Pushes updated design tokens from Figma straight into the pipeline. One action and tokens.json commits, the GitHub Action fires, Storybook rebuilds. No developer needed.</p>
-          </div>
-          <div class="vs-cap" data-i="1">
-            <h3 class="vs-cap-h">Layout Creator</h3>
-            <p class="vs-cap-p">Scaffolds a full LUX 2.0 layout - containers, navigation, page structure - with the correct token bindings already applied. Ready to design into, not from scratch.</p>
-          </div>
-          <div class="vs-cap" data-i="2">
-            <h3 class="vs-cap-h">Table Creator</h3>
-            <p class="vs-cap-p">Generates data tables with configurable rows, columns and density. Every output matches the LUX 2.0 Data Table token structure exactly, without manual assembly.</p>
-          </div>
-          <div class="vs-cap" data-i="3">
-            <h3 class="vs-cap-h">Icon Library Picker</h3>
-            <p class="vs-cap-p">Browse and insert from the LUX 2.0 icon library - 1,281 icons searchable by name, category or meaning. Inserted at the correct size with token binding applied.</p>
-          </div>
-        </div>
-
-        <div class="vs-ctrl">
-          <button class="vs-arrow" id="vs-prev" aria-label="Previous plugin"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="18 15 12 9 6 15"/></svg></button>
-          <div class="vs-count"><b id="vs-now">01</b><i></i><span>04</span></div>
-          <button class="vs-arrow" id="vs-next" aria-label="Next plugin"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></button>
-        </div>
-
         <div class="vs-rail" role="tablist" aria-label="Plugins" aria-orientation="vertical">
           <button class="vs-item on" data-i="0" role="tab" aria-selected="true" tabindex="0">
             <span class="vs-item-n">01</span>
@@ -348,8 +392,136 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
             <span class="vs-item-x"><b>Icon Library Picker</b><em>1,281 icons, instantly searchable</em></span>
           </button>
         </div>
+
+        <div class="vs-main">
+          <div class="vs-window">
+            <div class="vs-track" id="vs-track">
+              <div class="vs-slide" data-i="0">
+                <video data-src="videos/token-sync.mp4" poster="images/token-sync-poster.webp"
+                       width="1920" height="1080" muted loop playsinline preload="none"
+                       aria-label="Token Sync running in Figma"></video>
+              </div>
+              <div class="vs-slide" data-i="1">
+                <video data-src="videos/layout-creator.mp4" poster="images/layout-creator-poster.webp"
+                       width="1920" height="1080" muted loop playsinline preload="none"
+                       aria-label="Layout Creator running in Figma"></video>
+              </div>
+              <div class="vs-slide" data-i="2">
+                <video data-src="videos/table-creator.mp4" poster="images/table-creator-poster.webp"
+                       width="1920" height="1080" muted loop playsinline preload="none"
+                       aria-label="Table Creator running in Figma"></video>
+              </div>
+              <div class="vs-slide" data-i="3">
+                <video data-src="videos/icons-generator.mp4" poster="images/icons-generator-poster.webp"
+                       width="1920" height="1080" muted loop playsinline preload="none"
+                       aria-label="Icon Library Picker running in Figma"></video>
+              </div>
+            </div>
+            <!-- Controls appear on hover and on keyboard focus. They are real
+                 buttons, so the reel is operable without a mouse. -->
+            <div class="vs-ctl">
+              <button class="vs-btn vs-play" id="vs-play" aria-label="Pause video">
+                <span class="vs-i-play"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg></span>
+                <span class="vs-i-pause"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="6" y="5" width="4" height="14" rx="1"/><rect x="14" y="5" width="4" height="14" rx="1"/></svg></span>
+              </button>
+              <button class="vs-btn vs-exp" id="vs-exp" aria-label="Expand to full screen"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/></svg></button>
+            </div>
+          </div>
+          <div class="vs-caps">
+          <div class="vs-cap on" data-i="0">
+            <h3 class="vs-cap-h">Token Sync</h3>
+            <p class="vs-cap-p">Pushes updated design tokens from Figma straight into the
+              pipeline. One action and tokens.json commits, the GitHub Action fires,
+              Storybook rebuilds. No developer needed, and no terminal.</p>
+            <p class="vs-cap-p">Before this existed, a colour change meant a designer filing
+              a ticket, a developer editing JSON by hand, and a build someone had to remember
+              to trigger. Days, for a hex value. The plugin closes that loop entirely - the
+              designer who made the decision is the one who ships it.</p>
+            <div class="pv-wrap">
+              <div class="pv-label">How the pipeline works</div>
+              <div class="pv-flow">
+                <div class="pv-step" data-step="1">
+                  <span class="pv-icon">&#127912;</span>
+                  <span class="pv-name">Figma Variables</span>
+                  <span class="pv-badge">Manual</span>
+                </div>
+                <span class="pv-arr">&#8594;</span>
+                <div class="pv-step" data-step="2">
+                  <span class="pv-icon">&#128268;</span>
+                  <span class="pv-name">Token Sync</span>
+                  <span class="pv-badge">Manual</span>
+                </div>
+                <span class="pv-arr">&#8594;</span>
+                <div class="pv-step" data-step="3">
+                  <span class="pv-icon">&#128221;</span>
+                  <span class="pv-name">TS Generation</span>
+                  <span class="pv-badge auto">Auto</span>
+                </div>
+                <span class="pv-arr">&#8594;</span>
+                <div class="pv-step" data-step="4">
+                  <span class="pv-icon">&#128570;</span>
+                  <span class="pv-name">GitHub Push</span>
+                  <span class="pv-badge auto">Auto</span>
+                </div>
+                <span class="pv-arr">&#8594;</span>
+                <div class="pv-step" data-step="5">
+                  <span class="pv-icon">&#128640;</span>
+                  <span class="pv-name">Live on Main</span>
+                  <span class="pv-badge auto">Auto</span>
+                </div>
+              </div>
+  
+              <!-- Mock GitHub PR -->
+              <div class="pr-card">
+                <div class="pr-head">
+                  <div class="pr-title-row">
+                    <div class="pr-title">tokens: update brand-primary and interactive-default</div>
+                    <div class="pr-meta">Opened automatically by verint-token-sync &middot; +4 -4 &middot; primitives.ts, semanticsLight.ts, semanticsDark.ts</div>
+                  </div>
+                  <span class="pr-merged">
+                    <svg width="10" height="10" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M5 3.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0zm0 2.122a2.25 2.25 0 1 0-1.5 0v.878A2.25 2.25 0 0 0 5.75 8.5h1.5v2.128a2.251 2.251 0 1 0 1.5 0V8.5h1.5a2.25 2.25 0 0 0 2.25-2.25v-.878a2.25 2.25 0 1 0-1.5 0v.878a.75.75 0 0 1-.75.75h-4.5A.75.75 0 0 1 5 6.25v-.878z"/></svg>
+                    Merged
+                  </span>
+                </div>
+                <div class="pr-diff-block">
+                  <div class="diff-file-head">
+                    <span>&#128216; primitives.ts</span>
+                    <span class="diff-add-count">+1</span>
+                    <span class="diff-del-count">-1</span>
+                  </div>
+                  <div class="diff-lines">
+                    <span class="diff-line ctx"> 4 &nbsp;export const primitives = &#123;</span>
+                    <span class="diff-line del"> 5- &nbsp; colorBlue500: '#66AFFF',</span>
+                    <span class="diff-line add"> 5+ &nbsp; colorBlue500: '#2563EB',</span>
+                    <span class="diff-line ctx"> 6 &nbsp; colorBlue400: '#66AFFF',</span>
+                  </div>
+                </div>
+                <div class="pr-foot">
+                  <span class="pr-foot-check">&#10003;</span>
+                  <span>Auto-merged by GitHub Actions</span>
+                  <span class="pr-foot-badge">TypeScript valid</span>
+                  <span class="pr-foot-badge">Storybook preview</span>
+                </div>
+              </div>
+  
+            </div>
+          </div>
+          </div>
+          <div class="vs-cap" data-i="1">
+            <h3 class="vs-cap-h">Layout Creator</h3>
+            <p class="vs-cap-p">Scaffolds a full LUX 2.0 layout - containers, navigation, page structure - with the correct token bindings already applied. Ready to design into, not from scratch.</p>
+          </div>
+          <div class="vs-cap" data-i="2">
+            <h3 class="vs-cap-h">Table Creator</h3>
+            <p class="vs-cap-p">Generates data tables with configurable rows, columns and density. Every output matches the LUX 2.0 Data Table token structure exactly, without manual assembly.</p>
+          </div>
+          <div class="vs-cap" data-i="3">
+            <h3 class="vs-cap-h">Icon Library Picker</h3>
+            <p class="vs-cap-p">Browse and insert from the LUX 2.0 icon library - 1,281 icons searchable by name, category or meaning. Inserted at the correct size with token binding applied.</p>
+          </div>
+          </div>
+        </div>
       </div>
-    </div>
 
     <!-- Result -->
     <div class="cs-section cs-reveal">
@@ -406,21 +578,19 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
   </svg>
 </button>
 
-<script src="../shared/case-study.js?v=202609041016" defer></script>
+<script src="../shared/case-study.js?v=202609041107" defer></script>
 
 <script>
-/* ══ Vertical slide reel ════════════════════════════════════════════════════
-   One index drives everything: the track's transform (via a CSS custom
-   property), the caption, the rail selection and the counter. Bound by
-   data-i, never by DOM position, because the rail order and the slide order
-   are two lists that can drift apart by hand - which is exactly how the wrong
-   tab got paired with the wrong recording on myverint.
+/* ══ The reel ═══════════════════════════════════════════════════════════════
+   One index drives the track transform, the caption and the rail selection,
+   all bound by data-i rather than DOM position - the rail order and the slide
+   order are two lists a person can reorder independently, which is exactly how
+   the wrong tab got paired with the wrong recording on myverint.
 
    Media rules carried over from that rebuild: data-src so nothing is fetched
-   until asked for, no load() in the same tick as play(), a rejected play()
-   retried on canplay instead of swallowed, only the visible slide playing,
-   and under prefers-reduced-motion no src assigned at all so the poster
-   stays put.                                                              */
+   until it is wanted, no load() in the same tick as play(), a rejected play()
+   retried on canplay rather than swallowed, only the visible slide decoding,
+   and under prefers-reduced-motion no src at all so the poster survives.   */
 (function(){
   var vs = document.getElementById('vs');
   if (!vs) return;
@@ -430,10 +600,11 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
   var slides = vs.querySelectorAll('.vs-slide');
   var caps   = vs.querySelectorAll('.vs-cap');
   var items  = vs.querySelectorAll('.vs-item');
-  var prev   = document.getElementById('vs-prev');
-  var next   = document.getElementById('vs-next');
-  var now    = document.getElementById('vs-now');
+  var win    = vs.querySelector('.vs-window');
+  var playBtn= document.getElementById('vs-play');
+  var expBtn = document.getElementById('vs-exp');
   var idx    = 0;
+  var paused = reduce;      /* nothing is playing under reduced motion */
 
   function vidAt(i){
     var s = vs.querySelector('.vs-slide[data-i="' + i + '"]');
@@ -454,6 +625,11 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
     v.src = v.dataset.src;
   }
 
+  function syncPlayBtn(){
+    vs.classList.toggle('paused', paused);
+    playBtn.setAttribute('aria-label', paused ? 'Play video' : 'Pause video');
+  }
+
   function go(i){
     idx = Math.max(0, Math.min(N - 1, i));
     vs.style.setProperty('--i', idx);
@@ -465,25 +641,22 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
       b.tabIndex = on ? 0 : -1;
     });
     /* Re-triggering the caption animation needs the class off, a reflow, then
-       on again - otherwise the second step to the same caption does nothing. */
+       on again, or stepping back to the same caption does nothing. */
     caps.forEach(function(c){
       var on = +c.dataset.i === idx;
       c.classList.remove('on');
       if (on) { void c.offsetWidth; c.classList.add('on'); }
     });
 
-    now.textContent = ('0' + (idx + 1)).slice(-2);
-    prev.disabled = idx === 0;
-    next.disabled = idx === N - 1;
-
-    /* Only the slide on screen decodes. The rest keep currentTime and resume
-       a keyframe away, which is not the reload mistake. */
-    slides.forEach(function(s){
-      var v = s.querySelector('video');
+    /* Only the slide on screen decodes. The others keep currentTime and
+       resume a keyframe away, which is not the reload mistake. */
+    slides.forEach(function(sl){
+      var v = sl.querySelector('video');
       if (!v) return;
-      if (+s.dataset.i === idx) { load(v); if (v.src) tryPlay(v); }
+      if (+sl.dataset.i === idx) { load(v); if (v.src && !paused) tryPlay(v); }
       else if (!v.paused) v.pause();
     });
+    syncPlayBtn();
   }
 
   items.forEach(function(b, n, all){
@@ -498,28 +671,57 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
       e.preventDefault(); all[t].focus(); go(+all[t].dataset.i);
     });
   });
-  prev.addEventListener('click', function(){ go(idx - 1); });
-  next.addEventListener('click', function(){ go(idx + 1); });
 
-  /* Staged loading: the visible slide on intersection, the rest on idle, so
-     entering the section costs one recording rather than four. */
+  /* ── play / pause ─────────────────────────────────────────────────────── */
+  playBtn.addEventListener('click', function(){
+    var v = vidAt(idx);
+    if (!v) return;
+    paused = !paused;
+    if (paused) { v.pause(); }
+    else { load(v); if (v.src) tryPlay(v); }
+    syncPlayBtn();
+  });
+
+  /* ── full screen ──────────────────────────────────────────────────────────
+     Requires allow="fullscreen" on the iframe in index.html, or the request
+     rejects silently inside the frame. The button is hidden if the API is not
+     available rather than left there doing nothing. */
+  if (!(win.requestFullscreen || win.webkitRequestFullscreen)) {
+    expBtn.hidden = true;
+  } else {
+    expBtn.addEventListener('click', function(){
+      var fsEl = document.fullscreenElement || document.webkitFullscreenElement;
+      if (fsEl) {
+        (document.exitFullscreen || document.webkitExitFullscreen).call(document);
+      } else {
+        var req = win.requestFullscreen || win.webkitRequestFullscreen;
+        var p = req.call(win);
+        if (p && p.catch) p.catch(function(){ expBtn.hidden = true; });
+      }
+    });
+    document.addEventListener('fullscreenchange', function(){
+      var on = !!document.fullscreenElement;
+      expBtn.setAttribute('aria-label', on ? 'Exit full screen' : 'Expand to full screen');
+    });
+  }
+
+  /* ── staged loading ───────────────────────────────────────────────────── */
   var loaded = false;
-  var io = new IntersectionObserver(function(es){
+  new IntersectionObserver(function(es){
     es.forEach(function(e){
       if (!e.isIntersecting){
         vs.querySelectorAll('video').forEach(function(v){ if (!v.paused) v.pause(); });
         return;
       }
       var v = vidAt(idx);
-      load(v); if (v && v.src) tryPlay(v);
+      load(v); if (v && v.src && !paused) tryPlay(v);
       if (loaded) return;
       loaded = true;
-      var rest = function(){ slides.forEach(function(s){ load(s.querySelector('video')); }); };
+      var rest = function(){ slides.forEach(function(sl){ load(sl.querySelector('video')); }); };
       if (window.requestIdleCallback) requestIdleCallback(rest, { timeout: 2500 });
       else setTimeout(rest, 1400);
     });
-  }, { threshold: 0.25 });
-  io.observe(vs);
+  }, { threshold: 0.25 }).observe(vs);
 
   go(0);
 })();
