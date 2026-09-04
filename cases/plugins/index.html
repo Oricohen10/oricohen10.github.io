@@ -39,8 +39,8 @@
   }
 }
 </script>
-<link rel="stylesheet" href="../../src/tokens.css?v=202609041107"/>
-<link rel="stylesheet" href="../shared/case-study.css?v=202609041107"/>
+<link rel="stylesheet" href="../../src/tokens.css?v=202609041118"/>
+<link rel="stylesheet" href="../shared/case-study.css?v=202609041118"/>
 <script>try{if(localStorage.getItem('ori-theme')==='dark')document.documentElement.setAttribute('data-theme','dark')}catch(e){}
 if(window.self!==window.top){var _s=document.createElement('style');_s.textContent='*{cursor:none!important}';document.head.appendChild(_s);}</script>
 <style>
@@ -63,20 +63,27 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
    One container holds the rail, the stage and the caption, so the writing
    reads as part of the recording rather than as text that happens to follow
    it. Rail left, stage right, caption under the stage.                    */
+/* No border. A hairline around the whole thing fought with the rail divider
+   and the caption divider inside it - three lines describing one object. The
+   container reads as a single surface now, lifted off the page by a shadow
+   instead of outlined on it.
+
+   Shadows are not symmetric between themes: on white a shadow has to be short
+   and faint or it smears, on near-black it needs depth to register at all. */
 .vs{margin-top:28px;
   display:grid;grid-template-columns:236px minmax(0,1fr);
   gap:0;
-  border:1px solid var(--border-subtle);
   border-radius:var(--radius-xl);
   background:var(--surface-default);
+  box-shadow:0 1px 2px rgba(18,18,19,.05), 0 12px 32px rgba(18,18,19,.09);
   overflow:hidden}
-[data-theme="dark"] .vs{background:var(--surface-raised)}
+[data-theme="dark"] .vs{background:var(--surface-raised);
+  box-shadow:0 0 0 1px rgba(255,255,255,.06), 0 30px 70px rgba(0,0,0,.55)}
 
 /* ── rail, on the left ─────────────────────────────────────────────────── */
 .vs-rail{display:flex;flex-direction:column;gap:2px;
-  padding:14px 12px;
-  border-right:1px solid var(--border-subtle);
-  background:color-mix(in srgb, var(--action-primary) 3%, transparent)}
+  padding:16px 12px;
+  background:color-mix(in srgb, var(--action-primary) 4%, transparent)}
 [data-theme="dark"] .vs-rail{
   background:color-mix(in srgb, var(--action-primary) 7%, transparent)}
 .vs-item{position:relative;display:flex;align-items:flex-start;gap:10px;
@@ -141,7 +148,7 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
 .vs.paused .vs-i-play{display:flex}
 
 /* ── caption, inside the same container ───────────────────────────────── */
-.vs-caps{padding:22px 24px 26px;border-top:1px solid var(--border-subtle);min-width:0}
+.vs-caps{padding:24px 26px 28px;min-width:0}
 .vs-cap{display:none}
 .vs-cap.on{display:block;animation:vsCap .45s cubic-bezier(.4,0,.2,1) both}
 @keyframes vsCap{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
@@ -153,110 +160,99 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
   margin:0 0 .9em;max-width:68ch;text-wrap:pretty}
 .vs-caps .vs-cap-p:last-of-type{margin-bottom:0}
 
-/* ── the pipeline and the pull request, for Token Sync only ───────────── */
-.pv-wrap{
-  margin-top:28px;padding-top:24px;
-  border-top:1px dashed var(--border-subtle);
-}
-.pv-label{
-  font-size:10px;font-weight:700;letter-spacing:.1em;
-  text-transform:uppercase;color:var(--text-tertiary);
-  margin-bottom:16px;
-}
-.pv-flow{
-  display:flex;align-items:stretch;flex-wrap:nowrap;gap:6px;
-  margin-bottom:20px;
-  overflow-x:auto;
-  padding-bottom:2px;
-}
-.pv-step{
-  flex:1 1 0;min-width:0;
-  display:flex;flex-direction:column;align-items:center;gap:8px;
-  background:#fff;
-  border:1.5px solid #e5e7eb;
-  border-radius:12px;
-  padding:14px 10px 14px;
-  text-align:center;
-  transition:border-color .2s,box-shadow .2s;
-}
-[data-theme="dark"] .pv-step{background:var(--surface-raised);border-color:var(--border-default)}
-.pv-step[data-step="2"]{border-color:color-mix(in srgb, var(--action-primary) 28%, transparent)}
-.pv-step[data-step="3"]{border-color:color-mix(in srgb, var(--action-primary) 50%, transparent);box-shadow:0 0 8px color-mix(in srgb, var(--action-primary) 10%, transparent)}
-.pv-step[data-step="4"]{border-color:color-mix(in srgb, var(--action-primary) 70%, transparent);box-shadow:0 0 12px color-mix(in srgb, var(--action-primary) 18%, transparent)}
-.pv-step[data-step="5"]{border-color:var(--action-primary);box-shadow:0 0 18px color-mix(in srgb, var(--action-primary) 28%, transparent),0 0 6px color-mix(in srgb, var(--action-primary) 18%, transparent)}
-.pv-icon{font-size:24px;line-height:1}
-.pv-name{font-size:12px;font-weight:700;color:var(--text-primary);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
-.pv-badge{
-  font-size:9px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;
-  padding:3px 8px;border-radius:100px;
-  background:var(--action-primary-subtle);color:var(--action-primary);
-  white-space:nowrap;
-}
-.pv-badge.auto{background:rgba(21,128,61,.1);color:#15803d}
-[data-theme="dark"] .pv-badge.auto{background:rgba(74,222,128,.12);color:#4ade80}
-.pv-arr{
-  color:var(--text-tertiary);font-size:14px;font-weight:600;
-  flex-shrink:0;align-self:center;
-}
+/* ── the pipeline, for Token Sync only ──────────────────────────────────
+   Six steps. Each is a real button with the full sentence in its title
+   attribute, so the truncated name has a tooltip on hover and an accessible
+   name for assistive tech. Clicking opens the detail below, in place.        */
+.pf{margin-top:26px;padding-top:22px;border-top:1px solid var(--border-subtle)}
+.pf-label{font-size:10px;font-weight:800;letter-spacing:.12em;
+  text-transform:uppercase;color:var(--text-secondary);margin-bottom:14px}
+.pf-flow{display:flex;align-items:stretch;gap:6px;
+  overflow-x:auto;padding-bottom:4px;scrollbar-width:thin}
 
-/* ── PR card ──────────────────────────────────────────────────────────────── */
-.pr-card{
+.pf-step{flex:1 1 0;min-width:104px;
+  display:flex;flex-direction:column;align-items:center;gap:6px;
+  font:inherit;text-align:center;cursor:pointer;
+  padding:14px 10px 12px;border-radius:var(--radius-lg);
   background:var(--surface-default);
   border:1px solid var(--border-subtle);
-  border-radius:10px;overflow:hidden;
-}
-.pr-head{
-  display:flex;align-items:flex-start;justify-content:space-between;gap:8px;
-  padding:12px 14px;border-bottom:1px solid var(--border-subtle);
-}
-.pr-title-row{flex:1}
-.pr-title{font-size:12px;font-weight:700;color:var(--text-primary);font-family:monospace;margin-bottom:3px}
-.pr-meta{font-size:10.5px;color:var(--text-secondary)}
-.pr-merged{
-  display:inline-flex;align-items:center;gap:4px;flex-shrink:0;
-  font-size:10px;font-weight:700;
-  padding:3px 9px;border-radius:100px;
-  background:#6e40c9;color:#fff;
-}
-.pr-diff-block{border-bottom:1px solid var(--border-subtle)}
-.diff-file-head{
-  display:flex;align-items:center;gap:7px;
-  padding:6px 14px;
-  background:var(--canvas,#F5F5F5);
-  border-bottom:1px solid var(--border-subtle);
-  font-size:10.5px;font-weight:600;font-family:monospace;color:var(--text-secondary);
-}
-.diff-add-count{color:#15803d;font-weight:700}
-.diff-del-count{color:#b91c1c;font-weight:700}
-[data-theme="dark"] .diff-add-count{color:#4ade80}
-[data-theme="dark"] .diff-del-count{color:#f87171}
-.diff-lines{padding:4px 0}
-.diff-line{
-  display:block;font-family:monospace;font-size:10.5px;
-  padding:1.5px 14px;white-space:pre-wrap;word-break:break-all;
-}
-.diff-line.add{background:rgba(21,128,61,.07);color:#166534}
-.diff-line.del{background:rgba(239,68,68,.07);color:#b91c1c}
-[data-theme="dark"] .diff-line.add{background:rgba(74,222,128,.08);color:#4ade80}
-[data-theme="dark"] .diff-line.del{background:rgba(248,113,113,.08);color:#f87171}
-.diff-line.ctx{color:var(--text-tertiary)}
-.pr-foot{
-  display:flex;align-items:center;gap:8px;flex-wrap:wrap;
-  padding:9px 14px;
-  font-size:10.5px;color:var(--text-secondary);
-}
-.pr-foot-check{color:#15803d;font-size:12px;font-weight:700}
-[data-theme="dark"] .pr-foot-check{color:#4ade80}
-.pr-foot-badge{
-  font-size:9px;font-weight:700;padding:2px 7px;border-radius:4px;
-  background:rgba(21,128,61,.1);color:#15803d;
-}
-[data-theme="dark"] .pr-foot-badge{background:rgba(74,222,128,.12);color:#4ade80}
+  transition:border-color .18s,box-shadow .18s,transform .18s}
+[data-theme="dark"] .pf-step{background:var(--surface-default)}
+.pf-step:hover{border-color:color-mix(in srgb,var(--action-primary) 45%,transparent);
+  box-shadow:0 4px 14px color-mix(in srgb,var(--action-primary) 12%,transparent);
+  transform:translateY(-2px)}
+.pf-step:focus-visible{outline:2px solid var(--action-primary);outline-offset:2px}
+.pf-step[aria-expanded="true"]{
+  border-color:var(--action-primary);
+  box-shadow:0 0 0 3px var(--action-primary-subtle)}
+.pf-icon{font-size:21px;line-height:1}
+.pf-name{font-size:12px;font-weight:700;color:var(--text-primary);
+  line-height:1.25;
+  /* two lines, then ellipsis - the full sentence is in the title attribute */
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;
+  overflow:hidden}
+.pf-sub{font-size:10.5px;line-height:1.35;color:var(--text-secondary)}
+.pf-badge{font-size:8.5px;font-weight:800;letter-spacing:.07em;
+  text-transform:uppercase;padding:3px 7px;border-radius:var(--radius-full);
+  white-space:nowrap}
+.pf-step[data-type="manual"] .pf-badge,#pf-d-badge[data-type="manual"]{
+  background:var(--action-primary-subtle);color:var(--action-primary)}
+/* the light accent on its own 7% tint is 4.4:1 in dark, so dark steps up */
+[data-theme="dark"] .pf-step[data-type="manual"] .pf-badge,
+[data-theme="dark"] #pf-d-badge[data-type="manual"]{color:#ee9bfb}
+.pf-step[data-type="auto"] .pf-badge,#pf-d-badge[data-type="auto"]{
+  background:rgba(21,128,61,.1);color:#146c33}
+[data-theme="dark"] .pf-step[data-type="auto"] .pf-badge,
+[data-theme="dark"] #pf-d-badge[data-type="auto"]{background:rgba(74,222,128,.13);color:#7ee2a8}
+/* Tertiary, not secondary at 50% opacity. The faded version measured 2.25:1
+   in light mode. These are aria-hidden decoration, so WCAG technically lets
+   them off - but an arrow nobody can see is not communicating flow either,
+   and dimming text with opacity is the mistake this file has already made
+   three times today. Tertiary is 5.21:1 and still clearly subordinate. */
+.pf-arr{align-self:center;flex-shrink:0;font-size:13px;
+  color:var(--text-tertiary)}
 
-
-/* the recovered block was written for a card with its own padding; inside the
-   caption it only needs the rule above it */
-.vs-caps .pv-wrap{margin-top:22px;padding-top:20px}
+/* ── the step detail, inline ───────────────────────────────────────────── */
+.pf-detail{margin-top:14px;padding:18px 20px 16px;
+  border-radius:var(--radius-lg);
+  background:var(--surface-raised);
+  animation:pfIn .3s cubic-bezier(.4,0,.2,1) both}
+[data-theme="dark"] .pf-detail{background:color-mix(in srgb,var(--action-primary) 8%,var(--surface-sunken))}
+@keyframes pfIn{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
+.pf-d-head{display:flex;align-items:flex-start;gap:12px;margin-bottom:12px}
+.pf-d-icon{font-size:22px;line-height:1.1;flex-shrink:0}
+.pf-d-titles{flex:1;min-width:0}
+.pf-d-step{display:block;font-size:9.5px;font-weight:800;letter-spacing:.12em;
+  text-transform:uppercase;color:var(--text-secondary);margin-bottom:3px}
+.pf-d-title{font-size:16px;font-weight:800;letter-spacing:-.2px;
+  color:var(--text-primary);margin:0;line-height:1.3;text-wrap:pretty}
+.pf-d-close{flex-shrink:0;width:28px;height:28px;border:0;border-radius:50%;
+  cursor:pointer;display:flex;align-items:center;justify-content:center;
+  background:transparent;color:var(--text-secondary);transition:background .15s,color .15s}
+.pf-d-close:hover{background:var(--action-primary-subtle);color:var(--text-primary)}
+.pf-d-close:focus-visible{outline:2px solid var(--action-primary);outline-offset:1px}
+.pf-d-close svg{width:14px;height:14px;display:block}
+/* Two classes: .cs-section p in the shared sheet is (0,1,1) and would win on
+   colour, size, leading and margin against a single class. */
+.pf-detail .pf-d-body p{font-size:13.5px;line-height:1.75;
+  color:var(--text-secondary);margin:0 0 .8em;max-width:70ch;text-wrap:pretty}
+.pf-detail .pf-d-body p:last-child{margin-bottom:0}
+.pf-d-body code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;
+  font-size:.88em;padding:1px 5px;border-radius:4px;
+  background:var(--action-primary-subtle);color:var(--text-primary)}
+.pf-d-nav{display:flex;align-items:center;gap:12px;margin-top:14px;
+  padding-top:12px;border-top:1px solid var(--border-subtle)}
+.pf-d-btn{font:inherit;font-size:12px;font-weight:600;cursor:pointer;
+  padding:6px 12px;border-radius:var(--radius-full);
+  background:transparent;border:1px solid var(--border-default);
+  color:var(--text-secondary);transition:color .15s,border-color .15s}
+.pf-d-btn:hover:not([disabled]){color:var(--text-primary);border-color:var(--action-primary)}
+.pf-d-btn:focus-visible{outline:2px solid var(--action-primary);outline-offset:2px}
+.pf-d-btn[disabled]{cursor:default;opacity:1;color:var(--text-tertiary);
+  border-color:var(--border-subtle)}
+.pf-d-dots{display:flex;gap:5px;margin:0 auto}
+.pf-d-dots i{width:6px;height:6px;border-radius:50%;background:var(--border-default)}
+.pf-d-dots i.on{background:var(--action-primary);transform:scale(1.25)}
 
 @media(prefers-reduced-motion:reduce){
   .vs-track{transition:none}
@@ -437,73 +433,74 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
               a ticket, a developer editing JSON by hand, and a build someone had to remember
               to trigger. Days, for a hex value. The plugin closes that loop entirely - the
               designer who made the decision is the one who ships it.</p>
-            <div class="pv-wrap">
-              <div class="pv-label">How the pipeline works</div>
-              <div class="pv-flow">
-                <div class="pv-step" data-step="1">
-                  <span class="pv-icon">&#127912;</span>
-                  <span class="pv-name">Figma Variables</span>
-                  <span class="pv-badge">Manual</span>
+            <div class="pf">
+              <div class="pf-label">How the pipeline works</div>
+              <div class="pf-flow" id="pf-flow">
+                <button class="pf-step" data-s="1" data-type="manual"
+                        title="Designer updates Figma Variables" aria-expanded="false">
+                  <span class="pf-icon" aria-hidden="true">🎨</span>
+                  <span class="pf-name">Figma Variables</span>
+                  <span class="pf-sub">Edit a value</span>
+                  <span class="pf-badge">Manual</span>
+                </button>
+                <span class="pf-arr" aria-hidden="true">&#8594;</span>
+                <button class="pf-step" data-s="2" data-type="manual"
+                        title="One click in Verint Token Sync" aria-expanded="false">
+                  <span class="pf-icon" aria-hidden="true">🔌</span>
+                  <span class="pf-name">Token Sync</span>
+                  <span class="pf-sub">One click</span>
+                  <span class="pf-badge">Manual</span>
+                </button>
+                <span class="pf-arr" aria-hidden="true">&#8594;</span>
+                <button class="pf-step" data-s="3" data-type="auto"
+                        title="Four TypeScript files generated in the browser" aria-expanded="false">
+                  <span class="pf-icon" aria-hidden="true">📝</span>
+                  <span class="pf-name">TS Generation</span>
+                  <span class="pf-sub">4 files, in-browser</span>
+                  <span class="pf-badge">Auto</span>
+                </button>
+                <span class="pf-arr" aria-hidden="true">&#8594;</span>
+                <button class="pf-step" data-s="4" data-type="auto"
+                        title="Plugin pushes to GitHub and opens a PR" aria-expanded="false">
+                  <span class="pf-icon" aria-hidden="true">😺</span>
+                  <span class="pf-name">GitHub Push</span>
+                  <span class="pf-sub">Branch + PR</span>
+                  <span class="pf-badge">Auto</span>
+                </button>
+                <span class="pf-arr" aria-hidden="true">&#8594;</span>
+                <button class="pf-step" data-s="5" data-type="auto"
+                        title="GitHub Actions validates and auto-merges" aria-expanded="false">
+                  <span class="pf-icon" aria-hidden="true">⚙️</span>
+                  <span class="pf-name">GitHub Actions</span>
+                  <span class="pf-sub">Validate + merge</span>
+                  <span class="pf-badge">Auto</span>
+                </button>
+                <span class="pf-arr" aria-hidden="true">&#8594;</span>
+                <button class="pf-step" data-s="6" data-type="auto"
+                        title="Tokens live on main in under 60 seconds" aria-expanded="false">
+                  <span class="pf-icon" aria-hidden="true">🚀</span>
+                  <span class="pf-name">Live on Main</span>
+                  <span class="pf-sub">Under 60 seconds</span>
+                  <span class="pf-badge">Auto</span>
+                </button>
+              </div>
+              <div class="pf-detail" id="pf-detail" hidden>
+                <div class="pf-d-head">
+                  <span class="pf-d-icon" id="pf-d-icon" aria-hidden="true"></span>
+                  <div class="pf-d-titles">
+                    <span class="pf-d-step" id="pf-d-step"></span>
+                    <h4 class="pf-d-title" id="pf-d-title"></h4>
+                  </div>
+                  <span class="pf-badge" id="pf-d-badge"></span>
+                  <button class="pf-d-close" id="pf-d-close" aria-label="Close step detail"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
                 </div>
-                <span class="pv-arr">&#8594;</span>
-                <div class="pv-step" data-step="2">
-                  <span class="pv-icon">&#128268;</span>
-                  <span class="pv-name">Token Sync</span>
-                  <span class="pv-badge">Manual</span>
-                </div>
-                <span class="pv-arr">&#8594;</span>
-                <div class="pv-step" data-step="3">
-                  <span class="pv-icon">&#128221;</span>
-                  <span class="pv-name">TS Generation</span>
-                  <span class="pv-badge auto">Auto</span>
-                </div>
-                <span class="pv-arr">&#8594;</span>
-                <div class="pv-step" data-step="4">
-                  <span class="pv-icon">&#128570;</span>
-                  <span class="pv-name">GitHub Push</span>
-                  <span class="pv-badge auto">Auto</span>
-                </div>
-                <span class="pv-arr">&#8594;</span>
-                <div class="pv-step" data-step="5">
-                  <span class="pv-icon">&#128640;</span>
-                  <span class="pv-name">Live on Main</span>
-                  <span class="pv-badge auto">Auto</span>
+                <div class="pf-d-body" id="pf-d-body"></div>
+                <div class="pf-d-nav">
+                  <button class="pf-d-btn" id="pf-d-prev">Previous</button>
+                  <span class="pf-d-dots" id="pf-d-dots" aria-hidden="true"></span>
+                  <button class="pf-d-btn" id="pf-d-next">Next</button>
                 </div>
               </div>
-  
-              <!-- Mock GitHub PR -->
-              <div class="pr-card">
-                <div class="pr-head">
-                  <div class="pr-title-row">
-                    <div class="pr-title">tokens: update brand-primary and interactive-default</div>
-                    <div class="pr-meta">Opened automatically by verint-token-sync &middot; +4 -4 &middot; primitives.ts, semanticsLight.ts, semanticsDark.ts</div>
-                  </div>
-                  <span class="pr-merged">
-                    <svg width="10" height="10" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M5 3.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0zm0 2.122a2.25 2.25 0 1 0-1.5 0v.878A2.25 2.25 0 0 0 5.75 8.5h1.5v2.128a2.251 2.251 0 1 0 1.5 0V8.5h1.5a2.25 2.25 0 0 0 2.25-2.25v-.878a2.25 2.25 0 1 0-1.5 0v.878a.75.75 0 0 1-.75.75h-4.5A.75.75 0 0 1 5 6.25v-.878z"/></svg>
-                    Merged
-                  </span>
-                </div>
-                <div class="pr-diff-block">
-                  <div class="diff-file-head">
-                    <span>&#128216; primitives.ts</span>
-                    <span class="diff-add-count">+1</span>
-                    <span class="diff-del-count">-1</span>
-                  </div>
-                  <div class="diff-lines">
-                    <span class="diff-line ctx"> 4 &nbsp;export const primitives = &#123;</span>
-                    <span class="diff-line del"> 5- &nbsp; colorBlue500: '#66AFFF',</span>
-                    <span class="diff-line add"> 5+ &nbsp; colorBlue500: '#2563EB',</span>
-                    <span class="diff-line ctx"> 6 &nbsp; colorBlue400: '#66AFFF',</span>
-                  </div>
-                </div>
-                <div class="pr-foot">
-                  <span class="pr-foot-check">&#10003;</span>
-                  <span>Auto-merged by GitHub Actions</span>
-                  <span class="pr-foot-badge">TypeScript valid</span>
-                  <span class="pr-foot-badge">Storybook preview</span>
-                </div>
-              </div>
-  
             </div>
           </div>
           </div>
@@ -578,7 +575,7 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
   </svg>
 </button>
 
-<script src="../shared/case-study.js?v=202609041107" defer></script>
+<script src="../shared/case-study.js?v=202609041118" defer></script>
 
 <script>
 /* ══ The reel ═══════════════════════════════════════════════════════════════
@@ -722,6 +719,81 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
       else setTimeout(rest, 1400);
     });
   }, { threshold: 0.25 }).observe(vs);
+
+  /* ══ the pipeline steps ═══════════════════════════════════════════════════
+     Every step opens its detail in place. Content is the writing from the old
+     case study, carried over rather than rewritten.
+
+     Inline rather than a modal: this reel sits in an iframe inside a
+     draggable window, so a fixed overlay would cover the window and not the
+     page, which reads like something failed. Inline also keeps it inside the
+     one container.                                                          */
+  var PF = [{"icon": "🎨", "type": "manual", "title": "Designer updates Figma Variables", "body": "<p>The token architecture uses three Figma variable collections. Primitives holds raw values: hex colors, rem sizes, millisecond durations. Semantics Light and Semantics Dark map those primitives to role-based names. Components bind semantic tokens to specific UI patterns.</p><p>When a designer changes a value in any collection, that single edit is the only manual input the entire pipeline needs. No annotation, no handoff note, no Jira ticket.</p>"}, {"icon": "🔌", "type": "manual", "title": "One click in Verint Token Sync", "body": "<p>The plugin calls the Figma Variables REST API and pulls all three collections at once. It resolves aliases across collections so every semantic token has a concrete value before code generation starts.</p><p>The single-click trigger is intentional. Designers push on their own schedule, not on a cron job. It gives them ownership over what lands in the repository.</p>"}, {"icon": "📝", "type": "auto", "title": "Four TypeScript files generated in the browser", "body": "<p>The plugin runs a code generation pass inside the Figma plugin sandbox and writes four typed TypeScript files: <code>primitives.ts</code> for raw values, <code>semanticsLight.ts</code> and <code>semanticsDark.ts</code> for role-based mappings, and <code>components.tsx</code> for component-level bindings.</p><p>All four files use a consistent export shape so consuming components import exactly the token they need. No JSON, no CSS variables at this stage. Typed constants only.</p>"}, {"icon": "😺", "type": "auto", "title": "Plugin pushes to GitHub and opens a PR", "body": "<p>The plugin base64-encodes each file and calls the GitHub Contents API to write them to a feature branch. It then calls the GitHub Pull Requests API to open a PR against <code>main</code> with a commit message that names the changed tokens.</p><p>There is no server in this path. The plugin holds a scoped GitHub token in Figma plugin storage and makes all API calls from inside the sandbox. The entire push-and-PR sequence completes in under two seconds.</p>"}, {"icon": "⚙️", "type": "auto", "title": "GitHub Actions validates and auto-merges", "body": "<p>A GitHub Actions workflow runs <code>tsc --noEmit</code> against the four generated files. If TypeScript compilation passes, the workflow calls the GitHub Merge API and squash-merges the PR automatically. If it fails, the PR stays open and the checks surface shows exactly which file broke.</p><p>The TypeScript check is the safety net. Generated code that references a token with a type mismatch or a broken alias fails the build before it ever reaches <code>main</code>.</p>"}, {"icon": "🚀", "type": "auto", "title": "Tokens live on main in under 60 seconds", "body": "<p>The squash-merge lands on <code>main</code> with a clean commit message referencing the changed tokens. Storybook, the component library build, and any product that imports the token package all pick up the update on their next install or CI run.</p><p>The full cycle from Figma save to merged PR is under 60 seconds. The designer sees the PR open in the plugin UI and gets a confirmation when it merges. No developer was paged.</p>"}];
+  var pfFlow  = document.getElementById('pf-flow');
+  var pfDet   = document.getElementById('pf-detail');
+  if (pfFlow && pfDet) {
+    var pfSteps = pfFlow.querySelectorAll('.pf-step');
+    var dIcon = document.getElementById('pf-d-icon');
+    var dStep = document.getElementById('pf-d-step');
+    var dTtl  = document.getElementById('pf-d-title');
+    var dBadge= document.getElementById('pf-d-badge');
+    var dBody = document.getElementById('pf-d-body');
+    var dDots = document.getElementById('pf-d-dots');
+    var dPrev = document.getElementById('pf-d-prev');
+    var dNext = document.getElementById('pf-d-next');
+    var open_ = 0;   /* 1-based; 0 means closed */
+
+    dDots.innerHTML = PF.map(function(){ return '<i></i>'; }).join('');
+    var dots = dDots.querySelectorAll('i');
+
+    function render(n){
+      var d = PF[n-1];
+      open_ = n;
+      dIcon.textContent = d.icon;
+      dStep.textContent = 'Step ' + n + ' of ' + PF.length;
+      dTtl.textContent  = d.title;
+      dBadge.textContent = d.type === 'manual' ? 'Manual' : 'Auto';
+      dBadge.setAttribute('data-type', d.type);
+      dBody.innerHTML = d.body;
+      dots.forEach(function(el,i){ el.classList.toggle('on', i === n-1); });
+      dPrev.disabled = n === 1;
+      dNext.disabled = n === PF.length;
+      pfSteps.forEach(function(b){
+        b.setAttribute('aria-expanded', (+b.dataset.s === n) ? 'true' : 'false');
+      });
+      pfDet.hidden = false;
+      /* re-run the entry animation when stepping between steps */
+      pfDet.style.animation = 'none'; void pfDet.offsetWidth; pfDet.style.animation = '';
+    }
+    function close(){
+      open_ = 0;
+      pfDet.hidden = true;
+      pfSteps.forEach(function(b){ b.setAttribute('aria-expanded','false'); });
+    }
+
+    pfSteps.forEach(function(b){
+      b.addEventListener('click', function(){
+        var n = +b.dataset.s;
+        if (open_ === n) { close(); b.focus(); }
+        else render(n);
+      });
+    });
+    dPrev.addEventListener('click', function(){ if (open_ > 1) render(open_ - 1); });
+    dNext.addEventListener('click', function(){ if (open_ < PF.length) render(open_ + 1); });
+    document.getElementById('pf-d-close').addEventListener('click', function(){
+      var n = open_; close();
+      var b = pfFlow.querySelector('.pf-step[data-s="' + n + '"]');
+      if (b) b.focus();          /* focus goes back to what opened it */
+    });
+    /* Escape closes it, and left/right step through - only while it is open */
+    document.addEventListener('keydown', function(e){
+      if (!open_) return;
+      if (e.key === 'Escape') { var n=open_; close();
+        var b = pfFlow.querySelector('.pf-step[data-s="' + n + '"]'); if (b) b.focus(); }
+      else if (e.key === 'ArrowRight' && open_ < PF.length) render(open_ + 1);
+      else if (e.key === 'ArrowLeft'  && open_ > 1) render(open_ - 1);
+    });
+  }
 
   go(0);
 })();
