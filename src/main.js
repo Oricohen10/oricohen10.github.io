@@ -3,7 +3,19 @@ if (!isDesktop) document.getElementById('app').style.display = 'none';
 
 /* Handle viewport crossing the mobile/desktop breakpoint */
 let _lastBreakpoint = isDesktop ? 'desktop' : 'mobile';
+/* Coalesced to one frame. resize fires continuously while the browser window
+   is dragged, and centerFrame() reads layout, so the unthrottled version
+   forced a layout per event for the whole drag - which is exactly when the
+   page felt worst. */
+let _resizeQueued = false;
 window.addEventListener('resize', () => {
+  if (_resizeQueued) return;
+  _resizeQueued = true;
+  requestAnimationFrame(_onResize);
+});
+function _onResize() {
+  _resizeQueued = false;
+  if (window.invalidateIframeRects) window.invalidateIframeRects();
   const now = window.innerWidth >= 768 ? 'desktop' : 'mobile';
   if (now === _lastBreakpoint) {
     if (now === 'desktop') centerFrame();
@@ -59,7 +71,7 @@ window.addEventListener('resize', () => {
     const con = document.getElementById('mv-tcon');
     if (con) con.innerHTML = '';
   }
-});
+}
 
 /* ── Mobile menu ── */
 function _hamSet(expanded) {
@@ -344,6 +356,8 @@ let zoom = 1, panX = 0, panY = 0;
 function applyCanvas() {
   cvpEl.style.transform = `translate(${panX}px,${panY}px) scale(${zoom})`;
   zoomEl.textContent = Math.round(zoom * 100) + '%';
+  /* every iframe on the canvas just moved, so the cached rects are stale */
+  if (window.invalidateIframeRects) window.invalidateIframeRects();
 }
 
 function setZoom(z, cx, cy) {
@@ -704,6 +718,7 @@ const WIN_MIN_W = 280, WIN_MAX_W = 1400, WIN_MIN_H = 180, WIN_MAX_H = 900;
 const PROJ_WIN_IDS = new Set(['win-proj-lux','win-proj-myverint','win-proj-copilot','win-proj-plugins','win-proj-supervisor']);
 function winMinW(win){ return PROJ_WIN_IDS.has(win.id) ? 800 : WIN_MIN_W; }
 let winResize = null;
+let dragW = 0;
 
 function showNativeCursor() { curEl.style.display = 'none'; }
 function showCustomCursor() { curEl.style.display = ''; }
@@ -741,20 +756,25 @@ function startDrag(e, id) {
   front(w); drag = w;
   const r = w.getBoundingClientRect();
   dox = e.clientX - r.left; doy = e.clientY - r.top;
+  dragW = r.width;                       /* measured once for the whole drag */
   setIframePointerEvents('none');
   e.preventDefault();
 }
 
 document.addEventListener('mousemove', e => {
   if (drag) {
-    const ww = drag.offsetWidth, wh = drag.offsetHeight;
-    const nx = Math.max(0, Math.min(window.innerWidth  - Math.min(ww, 120), e.clientX - dox));
+    /* dragW is measured once in startDrag. Reading offsetWidth here forced a
+       layout on every mousemove, immediately before writing style.left -
+       read, write, read, write, for the length of the drag. */
+    const nx = Math.max(0, Math.min(window.innerWidth  - Math.min(dragW, 120), e.clientX - dox));
     const ny = Math.max(0, Math.min(window.innerHeight - 44, e.clientY - doy));
     drag.style.left = nx + 'px'; drag.style.top = ny + 'px';
     drag.style.right=drag.style.bottom='auto'; drag.style.transform='';
+    if (window.invalidateIframeRects) window.invalidateIframeRects();
     e.preventDefault();
   }
   if (winResize) {
+    if (window.invalidateIframeRects) window.invalidateIframeRects();
     const { win: rw, dir: rd, sx, sy, ox, oy, ow, oh } = winResize;
     const dx = e.clientX - sx, dy = e.clientY - sy;
     let nx = ox, ny = oy, nw = ow, nh = oh;
@@ -1618,21 +1638,48 @@ window.addEventListener('load', () => {
    The iframe sends its local clientX/Y; we offset by the iframe's
    bounding rect to get absolute coordinates in the parent viewport.
 ════════════════════════════════════ */
+/* This handler was the most expensive thing on the site. For EVERY mousemove
+   inside an open case study it ran a querySelectorAll, a linear scan of the
+   iframes, a getBoundingClientRect - a forced synchronous layout - and a
+   getElementById, then wrote a style. Read-then-write, 60 to 120 times a
+   second, which is a textbook layout-thrash loop: the read forces layout, the
+   write invalidates it, and the next message forces it again.
+
+   Three changes. The iframe is looked up from a cache keyed by its
+   contentWindow. Its rect is measured once and re-used until something that
+   could move it fires. And the cursor element is resolved once.
+
+   The rect cache is the part worth being careful about: an iframe moves when
+   its window is dragged or resized, when the canvas is panned or zoomed, and
+   when the browser window changes size. All of those set the dirty flag
+   below, so a stale rect cannot outlive a move. */
+const _mmRect = new WeakMap();
+let _mmFrames = null;
+let _mmDirty = true;
+window.invalidateIframeRects = function(){ _mmDirty = true; };
+['resize','scroll'].forEach(function(ev){
+  window.addEventListener(ev, window.invalidateIframeRects, { passive: true });
+});
+
 window.addEventListener('message', function(e) {
   if (!e.data || e.data.type !== 'iframe-mm') return;
-  /* Find which iframe sent the message */
-  const iframes = document.querySelectorAll('.proj-iframe');
+  if (!curEl) return;   /* already resolved once at the top of this file */
+
+  /* The iframe ELEMENTS are static markup, so the list is found once. Their
+     contentWindow is not - it changes if a frame reloads - which is why the
+     match below still compares contentWindow each time rather than caching
+     the window-to-element mapping. */
+  if (!_mmFrames) _mmFrames = document.querySelectorAll('.proj-iframe');
   let src = null;
-  for (const f of iframes) { try { if (f.contentWindow === e.source) { src = f; break; } } catch(_){} }
+  for (const f of _mmFrames) { try { if (f.contentWindow === e.source) { src = f; break; } } catch(_){} }
   if (!src) return;
-  const r = src.getBoundingClientRect();
-  const absX = r.left + e.data.x;
-  const absY = r.top  + e.data.y;
-  const el = document.getElementById('cursor');
-  if (!el) return;
-  el.style.visibility = '';
+
+  let r = _mmDirty ? null : _mmRect.get(src);
+  if (!r) { r = src.getBoundingClientRect(); _mmRect.set(src, r); _mmDirty = false; }
+
+  curEl.style.visibility = '';
   const [ox, oy] = CUR_OFFSET[curState] || [4, 4];
-  el.style.transform = `translate(${absX - ox}px,${absY - oy}px)`;
+  curEl.style.transform = `translate(${r.left + e.data.x - ox}px,${r.top + e.data.y - oy}px)`;
 });
 
 /* ════════════════════════════════════

@@ -66,7 +66,16 @@ button{cursor:pointer;font-family:inherit}
 .cs-field::before{content:"";position:absolute;inset:0;
   background-image:radial-gradient(circle,var(--cs-dot) 1px,transparent 1px);
   background-size:22px 22px}
-.cs-field i{position:absolute;display:block;border-radius:50%}
+/* will-change promotes each wash to its own compositor layer, so the drift is
+   a GPU matrix transform on a cached texture rather than a repaint of a
+   1100px-square gradient every frame. These animate forever, which is exactly
+   the case will-change is for - it is a hint to keep, not one to clean up.
+
+   Worth knowing: this field runs in every OPEN project window, so three
+   windows open at once means six of these animating. Closing windows you are
+   not reading is the cheapest performance win available on this site. */
+.cs-field i{position:absolute;display:block;border-radius:50%;
+  will-change:transform}
 .cs-field i:nth-child(1){width:64vmax;height:64vmax;top:-22vmax;right:-16vmax;
   background:radial-gradient(circle closest-side,var(--cs-wash-a),transparent 70%);
   animation:csFieldA 17s ease-in-out infinite alternate}
@@ -83,7 +92,7 @@ button{cursor:pointer;font-family:inherit}
 @keyframes csFieldB{from{transform:translate3d(0,0,0) scale(1.14)}
                       to{transform:translate3d(14vmax,-12vmax,0) scale(.94)}}
 @media(prefers-reduced-motion:reduce){
-  .cs-field i{animation:none}
+  .cs-field i{animation:none;will-change:auto}
 }
 /* The field is behind everything, so anything that must sit above it needs a
    stacking context of its own. .cs-body gets its z-index in the Layout block

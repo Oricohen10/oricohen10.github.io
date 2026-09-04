@@ -29,10 +29,26 @@ window.addEventListener('message', function(e) {
   }
 });
 
-/* ── Relay mousemove so the portfolio's custom cursor tracks inside iframes ─ */
-document.addEventListener('mousemove', function(e) {
-  try { window.parent.postMessage({type:'iframe-mm', x:e.clientX, y:e.clientY}, '*'); } catch(err){}
-}, { passive: true });
+/* ── Relay mousemove so the portfolio's custom cursor tracks inside iframes ─
+   Coalesced to one message per animation frame. Unthrottled this fired on
+   every mousemove - 60 to 120 postMessages a second per open iframe - and for
+   each one the parent ran a querySelectorAll and a getBoundingClientRect. The
+   cursor cannot move more than once per frame anyway, so the extra messages
+   bought nothing and cost a forced layout each. */
+(function(){
+  if (window.self === window.top) return;   /* only matters inside the frame */
+  var mx = 0, my = 0, queued = false;
+  function flush(){
+    queued = false;
+    try { window.parent.postMessage({ type:'iframe-mm', x:mx, y:my }, '*'); } catch(err){}
+  }
+  document.addEventListener('mousemove', function(e){
+    mx = e.clientX; my = e.clientY;
+    if (queued) return;
+    queued = true;
+    requestAnimationFrame(flush);
+  }, { passive: true });
+})();
 
 /* ── Scroll reveal ───────────────────────────────────────────────────────── */
 var revealObserver = new IntersectionObserver(function(entries) {
@@ -49,8 +65,19 @@ document.querySelectorAll('.cs-reveal').forEach(function(el) { revealObserver.ob
 document.addEventListener('DOMContentLoaded', function() {
   var scrollBtn = document.getElementById('scroll-top');
   if (!scrollBtn) return;
+  /* One check per frame, and the class is only touched when the state actually
+     changes - classList.toggle with an unchanged value is still a style
+     mutation the browser has to process. */
+  var shown = false, queued = false;
+  function check(){
+    queued = false;
+    var want = window.scrollY > 320;
+    if (want !== shown) { shown = want; scrollBtn.classList.toggle('show', want); }
+  }
   window.addEventListener('scroll', function() {
-    scrollBtn.classList.toggle('show', window.scrollY > 320);
+    if (queued) return;
+    queued = true;
+    requestAnimationFrame(check);
   }, { passive: true });
   scrollBtn.addEventListener('click', function() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
