@@ -39,8 +39,8 @@
   }
 }
 </script>
-<link rel="stylesheet" href="../../src/tokens.css?v=202609040833"/>
-<link rel="stylesheet" href="../shared/case-study.css?v=202609040833"/>
+<link rel="stylesheet" href="../../src/tokens.css?v=202609040856"/>
+<link rel="stylesheet" href="../shared/case-study.css?v=202609040856"/>
 <script>try{if(localStorage.getItem('ori-theme')==='dark')document.documentElement.setAttribute('data-theme','dark')}catch(e){}
 if(window.self!==window.top){var _s=document.createElement('style');_s.textContent='*{cursor:none!important}';document.head.appendChild(_s);}</script>
 <style>
@@ -59,227 +59,139 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
 /* -- Chip variant ------------------------------------------------------- */
 .chip--plugin{background:rgba(157,34,147,.1);color:#9d2293}
 [data-theme="dark"] .chip--plugin{background:rgba(232,121,249,.14);color:#e879f9}
-/* ══ The Plugin Workbench ═══════════════════════════════════════════════
-   A small application, not a media tray. Chrome colours are fixed dark in
-   both themes for the same reason the myverint phone bezel is: this is a
-   picture of an application window, not part of the page.
+/* ══ Vertical slide reel ════════════════════════════════════════════════
+   Layout: stage | controls | rail. The stage holds a window with a track of
+   four full-size slides; stepping translates the track vertically so the
+   outgoing recording leaves upward as the next arrives from below.
 
-   Every value in the Token Sync flow is the real change from the real pull
-   request - #66AFFF to #2563EB, the file, the +1/-1. Nothing is invented to
-   look impressive.                                                        */
-.fx{margin-top:26px;border-radius:14px;overflow:hidden;
-  background:#1A1B1E;border:1px solid #313337;
-  box-shadow:0 18px 40px rgba(18,18,19,.22)}
-[data-theme="dark"] .fx{box-shadow:0 40px 80px rgba(0,0,0,.7)}
+   The player bar is overlaid inside each slide rather than stacked above the
+   video. That is not only cosmetic: it keeps every slide exactly a 16:9 box,
+   which is what lets the step be a pure CSS percentage with no pixel
+   measurement and no resize handler.                                      */
+/* Two rows on purpose. With the captions inside the stage column, the
+   controls centred against stage+caption and sat below the video's middle;
+   the reference has them level with it. Explicit areas put the caption on its
+   own row so row 1 is exactly as tall as the window. */
+.vs{display:grid;margin-top:28px;
+  grid-template-columns:minmax(0,1fr) 46px 194px;
+  grid-template-areas:"win ctrl rail"
+                      "cap cap  cap";
+  column-gap:20px;row-gap:0}
+.vs-caps{grid-area:cap;min-width:0}
 
-/* title bar */
-.fx-top{display:flex;align-items:center;gap:12px;padding:9px 13px;
-  background:#232427;border-bottom:1px solid #313337}
-.fx-dots{display:flex;gap:6px;flex-shrink:0}
-.fx-dots i{width:9px;height:9px;border-radius:50%;background:#3A3C40}
-.fx-file{font-size:11.5px;color:#9AA0A6;flex:1;min-width:0;
+/* the window and the track */
+.vs-window{grid-area:win;position:relative;overflow:hidden;aspect-ratio:16/9;
+  border-radius:var(--radius-lg);border:1px solid var(--border-subtle);
+  background:#141517;
+  box-shadow:0 18px 40px rgba(18,18,19,.16)}
+[data-theme="dark"] .vs-window{box-shadow:0 48px 96px rgba(0,0,0,.8)}
+/* Four slides, so the track is 400% tall and one step is 25% of itself.
+   Tied to there being exactly four - a fifth makes this 20%. */
+.vs-track{position:absolute;inset:0;height:400%;
+  transform:translateY(calc(var(--i) * -25%));
+  transition:transform .62s cubic-bezier(.65,0,.35,1)}
+.vs-slide{position:relative;height:25%;overflow:hidden}
+.vs-slide video{position:absolute;inset:0;width:100%;height:100%;
+  object-fit:cover;display:block;background:#141517}
+
+/* overlaid player bar, same idea as the reference */
+.vs-bar{position:absolute;top:0;left:0;right:0;z-index:2;
+  display:flex;align-items:center;gap:8px;
+  padding:9px 13px;font-size:11.5px;font-weight:600;color:#F2F4F6;
+  background:linear-gradient(to bottom,rgba(10,11,12,.82),rgba(10,11,12,0));
+  text-shadow:0 1px 3px rgba(0,0,0,.6)}
+.vs-bar-n{font-weight:800;letter-spacing:.09em;color:#E879F9;flex-shrink:0}
+.vs-bar-t{margin-left:auto;font-weight:500;color:#D3D7DB;flex-shrink:0;
   white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.fx-file b{color:#DDE1E5;font-weight:600}
 
-/* segmented controls - one component, three uses */
-.fx-seg{display:flex;gap:2px;padding:2px;border-radius:7px;
-  background:#191A1C;border:1px solid #303236}
-.fx-seg button{font:inherit;font-size:11px;font-weight:600;white-space:nowrap;
-  padding:5px 10px;border:0;border-radius:5px;cursor:pointer;
-  background:transparent;color:#9AA0A6;transition:background .16s,color .16s}
-.fx-seg button:hover{color:#E4E7EA}
-.fx-seg button[aria-checked="true"]{background:#33353A;color:#F2F4F6}
-.fx-seg button:focus-visible{outline:2px solid #7FB2FF;outline-offset:1px}
-.fx-seg--mode{flex-shrink:0}
-.fx-seg--v{flex-direction:column;gap:2px}
-.fx-seg--v button{text-align:left;padding:7px 9px}
+/* the caption travels with the step, in the same direction */
+.vs-cap{display:none}
+.vs-cap.on{display:block;animation:vsCap .5s cubic-bezier(.4,0,.2,1) both}
+@keyframes vsCap{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+.vs-cap-h{font-size:19px;font-weight:800;letter-spacing:-.3px;
+  color:var(--text-primary);margin:18px 0 7px}
+/* Two classes, not one. .cs-section p in the shared sheet is (0,1,1) and
+   beats a single class on colour, size, leading and margin. */
+.vs-caps .vs-cap-p{font-size:14.5px;line-height:1.75;color:var(--text-secondary);
+  margin:0;max-width:64ch;text-wrap:pretty}
 
-/* body: rail | stage | panel */
-.fx-main{display:grid;grid-template-columns:168px minmax(0,1fr) 208px;
-  min-height:352px}
+/* controls between stage and rail, level with the window's centre */
+.vs-ctrl{grid-area:ctrl;display:flex;flex-direction:column;align-items:center;gap:11px;
+  justify-self:center;align-self:center}
+.vs-arrow{width:34px;height:34px;flex-shrink:0;border:0;border-radius:50%;
+  cursor:pointer;display:flex;align-items:center;justify-content:center;
+  background:var(--action-primary);color:#fff;transition:background .16s,transform .16s}
+.vs-arrow:hover{background:var(--action-primary-hover);transform:scale(1.07)}
+.vs-arrow:focus-visible{outline:2px solid var(--action-primary);outline-offset:3px}
+/* The dark accent is a bright magenta - white on it is 3.34:1, and 3.56:1 on
+   the hover tint. Dark ink gets 5.52:1 and 5.18:1. Same fix #scroll-top
+   already needed on myverint's rose. */
+[data-theme="dark"] .vs-arrow{color:#141414}
+/* Styled, not faded: opacity drags the glyph and the fill toward the page
+   together, and the pair lands under 3:1. */
+.vs-arrow[disabled]{cursor:default;background:var(--surface-raised);
+  color:var(--text-secondary);box-shadow:inset 0 0 0 1px var(--border-default);
+  transform:none}
+[data-theme="dark"] .vs-arrow[disabled]{color:var(--text-secondary)}
+.vs-arrow svg{width:15px;height:15px;display:block}
+.vs-count{display:flex;flex-direction:column;align-items:center;gap:3px;
+  font-size:12px;font-variant-numeric:tabular-nums lining-nums}
+.vs-count b{font-weight:800;color:var(--text-primary)}
+.vs-count i{width:14px;height:1px;background:var(--border-default)}
+/* secondary, not tertiary, on all four of these micro-labels: dark
+   --text-tertiary is 4.45:1 on --surface-default and 4.02:1 on
+   --surface-raised, so it fails AA at this size. Secondary is 9.29:1. */
+.vs-count span{color:var(--text-secondary)}
 
-/* plugin rail - the switcher, inside the app */
-.fx-rail{display:flex;flex-direction:column;gap:2px;padding:9px 7px;
-  background:#1E1F22;border-right:1px solid #2C2E32}
-.fx-nav{position:relative;display:flex;align-items:center;gap:9px;width:100%;font:inherit;
-  padding:9px 9px 9px 12px;border:0;border-radius:7px;cursor:pointer;text-align:left;
-  background:transparent;color:#A8AEB4;transition:background .16s,color .16s}
-.fx-nav:hover{background:#26282C;color:#E4E7EA}
-.fx-nav.on{background:#2A2C31;color:#F2F4F6}
-/* The selected fill is only 1.18:1 against the rail, so on its own it is not a
-   perceivable state change. Text colour and the number already shift too, but
-   navigation should not need you to compare two greys - this bar is the
-   unambiguous marker. */
-.fx-nav.on::before{content:"";position:absolute;left:3px;top:50%;
-  transform:translateY(-50%);width:2px;height:20px;border-radius:2px;
-  background:#E879F9}
-.fx-nav:focus-visible{outline:2px solid #7FB2FF;outline-offset:-2px}
-.fx-nav svg{width:15px;height:15px;flex-shrink:0}
-.fx-nav.on svg{color:#E879F9}
-.fx-nav-x{display:flex;flex-direction:column;min-width:0}
-.fx-nav-x em{font-style:normal;font-size:8.5px;font-weight:800;letter-spacing:.11em;
-  color:#8A9096}
-.fx-nav.on .fx-nav-x em{color:#E879F9}
-.fx-nav-x b{font-size:12px;font-weight:600;white-space:nowrap;
-  overflow:hidden;text-overflow:ellipsis}
-
-/* stage */
-.fx-stage{position:relative;
-  background:
-    radial-gradient(circle,rgba(255,255,255,.05) 1px,transparent 1px) 0 0/17px 17px,
-    #202124}
-.fx-canvas,.fx-rec{padding:18px 18px 20px}
-.fx-rec{display:none}
-.fx-cv-h{font-size:9.5px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;
-  color:#949AA1;margin-bottom:14px}
-.fx-pane{display:none}
-.fx-pane.on{display:block}
-
-/* token swatches */
-.fx-sw{display:flex;align-items:center;gap:11px;padding:9px 12px;margin-bottom:7px;
-  border-radius:8px;background:#26282B;border:1px solid #32353A}
-.fx-chip{width:26px;height:26px;border-radius:6px;flex-shrink:0;background:#66AFFF;
-  box-shadow:inset 0 0 0 1px rgba(255,255,255,.1);
-  transition:background .5s cubic-bezier(.4,0,.2,1)}
-.fx-sw b{font-size:12px;font-weight:600;color:#E4E7EA;flex:1;min-width:0}
-.fx-sw code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:11px;
-  color:#9AA0A6;font-variant-numeric:tabular-nums}
-/* Dimmed with colour, never opacity: opacity composites the text AND its
-   background toward the page, so a faded row's value text measured 2.48:1. */
-.fx-sw--q{background:#232528}
-.fx-sw--q b{color:#949AA1;font-weight:500}
-.fx-sw--q code{color:#8E949B}
-.fx-chip--q{opacity:.55}
-
-/* the pull request, revealed on push */
-.fx-pr{display:none;margin-top:14px;border-radius:9px;overflow:hidden;
-  background:#26282B;border:1px solid #32353A}
-.fx-pr.on{display:block;animation:fxIn .4s cubic-bezier(.4,0,.2,1) both}
-@keyframes fxIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
-.fx-pr-h{display:flex;align-items:flex-start;gap:9px;padding:10px 12px;
-  border-bottom:1px solid #32353A}
-.fx-pr-t{flex:1;min-width:0;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;
-  font-size:11px;color:#E4E7EA}
-.fx-pr-m{flex-shrink:0;font-size:9px;font-weight:800;letter-spacing:.05em;
-  padding:3px 8px;border-radius:100px;background:#7C4DBE;color:#fff}
-.fx-pr-f{display:flex;gap:8px;padding:6px 12px;background:#212326;
-  border-bottom:1px solid #32353A;
-  font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:10.5px;color:#9AA0A6}
-.fx-add{color:#6EE7A0;font-weight:700}
-.fx-del{color:#FF9B9B;font-weight:700}
-.fx-pr-d{padding:5px 0}
-.fx-l{display:block;white-space:pre;overflow-x:auto;
-  font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:10.5px;
-  padding:1.5px 12px}
-.fx-l--c{color:#9AA0A6}
-.fx-l--a{background:rgba(110,231,160,.1);color:#8BEFB5}
-.fx-l--d{background:rgba(255,155,155,.1);color:#FFB4B4}
-.fx-pr-o{padding:8px 12px;font-size:10.5px;color:#9AA0A6;border-top:1px solid #32353A}
-
-/* generated wireframe + table */
-.fx-wire-empty{display:flex;align-items:center;justify-content:center;
-  min-height:210px;padding:20px;text-align:center;
-  border:1px dashed #3A3D42;border-radius:10px;
-  font-size:11.5px;color:#949AA1}
-.fx-wire{display:grid;gap:6px;min-height:210px}
-.fx-wire.gen{animation:fxIn .4s cubic-bezier(.4,0,.2,1) both}
-.fx-b{border-radius:6px;background:#2A2D31;border:1px solid #363A3F;
-  display:flex;align-items:center;padding:0 9px;
-  font-size:9px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;
-  color:#9AA0A6}
-.fx-b--a{background:#2E2634;border-color:#4A3A55;color:#D9A7E8}
-.fx-tbl{width:100%;border-collapse:collapse;border-radius:8px;overflow:hidden;
-  background:#26282B;border:1px solid #32353A;animation:fxIn .4s both}
-.fx-tbl th,.fx-tbl td{text-align:left;font-size:10.5px;padding:7px 10px;
-  border-bottom:1px solid #303236;white-space:nowrap}
-.fx-tbl th{background:#2C2F33;color:#DDE1E5;font-weight:700;font-size:9.5px;
-  letter-spacing:.06em;text-transform:uppercase}
-.fx-tbl td{color:#B4BAC0}
-.fx-tbl.compact th,.fx-tbl.compact td{padding:4px 10px}
-.fx-tbl tr:last-child td{border-bottom:0}
-
-/* recording view */
-.fx-rec-fig,.fx-rec video,.fx-rec-fig video{margin:0}
-.fx-rec video,.fx-rec-fig video{width:100%;aspect-ratio:16/9;display:block;
-  object-fit:cover;border-radius:9px;border:1px solid #32353A;background:#191A1C}
-.fx-rec-note{font-size:11px;line-height:1.6;color:#949AA1;margin-top:10px;max-width:52ch}
-
-/* panel */
-.fx-side{padding:16px 15px;background:#1E1F22;border-left:1px solid #2C2E32;
-  display:flex;flex-direction:column}
-.fx-head{display:none}
-.fx-head.on{display:block}
-.fx-tag{font-size:9px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;
-  color:#E879F9}
-.fx-name{font-size:15px;font-weight:700;letter-spacing:-.2px;color:#F2F4F6;
-  margin:6px 0 7px}
-.fx-desc{font-size:11.5px;line-height:1.7;color:#A8AEB4;margin:0 0 15px}
-.fx-ctl{margin-top:auto}
-.fx-field{margin-bottom:12px}
-.fx-lab{display:block;font-size:9px;font-weight:800;letter-spacing:.1em;
-  text-transform:uppercase;color:#949AA1;margin-bottom:7px}
-.fx-var{padding:8px 10px;margin-bottom:6px;border-radius:7px;
-  background:#26282B;border:1px solid #32353A}
-.fx-var b{display:block;font-size:11.5px;font-weight:600;color:#E4E7EA}
-.fx-var em{font-style:normal;display:block;margin-top:2px;
-  font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:10px;color:#9AA0A6}
-.fx-step{display:flex;align-items:center;gap:2px;padding:2px;width:fit-content;
-  border-radius:7px;background:#191A1C;border:1px solid #303236}
-.fx-step button{font:inherit;font-size:13px;font-weight:700;line-height:1;
-  width:26px;height:24px;border:0;border-radius:5px;cursor:pointer;
-  background:transparent;color:#C9CDD2}
-.fx-step button:hover{background:#33353A;color:#fff}
-.fx-step button:focus-visible{outline:2px solid #7FB2FF;outline-offset:1px}
-.fx-step output{min-width:26px;text-align:center;font-size:12px;font-weight:700;
-  color:#F2F4F6;font-variant-numeric:tabular-nums}
-/* The accent here is the project's DARK-mode magenta in both page themes, and
-   the ink on it is dark. That is not a stray hardcode: the window chrome is
-   fixed dark, so a button following var(--action-primary) would use the light
-   accent #9d2293 on a near-black panel, which is 2.42:1 against it and fails
-   1.4.11 - the button's own shape stops being distinguishable. #e040fb is
-   4.94:1 against the panel, and dark ink on it is 5.52:1. */
-.fx-go{margin-top:4px;width:100%;font:inherit;font-size:12px;font-weight:700;
-  padding:10px 12px;border:0;border-radius:8px;cursor:pointer;
-  background:#e040fb;color:#141414;transition:background .16s}
-.fx-go:hover{background:#ea80fc}
-.fx-go:focus-visible{outline:2px solid #fff;outline-offset:2px}
-/* Styled, not faded. opacity:.5 on a button drags its label and its fill
-   toward the page together and the pair collapsed to 2.48:1 - and this button
-   still reports state, so it has to stay readable. */
-.fx-go[disabled]{cursor:default;background:#2A2C31;color:#A8AEB4;
-  box-shadow:inset 0 0 0 1px #383B40}
-.fx-hint{font-size:10.5px;line-height:1.65;color:#949AA1;margin:0}
-
-/* status bar */
-.fx-foot{display:flex;align-items:center;gap:12px;padding:8px 13px;
-  background:#232427;border-top:1px solid #313337}
-.fx-state{flex:1;min-width:0;font-size:10.5px;color:#9AA0A6;
-  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
-  font-variant-numeric:tabular-nums}
-.fx-state.ok{color:#6EE7A0}
-.fx-pipe{display:flex;gap:5px;flex-shrink:0}
-.fx-pipe i{width:22px;height:3px;border-radius:2px;background:#33353A;
-  transition:background .3s}
-.fx-pipe i.on{background:#E879F9}
-.fx-pipe i.done{background:#7C4DBE}
+/* rail - all four visible, no scrolling. Twelve items justify a moving
+   strip; four do not, and a strip of four with peeking neighbours just
+   looks like something failed to load. */
+.vs-rail{grid-area:rail;display:flex;flex-direction:column;gap:3px;align-self:center}
+.vs-item{position:relative;display:flex;align-items:flex-start;gap:10px;
+  width:100%;font:inherit;text-align:left;cursor:pointer;
+  padding:11px 11px 11px 13px;border:0;border-radius:var(--radius-md);
+  background:transparent;transition:background .18s}
+.vs-item:hover{background:var(--action-primary-subtle)}
+.vs-item.on{background:var(--action-primary-subtle)}
+.vs-item:focus-visible{outline:2px solid var(--action-primary);outline-offset:-2px}
+/* The selected tint is deliberately light, so it cannot be the only signal.
+   The bar is what makes the state unambiguous. */
+.vs-item.on::before{content:"";position:absolute;left:3px;top:12px;bottom:12px;
+  width:2px;border-radius:2px;background:var(--action-primary)}
+.vs-item-n{font-size:10px;font-weight:800;letter-spacing:.1em;
+  color:var(--text-secondary);padding-top:2px;flex-shrink:0}
+.vs-item.on .vs-item-n{color:var(--action-primary)}
+/* On the dark tint the accent itself is only 3.69:1. --action-primary-hover
+   is the lighter of the pair in dark mode, which lands it at 5.00:1. */
+[data-theme="dark"] .vs-item.on .vs-item-n{color:#e879f9}
+.vs-item-x{display:flex;flex-direction:column;gap:2px;min-width:0}
+.vs-item-x b{font-size:13px;font-weight:600;color:var(--text-secondary);
+  line-height:1.35}
+.vs-item.on .vs-item-x b{color:var(--text-primary);font-weight:800}
+.vs-item-x em{font-style:normal;font-size:11px;line-height:1.45;
+  color:var(--text-secondary)}
+.vs-item.on .vs-item-x em{color:var(--text-secondary)}
 
 @media(prefers-reduced-motion:reduce){
-  .fx-chip,.fx-pipe i{transition:none}
-  .fx-pr.on,.fx-wire.gen,.fx-tbl{animation:none}
+  .vs-track{transition:none}
+  .vs-cap.on{animation:none}
+  .vs-arrow:hover{transform:none}
 }
 @media(max-width:900px){
-  .fx-main{grid-template-columns:1fr}
-  .fx-rail{flex-direction:row;overflow-x:auto;scrollbar-width:none;
-    border-right:0;border-bottom:1px solid #2C2E32;padding:7px}
-  .fx-rail::-webkit-scrollbar{display:none}
-  .fx-nav{width:auto;flex-shrink:0}
-  .fx-nav-x b{font-size:11.5px}
-  .fx-side{border-left:0;border-top:1px solid #2C2E32}
-  .fx-ctl{margin-top:0}
+  /* Stage, then controls and rail side by side under it. The rail keeps its
+     labels - they are the only thing naming the plugins. */
+  .vs{grid-template-columns:1fr;
+    grid-template-areas:"win" "cap" "ctrl" "rail";
+    row-gap:16px}
+  .vs-ctrl{flex-direction:row;justify-self:start;align-self:auto;gap:14px}
+  .vs-count{flex-direction:row;gap:6px}
+  .vs-count i{width:1px;height:12px}
+  .vs-rail{gap:2px}
+  .vs-item{padding:10px 10px 10px 13px}
 }
-@media(max-width:560px){
-  .fx-file{display:none}
-  .fx-nav svg{display:none}
+@media(max-width:520px){
+  .vs-bar-t{display:none}
+  .vs-item-x em{display:none}
 }
 
 </style>
@@ -344,195 +256,89 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
       </div>
       <p>Each plugin targets one gap. Together they cover the full design-to-production loop without leaving Figma.</p>
 
-      <!-- ══ The Plugin Workbench ═══════════════════════════════════════════
-           One window, four plugins. The switcher lives inside the application
-           chrome rather than above it as page tabs, so it reads as the app's
-           own navigation - the same move that makes the LUX viewer feel like a
-           tool instead of a gallery. Only one plugin is on screen at a time,
-           and each brings its own canvas and its own panel.
+      <!-- ══ Vertical slide reel ════════════════════════════════════════════
+           One stage, four plugins, and the switch is a vertical translate of a
+           single track rather than a crossfade - the outgoing recording leaves
+           upward while the next one arrives from below, as one continuous
+           movement. The rail settles on the new item immediately while the
+           track is still travelling, which is what stops it reading as a
+           plain master-detail swap.
 
-           Three of the four actually run. Token Sync pushes and the swatches
-           change; Layout Creator scaffolds; Table Creator generates a real LUX
-           table at the size you ask for. The icon picker is a recording,
-           because there is no icon library in this repo to search.        -->
-      <div class="fx" id="fx" data-plug="token" data-mode="live">
-        <div class="fx-top">
-          <span class="fx-dots"><i></i><i></i><i></i></span>
-          <span class="fx-file">LUX 2.0 &#183; <b id="fx-crumb">Token Sync</b></span>
-          <div class="fx-seg fx-seg--mode" id="fx-mode" role="radiogroup" aria-label="View">
-            <button role="radio" aria-checked="true"  data-m="live">Interactive</button>
-            <button role="radio" aria-checked="false" data-m="rec">Recording</button>
-          </div>
-        </div>
-
-        <div class="fx-main">
-          <div class="fx-rail" role="tablist" aria-label="Plugins" aria-orientation="vertical">
-            <button class="fx-nav on" data-plug="token" role="tab" aria-selected="true" tabindex="0">
-              <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 3v3M8 6a2 2 0 0 0-2 2v1a2 2 0 0 1-2 2 2 2 0 0 1 2 2v1a2 2 0 0 0 2 2M8 6a2 2 0 0 1 2 2v1a2 2 0 0 0 2 2 2 2 0 0 0-2 2v1a2 2 0 0 1-2 2"/></svg>
-              <span class="fx-nav-x"><em>01</em><b>Token Sync</b></span>
-            </button>
-            <button class="fx-nav" data-plug="layout" role="tab" aria-selected="false" tabindex="-1">
-              <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="2.5" width="12" height="11" rx="1.5"/><path d="M2 6h12M6 6v7.5"/></svg>
-              <span class="fx-nav-x"><em>02</em><b>Layout Creator</b></span>
-            </button>
-            <button class="fx-nav" data-plug="table" role="tab" aria-selected="false" tabindex="-1">
-              <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="2.5" width="12" height="11" rx="1.5"/><path d="M2 6.2h12M2 10h12M7.5 6.2v7.3"/></svg>
-              <span class="fx-nav-x"><em>03</em><b>Table Creator</b></span>
-            </button>
-            <button class="fx-nav" data-plug="icons" role="tab" aria-selected="false" tabindex="-1">
-              <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="6.2" cy="6.2" r="3.2"/><path d="M10.2 10.2 14 14"/></svg>
-              <span class="fx-nav-x"><em>04</em><b>Icon Library Picker</b></span>
-            </button>
-          </div>
-
-          <div class="fx-stage">
-            <div class="fx-canvas">
-            <div class="fx-pane on" data-plug="token" data-kind="canvas">
-              <div class="fx-cv-h">Foundations / Color &#183; 3 variables</div>
-              <div class="fx-sw"><i class="fx-chip" data-tok></i>
-                <b>colorBlue500</b><code data-val>#66AFFF</code></div>
-              <div class="fx-sw"><i class="fx-chip" data-tok></i>
-                <b>interactive.default</b><code data-val>#66AFFF</code></div>
-              <div class="fx-sw fx-sw--q"><i class="fx-chip fx-chip--q"></i>
-                <b>colorBlue400</b><code>#66AFFF</code></div>
-              <div class="fx-pr" id="fx-pr">
-                <div class="fx-pr-h"><span class="fx-pr-t">tokens: update brand-primary and interactive-default</span>
-                  <span class="fx-pr-m">Merged</span></div>
-                <div class="fx-pr-f">&#128216; primitives.ts <span class="fx-add">+1</span> <span class="fx-del">-1</span></div>
-                <div class="fx-pr-d">
-                  <span class="fx-l fx-l--c"> 4  export const primitives = {</span>
-                  <span class="fx-l fx-l--d"> 5-   colorBlue500: '#66AFFF',</span>
-                  <span class="fx-l fx-l--a"> 5+   colorBlue500: '#2563EB',</span>
-                  <span class="fx-l fx-l--c"> 6    colorBlue400: '#66AFFF',</span>
-                </div>
-                <div class="fx-pr-o">Opened and auto-merged by verint-token-sync</div>
-              </div>
-            </div>
-            <div class="fx-pane" data-plug="layout" data-kind="canvas">
-              <div class="fx-cv-h">Page / Untitled</div>
-              <div class="fx-wire" id="fx-wire" data-preset="">
-                <div class="fx-wire-empty">Pick a preset and press Generate.</div>
-              </div>
-            </div>
-            <div class="fx-pane" data-plug="table" data-kind="canvas">
-              <div class="fx-cv-h">Page / Data Table</div>
-              <div class="fx-tbl-wrap" id="fx-tbl">
-                <div class="fx-wire-empty">Set rows and columns, then press Generate.</div>
-              </div>
-            </div>
-            <div class="fx-pane" data-plug="icons" data-kind="canvas">
-              <div class="fx-cv-h">Recording &#183; the shipped plugin in Figma</div>
-              <figure class="fx-rec-fig">
-                <video class="cs-media-vid" data-src="videos/icons-generator.mp4"
-                       poster="images/icons-generator-poster.webp" width="1920" height="1080"
-                       muted loop playsinline preload="none"
-                       aria-label="Icon Library Picker searching the LUX 2.0 icon library in Figma"></video>
-              </figure>
-              <p class="fx-rec-note">The searchable library itself is not reproduced here -
-                these are the real 1,281 LUX icons, in Figma.</p>
-            </div>
-            </div>
-            <div class="fx-rec on" data-plug="token">
-              <video class="cs-media-vid" data-src="videos/token-sync.mp4"
-                     poster="images/token-sync-poster.webp" width="1920" height="1080"
-                     muted loop playsinline preload="none"
+           The track is exactly 4 slides tall, so a step is 25% of its own
+           height. That keeps the transform in CSS and responsive with no
+           pixel measurement - but it does mean the 25% below is tied to
+           there being four slides. Add a fifth and it has to become 20%.  -->
+      <div class="vs" id="vs" style="--i:0">
+        <div class="vs-window">
+            <div class="vs-track" id="vs-track">
+            <div class="vs-slide" data-i="0">
+              <div class="vs-bar"><span class="vs-bar-n">01</span>Token Sync <span class="vs-bar-t">Figma to GitHub in 60 seconds</span></div>
+              <video data-src="videos/token-sync.mp4" poster="images/token-sync-poster.webp"
+                     width="1920" height="1080" muted loop playsinline preload="none"
                      aria-label="Token Sync running in Figma"></video>
             </div>
-            <div class="fx-rec" data-plug="layout">
-              <video class="cs-media-vid" data-src="videos/layout-creator.mp4"
-                     poster="images/layout-creator-poster.webp" width="1920" height="1080"
-                     muted loop playsinline preload="none"
+            <div class="vs-slide" data-i="1">
+              <div class="vs-bar"><span class="vs-bar-n">02</span>Layout Creator <span class="vs-bar-t">Scaffold any layout in seconds</span></div>
+              <video data-src="videos/layout-creator.mp4" poster="images/layout-creator-poster.webp"
+                     width="1920" height="1080" muted loop playsinline preload="none"
                      aria-label="Layout Creator running in Figma"></video>
             </div>
-            <div class="fx-rec" data-plug="table">
-              <video class="cs-media-vid" data-src="videos/table-creator.mp4"
-                     poster="images/table-creator-poster.webp" width="1920" height="1080"
-                     muted loop playsinline preload="none"
+            <div class="vs-slide" data-i="2">
+              <div class="vs-bar"><span class="vs-bar-n">03</span>Table Creator <span class="vs-bar-t">Responsive and fully editable</span></div>
+              <video data-src="videos/table-creator.mp4" poster="images/table-creator-poster.webp"
+                     width="1920" height="1080" muted loop playsinline preload="none"
                      aria-label="Table Creator running in Figma"></video>
             </div>
-            <div class="fx-rec" data-plug="icons"></div>
+            <div class="vs-slide" data-i="3">
+              <div class="vs-bar"><span class="vs-bar-n">04</span>Icon Library Picker <span class="vs-bar-t">1,281 icons, instantly searchable</span></div>
+              <video data-src="videos/icons-generator.mp4" poster="images/icons-generator-poster.webp"
+                     width="1920" height="1080" muted loop playsinline preload="none"
+                     aria-label="Icon Library Picker running in Figma"></video>
+            </div>
+            </div>
+        </div>
+        <div class="vs-caps">
+          <div class="vs-cap on" data-i="0">
+            <h3 class="vs-cap-h">Token Sync</h3>
+            <p class="vs-cap-p">Pushes updated design tokens from Figma straight into the pipeline. One action and tokens.json commits, the GitHub Action fires, Storybook rebuilds. No developer needed.</p>
           </div>
-
-          <aside class="fx-side">
-            <div class="fx-head on" data-plug="token">
-              <span class="fx-tag">60 seconds from Figma to GitHub</span>
-              <h3 class="fx-name">Token Sync</h3>
-              <p class="fx-desc">Pushes updated design tokens from Figma straight into the pipeline. One action and tokens.json commits, the GitHub Action fires, Storybook rebuilds. No developer needed.</p>
-            </div>
-            <div class="fx-head" data-plug="layout">
-              <span class="fx-tag">Scaffold any layout in seconds</span>
-              <h3 class="fx-name">Layout Creator</h3>
-              <p class="fx-desc">Scaffolds a full LUX 2.0 layout - containers, navigation, page structure - with the correct token bindings already applied. Ready to design into, not from scratch.</p>
-            </div>
-            <div class="fx-head" data-plug="table">
-              <span class="fx-tag">Responsive and fully editable</span>
-              <h3 class="fx-name">Table Creator</h3>
-              <p class="fx-desc">Generates data tables with configurable rows, columns and density. Every output matches the LUX 2.0 Data Table token structure exactly, without manual assembly.</p>
-            </div>
-            <div class="fx-head" data-plug="icons">
-              <span class="fx-tag">1,281 icons, instantly searchable</span>
-              <h3 class="fx-name">Icon Library Picker</h3>
-              <p class="fx-desc">Browse and insert from the LUX 2.0 icon library - 1,281 icons searchable by name, category or meaning. Inserted at the correct size with token binding applied.</p>
-            </div>
-            <div class="fx-ctl">
-            <div class="fx-pane on" data-plug="token" data-kind="panel">
-              <div class="fx-field">
-                <span class="fx-lab">Changed variables</span>
-                <div class="fx-var"><b>colorBlue500</b><em>#66AFFF &#8594; #2563EB</em></div>
-                <div class="fx-var"><b>interactive.default</b><em>#66AFFF &#8594; #2563EB</em></div>
-              </div>
-              <button class="fx-go" id="fx-go-token">Push to GitHub</button>
-            </div>
-            <div class="fx-pane" data-plug="layout" data-kind="panel">
-              <div class="fx-field">
-                <span class="fx-lab">Preset</span>
-                <div class="fx-seg fx-seg--v" id="fx-preset" role="radiogroup" aria-label="Layout preset">
-                  <button role="radio" aria-checked="true"  data-p="list">List + Details pane</button>
-                  <button role="radio" aria-checked="false" data-p="dash">Dashboard</button>
-                  <button role="radio" aria-checked="false" data-p="wizard">Wizard</button>
-                </div>
-              </div>
-              <button class="fx-go" id="fx-go-layout">Generate layout</button>
-            </div>
-            <div class="fx-pane" data-plug="table" data-kind="panel">
-              <div class="fx-field">
-                <span class="fx-lab">Rows</span>
-                <div class="fx-step"><button data-d="-1" aria-label="Fewer rows">&#8722;</button>
-                  <output id="fx-rows">5</output>
-                  <button data-d="1" aria-label="More rows">+</button></div>
-              </div>
-              <div class="fx-field">
-                <span class="fx-lab">Columns</span>
-                <div class="fx-step"><button data-d="-1" aria-label="Fewer columns">&#8722;</button>
-                  <output id="fx-cols">4</output>
-                  <button data-d="1" aria-label="More columns">+</button></div>
-              </div>
-              <div class="fx-field">
-                <span class="fx-lab">Density</span>
-                <div class="fx-seg" id="fx-dens" role="radiogroup" aria-label="Row density">
-                  <button role="radio" aria-checked="false" data-d="compact">Compact</button>
-                  <button role="radio" aria-checked="true"  data-d="regular">Regular</button>
-                </div>
-              </div>
-              <button class="fx-go" id="fx-go-table">Generate table</button>
-            </div>
-            <div class="fx-pane" data-plug="icons" data-kind="panel">
-              <div class="fx-field">
-                <span class="fx-lab">Library</span>
-                <div class="fx-var"><b>LUX 2.0 Icons</b><em>1,281 icons &#183; 14 categories</em></div>
-              </div>
-              <p class="fx-hint">This one is shown as a recording. Everything else in
-                this window runs for real.</p>
-            </div>
-            </div>
-          </aside>
+          <div class="vs-cap" data-i="1">
+            <h3 class="vs-cap-h">Layout Creator</h3>
+            <p class="vs-cap-p">Scaffolds a full LUX 2.0 layout - containers, navigation, page structure - with the correct token bindings already applied. Ready to design into, not from scratch.</p>
+          </div>
+          <div class="vs-cap" data-i="2">
+            <h3 class="vs-cap-h">Table Creator</h3>
+            <p class="vs-cap-p">Generates data tables with configurable rows, columns and density. Every output matches the LUX 2.0 Data Table token structure exactly, without manual assembly.</p>
+          </div>
+          <div class="vs-cap" data-i="3">
+            <h3 class="vs-cap-h">Icon Library Picker</h3>
+            <p class="vs-cap-p">Browse and insert from the LUX 2.0 icon library - 1,281 icons searchable by name, category or meaning. Inserted at the correct size with token binding applied.</p>
+          </div>
         </div>
 
-        <div class="fx-foot">
-          <span class="fx-state" id="fx-state" role="status" aria-live="polite">Ready</span>
-          <span class="fx-pipe" id="fx-pipe" aria-hidden="true">
-            <i data-s="0"></i><i data-s="1"></i><i data-s="2"></i><i data-s="3"></i><i data-s="4"></i>
-          </span>
+        <div class="vs-ctrl">
+          <button class="vs-arrow" id="vs-prev" aria-label="Previous plugin"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="18 15 12 9 6 15"/></svg></button>
+          <div class="vs-count"><b id="vs-now">01</b><i></i><span>04</span></div>
+          <button class="vs-arrow" id="vs-next" aria-label="Next plugin"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></button>
+        </div>
+
+        <div class="vs-rail" role="tablist" aria-label="Plugins" aria-orientation="vertical">
+          <button class="vs-item on" data-i="0" role="tab" aria-selected="true" tabindex="0">
+            <span class="vs-item-n">01</span>
+            <span class="vs-item-x"><b>Token Sync</b><em>Figma to GitHub in 60 seconds</em></span>
+          </button>
+          <button class="vs-item" data-i="1" role="tab" aria-selected="false" tabindex="-1">
+            <span class="vs-item-n">02</span>
+            <span class="vs-item-x"><b>Layout Creator</b><em>Scaffold any layout in seconds</em></span>
+          </button>
+          <button class="vs-item" data-i="2" role="tab" aria-selected="false" tabindex="-1">
+            <span class="vs-item-n">03</span>
+            <span class="vs-item-x"><b>Table Creator</b><em>Responsive and fully editable</em></span>
+          </button>
+          <button class="vs-item" data-i="3" role="tab" aria-selected="false" tabindex="-1">
+            <span class="vs-item-n">04</span>
+            <span class="vs-item-x"><b>Icon Library Picker</b><em>1,281 icons, instantly searchable</em></span>
+          </button>
         </div>
       </div>
     </div>
@@ -592,41 +398,39 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
   </svg>
 </button>
 
-<script src="../shared/case-study.js?v=202609040833" defer></script>
+<script src="../shared/case-study.js?v=202609040856" defer></script>
 
 <script>
-/* ══ The Plugin Workbench ═══════════════════════════════════════════════════
-   One controller for the whole window. Switching plugin swaps four things at
-   once - the rail selection, the canvas, the panel, and the crumb - all bound
-   by data-plug, never by index. Index arithmetic is what paired the wrong tab
-   with the wrong recording on myverint, and the ordering here is just as easy
-   to change by hand.
+/* ══ Vertical slide reel ════════════════════════════════════════════════════
+   One index drives everything: the track's transform (via a CSS custom
+   property), the caption, the rail selection and the counter. Bound by
+   data-i, never by DOM position, because the rail order and the slide order
+   are two lists that can drift apart by hand - which is exactly how the wrong
+   tab got paired with the wrong recording on myverint.
 
-   Media follows the same rules the rest of the site now uses: data-src so
-   nothing is fetched until it is asked for, no load() in the same tick as
-   play(), a rejected play() retried on canplay rather than swallowed, and
-   under prefers-reduced-motion no src at all so the poster survives.      */
+   Media rules carried over from that rebuild: data-src so nothing is fetched
+   until asked for, no load() in the same tick as play(), a rejected play()
+   retried on canplay instead of swallowed, only the visible slide playing,
+   and under prefers-reduced-motion no src assigned at all so the poster
+   stays put.                                                              */
 (function(){
-  var fx = document.getElementById('fx');
-  if (!fx) return;
+  var vs = document.getElementById('vs');
+  if (!vs) return;
 
+  var N      = 4;
   var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  var state  = document.getElementById('fx-state');
-  var crumb  = document.getElementById('fx-crumb');
-  var pipe   = document.getElementById('fx-pipe').querySelectorAll('i');
-  var NAMES  = {token:'Token Sync', layout:'Layout Creator',
-                table:'Table Creator', icons:'Icon Library Picker'};
-  var READY  = {token:'2 variables edited in Figma, not yet in code.',
-                layout:'Empty page. Pick a preset.',
-                table:'Empty page. 5 rows, 4 columns ready to generate.',
-                icons:'Recording - the shipped plugin, in Figma.'};
+  var slides = vs.querySelectorAll('.vs-slide');
+  var caps   = vs.querySelectorAll('.vs-cap');
+  var items  = vs.querySelectorAll('.vs-item');
+  var prev   = document.getElementById('vs-prev');
+  var next   = document.getElementById('vs-next');
+  var now    = document.getElementById('vs-now');
+  var idx    = 0;
 
-  function say(msg, ok){
-    state.textContent = msg;
-    state.classList.toggle('ok', !!ok);
+  function vidAt(i){
+    var s = vs.querySelector('.vs-slide[data-i="' + i + '"]');
+    return s ? s.querySelector('video') : null;
   }
-
-  /* ── media ────────────────────────────────────────────────────────────── */
   function tryPlay(v){
     var pr = v.play();
     if (!pr || !pr.catch) return;
@@ -637,213 +441,79 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
       });
     });
   }
-  function startVid(v){
-    if (!v || reduce) return;                 /* keep the poster */
-    if (!v.src && v.dataset.src) v.src = v.dataset.src;
-    tryPlay(v);
-  }
-  function stopAllVids(){
-    fx.querySelectorAll('video').forEach(function(v){ if (!v.paused) v.pause(); });
+  function load(v){
+    if (!v || v.src || !v.dataset.src || reduce) return;
+    v.src = v.dataset.src;
   }
 
-  /* ── which plugin, which view ─────────────────────────────────────────── */
-  function render(){
-    var id = fx.dataset.plug, mode = fx.dataset.mode;
-    /* icons has no interactive build, so it is always the recording */
-    var showRec = (mode === 'rec') || id === 'icons';
+  function go(i){
+    idx = Math.max(0, Math.min(N - 1, i));
+    vs.style.setProperty('--i', idx);
 
-    fx.querySelectorAll('.fx-nav').forEach(function(b){
-      var on = b.dataset.plug === id;
+    items.forEach(function(b){
+      var on = +b.dataset.i === idx;
       b.classList.toggle('on', on);
       b.setAttribute('aria-selected', on ? 'true' : 'false');
       b.tabIndex = on ? 0 : -1;
     });
-    fx.querySelectorAll('.fx-head').forEach(function(el){
-      el.classList.toggle('on', el.dataset.plug === id);
+    /* Re-triggering the caption animation needs the class off, a reflow, then
+       on again - otherwise the second step to the same caption does nothing. */
+    caps.forEach(function(c){
+      var on = +c.dataset.i === idx;
+      c.classList.remove('on');
+      if (on) { void c.offsetWidth; c.classList.add('on'); }
     });
-    fx.querySelectorAll('.fx-pane').forEach(function(el){
-      var on = el.dataset.plug === id
-            && !(showRec && el.dataset.kind === 'canvas' && id !== 'icons');
-      el.classList.toggle('on', on);
-    });
-    /* the panel is meaningless next to a recording, so it goes with it */
-    fx.querySelector('.fx-ctl').style.display =
-      (showRec && id !== 'icons') ? 'none' : '';
-    fx.querySelector('.fx-canvas').style.display =
-      (showRec && id !== 'icons') ? 'none' : '';
 
-    stopAllVids();
-    fx.querySelectorAll('.fx-rec').forEach(function(el){
-      var on = el.dataset.plug === id && showRec && id !== 'icons';
-      el.style.display = on ? 'block' : 'none';
-      if (on) startVid(el.querySelector('video'));
-    });
-    if (id === 'icons') startVid(fx.querySelector('.fx-pane[data-plug="icons"] video'));
+    now.textContent = ('0' + (idx + 1)).slice(-2);
+    prev.disabled = idx === 0;
+    next.disabled = idx === N - 1;
 
-    crumb.textContent = NAMES[id];
-    say(showRec ? 'Recording - the shipped plugin, in Figma.' : READY[id]);
-    setPipe(-1);
+    /* Only the slide on screen decodes. The rest keep currentTime and resume
+       a keyframe away, which is not the reload mistake. */
+    slides.forEach(function(s){
+      var v = s.querySelector('video');
+      if (!v) return;
+      if (+s.dataset.i === idx) { load(v); if (v.src) tryPlay(v); }
+      else if (!v.paused) v.pause();
+    });
   }
 
-  fx.querySelectorAll('.fx-nav').forEach(function(b, i, all){
-    b.addEventListener('click', function(){ fx.dataset.plug = b.dataset.plug; render(); });
+  items.forEach(function(b, n, all){
+    b.addEventListener('click', function(){ go(+b.dataset.i); });
     b.addEventListener('keydown', function(e){
-      var n = null;
-      if (e.key === 'ArrowDown' || e.key === 'ArrowRight') n = (i + 1) % all.length;
-      else if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') n = (i - 1 + all.length) % all.length;
-      else if (e.key === 'Home') n = 0;
-      else if (e.key === 'End') n = all.length - 1;
-      if (n === null) return;
-      e.preventDefault();
-      all[n].focus(); fx.dataset.plug = all[n].dataset.plug; render();
+      var t = null;
+      if (e.key === 'ArrowDown' || e.key === 'ArrowRight') t = (n + 1) % all.length;
+      else if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') t = (n - 1 + all.length) % all.length;
+      else if (e.key === 'Home') t = 0;
+      else if (e.key === 'End') t = all.length - 1;
+      if (t === null) return;
+      e.preventDefault(); all[t].focus(); go(+all[t].dataset.i);
     });
   });
+  prev.addEventListener('click', function(){ go(idx - 1); });
+  next.addEventListener('click', function(){ go(idx + 1); });
 
-  var modeSeg = document.getElementById('fx-mode');
-  modeSeg.addEventListener('click', function(e){
-    var b = e.target.closest('button'); if (!b) return;
-    fx.dataset.mode = b.dataset.m;
-    modeSeg.querySelectorAll('button').forEach(function(x){
-      x.setAttribute('aria-checked', x === b ? 'true' : 'false');
-    });
-    render();
-  });
-
-  /* ── 01 Token Sync ────────────────────────────────────────────────────── */
-  /* Real values from the real PR. The colour lands on the commit step, not on
-     the button press, because that is where it lands in the pipeline. */
-  var OLDC = '#66AFFF', NEWC = '#2563EB';
-  var STEPS = ['Reading Figma variables',
-               'Generating TypeScript',
-               'Committing to primitives.ts',
-               'Opening pull request',
-               'Merged - live on main'];
-  var tPane = fx.querySelector('.fx-pane[data-plug="token"][data-kind="canvas"]');
-  var tGo   = document.getElementById('fx-go-token');
-  var tPr   = document.getElementById('fx-pr');
-  var timers = [];
-
-  function setPipe(i){
-    pipe.forEach(function(el, n){
-      el.classList.toggle('on', n === i);
-      el.classList.toggle('done', i >= 0 && n < i);
-    });
-  }
-  function paint(hex){
-    tPane.querySelectorAll('[data-tok]').forEach(function(c){ c.style.background = hex; });
-    tPane.querySelectorAll('[data-val]').forEach(function(v){ v.textContent = hex; });
-  }
-  function tokenDone(){
-    pipe.forEach(function(el){ el.classList.remove('on'); el.classList.add('done'); });
-    paint(NEWC); tPr.classList.add('on');
-    say('Merged - the variables and the code now agree.', true);
-    tGo.disabled = true; tGo.textContent = 'Pushed';
-  }
-  tGo.addEventListener('click', function(){
-    timers.forEach(clearTimeout); timers = [];
-    tGo.disabled = true; tGo.textContent = 'Pushing...';
-    tPr.classList.remove('on');
-    if (reduce) { tokenDone(); return; }
-    STEPS.forEach(function(label, n){
-      timers.push(setTimeout(function(){
-        setPipe(n); say(label);
-        if (n === 2) paint(NEWC);
-        if (n === STEPS.length - 1) timers.push(setTimeout(tokenDone, 560));
-      }, 560 * n + 160));
-    });
-  });
-
-  /* ── 02 Layout Creator ────────────────────────────────────────────────── */
-  /* Scaffolds are drawn from grid template areas, so what appears really is
-     generated from the preset rather than being four hidden pictures. */
-  var PRESETS = {
-    list:   {rows:'26px 1fr 1fr', cols:'62px 1fr 128px',
-             cells:[['Verintop',1,3],['Nav',0,0],['List',0,0],['Details',0,2],['List',0,0]]},
-    dash:   {rows:'26px 76px 1fr', cols:'62px 1fr 1fr',
-             cells:[['Verintop',1,3],['Nav',0,2],['KPI',0,0],['KPI',0,0],['Chart',0,0],['Table',0,0]]},
-    wizard: {rows:'26px 34px 1fr 40px', cols:'1fr 1fr 1fr',
-             cells:[['Verintop',1,3],['Steps',1,3],['Form',1,3],['Actions',1,3]]}
-  };
-  var wire = document.getElementById('fx-wire');
-  var preset = 'list';
-  var pSeg = document.getElementById('fx-preset');
-  pSeg.addEventListener('click', function(e){
-    var b = e.target.closest('button'); if (!b) return;
-    preset = b.dataset.p;
-    pSeg.querySelectorAll('button').forEach(function(x){
-      x.setAttribute('aria-checked', x === b ? 'true' : 'false');
-    });
-    say('Preset: ' + b.textContent.trim() + '. Press Generate.');
-  });
-  document.getElementById('fx-go-layout').addEventListener('click', function(){
-    var p = PRESETS[preset];
-    wire.style.gridTemplateRows = p.rows;
-    wire.style.gridTemplateColumns = p.cols;
-    wire.innerHTML = p.cells.map(function(c){
-      var span = c[1] ? 'grid-column:span ' + c[2] : '';
-      var accent = (c[0] === 'Verintop' || c[0] === 'Nav') ? ' fx-b--a' : '';
-      return '<div class="fx-b' + accent + '" style="' + span + '">' + c[0] + '</div>';
-    }).join('');
-    wire.classList.remove('gen'); void wire.offsetWidth; wire.classList.add('gen');
-    say(p.cells.length + ' frames generated, token bindings applied.', true);
-  });
-
-  /* ── 03 Table Creator ─────────────────────────────────────────────────── */
-  var HEADS = ['Agent','Queue','Handled','Avg. handle','CSAT','Adherence','State'];
-  var CELLS = [['A. Cohen','Support','128','4m 12s','4.6','96%','Active'],
-               ['M. Levi','Billing','94','5m 03s','4.4','91%','Active'],
-               ['R. Adler','Support','141','3m 48s','4.8','98%','Break'],
-               ['S. Naveh','Tier 2','77','7m 21s','4.2','88%','Active'],
-               ['D. Weiss','Billing','112','4m 55s','4.5','94%','Active'],
-               ['T. Barak','Tier 2','65','8m 02s','4.1','85%','Away'],
-               ['N. Shani','Support','133','4m 07s','4.7','97%','Active']];
-  var rows = 5, cols = 4, dens = 'regular';
-  var rOut = document.getElementById('fx-rows'), cOut = document.getElementById('fx-cols');
-  var tbl = document.getElementById('fx-tbl');
-
-  function clamp(v, lo, hi){ return Math.max(lo, Math.min(hi, v)); }
-  rOut.parentElement.addEventListener('click', function(e){
-    var b = e.target.closest('button'); if (!b) return;
-    rows = clamp(rows + (+b.dataset.d), 1, 7); rOut.textContent = rows;
-    say(rows + ' rows, ' + cols + ' columns. Press Generate.');
-  });
-  cOut.parentElement.addEventListener('click', function(e){
-    var b = e.target.closest('button'); if (!b) return;
-    cols = clamp(cols + (+b.dataset.d), 2, 7); cOut.textContent = cols;
-    say(rows + ' rows, ' + cols + ' columns. Press Generate.');
-  });
-  var dSeg = document.getElementById('fx-dens');
-  dSeg.addEventListener('click', function(e){
-    var b = e.target.closest('button'); if (!b) return;
-    dens = b.dataset.d;
-    dSeg.querySelectorAll('button').forEach(function(x){
-      x.setAttribute('aria-checked', x === b ? 'true' : 'false');
-    });
-    say('Density: ' + dens + '. Press Generate.');
-  });
-  document.getElementById('fx-go-table').addEventListener('click', function(){
-    var th = HEADS.slice(0, cols).map(function(t){ return '<th>' + t + '</th>'; }).join('');
-    var tr = CELLS.slice(0, rows).map(function(r){
-      return '<tr>' + r.slice(0, cols).map(function(c){ return '<td>' + c + '</td>'; }).join('') + '</tr>';
-    }).join('');
-    tbl.innerHTML = '<table class="fx-tbl ' + dens + '"><thead><tr>' + th
-                  + '</tr></thead><tbody>' + tr + '</tbody></table>';
-    say(rows + '×' + cols + ' Data Table generated, ' + dens + ' density.', true);
-  });
-
-  /* ── only run media while the section is on screen ────────────────────── */
-  new IntersectionObserver(function(es){
+  /* Staged loading: the visible slide on intersection, the rest on idle, so
+     entering the section costs one recording rather than four. */
+  var loaded = false;
+  var io = new IntersectionObserver(function(es){
     es.forEach(function(e){
-      if (e.isIntersecting) {
-        var v = fx.querySelector('.fx-rec[style*="block"] video')
-             || (fx.dataset.plug === 'icons'
-                 ? fx.querySelector('.fx-pane[data-plug="icons"] video') : null);
-        startVid(v);
-      } else stopAllVids();
+      if (!e.isIntersecting){
+        vs.querySelectorAll('video').forEach(function(v){ if (!v.paused) v.pause(); });
+        return;
+      }
+      var v = vidAt(idx);
+      load(v); if (v && v.src) tryPlay(v);
+      if (loaded) return;
+      loaded = true;
+      var rest = function(){ slides.forEach(function(s){ load(s.querySelector('video')); }); };
+      if (window.requestIdleCallback) requestIdleCallback(rest, { timeout: 2500 });
+      else setTimeout(rest, 1400);
     });
-  }, { threshold: 0.2 }).observe(fx);
+  }, { threshold: 0.25 });
+  io.observe(vs);
 
-  render();
+  go(0);
 })();
 </script>
 </body>
