@@ -16,8 +16,8 @@
 <meta name="twitter:description" content="How Ori Cohen built Verint's enterprise design system from scratch — one language for 40+ products and 10k+ users."/>
 <meta name="twitter:image" content="https://oricohen.co/cases/lux/images/og-image.png"/>
 <meta name="author" content="Ori Cohen"/>
-<link rel="stylesheet" href="../../src/tokens.css?v=202609040922"/>
-<link rel="stylesheet" href="../shared/case-study.css?v=202609040922"/>
+<link rel="stylesheet" href="../../src/tokens.css?v=202609040930"/>
+<link rel="stylesheet" href="../shared/case-study.css?v=202609040930"/>
 <!-- Hide default cursor when embedded in the portfolio iframe -->
 <script>try{if(localStorage.getItem('ori-theme')==='dark')document.documentElement.setAttribute('data-theme','dark')}catch(e){}
 if(window.self!==window.top){var _s=document.createElement('style');_s.textContent='*{cursor:none!important}';document.head.appendChild(_s);}</script>
@@ -169,6 +169,11 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
       </div>
       <p>This was my first time building a design system from the ground up. I had to learn token architecture - primitives, semantics, components - while running the project and the team at the same time. Every sprint was a balancing act: making architectural decisions that would be hard to undo, managing a committee of stakeholders with competing priorities, and keeping the documentation honest enough that teams would actually trust it.</p>
       <p>The biggest technical challenge: closing the gap between design and code entirely. A designer changes a token in Figma - the change opens a PR in GitHub automatically, the developer merges, and it's live. No developer needed for design changes.</p>
+      <figure class="cs-media">
+        <img src="images/lux-03.webp" width="1968" height="1107" loading="lazy" decoding="async"
+             alt="The LUX 2.0 Variables panel in Figma, showing token collections: 96 colour primitives, 251 colour semantics and 1,115 component tokens"/>
+        <figcaption>The three layers, in Figma. 96 colour primitives feed 251 colour semantics, which feed 1,115 component tokens - the architecture I had to learn while running the project.</figcaption>
+      </figure>
     </div>
 
     <!-- Section 3: Solution -->
@@ -178,6 +183,11 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
       </div>
       <p>I structured the work into 2-week sprints - system architecture first, then tokens, then components and patterns. I didn't run it alone: a core team with weekly committee reviews kept quality consistent and unblocked decisions fast.</p>
       <p>Alongside the component library, we built Verint's first motion design library - easing curves, duration tokens, and micro-animation specs for every interaction state. The pipeline from Figma to Storybook to GitHub runs fully automated - one token change in Figma, one PR, one merge.</p>
+      <figure class="cs-media">
+        <img src="images/lux-02.webp" width="1968" height="1108" loading="lazy" decoding="async"
+             alt="A sample of the LUX 2.0 component library: colour swatches, avatars, upload and call cards, a file tree, a calendar, status chips, an alert, a loading state, a combo box, a tooltip and a filter bar"/>
+        <figcaption>A slice of the component library. Every control here is bound to the token layers above rather than to a fixed value, which is what lets one change in Figma reach all 40+ products.</figcaption>
+      </figure>
     </div>
 
     <!-- Stat cards -->
@@ -215,6 +225,11 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
       </div>
       <p>LUX 2.0 is live across 40+ Verint products. Zero hardcoded values in the system. Product teams that once waited days for a color fix now merge it themselves in under a minute - no ticket, no developer, no delay.</p>
       <p>Dark mode shipped on day one - the first in Verint's history. The motion library gave every product team a shared language for animation that hadn't existed before. For the first time, every interaction across the platform follows the same timing, the same easing, the same spec.</p>
+      <figure class="cs-media">
+        <img src="images/lux-01.webp" width="1968" height="1108" loading="lazy" decoding="async"
+             alt="A LUX 2.0 menu component with every colour annotated by its semantic token name, including text.neutral.main, bg.greyscale.soft.hover, icon.neutral.hover and menu.background.surface"/>
+        <figcaption>What "zero hardcoded values" looks like on a single component: every colour carries a semantic name, so it can be changed once and everywhere at the same time.</figcaption>
+      </figure>
     </div>
 
     <!-- AI Usage -->
@@ -237,6 +252,6 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
   </svg>
 </button>
 
-<script src="../shared/case-study.js?v=202609040922" defer></script>
+<script src="../shared/case-study.js?v=202609040930" defer></script>
 </body>
 </html>
