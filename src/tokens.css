@@ -154,7 +154,11 @@
   --border-strong:  var(--gray-600);
 
   /* Text — dark mode inversions of Verint text tokens */
-  --text-primary:   var(--vg-75);        /* #f3f4f5 — near-white on dark */
+  /* Pure white, not vg-75. #f3f4f5 read as slightly dulled against the dark
+     surfaces, and body copy is primary now rather than secondary, so this
+     carries the reading text. --gray-0 already exists in the primitives, so
+     no new value is introduced. */
+  --text-primary:   var(--gray-0);       /* #FFFFFF — pure white on dark */
   --text-secondary: var(--vg-300);       /* #d0d3d6 — muted on dark */
   /* vg-500, not vg-600. #8d9296 failed AA on every dark surface it is used on:
      4.45:1 on --surface-default, 4.02:1 on --surface-raised, both needing

@@ -224,8 +224,13 @@ button{cursor:pointer;font-family:inherit}
   color:var(--action-primary);
   margin-bottom:16px;
 }
+/* Body copy is primary, not secondary. This is the reading text of the whole
+   page and it was sitting one step down from the headings, which made every
+   section read as caption rather than prose.
+   The hero subtitle deliberately stays secondary - it is the one line that
+   should sit back, directly under the h1. */
 .cs-section p{
-  font-size:16px;color:var(--text-secondary);
+  font-size:16px;color:var(--text-primary);
   line-height:1.85;text-wrap:pretty;margin-bottom:12px;
 }
 .cs-section p:last-child{margin-bottom:0}
