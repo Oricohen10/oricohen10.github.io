@@ -16,8 +16,8 @@
 <meta name="twitter:description" content="How Ori Cohen built Verint's enterprise design system from scratch — one language for 40+ products and 10k+ users."/>
 <meta name="twitter:image" content="https://oricohen.co/cases/lux/images/og-image.png"/>
 <meta name="author" content="Ori Cohen"/>
-<link rel="stylesheet" href="../../src/tokens.css?v=202609061307"/>
-<link rel="stylesheet" href="../shared/case-study.css?v=202609061307"/>
+<link rel="stylesheet" href="../../src/tokens.css?v=202609061426"/>
+<link rel="stylesheet" href="../shared/case-study.css?v=202609061426"/>
 <!-- Hide default cursor when embedded in the portfolio iframe -->
 <script>try{if(localStorage.getItem('ori-theme')==='dark')document.documentElement.setAttribute('data-theme','dark')}catch(e){}
 if(window.self!==window.top){var _s=document.createElement('style');_s.textContent='*{cursor:none!important}';document.head.appendChild(_s);}</script>
@@ -328,6 +328,68 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
   .vb-head,.vb-r{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
   .vb-r-n,.vb-r-v{padding:0 9px}
 }
+
+/* ══ Dark mode, one component ══════════════════════════════════════════════
+   The payoff of the panel above it, which is why it sits directly after it:
+   that shows the architecture exists, this shows what the architecture buys.
+   Same card, same six bindings, no second component - only the mode changes.
+
+   Unlike .vb this DOES use site tokens. The panel is a depiction of Figma so
+   it carries Figma's colours; this is our own presentation of his artefact,
+   so it carries ours.                                                       */
+.dm{margin-top:22px;border:1px solid var(--border-subtle);
+  border-radius:var(--radius-lg);background:var(--surface-default);
+  overflow:hidden}
+.dm-hd{display:flex;align-items:center;gap:14px;flex-wrap:wrap;
+  padding:12px 16px;border-bottom:1px solid var(--border-subtle)}
+.dm-label{font-size:10px;font-weight:800;letter-spacing:.12em;
+  text-transform:uppercase;color:var(--text-secondary)}
+.dm-tabs{display:flex;gap:2px;margin-left:auto;padding:2px;
+  background:var(--surface-sunken);border-radius:var(--radius-md)}
+.dm-tab{font:inherit;font-size:12px;font-weight:600;cursor:pointer;
+  padding:6px 14px;min-height:28px;border:0;border-radius:6px;
+  background:transparent;color:var(--text-secondary);
+  transition:background .16s,color .16s}
+.dm-tab:hover{color:var(--text-primary)}
+/* The selected tab carries a filled surface AND the ink shift, not colour
+   alone - same reason the reel's rail item has a bar. */
+.dm-tab[aria-selected="true"]{background:var(--surface-default);
+  color:var(--text-primary);box-shadow:0 1px 2px rgba(18,18,19,.10)}
+[data-theme="dark"] .dm-tab[aria-selected="true"]{
+  background:var(--surface-raised);box-shadow:0 1px 3px rgba(0,0,0,.5)}
+
+.dm-body{display:grid;grid-template-columns:minmax(0,381px) minmax(0,1fr);
+  gap:22px;padding:18px 16px;align-items:start}
+/* The two shots are stacked and crossfaded rather than swapped, because a
+   src swap flashes on first switch and the whole point is that nothing moves.
+   Their edge maps overlap 86%, so the fade reads as a recolour. */
+.dm-stage{position:relative;aspect-ratio:381/249;border-radius:var(--radius-md);
+  overflow:hidden;background:var(--surface-sunken)}
+.dm-shot{position:absolute;inset:0;width:100%;height:100%;display:block;
+  opacity:0;transition:opacity .32s ease}
+.dm-shot.on{opacity:1}
+@media(prefers-reduced-motion:reduce){.dm-shot{transition:none}}
+
+.dm-toks{list-style:none;margin:0;padding:0;display:flex;
+  flex-direction:column;gap:9px;min-width:0}
+.dm-tok{min-width:0}
+.dm-tok-n{display:block;font-family:var(--font-mono);font-size:11.5px;
+  color:var(--text-primary);font-weight:600;overflow-wrap:anywhere}
+.dm-tok-c{display:flex;align-items:center;gap:6px;flex-wrap:wrap;
+  margin-top:3px;font-family:var(--font-mono);font-size:11px;
+  color:var(--text-secondary)}
+.dm-hop{display:inline-flex;align-items:center;gap:5px;overflow-wrap:anywhere}
+.dm-sw{width:11px;height:11px;border-radius:2px;flex-shrink:0;
+  border:1px solid var(--border-default)}
+.dm-arrow{color:var(--text-tertiary);flex-shrink:0}
+.dm-foot{padding:0 16px 16px;font-size:12.5px;line-height:1.65;
+  color:var(--text-secondary);max-width:74ch}
+.dm-foot b{color:var(--text-primary);font-weight:600}
+
+@media(max-width:720px){
+  .dm-body{grid-template-columns:1fr;gap:16px}
+  .dm-tabs{margin-left:0}
+}
 </style>
 <script type="application/ld+json">
 {
@@ -442,7 +504,7 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
       <figure class="cs-media">
       <!-- The variables browser. Replaces the component-library screenshot:
            the same claim, but checkable. -->
-      <div class="vb-shell" data-dv="202609061307">
+      <div class="vb-shell" data-dv="202609061426">
         <div class="vb" id="vb" role="group"
              aria-label="LUX 2.0 variable library, browsable">
           <div class="vb-side">
@@ -488,6 +550,52 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
         chain down to the primitive it lands on, which is the part a screenshot
         cannot show - 1,294 of these are references rather than values.</figcaption>
       </figure>
+
+      <div class="dm">
+        <div class="dm-hd">
+          <span class="dm-label">Dark mode, day one</span>
+          <div class="dm-tabs" role="tablist" aria-label="Theme">
+            <button class="dm-tab" role="tab" data-t="light" aria-selected="true"
+                    aria-controls="dm-stage">Light</button>
+            <button class="dm-tab" role="tab" data-t="dark" aria-selected="false"
+                    aria-controls="dm-stage">Dark</button>
+          </div>
+        </div>
+        <div class="dm-body">
+          <div class="dm-stage" id="dm-stage">
+            <img class="dm-shot on" id="dm-light" src="images/card-light.webp"
+                 width="381" height="249" loading="lazy" decoding="async"
+                 alt="The LUX 2.0 card component in light mode: white surface, dark title and body text, an outlined Cancel button and a filled blue Okay button."/>
+            <img class="dm-shot" id="dm-dark" src="images/card-dark.webp"
+                 width="381" height="249" loading="lazy" decoding="async" aria-hidden="true"
+                 alt="The same card in dark mode: near-black surface, light text, the same two buttons in lighter blue. The layout is identical."/>
+          </div>
+          <ul class="dm-toks">
+            <li class="dm-tok">
+              <span class="dm-tok-n">card/background/default</span>
+              <span class="dm-tok-c"><span class="dm-hop"><i class="dm-sw" style="background-color:#ffffff" aria-hidden="true"></i>#ffffff</span><svg class="dm-arrow" width="10" height="12" viewBox="0 0 10 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 4 7 7.5 3 11"/></svg><span class="dm-hop">background.neutral.soft.regular_level_2</span><svg class="dm-arrow" width="10" height="12" viewBox="0 0 10 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 4 7 7.5 3 11"/></svg><span class="dm-hop">base.white</span></span>
+            </li>
+            <li class="dm-tok">
+              <span class="dm-tok-n">card/border/color/regular</span>
+              <span class="dm-tok-c"><span class="dm-hop"><i class="dm-sw" style="background-color:#dfe2e4" aria-hidden="true"></i>#dfe2e4</span><svg class="dm-arrow" width="10" height="12" viewBox="0 0 10 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 4 7 7.5 3 11"/></svg><span class="dm-hop">border.neutral.regular</span><svg class="dm-arrow" width="10" height="12" viewBox="0 0 10 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 4 7 7.5 3 11"/></svg><span class="dm-hop">grey.200</span></span>
+            </li>
+            <li class="dm-tok">
+              <span class="dm-tok-n">card/text/regular</span>
+              <span class="dm-tok-c"><span class="dm-hop"><i class="dm-sw" style="background-color:#121213" aria-hidden="true"></i>#121213</span><svg class="dm-arrow" width="10" height="12" viewBox="0 0 10 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 4 7 7.5 3 11"/></svg><span class="dm-hop">text.neutral.main</span><svg class="dm-arrow" width="10" height="12" viewBox="0 0 10 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 4 7 7.5 3 11"/></svg><span class="dm-hop">grey.950</span></span>
+            </li>
+            <li class="dm-tok">
+              <span class="dm-tok-n">card/icon/color/regular</span>
+              <span class="dm-tok-c"><span class="dm-hop"><i class="dm-sw" style="background-color:#6a6d70" aria-hidden="true"></i>#6a6d70</span><svg class="dm-arrow" width="10" height="12" viewBox="0 0 10 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 4 7 7.5 3 11"/></svg><span class="dm-hop">icon.neutral.regular</span><svg class="dm-arrow" width="10" height="12" viewBox="0 0 10 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 4 7 7.5 3 11"/></svg><span class="dm-hop">grey.700</span></span>
+            </li>
+          </ul>
+        </div>
+        <p class="dm-foot">Four colour bindings, and <b>not one of them changes
+          between the themes</b>. Dark mode is a mode on the primitives, not a
+          second component - so the card is drawn once and
+          <code>text.neutral.main</code> resolves to a different grey. That is
+          the whole reason it could ship on day one rather than as a project of
+          its own.</p>
+      </div>
     </div>
 
     <!-- Stat cards -->
@@ -552,7 +660,46 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
   </svg>
 </button>
 
-<script src="../shared/case-study.js?v=202609061307" defer></script>
+<script src="../shared/case-study.js?v=202609061426" defer></script>
+<script>
+/* Dark-mode toggle. Independent of the page theme on purpose: this is a
+   depiction of the product in both modes, so it has to be switchable while
+   the page itself stays in whichever theme the visitor chose. */
+(function(){
+  var wrap=document.querySelector('.dm');
+  if(!wrap) return;
+  var tabs=[].slice.call(wrap.querySelectorAll('.dm-tab'));
+  var shots={light:document.getElementById('dm-light'),
+             dark: document.getElementById('dm-dark')};
+  function show(which){
+    tabs.forEach(function(t){
+      t.setAttribute('aria-selected', String(t.getAttribute('data-t')===which));
+    });
+    Object.keys(shots).forEach(function(k){
+      var on=k===which;
+      shots[k].classList.toggle('on',on);
+      /* Both images stay in the DOM for the crossfade, so the hidden one has
+         to leave the accessibility tree - otherwise a screen reader reads two
+         descriptions of the same card and the toggle appears to do nothing. */
+      if(on) shots[k].removeAttribute('aria-hidden');
+      else   shots[k].setAttribute('aria-hidden','true');
+    });
+  }
+  wrap.querySelector('.dm-tabs').addEventListener('click',function(e){
+    var b=e.target.closest('.dm-tab');
+    if(b) show(b.getAttribute('data-t'));
+  });
+  /* Left/Right across the tablist, which is what a tablist is expected to do. */
+  wrap.querySelector('.dm-tabs').addEventListener('keydown',function(e){
+    var i=tabs.indexOf(document.activeElement);
+    if(i<0) return;
+    var n = e.key==='ArrowRight' ? i+1 : e.key==='ArrowLeft' ? i-1 : -1;
+    if(n<0||n>=tabs.length) return;
+    e.preventDefault();
+    tabs[n].focus(); show(tabs[n].getAttribute('data-t'));
+  });
+})();
+</script>
 <script>
 /* ══ The variables browser ══════════════════════════════════════════════════
    Real data: cases/lux/data/, exported from the Figma file with Token Sync and
