@@ -176,7 +176,10 @@ button{cursor:pointer;font-family:inherit}
      size. --text-secondary is 8.41:1 on the same surface. */
   color:var(--text-secondary);
   text-wrap:pretty;
-  max-width:62ch;
+  /* Full width of the figure, no measure cap. The 62ch cap is the right rule
+     for a column of body copy, but a caption is anchored to the thing above
+     it - stopping it two thirds of the way across a wide figure reads as a
+     ragged edge rather than as a comfortable line length. */
 }
 
 /* The carousel, the placeholder SVG styling and both lightboxes were removed

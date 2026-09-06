@@ -16,8 +16,8 @@
 <meta name="twitter:description" content="How Ori Cohen built Verint's enterprise design system from scratch — one language for 40+ products and 10k+ users."/>
 <meta name="twitter:image" content="https://oricohen.co/cases/lux/images/og-image.png"/>
 <meta name="author" content="Ori Cohen"/>
-<link rel="stylesheet" href="../../src/tokens.css?v=202609061453"/>
-<link rel="stylesheet" href="../shared/case-study.css?v=202609061453"/>
+<link rel="stylesheet" href="../../src/tokens.css?v=202609061508"/>
+<link rel="stylesheet" href="../shared/case-study.css?v=202609061508"/>
 <!-- Hide default cursor when embedded in the portfolio iframe -->
 <script>try{if(localStorage.getItem('ori-theme')==='dark')document.documentElement.setAttribute('data-theme','dark')}catch(e){}
 if(window.self!==window.top){var _s=document.createElement('style');_s.textContent='*{cursor:none!important}';document.head.appendChild(_s);}</script>
@@ -49,24 +49,43 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
   width:fit-content;
 }
 
-/* -- Sidebar CTA - links to live viewer --------------------------------- */
+/* -- Sidebar CTA - links to live viewer ---------------------------------
+   Primary now, not outlined. It was a ghost button competing with nothing,
+   in a sidebar of grey labels - so it read as a footnote rather than as the
+   one thing on the page you are meant to click.
+
+   Filled from the fixed purple ramp rather than --action-primary, which is
+   the same call .btn-primary makes and for the same reason: the accent flips
+   lightness between themes, and white on the dark accent would be 2.78:1.
+   purple-600 under white is 5.81:1, purple-700 is 7.90:1, and both read
+   against the sidebar in either theme. No dark override needed at all, which
+   is also how the two-rule :hover/:active drift below got fixed. */
 .sb-cta{
-  display:inline-flex;align-items:center;justify-content:center;gap:6px;
+  display:inline-flex;align-items:center;justify-content:center;gap:7px;
   width:fit-content;
-  padding:9px 18px;border-radius:var(--r-md);
-  background:transparent;color:var(--purple-600, #6248E8);border:1.5px solid var(--purple-600, #6248E8);
-  font-size:13px;font-weight:600;
+  padding:11px 20px;border-radius:var(--r-md);
+  background:var(--purple-600, #6248E8);color:var(--gray-0, #fff);border:0;
+  font-size:13px;font-weight:700;letter-spacing:-.1px;
   text-decoration:none;
-  box-shadow:0 0 14px rgba(123,97,255,.28);
-  transition:background .12s,color .12s,border-color .12s,box-shadow .12s;
+  box-shadow:0 2px 10px rgba(98,72,232,.30);
+  transition:background .14s,box-shadow .14s,transform .14s;
 }
-.sb-cta:hover{background:var(--purple-50, #f0f0ff);color:var(--purple-700, #4c36c8);border-color:var(--purple-700, #4c36c8);box-shadow:0 0 20px rgba(98,72,232,.4)}
-.sb-cta:active{background:rgba(98,72,232,.1);color:var(--purple-800, #3a289e);border-color:var(--purple-800, #3a289e)}
-[data-theme="dark"] .sb-cta{color:var(--purple-300, #a78bfa);border-color:var(--purple-400, #8b72f0);box-shadow:0 0 16px rgba(123,97,255,.4)}
-[data-theme="dark"] .sb-cta:hover{background:rgba(123,97,255,.12);color:var(--purple-200, #c4b5fd);border-color:var(--purple-300, #a78bfa);box-shadow:0 0 22px rgba(123,97,255,.55)}
-/* :hover got a dark rule and :active did not, so pressing it in dark used the
-   light value - purple-800 ink on a dark tint, 1.14:1. */
-[data-theme="dark"] .sb-cta:active{background:rgba(123,97,255,.2);color:var(--purple-100, #e8e3ff);border-color:var(--purple-200, #d0c7ff)}
+.sb-cta:hover{background:var(--purple-700, #4D35C8);
+  box-shadow:0 5px 18px rgba(98,72,232,.42);transform:translateY(-1px)}
+.sb-cta:active{background:var(--purple-800, #3A278A);
+  box-shadow:0 1px 6px rgba(98,72,232,.28);transform:translateY(0)}
+@media(prefers-reduced-motion:reduce){.sb-cta,.sb-cta:hover{transform:none}}
+/* A visible edge in dark, and it is not decoration. purple-600 against the
+   near-black sidebar is 2.40:1, so the FILL alone barely separates from the
+   surface - the white label reads fine at 5.81:1 but the button's shape does
+   not, which is the opposite of standing out. A purple-400 hairline is 5.02:1
+   on the sidebar and 2.09:1 against its own fill, so it draws the outline
+   without fighting the label. Light mode needs none of this: the same fill is
+   already 5.81:1 on white. */
+[data-theme="dark"] .sb-cta{border:1px solid var(--purple-400, #9F8AFF);
+  box-shadow:0 2px 12px rgba(98,72,232,.5)}
+[data-theme="dark"] .sb-cta:hover{border-color:var(--purple-300, #B0A0FF);
+  box-shadow:0 5px 20px rgba(98,72,232,.62)}
 .sb-cta svg{width:13px;height:13px;flex-shrink:0}
 
 /* ══ The variables browser ══════════════════════════════════════════════════
@@ -172,7 +191,6 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
   --vb-accent-a:rgba(77,171,255,.28);
   border-color:#3a3a3a;
   box-shadow:0 0 0 1px rgba(255,255,255,.07),0 30px 70px rgba(0,0,0,.6)}
-
 
 /* ── left: collections and groups ──────────────────────────────────────── */
 /* min-height:0 is what lets a grid item shrink below its content, which is
@@ -344,7 +362,7 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
    single-pointer alternative to dragging. The visible handle is a separate
    layer that only follows --p.                                              */
 .cmp{margin-top:22px;--p:50%}
-.cmp-frame{position:relative;overflow:hidden;border-radius:var(--radius-lg);
+.cmp-frame{grid-column:2;position:relative;overflow:hidden;border-radius:var(--radius-lg);
   border:1px solid var(--border-subtle);background:var(--surface-sunken);
   aspect-ratio:1800/1012}
 .cmp-side{position:absolute;inset:0}
@@ -391,107 +409,92 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
 .cmp-input:focus-visible~.cmp-handle .cmp-pill{
   outline:3px solid var(--action-primary);outline-offset:3px}
 
-
 /* ── Token annotations ─────────────────────────────────────────────────────
-   Ori's idea, and it replaces the token list that used to sit under this
-   frame - better, because it is spatial. Reading
-   "border.neutral.regular - table rules and card edges" asks you to go find
-   the rule; a chip pointing at the rule does not.
+   Ori's idea, moved OUT of the frame as he asked - the chips sit in gutters
+   either side, and only the dot and its leader stay over the image. Which
+   also solved a problem I had not called out: a chip parked over a dense
+   application screenshot obscures the very thing it is pointing at.
 
-   Every coordinate below was measured off the image rather than eyeballed:
-   the brand blue was found by locating #006ee5 blobs (the Add button is the
-   57x27 one at the bottom, the toggles are the 19x16 ones in the Enabled
-   column), and the table rule by finding the widest run of #dfe2e4. So a chip
-   points at the thing it names, not near it.
+   The pill design is read off lux-01.webp - the image this replaces - rather
+   than invented: fully rounded, no border, soft shadow, a dot in the token's
+   own colour, and a 1px #b2b6bc leader. Measured off the file before deleting
+   it: fill #ffffff, leader #b2b6bc, pill height ~59px at 1968px wide with a
+   ~16px corner inset, so a full pill radius.
 
-   The chip carries its own surface and its own ink, fixed in both themes,
-   because the pixels underneath it change from white to near-black as the
-   seam is dragged. Same reasoning as the .vs-btn controls over video on the
-   plugins page: when the backdrop is unknown, the control brings the
-   contrast. #121213 on #ffffff is 16.7:1 either way.                       */
-.cmp-anns{position:absolute;inset:0;z-index:3;pointer-events:none}
-.cmp-ann{position:absolute;display:flex;align-items:center;gap:0;
-  transform:translateY(-50%)}
-.cmp-ann-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0;
-  background:#fff;border:2px solid #121213;
-  box-shadow:0 0 0 1px rgba(255,255,255,.7)}
-.cmp-ann-chip{display:inline-flex;align-items:center;gap:5px;flex-shrink:0;
-  padding:3px 8px;border-radius:5px;
-  background:#fff;color:#121213;
-  border:1px solid rgba(18,18,19,.22);
-  box-shadow:0 2px 8px rgba(0,0,0,.28);
+   One deliberate change from it: the fill follows the theme instead of being
+   a fixed white. In lux-01 the pill sat on a light page and white was right.
+   Here it sits on the case-study surface, which is near-black in dark - a
+   fixed white pill would be a row of glowing tags.
+
+   Gutters are max-content, so they are exactly as wide as the longest token
+   name and not a guessed number. --y positions each chip against its anchor's
+   row; --x is where the dot goes and the leader spans from there to the frame
+   edge.                                                                     */
+.cmp{margin-top:22px;--p:50%;
+  display:grid;grid-template-columns:max-content minmax(0,1fr) max-content;
+  align-items:stretch}
+.cmp-gut{position:relative;width:190px}
+.cmp-ann{position:absolute;top:var(--y);display:flex;align-items:center;gap:7px;
+  transform:translateY(-50%);
+  padding:5px 11px;border-radius:var(--radius-full);
+  background:var(--surface-default);
+  box-shadow:0 1px 2px rgba(18,18,19,.06),0 4px 14px rgba(18,18,19,.13);
   font-family:var(--font-mono);font-size:10.5px;font-weight:600;
-  line-height:1.3;white-space:nowrap}
-.cmp-ann-sw{width:9px;height:9px;border-radius:2px;flex-shrink:0;
-  border:1px solid rgba(18,18,19,.28)}
-/* A short straight leader, not a curve. The dot marks the element and the
-   chip sits beside it, which is legible at this size and needs no geometry. */
-.cmp-ann-r .cmp-ann-chip{margin-left:9px}
-.cmp-ann-r::before,.cmp-ann-l::before{content:"";position:absolute;top:50%;
-  width:9px;height:2px;background:#121213;transform:translateY(-50%)}
-.cmp-ann-r::before{left:9px}
-/* row-reverse puts the dot on the right of the box and the chip on its left;
-   the translate then shifts the whole box left by its own width so the DOT,
-   not the box, lands on the anchor coordinate. */
-.cmp-ann-l{flex-direction:row-reverse;transform:translate(-100%,-50%)}
-.cmp-ann-l .cmp-ann-chip{margin-right:9px}
-.cmp-ann-l::before{right:9px}
-/* Below this the frame is too small for four chips to be legible, and half
-   of them would sit on top of each other. The image alone still makes the
-   theme point, which is this element's first job. */
-@media(max-width:760px){.cmp-anns{display:none}}
-.cmp-hint{margin-top:10px;text-align:center;font-size:11.5px;
+  color:var(--text-secondary);line-height:1.3;white-space:nowrap}
+/* On near-black a shadow cannot describe an edge, so the pill takes a
+   hairline there instead - the same asymmetry the elevation rule calls out. */
+[data-theme="dark"] .cmp-ann{border:1px solid var(--border-default);
+  box-shadow:0 6px 20px rgba(0,0,0,.55)}
+.cmp-gut-l{padding-right:14px}
+.cmp-gut-r{padding-left:14px}
+.cmp-gut-l .cmp-ann{right:14px}
+.cmp-gut-r .cmp-ann{left:14px}
+.cmp-ann-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;
+  border:1px solid rgba(18,18,19,.18)}
+[data-theme="dark"] .cmp-ann-dot{border-color:rgba(255,255,255,.28)}
+/* the leader, from the pill across the gutter to the frame edge */
+.cmp-gut-l .cmp-ann::after,.cmp-gut-r .cmp-ann::before{content:"";
+  position:absolute;top:50%;width:14px;height:1px;background:#b2b6bc}
+.cmp-gut-l .cmp-ann::after{left:100%}
+.cmp-gut-r .cmp-ann::before{right:100%}
+
+/* dots and the in-frame half of each leader */
+.cmp-dots{position:absolute;inset:0;z-index:3;pointer-events:none}
+.cmp-dot{position:absolute;left:var(--x);top:var(--y);
+  width:9px;height:9px;border-radius:50%;
+  transform:translate(-50%,-50%);
+  background:#fff;border:2px solid #121213;
+  box-shadow:0 0 0 1px rgba(255,255,255,.75)}
+.cmp-dot::before{content:"";position:absolute;top:50%;height:1px;
+  background:#b2b6bc;transform:translateY(-50%)}
+.cmp-dot-l::before{right:100%;width:var(--x)}
+.cmp-dot-r::before{left:100%;width:calc(100% - var(--x))}
+/* The leader has to survive both halves of the seam, so it carries a faint
+   dark halo - #b2b6bc alone vanishes on the white side. */
+.cmp-dot::after{content:"";position:absolute;top:calc(50% - 2px);height:5px;
+  background:radial-gradient(rgba(0,0,0,.18),transparent 70%);z-index:-1}
+.cmp-dot-l::after{right:100%;width:var(--x)}
+.cmp-dot-r::after{left:100%;width:calc(100% - var(--x))}
+
+/* Below this the gutters would take more room than the screenshot. The chips
+   stack under the frame as a plain legend instead, which keeps the token
+   names without squeezing the image to nothing. */
+@media(max-width:900px){
+  .cmp{grid-template-columns:1fr;grid-template-areas:"frame" "l" "r"}
+  .cmp-frame{grid-area:frame}
+  .cmp-gut{width:auto;position:static;display:flex;flex-wrap:wrap;gap:8px;
+    padding:12px 0 0}
+  .cmp-gut-r{padding-top:8px}
+  .cmp-ann{position:static;transform:none}
+  .cmp-gut-l .cmp-ann,.cmp-gut-r .cmp-ann{right:auto;left:auto}
+  .cmp-gut-l .cmp-ann::after,.cmp-gut-r .cmp-ann::before{display:none}
+  .cmp-dots{display:none}
+}
+/* Spans all three columns. It is a grid child now that the gutters exist,
+   so without this it lands in column 1 under the left chips. */
+.cmp-hint{grid-column:1/-1;margin-top:10px;text-align:center;font-size:11.5px;
   color:var(--text-tertiary);letter-spacing:.03em}
 
-/* ══ Documentation ═════════════════════════════════════════════════════════
-   A card that opens the docs, rather than an iframe embedding them. The old
-   site nested the docs page inside the case study with a "scroll to explore"
-   hint - but this page is ALREADY inside an iframe on index.html, so that
-   would be three frames deep, and a scroll hint inside a nested frame is a
-   fight with the page's own scroll. The docs open as their own window, the
-   way the component viewer already does.                                    */
-.dk{margin-top:22px;display:grid;grid-template-columns:minmax(0,1fr) auto;
-  gap:24px;align-items:center;
-  padding:20px 22px;border:1px solid var(--border-subtle);
-  border-radius:var(--radius-lg);background:var(--surface-default)}
-.dk-l{min-width:0}
-.dk-label{font-size:10px;font-weight:800;letter-spacing:.12em;
-  text-transform:uppercase;color:var(--text-secondary);margin-bottom:8px}
-.dk-h{font-size:17px;font-weight:800;letter-spacing:-.2px;
-  color:var(--text-primary);margin-bottom:6px}
-.dk-p{font-size:13px;line-height:1.65;color:var(--text-secondary);
-  max-width:60ch;margin-bottom:14px}
-.dk-p b{color:var(--text-primary);font-weight:600}
-.dk-secs{display:flex;flex-wrap:wrap;gap:6px;list-style:none;margin:0;padding:0}
-.dk-sec{font-size:11px;font-weight:600;padding:4px 10px;
-  border-radius:var(--radius-full);border:1px solid var(--border-default);
-  color:var(--text-secondary);background:var(--surface-raised)}
-.dk-r{display:flex;flex-direction:column;gap:10px;align-items:stretch;
-  flex-shrink:0}
-.dk-nums{display:flex;gap:18px}
-.dk-num{text-align:center}
-.dk-num b{display:block;font-size:22px;font-weight:800;letter-spacing:-.5px;
-  color:var(--action-primary);line-height:1.1}
-.dk-num span{display:block;margin-top:2px;font-size:10px;font-weight:700;
-  letter-spacing:.08em;text-transform:uppercase;color:var(--text-tertiary)}
-.dk-open{display:inline-flex;align-items:center;justify-content:center;gap:7px;
-  min-height:38px;padding:9px 18px;border:0;border-radius:var(--radius-md);
-  font:inherit;font-size:13px;font-weight:600;cursor:pointer;
-  /* purple-600, not purple-500. The bottom-bar pill uses 500 because its
-     content is an ICON at the 3:1 bar; this is a text label at 4.5, and
-     white on purple-500 is 4.20 - just under. 600 is 5.81, 700 is 7.90. */
-  background:var(--purple-600);color:var(--gray-0);
-  text-decoration:none;white-space:nowrap;
-  transition:background .14s,box-shadow .14s}
-.dk-open:hover{background:var(--purple-700);
-  box-shadow:0 3px 14px rgba(98,72,232,.32)}
-.dk-open svg{width:13px;height:13px;flex-shrink:0}
-
-@media(max-width:760px){
-  .dk{grid-template-columns:1fr;gap:16px;align-items:start}
-  .dk-r{flex-direction:row;align-items:center;justify-content:space-between;
-    flex-wrap:wrap}
-}
 </style>
 <script type="application/ld+json">
 {
@@ -606,7 +609,7 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
       <figure class="cs-media">
       <!-- The variables browser. Replaces the component-library screenshot:
            the same claim, but checkable. -->
-      <div class="vb-shell" data-dv="202609061453">
+      <div class="vb-shell" data-dv="202609061508">
         <div class="vb" id="vb" role="group"
              aria-label="LUX 2.0 variable library, browsable">
           <div class="vb-side">
@@ -654,6 +657,17 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
       </figure>
 
       <div class="cmp" id="cmp">
+            <div class="cmp-gut cmp-gut-l" role="list"
+                 aria-label="Tokens on the left of this screen">
+            <span class="cmp-ann" role="listitem" style="--y:38.9%">
+              <i class="cmp-ann-dot" style="background-color:#121213" aria-hidden="true"></i>
+              <span class="cmp-ann-n">text.neutral.main</span>
+            </span>
+            <span class="cmp-ann" role="listitem" style="--y:14.8%">
+              <i class="cmp-ann-dot" style="background-color:#ffffff" aria-hidden="true"></i>
+              <span class="cmp-ann-n">layer.level_3</span>
+            </span>
+            </div>
             <div class="cmp-frame">
               <div class="cmp-side cmp-light">
                 <img src="images/af-light.webp" width="1800" height="1012"
@@ -667,24 +681,12 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
               <input class="cmp-input" id="cmp-input" type="range"
                      min="0" max="100" value="50" step="1"
                      aria-label="Reveal the dark theme. Drag or use the arrow keys."/>
-              <div class="cmp-anns" role="group" aria-label="Token names on the elements they paint">
-                <span class="cmp-ann cmp-ann-r" style="left:38.9%;top:14.8%">
-                  <i class="cmp-ann-dot" aria-hidden="true"></i>
-                  <span class="cmp-ann-chip"><i class="cmp-ann-sw" style="background-color:#ffffff" aria-hidden="true"></i>layer.level_3</span>
-                </span>
-                <span class="cmp-ann cmp-ann-l" style="left:83.3%;top:33.5%">
-                  <i class="cmp-ann-dot" aria-hidden="true"></i>
-                  <span class="cmp-ann-chip"><i class="cmp-ann-sw" style="background-color:#dfe2e4" aria-hidden="true"></i>border.neutral.regular</span>
-                </span>
-                <span class="cmp-ann cmp-ann-r" style="left:29.6%;top:38.9%">
-                  <i class="cmp-ann-dot" aria-hidden="true"></i>
-                  <span class="cmp-ann-chip"><i class="cmp-ann-sw" style="background-color:#121213" aria-hidden="true"></i>text.neutral.main</span>
-                </span>
-                <span class="cmp-ann cmp-ann-l" style="left:83.9%;top:90.8%">
-                  <i class="cmp-ann-dot" aria-hidden="true"></i>
-                  <span class="cmp-ann-chip"><i class="cmp-ann-sw" style="background-color:#006ee5" aria-hidden="true"></i>background.brand.regular</span>
-                </span>
-              </div>
+                <div class="cmp-dots" aria-hidden="true">
+                <i class="cmp-dot cmp-dot-l" style="--x:29.6%;--y:38.9%" aria-hidden="true"></i>
+                <i class="cmp-dot cmp-dot-l" style="--x:38.9%;--y:14.8%" aria-hidden="true"></i>
+                <i class="cmp-dot cmp-dot-r" style="--x:83.3%;--y:33.5%" aria-hidden="true"></i>
+                <i class="cmp-dot cmp-dot-r" style="--x:83.9%;--y:90.8%" aria-hidden="true"></i>
+                </div>
               <div class="cmp-handle" aria-hidden="true">
                 <span class="cmp-line"></span>
                 <span class="cmp-pill">
@@ -693,11 +695,33 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
                 <span class="cmp-line"></span>
               </div>
             </div>
+            <div class="cmp-gut cmp-gut-r" role="list"
+                 aria-label="Tokens on the right of this screen">
+            <span class="cmp-ann" role="listitem" style="--y:33.5%">
+              <i class="cmp-ann-dot" style="background-color:#dfe2e4" aria-hidden="true"></i>
+              <span class="cmp-ann-n">border.neutral.regular</span>
+            </span>
+            <span class="cmp-ann" role="listitem" style="--y:90.8%">
+              <i class="cmp-ann-dot" style="background-color:#006ee5" aria-hidden="true"></i>
+              <span class="cmp-ann-n">background.brand.regular</span>
+            </span>
+            </div>
             <p class="cmp-hint">Drag the handle, or use the arrow keys</p>
           </div>
     </div>
 
-    <!-- Stat cards -->
+    <!-- Section 4: Result -->
+    <div class="cs-section cs-reveal">
+      <div class="cs-section-num">
+        <h2 class="cs-sec-title">Result</h2>
+      </div>
+    
+      <p>LUX 2.0 is live across 40+ Verint products. Zero hardcoded values in the system. Product teams that once waited days for a color fix now merge it themselves in under a minute - no ticket, no developer, no delay.</p>
+      <p>Dark mode shipped on day one - the first in Verint's history. The motion library gave every product team a shared language for animation that hadn't existed before. For the first time, every interaction across the platform follows the same timing, the same easing, the same spec.</p>
+
+    </div>
+
+    <!-- Stat cards - after Result, matching every other case study -->
     <div class="stat-grid cs-reveal">
       <div class="stat-card">
         <div class="stat-icon">
@@ -725,50 +749,6 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
       </div>
     </div>
 
-    <!-- Section 4: Result -->
-    <div class="cs-section cs-reveal">
-      <div class="cs-section-num">
-        <h2 class="cs-sec-title">Result</h2>
-      </div>
-      <p>LUX 2.0 is live across 40+ Verint products. Zero hardcoded values in the system. Product teams that once waited days for a color fix now merge it themselves in under a minute - no ticket, no developer, no delay.</p>
-      <p>Dark mode shipped on day one - the first in Verint's history. The motion library gave every product team a shared language for animation that hadn't existed before. For the first time, every interaction across the platform follows the same timing, the same easing, the same spec.</p>
-      <figure class="cs-media">
-        <img src="images/lux-01.webp" width="1968" height="1108" loading="lazy" decoding="async"
-             alt="A LUX 2.0 menu component with every colour annotated by its semantic token name, including text.neutral.main, bg.greyscale.soft.hover, icon.neutral.hover and menu.background.surface"/>
-        <figcaption>What "zero hardcoded values" looks like on a single component: every colour carries a semantic name, so it can be changed once and everywhere at the same time.</figcaption>
-      </figure>
-
-      <div class="dk">
-        <div class="dk-l">
-          <div class="dk-label">Documentation</div>
-          <div class="dk-h">Docs not done, component not done.</div>
-          <p class="dk-p">Every component ships with the full picture, and
-            <b>the token reference is generated from the library</b> rather than
-            written by hand - so it cannot drift from what is actually in
-            Figma.</p>
-          <ul class="dk-secs">
-            <li class="dk-sec">Anatomy</li>
-            <li class="dk-sec">States</li>
-            <li class="dk-sec">Behaviour</li>
-            <li class="dk-sec">Keyboard</li>
-            <li class="dk-sec">Do / Don't</li>
-            <li class="dk-sec">Token reference</li>
-          </ul>
-        </div>
-        <div class="dk-r">
-          <div class="dk-nums">
-            <div class="dk-num"><b>14</b><span>Documented</span></div>
-            <div class="dk-num"><b>483</b><span>Tokens cited</span></div>
-          </div>
-          <a class="dk-open" href="docs.html" target="_blank" rel="noopener"
-             onclick="if(window.parent!==window&&window.parent.openWin){window.parent.openWin('lux-docs');return false;}">
-            Open the documentation
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg>
-          </a>
-        </div>
-      </div>
-    </div>
-
     <!-- AI Usage -->
     <div class="ai-card cs-reveal">
       <div class="ai-icon">
@@ -789,7 +769,7 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
   </svg>
 </button>
 
-<script src="../shared/case-study.js?v=202609061453" defer></script>
+<script src="../shared/case-study.js?v=202609061508" defer></script>
 <script>
 /* The light/dark seam. All input comes from the range element, so there are no
    drag handlers here at all - only a paint step. */

@@ -5,7 +5,7 @@ from dom import parse,q
 ROOT=os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 PAGES=['index.html','cases/plugins/index.html','cases/myverint/index.html',
-       'cases/lux/index.html','cases/lux/viewer.html','cases/lux/docs.html','cases/copilot/index.html',
+       'cases/lux/index.html','cases/lux/viewer.html','cases/copilot/index.html',
        'cases/agent-factory/index.html','cases/_template.html']
 
 findings=collections.defaultdict(list)
