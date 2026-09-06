@@ -16,8 +16,8 @@
 <meta name="twitter:description" content="How Ori Cohen built Verint's enterprise design system from scratch — one language for 40+ products and 10k+ users."/>
 <meta name="twitter:image" content="https://oricohen.co/cases/lux/images/og-image.png"/>
 <meta name="author" content="Ori Cohen"/>
-<link rel="stylesheet" href="../../src/tokens.css?v=202609061300"/>
-<link rel="stylesheet" href="../shared/case-study.css?v=202609061300"/>
+<link rel="stylesheet" href="../../src/tokens.css?v=202609061307"/>
+<link rel="stylesheet" href="../shared/case-study.css?v=202609061307"/>
 <!-- Hide default cursor when embedded in the portfolio iframe -->
 <script>try{if(localStorage.getItem('ori-theme')==='dark')document.documentElement.setAttribute('data-theme','dark')}catch(e){}
 if(window.self!==window.top){var _s=document.createElement('style');_s.textContent='*{cursor:none!important}';document.head.appendChild(_s);}</script>
@@ -74,16 +74,19 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
    1,573 variables across six collections, exported from the file with Token
    Sync and committed under data/.
 
-   It stays LIGHT in both themes on purpose, and that is the same rule as the
-   phone bezel on myverint: this is a picture of a piece of software, not page
-   chrome. Figma's panel is light, so a dark copy of it would be a copy of
-   nothing. A light panel on the near-black page is correct here.
+   It has both themes, and the earlier version did not. I argued for
+   light-in-both on the phone-bezel rule - a picture of a piece of software,
+   not page chrome - but the analogy was wrong: a phone bezel really is one
+   fixed colour, whereas Figma ships an actual dark UI. So a dark panel is a
+   truthful depiction rather than an invention, and a white slab on the
+   near-black page was the thing that looked out of place.
 
-   Everything below is scoped under .vb and hardcodes Figma's own greys rather
-   than reading site tokens, for the same reason - the colours belong to the
-   thing being depicted. This is the one place on the site where not using
-   tokens is the right call, so it is stated rather than left to look like an
-   oversight.                                                                */
+   Everything is scoped under .vb and uses Figma's own greys rather than site
+   tokens, because the colours belong to the thing being depicted. That part
+   still holds. All of them flow through the --vb-* properties below, so the
+   dark theme is one override block - eleven of them used to be hardcoded
+   further down, which is exactly how a second theme drifts out of sync with
+   the first.                                                                */
 .vb-shell{margin-top:28px}
 .vb{
   --vb-line:#e6e6e6; --vb-line-2:#f0f0f0;
@@ -102,6 +105,25 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
   --vb-ink-3:#8a8a8a;      /* graphics only - icon, caret */
   --vb-ink-3t:#6a6a6a;     /* text - counts, placeholder, hint */
   --vb-sel:#f5f5f5; --vb-selb:#e5f2ff;
+  /* Everything the panel paints with lives here, so the dark theme is one
+     block rather than a hunt through the file. Eleven of these used to be
+     hardcoded further down, which is how a second theme drifts. */
+  --vb-bg:#fff;            /* panel, group header, search field, hop chip */
+  --vb-bg-hover:#fafafa;   /* row hover */
+  --vb-bg-foot:#fcfcfc;    /* the trace strip */
+  --vb-bg-input:#fff;      /* the search field */
+  --vb-sw-bd:rgba(0,0,0,.12);
+  --vb-check:#ccc;         /* transparency checkerboard */
+  /* #0a7cd1, not Figma's #0d99ff. The bar exists to carry the selected state
+     because the tint cannot, so the bar itself has to clear the 3:1 that
+     1.4.11 asks of a state indicator - and #0d99ff is 2.63:1 on the tint it
+     sits on and 2.99:1 on the panel. Both just under. One step darker clears
+     both at 3.84 and 4.36, and at 2px wide the hue difference is not
+     perceptible next to the reference.
+     Dark mode does not have this problem and keeps a brighter blue - see the
+     override block. */
+  --vb-accent:#0a7cd1;     /* selected-row bar, focus ring */
+  --vb-accent-a:rgba(10,124,209,.28);
   display:grid;grid-template-columns:236px minmax(0,1fr);
   /* A FIXED height, and it has to live here rather than on the two columns.
      A grid row sizes to its tallest item and a grid item defaults to
@@ -110,14 +132,47 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
      rows, about 7,450px, so the sidebar set the height of the whole panel and
      the table sat in the top 376px of it with a mile of white underneath. */
   height:520px;
-  background:#fff;color:var(--vb-ink);
+  background:var(--vb-bg);color:var(--vb-ink);
   border:1px solid var(--vb-line);border-radius:12px;overflow:hidden;
   font-size:12px;line-height:1.4;
   /* Not symmetric between themes - short and faint on white or it smears,
      deep on near-black or it does not register. */
   box-shadow:0 1px 2px rgba(18,18,19,.05),0 12px 32px rgba(18,18,19,.10)}
-[data-theme="dark"] .vb{border-color:#3a3a3a;
+/* ── dark ──────────────────────────────────────────────────────────────────
+   Figma's dark UI surfaces. Every grey here was picked by measuring, not by
+   eye, and two of them are not what Figma uses:
+
+   The selected row is #374350, not Figma's #2c4a63. That blue is only 1.51:1
+   against the panel, so it barely reads as a boundary at all, and worse, it
+   is dark enough to drag the secondary text on top of it down to 4.42:1 -
+   under AA. #374350 keeps the blue cast, clears 4.81:1 for --vb-ink-3t, and
+   the state is carried by the accent bar below rather than by the tint.
+
+   The tertiary greys flip roles between themes rather than inverting. In
+   light, #8a8a8a is fine as a graphic and fails as text. In dark the same
+   split exists at different values: #949494 clears 3:1 on every dark surface
+   here, #b3b3b3 clears 4.5:1, and Figma's own #8a8a8a would fail BOTH bars on
+   dark - 2.92:1 at worst. So it is not used at all here.               */
+[data-theme="dark"] .vb{
+  --vb-line:#444; --vb-line-2:#383838;
+  --vb-ink:#fff;           /* 10.09:1 worst case */
+  --vb-ink-2:#d4d4d4;      /* 6.81:1 */
+  --vb-ink-3:#949494;      /* graphics, 3.33:1 - clears the 1.4.11 bar */
+  --vb-ink-3t:#b3b3b3;     /* text, 4.81:1 */
+  --vb-sel:#383838; --vb-selb:#374350;
+  --vb-bg:#2c2c2c;
+  --vb-bg-hover:#333;
+  --vb-bg-foot:#262626;
+  /* Sunken, not level with the panel: matching --vb-bg made the field
+     invisible against it. */
+  --vb-bg-input:#252525;
+  --vb-sw-bd:rgba(255,255,255,.18);
+  --vb-check:#555;
+  --vb-accent:#4dabff;     /* 4.12:1 on the selected tint, 5.71:1 on the panel */
+  --vb-accent-a:rgba(77,171,255,.28);
+  border-color:#3a3a3a;
   box-shadow:0 0 0 1px rgba(255,255,255,.07),0 30px 70px rgba(0,0,0,.6)}
+
 
 /* ── left: collections and groups ──────────────────────────────────────── */
 /* min-height:0 is what lets a grid item shrink below its content, which is
@@ -136,8 +191,12 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
   border:0;background:transparent;color:var(--vb-ink);
   padding:5px 8px;min-height:24px;border-radius:5px}
 .vb-row:hover{background:var(--vb-line-2)}
-.vb-row[aria-selected="true"]{background:var(--vb-sel);font-weight:600}
+.vb-row[aria-selected="true"]{background:var(--vb-sel);font-weight:600;
+  position:relative}
 .vb-groups .vb-row[aria-selected="true"]{background:var(--vb-selb)}
+.vb-row[aria-selected="true"]::before{content:"";position:absolute;
+  left:0;top:3px;bottom:3px;width:2px;border-radius:2px;
+  background:var(--vb-accent)}
 .vb-row-n{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;
   white-space:nowrap}
 .vb-row-c{flex-shrink:0;color:var(--vb-ink-3t);font-variant-numeric:tabular-nums}
@@ -173,10 +232,10 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
   width:13px;height:13px;color:var(--vb-ink-3);pointer-events:none}
 .vb-search input{width:100%;font:inherit;color:var(--vb-ink);
   padding:5px 8px 5px 27px;border:1px solid var(--vb-line);border-radius:5px;
-  background:#fff}
+  background:var(--vb-bg-input)}
 .vb-search input::placeholder{color:var(--vb-ink-3t)}
-.vb-search input:focus{border-color:#007aff;outline:2px solid rgba(0,122,255,.25);
-  outline-offset:-1px}
+.vb-search input:focus{border-color:var(--vb-accent);
+  outline:2px solid var(--vb-accent-a);outline-offset:-1px}
 /* Figma's own panel chrome - the expand and close affordances. Decorative:
    they are part of the picture, not controls, so they are out of the
    accessibility tree and cannot be clicked. A fake close button that does
@@ -202,8 +261,15 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
 .vb-r{height:32px;border-bottom:1px solid var(--vb-line-2);
   width:100%;font:inherit;text-align:left;background:transparent;border-left:0;
   border-right:0;border-top:0;cursor:pointer;color:var(--vb-ink)}
-.vb-r:hover{background:#fafafa}
-.vb-r[aria-selected="true"]{background:var(--vb-selb)}
+.vb-r:hover{background:var(--vb-bg-hover)}
+/* A tint alone cannot carry the selected state in either theme: #e5f2ff on
+   white is 1.13:1 and #374350 on #2c2c2c is 1.38:1. Both are below the 3:1
+   that 1.4.11 asks of a state indicator, so neither is doing the job on its
+   own. The bar is what makes it unambiguous - same conclusion as
+   .vs-item.on on the plugins page. */
+.vb-r[aria-selected="true"]{background:var(--vb-selb);position:relative}
+.vb-r[aria-selected="true"]::before{content:"";position:absolute;
+  left:0;top:0;bottom:0;width:2px;background:var(--vb-accent)}
 .vb-r-n,.vb-r-v{display:flex;align-items:center;gap:7px;
   padding:0 12px;min-width:0;overflow:hidden}
 .vb-r-v{border-left:1px solid var(--vb-line-2);height:32px}
@@ -211,19 +277,19 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
   white-space:nowrap}
 .vb-ico{flex-shrink:0;width:13px;height:13px;color:var(--vb-ink-3)}
 .vb-sw{flex-shrink:0;width:14px;height:14px;border-radius:3px;
-  border:1px solid rgba(0,0,0,.12)}
+  border:1px solid var(--vb-sw-bd)}
 /* A transparent or semi-transparent token has to show it, or a 10% overlay
    and white read as the same swatch. */
-.vb-sw-a{background-image:linear-gradient(45deg,#ccc 25%,transparent 25%,transparent 75%,#ccc 75%),
-  linear-gradient(45deg,#ccc 25%,transparent 25%,transparent 75%,#ccc 75%);
+.vb-sw-a{background-image:linear-gradient(45deg,var(--vb-check) 25%,transparent 25%,transparent 75%,var(--vb-check) 75%),
+  linear-gradient(45deg,var(--vb-check) 25%,transparent 25%,transparent 75%,var(--vb-check) 75%);
   background-size:8px 8px;background-position:0 0,4px 4px}
 /* An alias renders as a chip naming its target, which is what the panel is
    for. A resolved hex here would throw away the architecture. */
 .vb-alias{display:inline-flex;align-items:center;gap:6px;min-width:0;
-  padding:2px 7px 2px 5px;border-radius:4px;background:#f5f5f5;
+  padding:2px 7px 2px 5px;border-radius:4px;background:var(--vb-sel);
   color:var(--vb-ink-2);font-size:11.5px;max-width:100%}
 .vb-grp{padding:9px 12px 5px;font-weight:600;font-size:11.5px;
-  background:#fff;border-bottom:1px solid var(--vb-line-2)}
+  background:var(--vb-bg);border-bottom:1px solid var(--vb-line-2)}
 .vb-empty{padding:26px 12px;color:var(--vb-ink-3t);text-align:center}
 
 /* ── the resolution trace ──────────────────────────────────────────────────
@@ -232,11 +298,11 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
    layers made visible on one line. */
 .vb-foot{border-top:1px solid var(--vb-line);padding:10px 12px;
   min-height:46px;display:flex;align-items:center;gap:8px;
-  flex-wrap:wrap;font-size:11.5px;color:var(--vb-ink-2);background:#fcfcfc}
+  flex-wrap:wrap;font-size:11.5px;color:var(--vb-ink-2);background:var(--vb-bg-foot)}
 .vb-hop{display:inline-flex;align-items:center;gap:6px;
-  padding:2px 8px;border-radius:4px;background:#fff;
+  padding:2px 8px;border-radius:4px;background:var(--vb-bg);
   border:1px solid var(--vb-line);color:var(--vb-ink)}
-.vb-hop-c{width:11px;height:11px;border-radius:2px;border:1px solid rgba(0,0,0,.12);
+.vb-hop-c{width:11px;height:11px;border-radius:2px;border:1px solid var(--vb-sw-bd);
   flex-shrink:0}
 .vb-arrow{color:var(--vb-ink-3);flex-shrink:0}
 .vb-foot-hint{color:var(--vb-ink-3t)}
@@ -376,7 +442,7 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
       <figure class="cs-media">
       <!-- The variables browser. Replaces the component-library screenshot:
            the same claim, but checkable. -->
-      <div class="vb-shell" data-dv="202609061300">
+      <div class="vb-shell" data-dv="202609061307">
         <div class="vb" id="vb" role="group"
              aria-label="LUX 2.0 variable library, browsable">
           <div class="vb-side">
@@ -486,7 +552,7 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
   </svg>
 </button>
 
-<script src="../shared/case-study.js?v=202609061300" defer></script>
+<script src="../shared/case-study.js?v=202609061307" defer></script>
 <script>
 /* ══ The variables browser ══════════════════════════════════════════════════
    Real data: cases/lux/data/, exported from the Figma file with Token Sync and
