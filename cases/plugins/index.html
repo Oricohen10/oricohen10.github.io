@@ -39,8 +39,8 @@
   }
 }
 </script>
-<link rel="stylesheet" href="../../src/tokens.css?v=202609060914"/>
-<link rel="stylesheet" href="../shared/case-study.css?v=202609060914"/>
+<link rel="stylesheet" href="../../src/tokens.css?v=202609060925"/>
+<link rel="stylesheet" href="../shared/case-study.css?v=202609060925"/>
 <script>try{if(localStorage.getItem('ori-theme')==='dark')document.documentElement.setAttribute('data-theme','dark')}catch(e){}
 if(window.self!==window.top){var _s=document.createElement('style');_s.textContent='*{cursor:none!important}';document.head.appendChild(_s);}</script>
 <style>
@@ -182,53 +182,76 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
    badges were floating at different heights because "Figma Variables", "TS
    Generation" and "GitHub Actions" wrap to two lines and the others do not. */
 .pf-flow{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));
-  gap:10px 16px}
+  gap:12px 20px}
+
+/* ── a step ────────────────────────────────────────────────────────────────
+   The manual steps are tinted and the automatic ones are not. That is the
+   point of the whole diagram - a designer does two things and the remaining
+   four happen without anyone - and it was being carried only by a small badge
+   that you had to read six times to count. Tinted, you can see it at a glance
+   and the badge becomes confirmation rather than the only signal.
+
+   Contrast on the tint, measured: name 17.29:1 light and 12.56:1 dark, sub
+   6.31:1 and 8.36:1, number 6.29:1 and 6.41:1, badge ink 5.61:1 in both. */
 .pf-step{position:relative;
   display:grid;grid-template-rows:auto auto 1fr auto;justify-items:center;
-  gap:5px;
+  gap:6px;
   font:inherit;text-align:center;cursor:pointer;
-  padding:14px 12px 12px;border-radius:var(--radius-lg);
+  padding:16px 12px 13px;border-radius:14px;
   background:var(--surface-default);
   border:1px solid var(--border-subtle);
-  transition:border-color .18s,box-shadow .18s,transform .18s}
-[data-theme="dark"] .pf-step{background:var(--surface-default)}
-.pf-step:hover{border-color:color-mix(in srgb,var(--action-primary) 45%,transparent);
-  box-shadow:0 4px 14px color-mix(in srgb,var(--action-primary) 12%,transparent);
+  transition:border-color .18s,box-shadow .18s,transform .18s,background .18s}
+.pf-step[data-type="manual"]{
+  background:color-mix(in srgb, var(--action-primary) 5%, var(--surface-default));
+  border-color:color-mix(in srgb, var(--action-primary) 22%, var(--border-subtle))}
+[data-theme="dark"] .pf-step[data-type="manual"]{
+  background:color-mix(in srgb, var(--action-primary) 10%, var(--surface-default))}
+.pf-step:hover{border-color:color-mix(in srgb,var(--action-primary) 50%,transparent);
+  box-shadow:0 6px 18px color-mix(in srgb,var(--action-primary) 14%,transparent);
   transform:translateY(-2px)}
 .pf-step:focus-visible{outline:2px solid var(--action-primary);outline-offset:2px}
 .pf-step[aria-expanded="true"]{
   border-color:var(--action-primary);
-  box-shadow:0 0 0 3px var(--action-primary-subtle)}
-/* The arrow lives in the gap as a pseudo-element rather than as its own grid
-   item, so it costs no column width. It is dropped after every third card,
-   where the row wraps and an arrow pointing right would be wrong. */
-.pf-step::after{content:"";position:absolute;top:50%;right:-16px;
-  width:16px;height:1px;background:var(--border-default)}
+  box-shadow:0 0 0 3px var(--action-primary-subtle),
+             0 6px 18px color-mix(in srgb,var(--action-primary) 16%,transparent)}
+
+/* the connector, as a chevron in the grid gap rather than its own element, so
+   it costs no column width. Suppressed after every third card, where the row
+   wraps and an arrow pointing right would be a lie. */
+.pf-step::after{content:"";position:absolute;top:50%;right:-13px;
+  width:6px;height:6px;
+  border-top:1.5px solid var(--border-default);
+  border-right:1.5px solid var(--border-default);
+  transform:translateY(-50%) rotate(45deg)}
 .pf-step:nth-child(3n)::after,
 .pf-step:last-child::after{display:none}
-/* The step number. In a 3x2 grid nothing tells you the order - left to right
-   then wrap is an assumption, not a signal - and the connector line only
-   joins pairs. The number is the indication.
 
-   Accent on the card: 6.81:1 in light. In dark the accent is #e040fb, which
-   is 4.19:1 on --surface-default and fails, so dark takes the lighter step. */
-.pf-num{position:absolute;top:9px;left:11px;
-  font-size:10px;font-weight:800;letter-spacing:.06em;
+/* The number sits in the corner in a soft disc. Bare, it read as a stray
+   character floating above the icon. */
+.pf-num{position:absolute;top:8px;left:8px;
+  width:19px;height:19px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:10px;font-weight:800;
   font-variant-numeric:tabular-nums lining-nums;
-  color:var(--action-primary)}
+  color:var(--action-primary);
+  background:var(--action-primary-subtle)}
 [data-theme="dark"] .pf-num{color:#ee9bfb}
-.pf-step[aria-expanded="true"] .pf-num{font-weight:900}
-.pf-icon{font-size:21px;line-height:1}
+.pf-step[aria-expanded="true"] .pf-num{
+  color:#fff;background:var(--action-primary)}
+[data-theme="dark"] .pf-step[aria-expanded="true"] .pf-num{color:#141414}
+.pf-icon{font-size:19px;line-height:1}
 .pf-name{font-size:12.5px;font-weight:700;color:var(--text-primary);line-height:1.3}
 .pf-sub{font-size:10.5px;line-height:1.35;color:var(--text-secondary);align-self:start}
 .pf-badge{font-size:8.5px;font-weight:800;letter-spacing:.07em;
-  text-transform:uppercase;padding:3px 7px;border-radius:var(--radius-full);
+  text-transform:uppercase;padding:3px 8px;border-radius:var(--radius-full);
   white-space:nowrap}
 .pf-step[data-type="manual"] .pf-badge,#pf-d-badge[data-type="manual"]{
-  background:var(--action-primary-subtle);color:var(--action-primary)}
+  background:color-mix(in srgb, var(--action-primary) 7%, transparent);
+  color:var(--action-primary)}
 /* the light accent on its own tint is 4.4:1 in dark, so dark steps up */
 [data-theme="dark"] .pf-step[data-type="manual"] .pf-badge,
-[data-theme="dark"] #pf-d-badge[data-type="manual"]{color:#ee9bfb}
+[data-theme="dark"] #pf-d-badge[data-type="manual"]{color:#ee9bfb;
+  background:color-mix(in srgb, var(--action-primary) 12%, transparent)}
 .pf-step[data-type="auto"] .pf-badge,#pf-d-badge[data-type="auto"]{
   background:rgba(21,128,61,.1);color:#146c33}
 [data-theme="dark"] .pf-step[data-type="auto"] .pf-badge,
@@ -619,7 +642,7 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
   </svg>
 </button>
 
-<script src="../shared/case-study.js?v=202609060914" defer></script>
+<script src="../shared/case-study.js?v=202609060925" defer></script>
 
 <script>
 /* ══ The reel ═══════════════════════════════════════════════════════════════

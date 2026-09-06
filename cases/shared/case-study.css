@@ -226,13 +226,22 @@ button{cursor:pointer;font-family:inherit}
    page and it was sitting one step down from the headings, which made every
    section read as caption rather than prose.
    The hero subtitle deliberately stays secondary - it is the one line that
-   should sit back, directly under the h1. */
-.cs-section p{
+   should sit back, directly under the h1.
+
+   DIRECT CHILDREN ONLY. As a descendant selector this reached every <p>
+   inside any module a section contained - 17 of them across the site - and
+   at (0,1,1) it beat any single-class rule those modules used, silently, on
+   colour, size, line-height and margin. That is the specificity trap in
+   CLAUDE.md, and it is why module paragraphs needed two classes to override
+   what should never have applied to them. Scoped to `>`, section body copy
+   still gets styled and module internals are left alone. Verified first:
+   all 17 nested paragraphs already set their own colour, size and leading. */
+.cs-section > p{
   font-size:16px;color:var(--text-primary);
   line-height:1.85;text-wrap:pretty;margin-bottom:12px;
 }
-.cs-section p:last-child{margin-bottom:0}
-.cs-section p strong{color:var(--text-primary);font-weight:700}
+.cs-section > p:last-child{margin-bottom:0}
+.cs-section > p strong{color:var(--text-primary);font-weight:700}
 
 /* ── Plugin blocks ────────────────────────────────────────────────────────── */
 .plugins-list{
@@ -280,6 +289,9 @@ button{cursor:pointer;font-family:inherit}
 .plugin-desc{
   font-size:14px;color:var(--text-secondary);
   line-height:1.75;max-width:560px;
+  /* explicit now: it used to inherit margin-bottom from .cs-section p, which
+     no longer reaches it */
+  margin:0 0 12px;
 }
 
 /* The pipeline diagram and the mock GitHub PR card were removed in Sept 2026
@@ -363,9 +375,9 @@ button{cursor:pointer;font-family:inherit}
    lighter of the pair in dark mode and clears it */
 [data-theme="dark"] .diff-marg{color:var(--action-primary-hover)}
 .diff-body{min-width:0}
-/* Two classes, not one. .cs-section p in this sheet is (0,1,1) and beats a
-   single class on colour, size, leading and margin - a one-class override
-   looks like it half-worked. */
+/* Two classes here are now belt and braces rather than a requirement:
+   .cs-section is scoped to `> p`, so it no longer reaches inside this module.
+   Left as-is because they work; new modules only need one class. */
 .diff-body .diff-lesson{
   font-size:1.1875rem;line-height:1.35;font-weight:700;
   letter-spacing:-.014em;color:var(--text-primary);
@@ -499,7 +511,7 @@ button{cursor:pointer;font-family:inherit}
   .cs-body{gap:28px;padding:24px 20px 80px}
   .cs-hero h1{font-size:24px}
   .cs-hero-sub{font-size:15px}
-  .cs-section p{font-size:15px}
+  .cs-section > p{font-size:15px}
   .ai-card-text{font-size:15px}
   .stat-grid{grid-template-columns:1fr 1fr}
   .stat-grid .stat-card:last-child{grid-column:1/-1}
@@ -513,6 +525,6 @@ button{cursor:pointer;font-family:inherit}
   .stat-grid .stat-card:last-child{grid-column:auto}
   .stat-num{font-size:32px}
   .ai-card{flex-direction:column;gap:10px}
-  .cs-section p{font-size:14.5px}
+  .cs-section > p{font-size:14.5px}
   .ai-card-text{font-size:14.5px}
 }
