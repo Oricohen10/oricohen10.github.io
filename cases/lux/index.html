@@ -16,8 +16,8 @@
 <meta name="twitter:description" content="How Ori Cohen built Verint's enterprise design system from scratch — one language for 40+ products and 10k+ users."/>
 <meta name="twitter:image" content="https://oricohen.co/cases/lux/images/og-image.png"/>
 <meta name="author" content="Ori Cohen"/>
-<link rel="stylesheet" href="../../src/tokens.css?v=202609061053"/>
-<link rel="stylesheet" href="../shared/case-study.css?v=202609061053"/>
+<link rel="stylesheet" href="../../src/tokens.css?v=202609061300"/>
+<link rel="stylesheet" href="../shared/case-study.css?v=202609061300"/>
 <!-- Hide default cursor when embedded in the portfolio iframe -->
 <script>try{if(localStorage.getItem('ori-theme')==='dark')document.documentElement.setAttribute('data-theme','dark')}catch(e){}
 if(window.self!==window.top){var _s=document.createElement('style');_s.textContent='*{cursor:none!important}';document.head.appendChild(_s);}</script>
@@ -103,6 +103,13 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
   --vb-ink-3t:#6a6a6a;     /* text - counts, placeholder, hint */
   --vb-sel:#f5f5f5; --vb-selb:#e5f2ff;
   display:grid;grid-template-columns:236px minmax(0,1fr);
+  /* A FIXED height, and it has to live here rather than on the two columns.
+     A grid row sizes to its tallest item and a grid item defaults to
+     min-height:auto, so flex:1 + min-height:0 on the group list did nothing:
+     nothing above it was bounded. The group list for Component Tokens is 276
+     rows, about 7,450px, so the sidebar set the height of the whole panel and
+     the table sat in the top 376px of it with a mile of white underneath. */
+  height:520px;
   background:#fff;color:var(--vb-ink);
   border:1px solid var(--vb-line);border-radius:12px;overflow:hidden;
   font-size:12px;line-height:1.4;
@@ -113,8 +120,10 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
   box-shadow:0 0 0 1px rgba(255,255,255,.07),0 30px 70px rgba(0,0,0,.6)}
 
 /* ── left: collections and groups ──────────────────────────────────────── */
-.vb-side{border-right:1px solid var(--vb-line);min-width:0;
-  display:flex;flex-direction:column}
+/* min-height:0 is what lets a grid item shrink below its content, which is
+   the half of the fix that is easy to leave out. */
+.vb-side{border-right:1px solid var(--vb-line);min-width:0;min-height:0;
+  display:flex;flex-direction:column;overflow:hidden}
 .vb-side-hd{display:flex;align-items:center;justify-content:space-between;
   padding:11px 12px;border-bottom:1px solid var(--vb-line);
   font-size:12.5px;font-weight:600}
@@ -125,7 +134,7 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
 .vb-row{display:flex;align-items:center;gap:8px;width:100%;
   font:inherit;text-align:left;cursor:pointer;
   border:0;background:transparent;color:var(--vb-ink);
-  padding:5px 8px;border-radius:5px}
+  padding:5px 8px;min-height:24px;border-radius:5px}
 .vb-row:hover{background:var(--vb-line-2)}
 .vb-row[aria-selected="true"]{background:var(--vb-sel);font-weight:600}
 .vb-groups .vb-row[aria-selected="true"]{background:var(--vb-selb)}
@@ -134,11 +143,29 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
 .vb-row-c{flex-shrink:0;color:var(--vb-ink-3t);font-variant-numeric:tabular-nums}
 .vb-row[aria-selected="true"] .vb-row-c{color:var(--vb-ink-2)}
 .vb-groups{overflow-y:auto;flex:1;min-height:0}
-.vb-d1{padding-left:20px}
-.vb-d2{padding-left:32px}
+/* A group row is a toggle plus a label, two controls rather than one. The
+   caret expands, the name filters. Overloading a single row with both is
+   what makes tree navigation feel like a guess. */
+.vb-grow{display:flex;align-items:center;gap:1px}
+/* 24x24, not the 18x22 this started at, because 2.5.8 asks for 24x24 and a
+   disclosure has no equivalent elsewhere - the label beside it filters, it
+   does not expand. It also happens to match Figma's real row height, so the
+   rail reads slightly closer to the reference than the tighter version did. */
+.vb-tog{flex-shrink:0;width:24px;height:24px;padding:0;border:0;
+  background:transparent;cursor:pointer;color:var(--vb-ink-3);
+  display:flex;align-items:center;justify-content:center;border-radius:4px}
+.vb-tog:hover{background:var(--vb-line-2);color:var(--vb-ink)}
+.vb-tog svg{width:10px;height:10px;display:block;
+  transition:transform .16s ease}
+.vb-tog[aria-expanded="true"] svg{transform:rotate(90deg)}
+@media(prefers-reduced-motion:reduce){.vb-tog svg{transition:none}}
+.vb-spacer{flex-shrink:0;width:24px}
+.vb-grow .vb-row{flex:1;min-width:0}
+.vb-sub{list-style:none;margin:0;padding:0 0 0 24px}
+.vb-sub[hidden]{display:none}
 
 /* ── right: the table ──────────────────────────────────────────────────── */
-.vb-main{min-width:0;display:flex;flex-direction:column}
+.vb-main{min-width:0;min-height:0;display:flex;flex-direction:column}
 .vb-top{display:flex;align-items:center;gap:8px;
   padding:8px 10px;border-bottom:1px solid var(--vb-line)}
 .vb-search{position:relative;margin-left:auto;flex:0 1 260px}
@@ -167,7 +194,9 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
 /* The scroller. Component Tokens alone is 1,114 rows, so only the visible
    window is in the DOM - see the driver. Fixed row height is what makes the
    arithmetic possible, so it is a constant in both places. */
-.vb-scroll{position:relative;overflow-y:auto;height:376px}
+/* Flexes to fill whatever the fixed panel height leaves, rather than being
+   its own magic number - so there is one height to change, not two. */
+.vb-scroll{position:relative;overflow-y:auto;flex:1;min-height:0}
 .vb-sizer{position:relative;width:100%}
 .vb-win{position:absolute;top:0;left:0;right:0}
 .vb-r{height:32px;border-bottom:1px solid var(--vb-line-2);
@@ -218,20 +247,20 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
    table does not fit in a phone width without the value column collapsing to
    nothing. */
 @media(max-width:860px){
-  .vb{grid-template-columns:200px minmax(0,1fr)}
-  .vb-scroll{height:320px}
+  .vb{grid-template-columns:200px minmax(0,1fr);height:470px}
 }
 @media(max-width:720px){
-  .vb{grid-template-columns:1fr}
+  .vb{grid-template-columns:1fr;grid-template-rows:auto minmax(0,1fr);height:560px}
   .vb-side{border-right:0;border-bottom:1px solid var(--vb-line)}
-  .vb-groups{max-height:150px}
+  /* Sidebar on top, so it takes a slice and the table gets the rest. The
+     rail cap is a max-height rather than a height so a short collection does
+     not leave dead space above the table. */
+  .vb-groups{max-height:132px}
   .vb-search{flex:1 1 auto;margin-left:0}
-  .vb-scroll{height:300px}
 }
 @media(max-width:560px){
   .vb-head,.vb-r{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
   .vb-r-n,.vb-r-v{padding:0 9px}
-  .vb-scroll{height:264px}
 }
 </style>
 <script type="application/ld+json">
@@ -347,7 +376,7 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
       <figure class="cs-media">
       <!-- The variables browser. Replaces the component-library screenshot:
            the same claim, but checkable. -->
-      <div class="vb-shell" data-dv="202609061053">
+      <div class="vb-shell" data-dv="202609061300">
         <div class="vb" id="vb" role="group"
              aria-label="LUX 2.0 variable library, browsable">
           <div class="vb-side">
@@ -457,7 +486,7 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
   </svg>
 </button>
 
-<script src="../shared/case-study.js?v=202609061053" defer></script>
+<script src="../shared/case-study.js?v=202609061300" defer></script>
 <script>
 /* ══ The variables browser ══════════════════════════════════════════════════
    Real data: cases/lux/data/, exported from the Figma file with Token Sync and
@@ -634,35 +663,62 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
         '<span class="vb-row-c">' + DATA.counts[c] + '</span></button></li>';
     }).join('');
   }
+  var open = {};                /* level-1 group -> expanded? */
+  var CARET = '<svg viewBox="0 0 10 10" fill="none" stroke="currentColor"' +
+    ' stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"' +
+    ' aria-hidden="true"><path d="M3.5 1.5 7 5 3.5 8.5"/></svg>';
+
   function renderGroups(){
     var rows = store[cur] || [];
     /* Two levels, which is what the real panel shows - azure holds light_mode
        and dark_mode. Deeper than that and the rail becomes the table. */
-    var lvl1 = {}, lvl2 = {};
+    var l1 = {}, kids = {};
     rows.forEach(function(r){
       if (r.p.length < 2) return;
-      lvl1[r.p[0]] = (lvl1[r.p[0]] || 0) + 1;
+      l1[r.p[0]] = (l1[r.p[0]] || 0) + 1;
       if (r.p.length > 2){
         var k = r.p[0] + '/' + r.p[1];
-        lvl2[k] = (lvl2[k] || 0) + 1;
+        (kids[r.p[0]] = kids[r.p[0]] || {})[k] = (kids[r.p[0]][k] || 0) + 1;
       }
     });
-    var html = '<li role="presentation"><button class="vb-row" data-g=""' +
-      ' aria-selected="' + (curGroup === '') + '">' +
-      '<span class="vb-row-n">All</span><span class="vb-row-c">' +
-      rows.length + '</span></button></li>';
-    Object.keys(lvl1).forEach(function(g){
-      html += '<li role="presentation"><button class="vb-row vb-d1" data-g="' + esc(g) +
-        '" aria-selected="' + (curGroup === g) + '">' +
-        '<span class="vb-row-n">' + esc(g) + '</span>' +
-        '<span class="vb-row-c">' + lvl1[g] + '</span></button></li>';
-      Object.keys(lvl2).forEach(function(k){
-        if (k.indexOf(g + '/') !== 0) return;
-        html += '<li role="presentation"><button class="vb-row vb-d2" data-g="' + esc(k) +
-          '" aria-selected="' + (curGroup === k) + '">' +
-          '<span class="vb-row-n">' + esc(k.split('/')[1]) + '</span>' +
-          '<span class="vb-row-c">' + lvl2[k] + '</span></button></li>';
-      });
+
+    function label(cls, g, name, count){
+      return '<button class="vb-row ' + cls + '" data-g="' + esc(g) + '"' +
+        ' aria-selected="' + (curGroup === g) + '">' +
+        '<span class="vb-row-n">' + esc(name) + '</span>' +
+        '<span class="vb-row-c">' + count + '</span></button>';
+    }
+
+    var html = '<li role="presentation"><div class="vb-grow">' +
+      '<span class="vb-spacer" aria-hidden="true"></span>' +
+      label('', '', 'All', rows.length) + '</div></li>';
+
+    Object.keys(l1).forEach(function(g, i){
+      var sub = kids[g], subKeys = sub ? Object.keys(sub) : [];
+      var id = 'vb-g-' + i;
+      var isOpen = !!open[g];
+      html += '<li role="presentation"><div class="vb-grow">';
+      if (subKeys.length){
+        /* A disclosure button, not a div with a click handler: it gets the
+           role, the keyboard and aria-expanded for free. */
+        html += '<button class="vb-tog" data-t="' + esc(g) + '"' +
+          ' aria-expanded="' + isOpen + '" aria-controls="' + id + '"' +
+          ' aria-label="' + (isOpen ? 'Collapse ' : 'Expand ') + esc(g) + '">' +
+          CARET + '</button>';
+      } else {
+        html += '<span class="vb-spacer" aria-hidden="true"></span>';
+      }
+      html += label('', g, g, l1[g]) + '</div>';
+      if (subKeys.length){
+        html += '<ul class="vb-sub" id="' + id + '"' + (isOpen ? '' : ' hidden') + '>';
+        subKeys.forEach(function(k){
+          html += '<li role="presentation"><div class="vb-grow">' +
+            '<span class="vb-spacer" aria-hidden="true"></span>' +
+            label('', k, k.split('/')[1], sub[k]) + '</div></li>';
+        });
+        html += '</ul>';
+      }
+      html += '</li>';
     });
     grpsEl.innerHTML = html;
   }
@@ -673,6 +729,17 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
     select(b.getAttribute('data-c'));
   });
   grpsEl.addEventListener('click', function(e){
+    var t = e.target.closest('[data-t]');
+    if (t){
+      /* Expanding is not selecting. Toggling a group open should not move the
+         table out from under you, so this returns without touching curGroup. */
+      var g = t.getAttribute('data-t');
+      open[g] = !open[g];
+      renderGroups();
+      var again = grpsEl.querySelector('[data-t="' + g.replace(/"/g,'\\"') + '"]');
+      if (again) again.focus();
+      return;
+    }
     var b = e.target.closest('[data-g]');
     if (!b) return;
     curGroup = b.getAttribute('data-g');
@@ -681,7 +748,8 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
   qEl.addEventListener('input', function(){ query = qEl.value; build(); });
 
   function select(name){
-    cur = name; curGroup = ''; 
+    cur = name; curGroup = ''; open = {};
+    
     footEl.innerHTML = '<span class="vb-foot-hint">Pick a variable to trace what it resolves to.</span>';
     renderColls();
     if (store[cur]) { renderGroups(); build(); return; }
