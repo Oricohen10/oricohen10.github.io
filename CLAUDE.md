@@ -156,8 +156,11 @@ Where a rule is currently only implemented on myverint it says so.
   Overriding a card means overriding its pseudo-elements too.
 
 ### The specificity trap
-`.cs-section p` in the shared sheet is **(0,1,1)** - one class plus one
-type. A local rule of the form `.my-class` is **(0,1,0)** and **loses**,
+**Fixed at the cause (Sept 2026): the rule is `.cs-section > p` now**, so
+it no longer reaches inside a module and a module paragraph needs one
+class, not two. The mechanism, for when something similar appears:
+`.cs-section p` as a descendant selector is **(0,1,1)** - one class plus
+one type. A local rule of the form `.my-class` is **(0,1,0)** and **loses**,
 silently, for `color`, `font-size`, `line-height` and `margin`. Only
 properties the shared rule does not set (e.g. `font-weight`) get through,
 which makes it look like the rule half-worked. Any local override on a
@@ -291,7 +294,21 @@ rule left its selector prefix dangling onto the next rule, and an
 inserted rule split `.ai-step.active .ai-step-title` into an unqualified
 `.ai-step-title`. Balanced braces, zero warnings, broken page.
 
-What actually catches these:
+**Tag balance is not structure.** A stray `</div>` in the middle of a
+block closes an ancestor early and a later missing one closes it late, so
+the total still balances and every counter reports zero. The plugins reel
+shipped like that for three rounds: `.vs-caps` closed after the first
+caption, so the other three captions were siblings of it rather than
+children, `.vs-caps .vs-cap-p` never matched them, and they fell through
+to the browser default - 16px, inherited black, no measure. Ori reported
+it three times and each time the checks said the file was fine.
+
+The check that catches it: **walk the tree and print the ancestor path of
+the elements a selector depends on.** If a rule is `.a .b`, assert that
+every `.b` actually has `.a` in its ancestor chain. Balance counters
+cannot see this; a path walk cannot miss it.
+
+What actually catches the CSS ones:
 - Split the stylesheet **by cascade context** (base, then each `@media`)
   and flag any selector declared twice within one context. A media query
   repeating a base selector is correct; the same selector twice in one

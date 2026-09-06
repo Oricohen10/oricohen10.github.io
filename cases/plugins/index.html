@@ -39,8 +39,8 @@
   }
 }
 </script>
-<link rel="stylesheet" href="../../src/tokens.css?v=202609060925"/>
-<link rel="stylesheet" href="../shared/case-study.css?v=202609060925"/>
+<link rel="stylesheet" href="../../src/tokens.css?v=202609060932"/>
+<link rel="stylesheet" href="../shared/case-study.css?v=202609060932"/>
 <script>try{if(localStorage.getItem('ori-theme')==='dark')document.documentElement.setAttribute('data-theme','dark')}catch(e){}
 if(window.self!==window.top){var _s=document.createElement('style');_s.textContent='*{cursor:none!important}';document.head.appendChild(_s);}</script>
 <style>
@@ -185,14 +185,10 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
   gap:12px 20px}
 
 /* ── a step ────────────────────────────────────────────────────────────────
-   The manual steps are tinted and the automatic ones are not. That is the
-   point of the whole diagram - a designer does two things and the remaining
-   four happen without anyone - and it was being carried only by a small badge
-   that you had to read six times to count. Tinted, you can see it at a glance
-   and the badge becomes confirmation rather than the only signal.
-
-   Contrast on the tint, measured: name 17.29:1 light and 12.56:1 dark, sub
-   6.31:1 and 8.36:1, number 6.29:1 and 6.41:1, badge ink 5.61:1 in both. */
+   All six cards are the same surface. Tinting the two manual ones read as a
+   selection state rather than as a category, and it competed with the actual
+   selected state - the accent border - which is the one thing on the row that
+   has to be unmistakable. Manual versus auto stays on the badge. */
 .pf-step{position:relative;
   display:grid;grid-template-rows:auto auto 1fr auto;justify-items:center;
   gap:6px;
@@ -201,11 +197,6 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
   background:var(--surface-default);
   border:1px solid var(--border-subtle);
   transition:border-color .18s,box-shadow .18s,transform .18s,background .18s}
-.pf-step[data-type="manual"]{
-  background:color-mix(in srgb, var(--action-primary) 5%, var(--surface-default));
-  border-color:color-mix(in srgb, var(--action-primary) 22%, var(--border-subtle))}
-[data-theme="dark"] .pf-step[data-type="manual"]{
-  background:color-mix(in srgb, var(--action-primary) 10%, var(--surface-default))}
 .pf-step:hover{border-color:color-mix(in srgb,var(--action-primary) 50%,transparent);
   box-shadow:0 6px 18px color-mix(in srgb,var(--action-primary) 14%,transparent);
   transform:translateY(-2px)}
@@ -215,30 +206,23 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
   box-shadow:0 0 0 3px var(--action-primary-subtle),
              0 6px 18px color-mix(in srgb,var(--action-primary) 16%,transparent)}
 
-/* the connector, as a chevron in the grid gap rather than its own element, so
-   it costs no column width. Suppressed after every third card, where the row
-   wraps and an arrow pointing right would be a lie. */
-.pf-step::after{content:"";position:absolute;top:50%;right:-13px;
-  width:6px;height:6px;
-  border-top:1.5px solid var(--border-default);
-  border-right:1.5px solid var(--border-default);
+/* The chevron carries the sequence now that the numbers are gone, so it is
+   drawn at full strength rather than as a hairline hint: 9px, 2px strokes, in
+   --text-secondary. Still a pseudo-element in the grid gap, so it costs no
+   column width. Suppressed after every third card, where the row wraps and an
+   arrow pointing right would be a lie.
+
+   --text-secondary is 6.83:1 on the card in light and 9.29:1 in dark. This is
+   a graphical object rather than text, so 3:1 would be the bar under 1.4.11 -
+   it clears both. */
+.pf-step::after{content:"";position:absolute;top:50%;right:-14px;
+  width:9px;height:9px;
+  border-top:2px solid var(--text-secondary);
+  border-right:2px solid var(--text-secondary);
   transform:translateY(-50%) rotate(45deg)}
 .pf-step:nth-child(3n)::after,
 .pf-step:last-child::after{display:none}
 
-/* The number sits in the corner in a soft disc. Bare, it read as a stray
-   character floating above the icon. */
-.pf-num{position:absolute;top:8px;left:8px;
-  width:19px;height:19px;border-radius:50%;
-  display:flex;align-items:center;justify-content:center;
-  font-size:10px;font-weight:800;
-  font-variant-numeric:tabular-nums lining-nums;
-  color:var(--action-primary);
-  background:var(--action-primary-subtle)}
-[data-theme="dark"] .pf-num{color:#ee9bfb}
-.pf-step[aria-expanded="true"] .pf-num{
-  color:#fff;background:var(--action-primary)}
-[data-theme="dark"] .pf-step[aria-expanded="true"] .pf-num{color:#141414}
 .pf-icon{font-size:19px;line-height:1}
 .pf-name{font-size:12.5px;font-weight:700;color:var(--text-primary);line-height:1.3}
 .pf-sub{font-size:10.5px;line-height:1.35;color:var(--text-secondary);align-self:start}
@@ -505,7 +489,6 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
               <div class="pf-flow" id="pf-flow">
                 <button class="pf-step" data-s="1" data-type="manual"
                         title="Designer updates Figma Variables" aria-expanded="true">
-                  <span class="pf-num" aria-hidden="true">1</span>
                   <span class="pf-icon" aria-hidden="true">🎨</span>
                   <span class="pf-name">Figma Variables</span>
                   <span class="pf-sub">Edit a value</span>
@@ -513,7 +496,6 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
                 </button>
                 <button class="pf-step" data-s="2" data-type="manual"
                         title="One click in Verint Token Sync" aria-expanded="false">
-                  <span class="pf-num" aria-hidden="true">2</span>
                   <span class="pf-icon" aria-hidden="true">🔌</span>
                   <span class="pf-name">Token Sync</span>
                   <span class="pf-sub">One click</span>
@@ -521,7 +503,6 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
                 </button>
                 <button class="pf-step" data-s="3" data-type="auto"
                         title="Four TypeScript files generated in the browser" aria-expanded="false">
-                  <span class="pf-num" aria-hidden="true">3</span>
                   <span class="pf-icon" aria-hidden="true">📝</span>
                   <span class="pf-name">TS Generation</span>
                   <span class="pf-sub">4 files, in-browser</span>
@@ -529,7 +510,6 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
                 </button>
                 <button class="pf-step" data-s="4" data-type="auto"
                         title="Plugin pushes to GitHub and opens a PR" aria-expanded="false">
-                  <span class="pf-num" aria-hidden="true">4</span>
                   <span class="pf-icon" aria-hidden="true">😺</span>
                   <span class="pf-name">GitHub Push</span>
                   <span class="pf-sub">Branch + PR</span>
@@ -537,7 +517,6 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
                 </button>
                 <button class="pf-step" data-s="5" data-type="auto"
                         title="GitHub Actions validates and auto-merges" aria-expanded="false">
-                  <span class="pf-num" aria-hidden="true">5</span>
                   <span class="pf-icon" aria-hidden="true">⚙️</span>
                   <span class="pf-name">GitHub Actions</span>
                   <span class="pf-sub">Validate + merge</span>
@@ -545,7 +524,6 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
                 </button>
                 <button class="pf-step" data-s="6" data-type="auto"
                         title="Tokens live on main in under 60 seconds" aria-expanded="false">
-                  <span class="pf-num" aria-hidden="true">6</span>
                   <span class="pf-icon" aria-hidden="true">🚀</span>
                   <span class="pf-name">Live on Main</span>
                   <span class="pf-sub">Under 60 seconds</span>
@@ -570,7 +548,6 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
               </div>
             </div>
           </div>
-          </div>
           <div class="vs-cap" data-i="1">
             <h3 class="vs-cap-h">Layout Creator</h3>
             <p class="vs-cap-p">Scaffolds a full LUX 2.0 layout - containers, navigation, page structure - with the correct token bindings already applied. Ready to design into, not from scratch.</p>
@@ -583,6 +560,7 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
             <h3 class="vs-cap-h">Icon Library Picker</h3>
             <p class="vs-cap-p">Browse and insert from the LUX 2.0 icon library - 1,281 icons searchable by name, category or meaning. Inserted at the correct size with token binding applied.</p>
           </div>
+        </div>
           </div>
         </div>
       </div>
@@ -642,7 +620,7 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
   </svg>
 </button>
 
-<script src="../shared/case-study.js?v=202609060925" defer></script>
+<script src="../shared/case-study.js?v=202609060932" defer></script>
 
 <script>
 /* ══ The reel ═══════════════════════════════════════════════════════════════
