@@ -16,8 +16,8 @@
 <meta name="twitter:description" content="How Ori Cohen built Verint's enterprise design system from scratch — one language for 40+ products and 10k+ users."/>
 <meta name="twitter:image" content="https://oricohen.co/cases/lux/images/og-image.png"/>
 <meta name="author" content="Ori Cohen"/>
-<link rel="stylesheet" href="../../src/tokens.css?v=202609061111"/>
-<link rel="stylesheet" href="../shared/case-study.css?v=202609061111"/>
+<link rel="stylesheet" href="../../src/tokens.css?v=202609061053"/>
+<link rel="stylesheet" href="../shared/case-study.css?v=202609061053"/>
 <!-- Hide default cursor when embedded in the portfolio iframe -->
 <script>try{if(localStorage.getItem('ori-theme')==='dark')document.documentElement.setAttribute('data-theme','dark')}catch(e){}
 if(window.self!==window.top){var _s=document.createElement('style');_s.textContent='*{cursor:none!important}';document.head.appendChild(_s);}</script>
@@ -68,6 +68,171 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
    light value - purple-800 ink on a dark tint, 1.14:1. */
 [data-theme="dark"] .sb-cta:active{background:rgba(123,97,255,.2);color:var(--purple-100, #e8e3ff);border-color:var(--purple-200, #d0c7ff)}
 .sb-cta svg{width:13px;height:13px;flex-shrink:0}
+
+/* ══ The variables browser ══════════════════════════════════════════════════
+   A replica of Figma's Variables panel, browsing the real LUX 2.0 library:
+   1,573 variables across six collections, exported from the file with Token
+   Sync and committed under data/.
+
+   It stays LIGHT in both themes on purpose, and that is the same rule as the
+   phone bezel on myverint: this is a picture of a piece of software, not page
+   chrome. Figma's panel is light, so a dark copy of it would be a copy of
+   nothing. A light panel on the near-black page is correct here.
+
+   Everything below is scoped under .vb and hardcodes Figma's own greys rather
+   than reading site tokens, for the same reason - the colours belong to the
+   thing being depicted. This is the one place on the site where not using
+   tokens is the right call, so it is stated rather than left to look like an
+   oversight.                                                                */
+.vb-shell{margin-top:28px}
+.vb{
+  --vb-line:#e6e6e6; --vb-line-2:#f0f0f0;
+  --vb-ink:#1e1e1e; --vb-ink-2:#5f5f5f;
+  /* Two tertiary greys, and this is the one place the replica deviates from
+     Figma on purpose. Figma's secondary grey is #8a8a8a, which is 3.45:1 on
+     white and 3.04:1 on the selected row - it fails AA as text on every
+     surface in this panel. Fine for a GRAPHIC under 1.4.11, which asks 3:1,
+     so the row icon and the caret glyphs keep it. Not fine for the counts,
+     the placeholder and the footer hint, which are text.
+     #6a6a6a is the lightest grey that clears 4.5:1 on all five backgrounds
+     here, worst case 4.76:1 on the selected row. Two shades darker than the
+     reference and invisible beside it, and the alternative is a case study
+     about design-system rigour containing text that fails the standard the
+     system exists to guarantee. */
+  --vb-ink-3:#8a8a8a;      /* graphics only - icon, caret */
+  --vb-ink-3t:#6a6a6a;     /* text - counts, placeholder, hint */
+  --vb-sel:#f5f5f5; --vb-selb:#e5f2ff;
+  display:grid;grid-template-columns:236px minmax(0,1fr);
+  background:#fff;color:var(--vb-ink);
+  border:1px solid var(--vb-line);border-radius:12px;overflow:hidden;
+  font-size:12px;line-height:1.4;
+  /* Not symmetric between themes - short and faint on white or it smears,
+     deep on near-black or it does not register. */
+  box-shadow:0 1px 2px rgba(18,18,19,.05),0 12px 32px rgba(18,18,19,.10)}
+[data-theme="dark"] .vb{border-color:#3a3a3a;
+  box-shadow:0 0 0 1px rgba(255,255,255,.07),0 30px 70px rgba(0,0,0,.6)}
+
+/* ── left: collections and groups ──────────────────────────────────────── */
+.vb-side{border-right:1px solid var(--vb-line);min-width:0;
+  display:flex;flex-direction:column}
+.vb-side-hd{display:flex;align-items:center;justify-content:space-between;
+  padding:11px 12px;border-bottom:1px solid var(--vb-line);
+  font-size:12.5px;font-weight:600}
+.vb-sec{display:flex;align-items:center;justify-content:space-between;
+  padding:10px 12px 5px;font-size:11px;font-weight:600;color:var(--vb-ink-2)}
+.vb-list{list-style:none;margin:0;padding:0 6px 6px}
+.vb-list li{margin:0}
+.vb-row{display:flex;align-items:center;gap:8px;width:100%;
+  font:inherit;text-align:left;cursor:pointer;
+  border:0;background:transparent;color:var(--vb-ink);
+  padding:5px 8px;border-radius:5px}
+.vb-row:hover{background:var(--vb-line-2)}
+.vb-row[aria-selected="true"]{background:var(--vb-sel);font-weight:600}
+.vb-groups .vb-row[aria-selected="true"]{background:var(--vb-selb)}
+.vb-row-n{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;
+  white-space:nowrap}
+.vb-row-c{flex-shrink:0;color:var(--vb-ink-3t);font-variant-numeric:tabular-nums}
+.vb-row[aria-selected="true"] .vb-row-c{color:var(--vb-ink-2)}
+.vb-groups{overflow-y:auto;flex:1;min-height:0}
+.vb-d1{padding-left:20px}
+.vb-d2{padding-left:32px}
+
+/* ── right: the table ──────────────────────────────────────────────────── */
+.vb-main{min-width:0;display:flex;flex-direction:column}
+.vb-top{display:flex;align-items:center;gap:8px;
+  padding:8px 10px;border-bottom:1px solid var(--vb-line)}
+.vb-search{position:relative;margin-left:auto;flex:0 1 260px}
+.vb-search svg{position:absolute;left:8px;top:50%;transform:translateY(-50%);
+  width:13px;height:13px;color:var(--vb-ink-3);pointer-events:none}
+.vb-search input{width:100%;font:inherit;color:var(--vb-ink);
+  padding:5px 8px 5px 27px;border:1px solid var(--vb-line);border-radius:5px;
+  background:#fff}
+.vb-search input::placeholder{color:var(--vb-ink-3t)}
+.vb-search input:focus{border-color:#007aff;outline:2px solid rgba(0,122,255,.25);
+  outline-offset:-1px}
+/* Figma's own panel chrome - the expand and close affordances. Decorative:
+   they are part of the picture, not controls, so they are out of the
+   accessibility tree and cannot be clicked. A fake close button that does
+   nothing is worse than no close button. */
+.vb-chrome{display:flex;gap:2px;color:var(--vb-ink-3);pointer-events:none}
+.vb-chrome svg{width:14px;height:14px;display:block}
+
+.vb-head,.vb-r{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);
+  align-items:center}
+.vb-head{border-bottom:1px solid var(--vb-line);
+  font-size:11.5px;font-weight:600;color:var(--vb-ink-2)}
+.vb-head span{padding:8px 12px}
+.vb-head span+span{border-left:1px solid var(--vb-line)}
+
+/* The scroller. Component Tokens alone is 1,114 rows, so only the visible
+   window is in the DOM - see the driver. Fixed row height is what makes the
+   arithmetic possible, so it is a constant in both places. */
+.vb-scroll{position:relative;overflow-y:auto;height:376px}
+.vb-sizer{position:relative;width:100%}
+.vb-win{position:absolute;top:0;left:0;right:0}
+.vb-r{height:32px;border-bottom:1px solid var(--vb-line-2);
+  width:100%;font:inherit;text-align:left;background:transparent;border-left:0;
+  border-right:0;border-top:0;cursor:pointer;color:var(--vb-ink)}
+.vb-r:hover{background:#fafafa}
+.vb-r[aria-selected="true"]{background:var(--vb-selb)}
+.vb-r-n,.vb-r-v{display:flex;align-items:center;gap:7px;
+  padding:0 12px;min-width:0;overflow:hidden}
+.vb-r-v{border-left:1px solid var(--vb-line-2);height:32px}
+.vb-r-n span,.vb-r-v span{overflow:hidden;text-overflow:ellipsis;
+  white-space:nowrap}
+.vb-ico{flex-shrink:0;width:13px;height:13px;color:var(--vb-ink-3)}
+.vb-sw{flex-shrink:0;width:14px;height:14px;border-radius:3px;
+  border:1px solid rgba(0,0,0,.12)}
+/* A transparent or semi-transparent token has to show it, or a 10% overlay
+   and white read as the same swatch. */
+.vb-sw-a{background-image:linear-gradient(45deg,#ccc 25%,transparent 25%,transparent 75%,#ccc 75%),
+  linear-gradient(45deg,#ccc 25%,transparent 25%,transparent 75%,#ccc 75%);
+  background-size:8px 8px;background-position:0 0,4px 4px}
+/* An alias renders as a chip naming its target, which is what the panel is
+   for. A resolved hex here would throw away the architecture. */
+.vb-alias{display:inline-flex;align-items:center;gap:6px;min-width:0;
+  padding:2px 7px 2px 5px;border-radius:4px;background:#f5f5f5;
+  color:var(--vb-ink-2);font-size:11.5px;max-width:100%}
+.vb-grp{padding:9px 12px 5px;font-weight:600;font-size:11.5px;
+  background:#fff;border-bottom:1px solid var(--vb-line-2)}
+.vb-empty{padding:26px 12px;color:var(--vb-ink-3t);text-align:center}
+
+/* ── the resolution trace ──────────────────────────────────────────────────
+   The reason this is interactive rather than a screenshot. Selecting a row
+   walks its alias chain to the primitive it lands on, which is the three
+   layers made visible on one line. */
+.vb-foot{border-top:1px solid var(--vb-line);padding:10px 12px;
+  min-height:46px;display:flex;align-items:center;gap:8px;
+  flex-wrap:wrap;font-size:11.5px;color:var(--vb-ink-2);background:#fcfcfc}
+.vb-hop{display:inline-flex;align-items:center;gap:6px;
+  padding:2px 8px;border-radius:4px;background:#fff;
+  border:1px solid var(--vb-line);color:var(--vb-ink)}
+.vb-hop-c{width:11px;height:11px;border-radius:2px;border:1px solid rgba(0,0,0,.12);
+  flex-shrink:0}
+.vb-arrow{color:var(--vb-ink-3);flex-shrink:0}
+.vb-foot-hint{color:var(--vb-ink-3t)}
+
+/* ── narrow ────────────────────────────────────────────────────────────────
+   Same ladder as the rest of the page. Below 720 the sidebar goes on top and
+   the collections scroll sideways, because a 236px rail plus a two-column
+   table does not fit in a phone width without the value column collapsing to
+   nothing. */
+@media(max-width:860px){
+  .vb{grid-template-columns:200px minmax(0,1fr)}
+  .vb-scroll{height:320px}
+}
+@media(max-width:720px){
+  .vb{grid-template-columns:1fr}
+  .vb-side{border-right:0;border-bottom:1px solid var(--vb-line)}
+  .vb-groups{max-height:150px}
+  .vb-search{flex:1 1 auto;margin-left:0}
+  .vb-scroll{height:300px}
+}
+@media(max-width:560px){
+  .vb-head,.vb-r{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
+  .vb-r-n,.vb-r-v{padding:0 9px}
+  .vb-scroll{height:264px}
+}
 </style>
 <script type="application/ld+json">
 {
@@ -180,9 +345,53 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
       <p>I structured the work into 2-week sprints - system architecture first, then tokens, then components and patterns. I didn't run it alone: a core team with weekly committee reviews kept quality consistent and unblocked decisions fast.</p>
       <p>Alongside the component library, we built Verint's first motion design library - easing curves, duration tokens, and micro-animation specs for every interaction state. The pipeline from Figma to Storybook to GitHub runs fully automated - one token change in Figma, one PR, one merge.</p>
       <figure class="cs-media">
-        <img src="images/lux-02.webp" width="1968" height="1108" loading="lazy" decoding="async"
-             alt="A sample of the LUX 2.0 component library: colour swatches, avatars, upload and call cards, a file tree, a calendar, status chips, an alert, a loading state, a combo box, a tooltip and a filter bar"/>
-        <figcaption>A slice of the component library. Every control here is bound to the token layers above rather than to a fixed value, which is what lets one change in Figma reach all 40+ products.</figcaption>
+      <!-- The variables browser. Replaces the component-library screenshot:
+           the same claim, but checkable. -->
+      <div class="vb-shell" data-dv="202609061053">
+        <div class="vb" id="vb" role="group"
+             aria-label="LUX 2.0 variable library, browsable">
+          <div class="vb-side">
+            <div class="vb-side-hd">
+              <span>Variables</span>
+              <span class="vb-chrome" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="3" y="4" width="18" height="16" rx="2"/><line x1="9" y1="4" x2="9" y2="20"/></svg>
+              </span>
+            </div>
+            <div class="vb-sec"><span>Collections</span></div>
+            <ul class="vb-list" id="vb-colls" role="tablist"
+                aria-label="Variable collections"></ul>
+            <div class="vb-sec"><span>Groups</span></div>
+            <ul class="vb-list vb-groups" id="vb-groups"
+                aria-label="Groups in the selected collection"></ul>
+          </div>
+          <div class="vb-main">
+            <div class="vb-top">
+              <label class="vb-search">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><line x1="20" y1="20" x2="16.2" y2="16.2"/></svg>
+                <input id="vb-q" type="search" placeholder="Search"
+                       aria-label="Search variables by name or value"
+                       autocomplete="off" spellcheck="false"/>
+              </label>
+              <span class="vb-chrome" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="15 4 20 4 20 9"/><polyline points="9 20 4 20 4 15"/><line x1="20" y1="4" x2="13.5" y2="10.5"/><line x1="4" y1="20" x2="10.5" y2="13.5"/></svg>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+              </span>
+            </div>
+            <div class="vb-head" aria-hidden="true"><span>Name</span><span>Value</span></div>
+            <div class="vb-scroll" id="vb-scroll" tabindex="0"
+                 role="listbox" aria-label="Variables">
+              <div class="vb-sizer" id="vb-sizer"><div class="vb-win" id="vb-win"></div></div>
+            </div>
+            <div class="vb-foot" id="vb-foot" aria-live="polite">
+              <span class="vb-foot-hint">Pick a variable to trace what it resolves to.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <figcaption>The real library, not a screenshot: 1,573 variables exported
+        from the Figma file with Token Sync. Selecting a row traces its alias
+        chain down to the primitive it lands on, which is the part a screenshot
+        cannot show - 1,294 of these are references rather than values.</figcaption>
       </figure>
     </div>
 
@@ -248,6 +457,266 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
   </svg>
 </button>
 
-<script src="../shared/case-study.js?v=202609061111" defer></script>
+<script src="../shared/case-study.js?v=202609061053" defer></script>
+<script>
+/* ══ The variables browser ══════════════════════════════════════════════════
+   Real data: cases/lux/data/, exported from the Figma file with Token Sync and
+   normalised by tools/lux-normalise.py. 1,573 variables, six collections.
+
+   Three things worth knowing before changing this:
+
+   1. ROW is a constant shared with the CSS. The scroller keeps only the
+      visible window in the DOM because Component Tokens alone is 1,114 rows,
+      and 1,573 nodes with a swatch each is a real cost inside an iframe on a
+      page that also runs the ambient field. Fixed row height is what makes
+      the arithmetic possible, so if it changes in one place it has to change
+      in both.
+   2. Component Tokens is fetched separately and only when selected. It is
+      141KB against 39KB for the other five put together, and most visitors
+      never open it.
+   3. Nothing loads until the module is on screen. Same rule as the media on
+      every other case study: entering a section should not cost the whole
+      section's payload.                                                     */
+(function(){
+  var shell = document.querySelector('.vb-shell');
+  var root  = document.getElementById('vb');
+  if (!shell || !root) return;
+
+  var ROW = 32;                 /* keep in sync with .vb-r height */
+  var PAD = 6;                  /* rows rendered beyond the viewport, each end */
+  var DV  = shell.getAttribute('data-dv') || '0';
+
+  var scroll = document.getElementById('vb-scroll');
+  var sizer  = document.getElementById('vb-sizer');
+  var win    = document.getElementById('vb-win');
+  var collsEl= document.getElementById('vb-colls');
+  var grpsEl = document.getElementById('vb-groups');
+  var footEl = document.getElementById('vb-foot');
+  var qEl    = document.getElementById('vb-q');
+
+  var DATA = null;              /* {order, counts, deferred, collections} */
+  var store = {};               /* collection name -> rows */
+  var cur = null, curGroup = '', query = '', selected = -1;
+  var items = [];               /* flat display list: headers and rows */
+
+  /* ── helpers ──────────────────────────────────────────────────────────── */
+  function isColor(t){ return t === 'color'; }
+  function hasAlpha(v){
+    return typeof v === 'string' && /^#[0-9a-f]{8}$/i.test(v) &&
+           v.slice(7).toLowerCase() !== 'ff';
+  }
+  function groupOf(r){ return r.p.slice(0, -1).join('/'); }
+  function nameOf(r){ return r.p[r.p.length - 1]; }
+  function esc(s){
+    return String(s).replace(/[&<>"]/g, function(c){
+      return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'})[c];
+    });
+  }
+  function swatch(v, cls){
+    var a = hasAlpha(v) ? ' vb-sw-a' : '';
+    /* The colour goes in a style attribute because it is data, not design -
+       there is no way to express 894 distinct swatches as classes. */
+    return '<i class="' + cls + a + '" style="background-color:' + esc(v) +
+           '" aria-hidden="true"></i>';
+  }
+
+  /* ── the display list ─────────────────────────────────────────────────── */
+  function build(){
+    var rows = store[cur] || [];
+    var q = query.trim().toLowerCase();
+    var out = [];
+    var filtered = rows.filter(function(r){
+      if (curGroup && groupOf(r) !== curGroup &&
+          groupOf(r).indexOf(curGroup + '/') !== 0) return false;
+      if (!q) return true;
+      return r.p.join('/').toLowerCase().indexOf(q) > -1 ||
+             String(r.v).toLowerCase().indexOf(q) > -1 ||
+             String(r.r).toLowerCase().indexOf(q) > -1;
+    });
+    var last = null;
+    filtered.forEach(function(r){
+      var g = groupOf(r);
+      if (g !== last){ out.push({h:g || cur}); last = g; }
+      out.push({r:r});
+    });
+    items = out;
+    selected = -1;
+    sizer.style.height = (items.length * ROW) + 'px';
+    scroll.scrollTop = 0;
+    paint();
+    if (!items.length) {
+      win.innerHTML = '<div class="vb-empty">No variable matches "' +
+                      esc(query) + '".</div>';
+    }
+    scroll.setAttribute('aria-label',
+      filtered.length + ' variables in ' + cur + (curGroup ? ' / ' + curGroup : ''));
+  }
+
+  /* ── paint only the visible window ────────────────────────────────────── */
+  var painting = false;
+  function paint(){
+    if (!items.length) return;
+    var top = scroll.scrollTop;
+    var h   = scroll.clientHeight;
+    var a = Math.max(0, Math.floor(top / ROW) - PAD);
+    var b = Math.min(items.length, Math.ceil((top + h) / ROW) + PAD);
+    var html = '';
+    for (var i = a; i < b; i++){
+      var it = items[i];
+      if (it.h !== undefined){
+        html += '<div class="vb-r vb-grp" role="presentation">' + esc(it.h) + '</div>';
+        continue;
+      }
+      var r = it.r, val;
+      if (typeof r.v === 'string' && r.v.charAt(0) === '{'){
+        /* An alias shows its target, with the colour it ends up at beside it.
+           Resolving it to a hex here would discard the whole point. */
+        val = '<span class="vb-alias">' +
+              (isColor(r.t) ? swatch(r.r, 'vb-hop-c') : '') +
+              '<span>' + esc(r.v.slice(1, -1)) + '</span></span>';
+      } else if (isColor(r.t)){
+        val = swatch(r.v, 'vb-sw') + '<span>' + esc(r.v) + '</span>';
+      } else {
+        val = '<span>' + esc(r.v) + '</span>';
+      }
+      html += '<button class="vb-r" role="option" data-i="' + i + '"' +
+              (i === selected ? ' aria-selected="true"' : ' aria-selected="false"') +
+              '><span class="vb-r-n">' +
+              '<svg class="vb-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="9" r="1.6" fill="currentColor" stroke="none"/><circle cx="9" cy="13" r="1.6" fill="currentColor" stroke="none"/><circle cx="15" cy="13" r="1.6" fill="currentColor" stroke="none"/></svg>' +
+              '<span>' + esc(nameOf(r)) + '</span></span>' +
+              '<span class="vb-r-v">' + val + '</span></button>';
+    }
+    win.style.transform = 'translateY(' + (a * ROW) + 'px)';
+    win.innerHTML = html;
+  }
+  scroll.addEventListener('scroll', function(){
+    if (painting) return;
+    painting = true;
+    requestAnimationFrame(function(){ painting = false; paint(); });
+  }, {passive:true});
+
+  /* ── the resolution trace ─────────────────────────────────────────────── */
+  function trace(r){
+    if (!r.c.length){
+      footEl.innerHTML = '<span class="vb-hop">' +
+        (isColor(r.t) ? '<i class="vb-hop-c" style="background-color:' + esc(r.v) + '"></i>' : '') +
+        esc(r.p.join('/')) + '</span>' +
+        '<span class="vb-foot-hint">is a value, not a reference - this is where a chain ends.</span>';
+      return;
+    }
+    var html = '<span class="vb-hop">' + esc(r.p.join('/')) + '</span>';
+    r.c.forEach(function(hop, i){
+      var lastHop = i === r.c.length - 1;
+      html += '<svg class="vb-arrow" width="10" height="14" viewBox="0 0 10 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 4 7 7.5 3 11"/></svg>' +
+              '<span class="vb-hop">' +
+              (lastHop && isColor(r.t) ? '<i class="vb-hop-c" style="background-color:' + esc(r.r) + '"></i>' : '') +
+              esc(hop) + (lastHop ? ' = ' + esc(r.r) : '') + '</span>';
+    });
+    html += '<span class="vb-foot-hint">' + r.c.length +
+            (r.c.length === 1 ? ' hop' : ' hops') + '</span>';
+    footEl.innerHTML = html;
+  }
+
+  win.addEventListener('click', function(e){
+    var btn = e.target.closest('.vb-r[data-i]');
+    if (!btn) return;
+    selected = +btn.getAttribute('data-i');
+    paint();
+    trace(items[selected].r);
+  });
+
+  /* ── left rail ────────────────────────────────────────────────────────── */
+  function renderColls(){
+    collsEl.innerHTML = DATA.order.map(function(c){
+      return '<li role="presentation"><button class="vb-row" role="tab" data-c="' +
+        esc(c) + '" aria-selected="' + (c === cur) + '">' +
+        '<span class="vb-row-n">' + esc(c) + '</span>' +
+        '<span class="vb-row-c">' + DATA.counts[c] + '</span></button></li>';
+    }).join('');
+  }
+  function renderGroups(){
+    var rows = store[cur] || [];
+    /* Two levels, which is what the real panel shows - azure holds light_mode
+       and dark_mode. Deeper than that and the rail becomes the table. */
+    var lvl1 = {}, lvl2 = {};
+    rows.forEach(function(r){
+      if (r.p.length < 2) return;
+      lvl1[r.p[0]] = (lvl1[r.p[0]] || 0) + 1;
+      if (r.p.length > 2){
+        var k = r.p[0] + '/' + r.p[1];
+        lvl2[k] = (lvl2[k] || 0) + 1;
+      }
+    });
+    var html = '<li role="presentation"><button class="vb-row" data-g=""' +
+      ' aria-selected="' + (curGroup === '') + '">' +
+      '<span class="vb-row-n">All</span><span class="vb-row-c">' +
+      rows.length + '</span></button></li>';
+    Object.keys(lvl1).forEach(function(g){
+      html += '<li role="presentation"><button class="vb-row vb-d1" data-g="' + esc(g) +
+        '" aria-selected="' + (curGroup === g) + '">' +
+        '<span class="vb-row-n">' + esc(g) + '</span>' +
+        '<span class="vb-row-c">' + lvl1[g] + '</span></button></li>';
+      Object.keys(lvl2).forEach(function(k){
+        if (k.indexOf(g + '/') !== 0) return;
+        html += '<li role="presentation"><button class="vb-row vb-d2" data-g="' + esc(k) +
+          '" aria-selected="' + (curGroup === k) + '">' +
+          '<span class="vb-row-n">' + esc(k.split('/')[1]) + '</span>' +
+          '<span class="vb-row-c">' + lvl2[k] + '</span></button></li>';
+      });
+    });
+    grpsEl.innerHTML = html;
+  }
+
+  collsEl.addEventListener('click', function(e){
+    var b = e.target.closest('[data-c]');
+    if (!b) return;
+    select(b.getAttribute('data-c'));
+  });
+  grpsEl.addEventListener('click', function(e){
+    var b = e.target.closest('[data-g]');
+    if (!b) return;
+    curGroup = b.getAttribute('data-g');
+    renderGroups(); build();
+  });
+  qEl.addEventListener('input', function(){ query = qEl.value; build(); });
+
+  function select(name){
+    cur = name; curGroup = ''; 
+    footEl.innerHTML = '<span class="vb-foot-hint">Pick a variable to trace what it resolves to.</span>';
+    renderColls();
+    if (store[cur]) { renderGroups(); build(); return; }
+    /* Deferred collection - fetch it now, once. */
+    win.innerHTML = '<div class="vb-empty">Loading ' + esc(cur) + '...</div>';
+    fetch('data/component-tokens.json?v=' + DV)
+      .then(function(r){ return r.json(); })
+      .then(function(j){ store[j.name] = j.rows; renderGroups(); build(); })
+      .catch(function(){
+        win.innerHTML = '<div class="vb-empty">Could not load ' + esc(cur) + '.</div>';
+      });
+  }
+
+  /* ── boot, on intersection ────────────────────────────────────────────── */
+  var booted = false;
+  function boot(){
+    if (booted) return; booted = true;
+    fetch('data/collections.json?v=' + DV)
+      .then(function(r){ return r.json(); })
+      .then(function(j){
+        DATA = j;
+        Object.keys(j.collections).forEach(function(k){ store[k] = j.collections[k]; });
+        select('Colors Primitives');
+      })
+      .catch(function(){
+        win.innerHTML = '<div class="vb-empty">Could not load the variable data.</div>';
+      });
+  }
+  if ('IntersectionObserver' in window){
+    var io = new IntersectionObserver(function(en){
+      en.forEach(function(e){ if (e.isIntersecting){ boot(); io.disconnect(); } });
+    }, {rootMargin:'200px'});
+    io.observe(root);
+  } else { boot(); }
+})();
+</script>
 </body>
 </html>

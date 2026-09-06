@@ -117,8 +117,14 @@ for page in PAGES:
         if not n.attrs.get('width') or not n.attrs.get('height'):
             rep(page,'perf','img-dim',f'line {n.line}: <img> missing width/height ({n.attrs.get("src","?")[:52]})')
     for n in q(root,'svg'):
-        if not (n.attrs.get('aria-hidden') or n.attrs.get('role') or n.attrs.get('aria-label')):
-            rep(page,'AA','svg',f'line {n.line}: <svg> with no role/aria-hidden')
+        if n.attrs.get('aria-hidden') or n.attrs.get('role') or n.attrs.get('aria-label'):
+            continue
+        # aria-hidden INHERITS. An svg inside <span aria-hidden="true"> is
+        # already out of the accessibility tree, and demanding the attribute
+        # again on the child is noise - the kind that buries real findings.
+        if any(a.attrs.get('aria-hidden')=='true' for a in n.ancestors()):
+            continue
+        rep(page,'AA','svg',f'line {n.line}: <svg> with no role/aria-hidden')
 
     # --- 4. duplicate + dangling ids ---
     ids=collections.Counter(n.attrs['id'] for n in root.walk() if n.attrs.get('id'))

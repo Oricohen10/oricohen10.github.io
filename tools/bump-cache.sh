@@ -50,6 +50,12 @@ SUBRES = re.compile(
 # the iframe documents themselves
 IFRAME = re.compile(
     r'(<iframe[^>]*\bsrc=")(cases/[\w-]+/(?:index|viewer)\.html)(?:\?v=[^"]*)?(")')
+# JSON that JS fetches at runtime. The regexes above only see URLs written in
+# the markup, so cases/lux/data/*.json - fetched by the variables browser - was
+# invisible to this script and would have gone stale exactly the way the shared
+# stylesheet did. The stamp lives on the container as data-dv and the fetch
+# appends it, so there is one place to update.
+DATAV = re.compile(r'(data-dv=")([^"]*)(")')
 
 changed = 0
 for f in targets:
@@ -58,6 +64,7 @@ for f in targets:
     src = open(f, encoding='utf-8').read()
     out = SUBRES.sub(lambda m: m.group(1) + m.group(2) + '?v=' + stamp + m.group(3), src)
     out = IFRAME.sub(lambda m: m.group(1) + m.group(2) + '?v=' + stamp + m.group(3), out)
+    out = DATAV.sub(lambda m: m.group(1) + stamp + m.group(3), out)
     if out != src:
         open(f, 'w', encoding='utf-8').write(out)
         changed += 1
