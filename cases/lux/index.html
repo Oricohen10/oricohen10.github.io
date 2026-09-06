@@ -16,8 +16,8 @@
 <meta name="twitter:description" content="How Ori Cohen built Verint's enterprise design system from scratch — one language for 40+ products and 10k+ users."/>
 <meta name="twitter:image" content="https://oricohen.co/cases/lux/images/og-image.png"/>
 <meta name="author" content="Ori Cohen"/>
-<link rel="stylesheet" href="../../src/tokens.css?v=202609061517"/>
-<link rel="stylesheet" href="../shared/case-study.css?v=202609061517"/>
+<link rel="stylesheet" href="../../src/tokens.css?v=202609061536"/>
+<link rel="stylesheet" href="../shared/case-study.css?v=202609061536"/>
 <!-- Hide default cursor when embedded in the portfolio iframe -->
 <script>try{if(localStorage.getItem('ori-theme')==='dark')document.documentElement.setAttribute('data-theme','dark')}catch(e){}
 if(window.self!==window.top){var _s=document.createElement('style');_s.textContent='*{cursor:none!important}';document.head.appendChild(_s);}</script>
@@ -352,10 +352,6 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
    click-to-jump and touch for free - and satisfies 2.5.7, which wants a
    single-pointer alternative to dragging. The visible handle is a separate
    layer that only follows --p.                                              */
-.cmp{margin-top:22px;--p:50%}
-.cmp-frame{grid-column:2;position:relative;overflow:hidden;border-radius:var(--radius-lg);
-  border:1px solid var(--border-subtle);background:var(--surface-sunken);
-  aspect-ratio:1800/1012}
 .cmp-side{position:absolute;inset:0}
 .cmp-side img{width:100%;height:100%;display:block;object-fit:cover}
 /* Light sits behind at full width; dark is clipped from the right, so the
@@ -401,88 +397,83 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
   outline:3px solid var(--action-primary);outline-offset:3px}
 
 /* ── Token annotations ─────────────────────────────────────────────────────
-   Ori's idea, moved OUT of the frame as he asked - the chips sit in gutters
-   either side, and only the dot and its leader stay over the image. Which
-   also solved a problem I had not called out: a chip parked over a dense
-   application screenshot obscures the very thing it is pointing at.
+   Third arrangement, and the reasons for the change are worth keeping.
 
-   The pill design is read off lux-01.webp - the image this replaces - rather
-   than invented: fully rounded, no border, soft shadow, a dot in the token's
-   own colour, and a 1px #b2b6bc leader. Measured off the file before deleting
-   it: fill #ffffff, leader #b2b6bc, pill height ~59px at 1968px wide with a
-   ~16px corner inset, so a full pill radius.
+   v1 put the chips ON the image. Ori liked it but a chip parked on a dense
+   application screenshot hides the thing it points at.
+   v2 moved them into gutters either side. That fixed the occlusion and broke
+   something worse: two 190px gutters ate 380px of an 880px column, so the
+   screenshot rendered at barely half size and looked, accurately, sad.
+   v3 - this one - gives the whole column back to the image and lets the chips
+   overlap its edges. They sit over the left nav and the empty right margin of
+   the screenshot, which carry no detail, and hang 10px outside the frame so
+   the eye reads them as labels rather than as part of the UI.
 
-   One deliberate change from it: the fill follows the theme instead of being
-   a fixed white. In lux-01 the pill sat on a light page and white was right.
-   Here it sits on the case-study surface, which is near-black in dark - a
-   fixed white pill would be a row of glowing tags.
+   THE LINES DID NOT CONNECT, and that was a real bug rather than a taste
+   problem. The in-frame leader was .cmp-dot::before with width:var(--x). A
+   percentage width resolves against the containing block, and .cmp-dot is
+   position:absolute and 9px wide - so it was the containing block. 38.9%
+   became 3.5px instead of 342px. Every leader was two to seven pixels long,
+   which is why the chips looked stranded.
+   The leader is its own element inside .cmp-ov now. That layer is inset:0 of
+   the frame, so a percentage finally measures against the frame.            */
+.cmp{margin-top:22px;--p:50%}
+.cmp-stage{position:relative}
+.cmp-frame{position:relative;overflow:hidden;border-radius:var(--radius-lg);
+  border:1px solid var(--border-subtle);background:var(--surface-sunken);
+  aspect-ratio:1800/1012}
 
-   Gutters are max-content, so they are exactly as wide as the longest token
-   name and not a guessed number. --y positions each chip against its anchor's
-   row; --x is where the dot goes and the leader spans from there to the frame
-   edge.                                                                     */
-.cmp{margin-top:22px;--p:50%;
-  display:grid;grid-template-columns:max-content minmax(0,1fr) max-content;
-  align-items:stretch}
-.cmp-gut{position:relative;width:190px}
+/* dots and leaders - inside the frame, so percentages mean frame percentages */
+.cmp-ov{position:absolute;inset:0;z-index:3;pointer-events:none}
+.cmp-lead{position:absolute;top:var(--y);height:1px;
+  background:#8f959c;transform:translateY(-50%);
+  box-shadow:0 0 0 .5px rgba(255,255,255,.55)}
+.cmp-lead{left:0;width:var(--x)}
+.cmp-dot{position:absolute;left:var(--x);top:var(--y);
+  width:11px;height:11px;border-radius:50%;
+  transform:translate(-50%,-50%);
+  background:#fff;border:2.5px solid #121213;
+  box-shadow:0 0 0 1.5px rgba(255,255,255,.85),0 1px 3px rgba(0,0,0,.4)}
+
+/* the chips, overlapping the frame edges */
+.cmp-chips{position:absolute;inset:0;z-index:4;pointer-events:none}
 .cmp-ann{position:absolute;top:var(--y);display:flex;align-items:center;gap:7px;
   transform:translateY(-50%);
   padding:5px 11px;border-radius:var(--radius-full);
   background:var(--surface-default);
-  box-shadow:0 1px 2px rgba(18,18,19,.06),0 4px 14px rgba(18,18,19,.13);
+  /* A border in BOTH themes now, not just dark. The chip used to sit on the
+     page, where a shadow was enough; it sits on the screenshot now, and a
+     white pill on a white area of the screenshot has no edge at all without
+     one. */
+  border:1px solid rgba(18,18,19,.20);
+  box-shadow:0 2px 10px rgba(18,18,19,.20);
   font-family:var(--font-mono);font-size:10.5px;font-weight:600;
   color:var(--text-secondary);line-height:1.3;white-space:nowrap}
-/* On near-black a shadow cannot describe an edge, so the pill takes a
-   hairline there instead - the same asymmetry the elevation rule calls out. */
-[data-theme="dark"] .cmp-ann{border:1px solid var(--border-default);
-  box-shadow:0 6px 20px rgba(0,0,0,.55)}
-.cmp-gut-l{padding-right:14px}
-.cmp-gut-r{padding-left:14px}
-.cmp-gut-l .cmp-ann{right:14px}
-.cmp-gut-r .cmp-ann{left:14px}
+[data-theme="dark"] .cmp-ann{border-color:rgba(255,255,255,.26);
+  box-shadow:0 4px 16px rgba(0,0,0,.6)}
+/* All four on the left, and that is the fix for the occlusion problem:
+   a chip is about 190px of an 880px frame, so a right-edge chip spans
+   79% to 101% - and both right-hand anchors sit at 83%, underneath it.
+   A chip covering the dot it points at is worse than an unbalanced
+   composition. From the left, every dot is to the RIGHT of every chip,
+   so nothing is hidden and the leader length itself says how far in the
+   element sits. The rows were chosen for clearance too: 73, 166, 303 and
+   449px on a 495px frame, so the closest pair is 93px apart against a
+   24px chip. */
+.cmp-ann{left:-10px}
 .cmp-ann-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;
   border:1px solid rgba(18,18,19,.18)}
 [data-theme="dark"] .cmp-ann-dot{border-color:rgba(255,255,255,.28)}
-/* the leader, from the pill across the gutter to the frame edge */
-.cmp-gut-l .cmp-ann::after,.cmp-gut-r .cmp-ann::before{content:"";
-  position:absolute;top:50%;width:14px;height:1px;background:#b2b6bc}
-.cmp-gut-l .cmp-ann::after{left:100%}
-.cmp-gut-r .cmp-ann::before{right:100%}
 
-/* dots and the in-frame half of each leader */
-.cmp-dots{position:absolute;inset:0;z-index:3;pointer-events:none}
-.cmp-dot{position:absolute;left:var(--x);top:var(--y);
-  width:9px;height:9px;border-radius:50%;
-  transform:translate(-50%,-50%);
-  background:#fff;border:2px solid #121213;
-  box-shadow:0 0 0 1px rgba(255,255,255,.75)}
-.cmp-dot::before{content:"";position:absolute;top:50%;height:1px;
-  background:#b2b6bc;transform:translateY(-50%)}
-.cmp-dot-l::before{right:100%;width:var(--x)}
-.cmp-dot-r::before{left:100%;width:calc(100% - var(--x))}
-/* The leader has to survive both halves of the seam, so it carries a faint
-   dark halo - #b2b6bc alone vanishes on the white side. */
-.cmp-dot::after{content:"";position:absolute;top:calc(50% - 2px);height:5px;
-  background:radial-gradient(rgba(0,0,0,.18),transparent 70%);z-index:-1}
-.cmp-dot-l::after{right:100%;width:var(--x)}
-.cmp-dot-r::after{left:100%;width:calc(100% - var(--x))}
-
-/* Below this the gutters would take more room than the screenshot. The chips
-   stack under the frame as a plain legend instead, which keeps the token
-   names without squeezing the image to nothing. */
-@media(max-width:900px){
-  .cmp{grid-template-columns:1fr;grid-template-areas:"frame" "l" "r"}
-  .cmp-frame{grid-area:frame}
-  .cmp-gut{width:auto;position:static;display:flex;flex-wrap:wrap;gap:8px;
-    padding:12px 0 0}
-  .cmp-gut-r{padding-top:8px}
-  .cmp-ann{position:static;transform:none}
-  .cmp-gut-l .cmp-ann,.cmp-gut-r .cmp-ann{right:auto;left:auto}
-  .cmp-gut-l .cmp-ann::after,.cmp-gut-r .cmp-ann::before{display:none}
-  .cmp-dots{display:none}
+/* Below this the frame is too narrow for a chip to overlap without covering
+   the content it names, so they become a legend underneath and the dots and
+   leaders come off. The image alone still makes the theme point. */
+@media(max-width:760px){
+  .cmp-chips{position:static;display:flex;flex-wrap:wrap;gap:8px;
+    padding-top:12px;pointer-events:auto}
+  .cmp-ann{position:static;transform:none;left:auto}
+  .cmp-ov{display:none}
 }
-/* Spans all three columns. It is a grid child now that the gutters exist,
-   so without this it lands in column 1 under the left chips. */
 .cmp-hint{grid-column:1/-1;margin-top:10px;text-align:center;font-size:11.5px;
   color:var(--text-tertiary);letter-spacing:.03em}
 
@@ -581,6 +572,62 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
       <p>Rebuilding it became one of Verint's top-20 strategic goals. We started from scratch: a new token architecture, Verint's first motion design library, full accessibility coverage, and dark mode - a first in the company's history.</p>
     </div>
 
+    <div class="cmp" id="cmp">
+            <div class="cmp-stage">
+            <div class="cmp-frame">
+              <div class="cmp-side cmp-light">
+                <img src="images/af-light.webp" width="1800" height="1012"
+                     loading="lazy" decoding="async"
+                     alt="Verint Agent Factory in light mode: the Add tool provider modal over the Tools Manager page, with a stepper, radio cards, a data table of tool names and annotations, status badges and toggles."/>
+              </div>
+              <div class="cmp-side cmp-dark" aria-hidden="true">
+                <img src="images/af-dark.webp" width="1800" height="1012"
+                     loading="lazy" decoding="async" alt=""/>
+              </div>
+              <input class="cmp-input" id="cmp-input" type="range"
+                     min="0" max="100" value="50" step="1"
+                     aria-label="Reveal the dark theme. Drag or use the arrow keys."/>
+                <div class="cmp-ov" aria-hidden="true">
+                <i class="cmp-lead" style="--x:38.9%;--y:14.8%"></i>
+                <i class="cmp-dot" style="--x:38.9%;--y:14.8%"></i>
+                <i class="cmp-lead" style="--x:56.3%;--y:33.5%"></i>
+                <i class="cmp-dot" style="--x:56.3%;--y:33.5%"></i>
+                <i class="cmp-lead" style="--x:29.6%;--y:61.2%"></i>
+                <i class="cmp-dot" style="--x:29.6%;--y:61.2%"></i>
+                <i class="cmp-lead" style="--x:83.9%;--y:90.8%"></i>
+                <i class="cmp-dot" style="--x:83.9%;--y:90.8%"></i>
+                </div>
+              <div class="cmp-handle" aria-hidden="true">
+                <span class="cmp-line"></span>
+                <span class="cmp-pill">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M8 8L4 12l4 4M16 8l4 4-4 4"/></svg>
+                </span>
+                <span class="cmp-line"></span>
+              </div>
+            </div>
+                      <div class="cmp-chips" role="list"
+                 aria-label="Token names on the elements they paint">
+              <span class="cmp-ann" role="listitem" style="--y:14.8%">
+                <i class="cmp-ann-dot" style="background-color:#ffffff"></i>
+                <span class="cmp-ann-n">layer.level_3</span>
+              </span>
+              <span class="cmp-ann" role="listitem" style="--y:33.5%">
+                <i class="cmp-ann-dot" style="background-color:#dfe2e4"></i>
+                <span class="cmp-ann-n">border.neutral.regular</span>
+              </span>
+              <span class="cmp-ann" role="listitem" style="--y:61.2%">
+                <i class="cmp-ann-dot" style="background-color:#121213"></i>
+                <span class="cmp-ann-n">text.neutral.main</span>
+              </span>
+              <span class="cmp-ann" role="listitem" style="--y:90.8%">
+                <i class="cmp-ann-dot" style="background-color:#006ee5"></i>
+                <span class="cmp-ann-n">background.brand.regular</span>
+              </span>
+            </div>
+            </div>
+            <p class="cmp-hint">Drag the handle, or use the arrow keys</p>
+            </div>
+
     <!-- Section 2: Challenge -->
     <div class="cs-section cs-reveal">
       <div class="cs-section-num">
@@ -600,7 +647,7 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
       <figure class="cs-media">
       <!-- The variables browser. Replaces the component-library screenshot:
            the same claim, but checkable. -->
-      <div class="vb-shell" data-dv="202609061517">
+      <div class="vb-shell" data-dv="202609061536">
         <div class="vb" id="vb" role="group"
              aria-label="LUX 2.0 variable library, browsable">
           <div class="vb-side">
@@ -647,58 +694,7 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
         cannot show - 1,294 of these are references rather than values.</figcaption>
       </figure>
 
-      <div class="cmp" id="cmp">
-            <div class="cmp-gut cmp-gut-l" role="list"
-                 aria-label="Tokens on the left of this screen">
-            <span class="cmp-ann" role="listitem" style="--y:38.9%">
-              <i class="cmp-ann-dot" style="background-color:#121213" aria-hidden="true"></i>
-              <span class="cmp-ann-n">text.neutral.main</span>
-            </span>
-            <span class="cmp-ann" role="listitem" style="--y:14.8%">
-              <i class="cmp-ann-dot" style="background-color:#ffffff" aria-hidden="true"></i>
-              <span class="cmp-ann-n">layer.level_3</span>
-            </span>
-            </div>
-            <div class="cmp-frame">
-              <div class="cmp-side cmp-light">
-                <img src="images/af-light.webp" width="1800" height="1012"
-                     loading="lazy" decoding="async"
-                     alt="Verint Agent Factory in light mode: the Add tool provider modal over the Tools Manager page, with a stepper, radio cards, a data table of tool names and annotations, status badges and toggles."/>
-              </div>
-              <div class="cmp-side cmp-dark" aria-hidden="true">
-                <img src="images/af-dark.webp" width="1800" height="1012"
-                     loading="lazy" decoding="async" alt=""/>
-              </div>
-              <input class="cmp-input" id="cmp-input" type="range"
-                     min="0" max="100" value="50" step="1"
-                     aria-label="Reveal the dark theme. Drag or use the arrow keys."/>
-                <div class="cmp-dots" aria-hidden="true">
-                <i class="cmp-dot cmp-dot-l" style="--x:29.6%;--y:38.9%" aria-hidden="true"></i>
-                <i class="cmp-dot cmp-dot-l" style="--x:38.9%;--y:14.8%" aria-hidden="true"></i>
-                <i class="cmp-dot cmp-dot-r" style="--x:83.3%;--y:33.5%" aria-hidden="true"></i>
-                <i class="cmp-dot cmp-dot-r" style="--x:83.9%;--y:90.8%" aria-hidden="true"></i>
-                </div>
-              <div class="cmp-handle" aria-hidden="true">
-                <span class="cmp-line"></span>
-                <span class="cmp-pill">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M8 8L4 12l4 4M16 8l4 4-4 4"/></svg>
-                </span>
-                <span class="cmp-line"></span>
-              </div>
-            </div>
-            <div class="cmp-gut cmp-gut-r" role="list"
-                 aria-label="Tokens on the right of this screen">
-            <span class="cmp-ann" role="listitem" style="--y:33.5%">
-              <i class="cmp-ann-dot" style="background-color:#dfe2e4" aria-hidden="true"></i>
-              <span class="cmp-ann-n">border.neutral.regular</span>
-            </span>
-            <span class="cmp-ann" role="listitem" style="--y:90.8%">
-              <i class="cmp-ann-dot" style="background-color:#006ee5" aria-hidden="true"></i>
-              <span class="cmp-ann-n">background.brand.regular</span>
-            </span>
-            </div>
-            <p class="cmp-hint">Drag the handle, or use the arrow keys</p>
-          </div>
+      
     </div>
 
     <!-- Section 4: Result -->
@@ -760,7 +756,7 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
   </svg>
 </button>
 
-<script src="../shared/case-study.js?v=202609061517" defer></script>
+<script src="../shared/case-study.js?v=202609061536" defer></script>
 <script>
 /* The light/dark seam. All input comes from the range element, so there are no
    drag handlers here at all - only a paint step. */
