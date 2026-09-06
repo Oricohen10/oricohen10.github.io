@@ -248,10 +248,17 @@ button{cursor:pointer;font-family:inherit}
   color:var(--text-primary);
 }
 .cs-hero-accent{color:var(--action-primary)}
+/* 17.5px at 650px, not 16px at 580px. What read as "too narrow" was the
+   ratio rather than the width: the h1 fills the 880px column and the subtitle
+   stopped at 580, so it looked unrelated to the line above it.
+   Widening the box alone would have broken the measure - 580px at 16px is
+   already about 72 characters a line, the top of the 50-75 range this file
+   works to. Lifting the size and the width together lands at 74, so the block
+   is 12% wider and reads as part of the hero instead of a caption under it. */
 .cs-hero-sub{
   margin-top:16px;
-  font-size:16px;color:var(--text-secondary);
-  line-height:1.75;max-width:580px;
+  font-size:17.5px;color:var(--text-secondary);
+  line-height:1.7;max-width:650px;
   text-wrap:pretty;
 }
 
@@ -561,7 +568,7 @@ button{cursor:pointer;font-family:inherit}
   .back-nav{display:flex}
   .cs-body{gap:28px;padding:24px 20px 80px}
   .cs-hero h1{font-size:24px}
-  .cs-hero-sub{font-size:15px}
+  .cs-hero-sub{font-size:16px;max-width:none}
   .cs-section > p{font-size:15px}
   .ai-card-text{font-size:15px}
   .stat-grid{grid-template-columns:1fr 1fr}

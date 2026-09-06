@@ -16,8 +16,8 @@
 <meta name="twitter:description" content="How Ori Cohen built Verint's enterprise design system from scratch — one language for 40+ products and 10k+ users."/>
 <meta name="twitter:image" content="https://oricohen.co/cases/lux/images/og-image.png"/>
 <meta name="author" content="Ori Cohen"/>
-<link rel="stylesheet" href="../../src/tokens.css?v=202609061536"/>
-<link rel="stylesheet" href="../shared/case-study.css?v=202609061536"/>
+<link rel="stylesheet" href="../../src/tokens.css?v=202609061540"/>
+<link rel="stylesheet" href="../shared/case-study.css?v=202609061540"/>
 <!-- Hide default cursor when embedded in the portfolio iframe -->
 <script>try{if(localStorage.getItem('ori-theme')==='dark')document.documentElement.setAttribute('data-theme','dark')}catch(e){}
 if(window.self!==window.top){var _s=document.createElement('style');_s.textContent='*{cursor:none!important}';document.head.appendChild(_s);}</script>
@@ -434,6 +434,39 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
   transform:translate(-50%,-50%);
   background:#fff;border:2.5px solid #121213;
   box-shadow:0 0 0 1.5px rgba(255,255,255,.85),0 1px 3px rgba(0,0,0,.4)}
+/* A slow ring leaving each dot. It is a separate pseudo-element rather than a
+   box-shadow animation on the dot itself, because the dot's shadow is doing
+   two other jobs - the white halo that keeps it legible over both halves of
+   the seam, and the drop shadow - and animating that property would fight
+   both.
+
+   The ring rides on transform and opacity only, so it composites and never
+   triggers layout. Each dot is offset by a different delay: four rings
+   pulsing in unison reads as a machine, four out of step reads as something
+   alive, and it also stops the eye locking onto one rhythm.
+
+   4.5s is deliberately slow. This sits under a paragraph asking you to drag a
+   handle, so the dots should say "these are the points" and then get out of
+   the way, not compete for attention while you read. */
+.cmp-dot::after{content:"";position:absolute;inset:-2.5px;border-radius:50%;
+  border:1.5px solid rgba(18,18,19,.55);
+  animation:cmpPing 4.5s cubic-bezier(.2,.6,.3,1) var(--d,0s) infinite;
+  pointer-events:none}
+/* The delay comes from --d on each dot, not from nth-of-type. The leads are
+   <i> too, so the dots are the 2nd, 4th, 6th and 8th of their type - a
+   positional selector here selected a lead, a dot and a lead. Setting it on
+   the element cannot drift when the markup order changes. */
+@keyframes cmpPing{
+  0%      {transform:scale(1);   opacity:.75}
+  55%,100%{transform:scale(2.9); opacity:0}
+}
+/* Same guard as every other decorative animation on the site, and it has to
+   resolve to the resting state rather than to a mid-animation frame - an
+   expanded ring frozen at opacity 0 would be invisible, which is fine, but a
+   frozen ring at full opacity would look like a second dot. */
+@media(prefers-reduced-motion:reduce){
+  .cmp-dot::after{animation:none;opacity:0}
+}
 
 /* the chips, overlapping the frame edges */
 .cmp-chips{position:absolute;inset:0;z-index:4;pointer-events:none}
@@ -572,61 +605,7 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
       <p>Rebuilding it became one of Verint's top-20 strategic goals. We started from scratch: a new token architecture, Verint's first motion design library, full accessibility coverage, and dark mode - a first in the company's history.</p>
     </div>
 
-    <div class="cmp" id="cmp">
-            <div class="cmp-stage">
-            <div class="cmp-frame">
-              <div class="cmp-side cmp-light">
-                <img src="images/af-light.webp" width="1800" height="1012"
-                     loading="lazy" decoding="async"
-                     alt="Verint Agent Factory in light mode: the Add tool provider modal over the Tools Manager page, with a stepper, radio cards, a data table of tool names and annotations, status badges and toggles."/>
-              </div>
-              <div class="cmp-side cmp-dark" aria-hidden="true">
-                <img src="images/af-dark.webp" width="1800" height="1012"
-                     loading="lazy" decoding="async" alt=""/>
-              </div>
-              <input class="cmp-input" id="cmp-input" type="range"
-                     min="0" max="100" value="50" step="1"
-                     aria-label="Reveal the dark theme. Drag or use the arrow keys."/>
-                <div class="cmp-ov" aria-hidden="true">
-                <i class="cmp-lead" style="--x:38.9%;--y:14.8%"></i>
-                <i class="cmp-dot" style="--x:38.9%;--y:14.8%"></i>
-                <i class="cmp-lead" style="--x:56.3%;--y:33.5%"></i>
-                <i class="cmp-dot" style="--x:56.3%;--y:33.5%"></i>
-                <i class="cmp-lead" style="--x:29.6%;--y:61.2%"></i>
-                <i class="cmp-dot" style="--x:29.6%;--y:61.2%"></i>
-                <i class="cmp-lead" style="--x:83.9%;--y:90.8%"></i>
-                <i class="cmp-dot" style="--x:83.9%;--y:90.8%"></i>
-                </div>
-              <div class="cmp-handle" aria-hidden="true">
-                <span class="cmp-line"></span>
-                <span class="cmp-pill">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M8 8L4 12l4 4M16 8l4 4-4 4"/></svg>
-                </span>
-                <span class="cmp-line"></span>
-              </div>
-            </div>
-                      <div class="cmp-chips" role="list"
-                 aria-label="Token names on the elements they paint">
-              <span class="cmp-ann" role="listitem" style="--y:14.8%">
-                <i class="cmp-ann-dot" style="background-color:#ffffff"></i>
-                <span class="cmp-ann-n">layer.level_3</span>
-              </span>
-              <span class="cmp-ann" role="listitem" style="--y:33.5%">
-                <i class="cmp-ann-dot" style="background-color:#dfe2e4"></i>
-                <span class="cmp-ann-n">border.neutral.regular</span>
-              </span>
-              <span class="cmp-ann" role="listitem" style="--y:61.2%">
-                <i class="cmp-ann-dot" style="background-color:#121213"></i>
-                <span class="cmp-ann-n">text.neutral.main</span>
-              </span>
-              <span class="cmp-ann" role="listitem" style="--y:90.8%">
-                <i class="cmp-ann-dot" style="background-color:#006ee5"></i>
-                <span class="cmp-ann-n">background.brand.regular</span>
-              </span>
-            </div>
-            </div>
-            <p class="cmp-hint">Drag the handle, or use the arrow keys</p>
-            </div>
+    
 
     <!-- Section 2: Challenge -->
     <div class="cs-section cs-reveal">
@@ -647,7 +626,7 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
       <figure class="cs-media">
       <!-- The variables browser. Replaces the component-library screenshot:
            the same claim, but checkable. -->
-      <div class="vb-shell" data-dv="202609061536">
+      <div class="vb-shell" data-dv="202609061540">
         <div class="vb" id="vb" role="group"
              aria-label="LUX 2.0 variable library, browsable">
           <div class="vb-side">
@@ -696,6 +675,80 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
 
       
     </div>
+
+    <!-- Section: The design -->
+    <div class="cs-section cs-reveal">
+      <div class="cs-section-num">
+        <h2 class="cs-sec-title">The design</h2>
+      </div>
+      <p>Nothing in LUX 2.0 carries a colour of its own. A component points at
+        a semantic token, that token points at a primitive, and the primitive
+        is the only place a value is ever written down. Change it once and
+        every product using it moves with it, which is what makes a system of
+        this size something a small team can actually maintain.</p>
+      <p>Dark mode is what that architecture buys. It is not a second set of
+        components or a parallel library to keep in step, it is a mode on the
+        primitives, so one build renders either theme. Drag the handle below
+        and watch what does not happen: nothing moves. Same layout, same
+        spacing, same component, same token names on both sides of the seam.
+        Only the values behind those names change.</p>
+      <div class="cmp" id="cmp">
+            <div class="cmp-stage">
+            <div class="cmp-frame">
+              <div class="cmp-side cmp-light">
+                <img src="images/af-light.webp" width="1800" height="1012"
+                     loading="lazy" decoding="async"
+                     alt="Verint Agent Factory in light mode: the Add tool provider modal over the Tools Manager page, with a stepper, radio cards, a data table of tool names and annotations, status badges and toggles."/>
+              </div>
+              <div class="cmp-side cmp-dark" aria-hidden="true">
+                <img src="images/af-dark.webp" width="1800" height="1012"
+                     loading="lazy" decoding="async" alt=""/>
+              </div>
+              <input class="cmp-input" id="cmp-input" type="range"
+                     min="0" max="100" value="50" step="1"
+                     aria-label="Reveal the dark theme. Drag or use the arrow keys."/>
+                <div class="cmp-ov" aria-hidden="true">
+                <i class="cmp-lead" style="--x:38.9%;--y:14.8%"></i>
+                <i class="cmp-dot" style="--x:38.9%;--y:14.8%"></i>
+                <i class="cmp-lead" style="--x:56.3%;--y:33.5%"></i>
+                <i class="cmp-dot" style="--x:56.3%;--y:33.5%;--d:0.55s"></i>
+                <i class="cmp-lead" style="--x:29.6%;--y:61.2%"></i>
+                <i class="cmp-dot" style="--x:29.6%;--y:61.2%;--d:1.1s"></i>
+                <i class="cmp-lead" style="--x:83.9%;--y:90.8%"></i>
+                <i class="cmp-dot" style="--x:83.9%;--y:90.8%;--d:1.65s"></i>
+                </div>
+              <div class="cmp-handle" aria-hidden="true">
+                <span class="cmp-line"></span>
+                <span class="cmp-pill">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M8 8L4 12l4 4M16 8l4 4-4 4"/></svg>
+                </span>
+                <span class="cmp-line"></span>
+              </div>
+            </div>
+                      <div class="cmp-chips" role="list"
+                 aria-label="Token names on the elements they paint">
+              <span class="cmp-ann" role="listitem" style="--y:14.8%">
+                <i class="cmp-ann-dot" style="background-color:#ffffff"></i>
+                <span class="cmp-ann-n">layer.level_3</span>
+              </span>
+              <span class="cmp-ann" role="listitem" style="--y:33.5%">
+                <i class="cmp-ann-dot" style="background-color:#dfe2e4"></i>
+                <span class="cmp-ann-n">border.neutral.regular</span>
+              </span>
+              <span class="cmp-ann" role="listitem" style="--y:61.2%">
+                <i class="cmp-ann-dot" style="background-color:#121213"></i>
+                <span class="cmp-ann-n">text.neutral.main</span>
+              </span>
+              <span class="cmp-ann" role="listitem" style="--y:90.8%">
+                <i class="cmp-ann-dot" style="background-color:#006ee5"></i>
+                <span class="cmp-ann-n">background.brand.regular</span>
+              </span>
+            </div>
+            </div>
+            <p class="cmp-hint">Drag the handle, or use the arrow keys</p>
+            </div>
+    </div>
+
 
     <!-- Section 4: Result -->
     <div class="cs-section cs-reveal">
@@ -756,7 +809,7 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
   </svg>
 </button>
 
-<script src="../shared/case-study.js?v=202609061536" defer></script>
+<script src="../shared/case-study.js?v=202609061540" defer></script>
 <script>
 /* The light/dark seam. All input comes from the range element, so there are no
    drag handlers here at all - only a paint step. */
