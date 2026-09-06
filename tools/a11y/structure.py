@@ -5,7 +5,7 @@ from dom import parse,q
 ROOT=os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 PAGES=['index.html','cases/plugins/index.html','cases/myverint/index.html',
-       'cases/lux/index.html','cases/lux/viewer.html','cases/copilot/index.html',
+       'cases/lux/index.html','cases/lux/viewer.html','cases/lux/docs.html','cases/copilot/index.html',
        'cases/agent-factory/index.html','cases/_template.html']
 
 findings=collections.defaultdict(list)
@@ -137,6 +137,37 @@ for page in PAGES:
             for ref in v.split():
                 if ref not in ids:
                     rep(page,'A','idref',f'line {n.line}: {attr}="{ref}" points at no element')
+
+    # --- 4b. controls wired up in JS rather than with an inline handler ---
+    # The checker used to look only for onclick="" attributes, which meant a
+    # div bound with addEventListener was invisible to it. That is how 14 nav
+    # items on cases/lux/docs.html - divs with a click listener, no role, no
+    # tabindex, no keyboard - passed a clean audit.
+    js_all=src
+    for extra in ('src/main.js','cases/shared/case-study.js'):
+        pth=os.path.join(ROOT,extra)
+        if os.path.exists(pth): js_all+=open(pth,encoding='utf-8').read()
+    # selectors this page binds a click to
+    bound=set()
+    for m in re.finditer(r"querySelectorAll?\(\s*[`'\"]([^`'\"]+)[`'\"]\s*\)"
+                         r"(?:[^;]{0,200}?)addEventListener\(\s*['\"]click", js_all, re.S):
+        bound.add(m.group(1))
+    for m in re.finditer(r"addEventListener\(\s*['\"]click[^;]{0,400}?closest\(\s*['\"]([^'\"]+)", js_all, re.S):
+        bound.add(m.group(1))
+    for sel in bound:
+        cls=re.findall(r'\.([\w-]+)',sel)
+        if not cls: continue
+        for n in root.walk():
+            if n.tag in ('button','a','input','select','textarea','summary'): continue
+            if not all(c in n.cls() for c in cls): continue
+            if n.attrs.get('aria-hidden')=='true': continue
+            if any(c in RUNTIME_PATCHED for c in n.cls()): continue
+            role=n.attrs.get('role','')
+            if role in ('button','tab','link','menuitem','option'): continue
+            if 'tabindex' in n.attrs and role: continue
+            rep(page,'A','js-click',
+                f'line {n.line}: <{n.tag} class="{" ".join(n.cls())}"> gets a click '
+                f'listener via "{sel}" but is not a button and has no role/tabindex')
 
     # --- 5. interactive ---
     for n in root.walk():

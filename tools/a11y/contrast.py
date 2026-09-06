@@ -15,6 +15,7 @@ SHEETS={
  'cases/copilot/index.html':['src/tokens.css','cases/shared/case-study.css'],
  'cases/agent-factory/index.html':['src/tokens.css','cases/shared/case-study.css'],
  'cases/lux/viewer.html':['src/tokens.css'],
+ 'cases/lux/docs.html':['src/tokens.css'],
 }
 
 def page_rules(page):

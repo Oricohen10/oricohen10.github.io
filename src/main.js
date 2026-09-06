@@ -600,7 +600,7 @@ document.addEventListener('DOMContentLoaded', patchWindowControls);
 let wZ = 600, drag = null, dox = 0, doy = 0;
 let cascadeX = 60, cascadeY = 50;
 const STEP = 28;
-const WIN_IDS = ['projects','about','contact','proj-lux','proj-myverint','proj-copilot','proj-plugins','proj-supervisor','a11y','lux-viewer'];
+const WIN_IDS = ['projects','about','contact','proj-lux','proj-myverint','proj-copilot','proj-plugins','proj-supervisor','a11y','lux-viewer','lux-docs'];
 
 function updateCloseAll() {
   const anyOpen = WIN_IDS.some(id => {
@@ -656,7 +656,7 @@ function openWin(id) {
     document.head.appendChild(lk);
   }
   /* Case study windows open maximized on first launch */
-  const CASE_STUDIES = ['proj-lux', 'proj-myverint', 'proj-supervisor', 'proj-plugins', 'proj-copilot', 'lux-viewer'];
+  const CASE_STUDIES = ['proj-lux', 'proj-myverint', 'proj-supervisor', 'proj-plugins', 'proj-copilot', 'lux-viewer', 'lux-docs'];
   if (CASE_STUDIES.includes(id) && !w._everMaximized) {
     w._everMaximized = true;
     requestAnimationFrame(() => maximizeWin(id));

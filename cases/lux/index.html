@@ -16,8 +16,8 @@
 <meta name="twitter:description" content="How Ori Cohen built Verint's enterprise design system from scratch — one language for 40+ products and 10k+ users."/>
 <meta name="twitter:image" content="https://oricohen.co/cases/lux/images/og-image.png"/>
 <meta name="author" content="Ori Cohen"/>
-<link rel="stylesheet" href="../../src/tokens.css?v=202609061435"/>
-<link rel="stylesheet" href="../shared/case-study.css?v=202609061435"/>
+<link rel="stylesheet" href="../../src/tokens.css?v=202609061449"/>
+<link rel="stylesheet" href="../shared/case-study.css?v=202609061449"/>
 <!-- Hide default cursor when embedded in the portfolio iframe -->
 <script>try{if(localStorage.getItem('ori-theme')==='dark')document.documentElement.setAttribute('data-theme','dark')}catch(e){}
 if(window.self!==window.top){var _s=document.createElement('style');_s.textContent='*{cursor:none!important}';document.head.appendChild(_s);}</script>
@@ -440,6 +440,56 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
   background:var(--surface-raised)}
 .cmp-hint{margin-top:10px;text-align:center;font-size:11.5px;
   color:var(--text-tertiary);letter-spacing:.03em}
+
+/* ══ Documentation ═════════════════════════════════════════════════════════
+   A card that opens the docs, rather than an iframe embedding them. The old
+   site nested the docs page inside the case study with a "scroll to explore"
+   hint - but this page is ALREADY inside an iframe on index.html, so that
+   would be three frames deep, and a scroll hint inside a nested frame is a
+   fight with the page's own scroll. The docs open as their own window, the
+   way the component viewer already does.                                    */
+.dk{margin-top:22px;display:grid;grid-template-columns:minmax(0,1fr) auto;
+  gap:24px;align-items:center;
+  padding:20px 22px;border:1px solid var(--border-subtle);
+  border-radius:var(--radius-lg);background:var(--surface-default)}
+.dk-l{min-width:0}
+.dk-label{font-size:10px;font-weight:800;letter-spacing:.12em;
+  text-transform:uppercase;color:var(--text-secondary);margin-bottom:8px}
+.dk-h{font-size:17px;font-weight:800;letter-spacing:-.2px;
+  color:var(--text-primary);margin-bottom:6px}
+.dk-p{font-size:13px;line-height:1.65;color:var(--text-secondary);
+  max-width:60ch;margin-bottom:14px}
+.dk-p b{color:var(--text-primary);font-weight:600}
+.dk-secs{display:flex;flex-wrap:wrap;gap:6px;list-style:none;margin:0;padding:0}
+.dk-sec{font-size:11px;font-weight:600;padding:4px 10px;
+  border-radius:var(--radius-full);border:1px solid var(--border-default);
+  color:var(--text-secondary);background:var(--surface-raised)}
+.dk-r{display:flex;flex-direction:column;gap:10px;align-items:stretch;
+  flex-shrink:0}
+.dk-nums{display:flex;gap:18px}
+.dk-num{text-align:center}
+.dk-num b{display:block;font-size:22px;font-weight:800;letter-spacing:-.5px;
+  color:var(--action-primary);line-height:1.1}
+.dk-num span{display:block;margin-top:2px;font-size:10px;font-weight:700;
+  letter-spacing:.08em;text-transform:uppercase;color:var(--text-tertiary)}
+.dk-open{display:inline-flex;align-items:center;justify-content:center;gap:7px;
+  min-height:38px;padding:9px 18px;border:0;border-radius:var(--radius-md);
+  font:inherit;font-size:13px;font-weight:600;cursor:pointer;
+  /* purple-600, not purple-500. The bottom-bar pill uses 500 because its
+     content is an ICON at the 3:1 bar; this is a text label at 4.5, and
+     white on purple-500 is 4.20 - just under. 600 is 5.81, 700 is 7.90. */
+  background:var(--purple-600);color:var(--gray-0);
+  text-decoration:none;white-space:nowrap;
+  transition:background .14s,box-shadow .14s}
+.dk-open:hover{background:var(--purple-700);
+  box-shadow:0 3px 14px rgba(98,72,232,.32)}
+.dk-open svg{width:13px;height:13px;flex-shrink:0}
+
+@media(max-width:760px){
+  .dk{grid-template-columns:1fr;gap:16px;align-items:start}
+  .dk-r{flex-direction:row;align-items:center;justify-content:space-between;
+    flex-wrap:wrap}
+}
 </style>
 <script type="application/ld+json">
 {
@@ -554,7 +604,7 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
       <figure class="cs-media">
       <!-- The variables browser. Replaces the component-library screenshot:
            the same claim, but checkable. -->
-      <div class="vb-shell" data-dv="202609061435">
+      <div class="vb-shell" data-dv="202609061449">
         <div class="vb" id="vb" role="group"
              aria-label="LUX 2.0 variable library, browsable">
           <div class="vb-side">
@@ -706,6 +756,36 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
              alt="A LUX 2.0 menu component with every colour annotated by its semantic token name, including text.neutral.main, bg.greyscale.soft.hover, icon.neutral.hover and menu.background.surface"/>
         <figcaption>What "zero hardcoded values" looks like on a single component: every colour carries a semantic name, so it can be changed once and everywhere at the same time.</figcaption>
       </figure>
+
+      <div class="dk">
+        <div class="dk-l">
+          <div class="dk-label">Documentation</div>
+          <div class="dk-h">Docs not done, component not done.</div>
+          <p class="dk-p">Every component ships with the full picture, and
+            <b>the token reference is generated from the library</b> rather than
+            written by hand - so it cannot drift from what is actually in
+            Figma.</p>
+          <ul class="dk-secs">
+            <li class="dk-sec">Anatomy</li>
+            <li class="dk-sec">States</li>
+            <li class="dk-sec">Behaviour</li>
+            <li class="dk-sec">Keyboard</li>
+            <li class="dk-sec">Do / Don't</li>
+            <li class="dk-sec">Token reference</li>
+          </ul>
+        </div>
+        <div class="dk-r">
+          <div class="dk-nums">
+            <div class="dk-num"><b>14</b><span>Documented</span></div>
+            <div class="dk-num"><b>483</b><span>Tokens cited</span></div>
+          </div>
+          <a class="dk-open" href="docs.html" target="_blank" rel="noopener"
+             onclick="if(window.parent!==window&&window.parent.openWin){window.parent.openWin('lux-docs');return false;}">
+            Open the documentation
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg>
+          </a>
+        </div>
+      </div>
     </div>
 
     <!-- AI Usage -->
@@ -728,7 +808,7 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
   </svg>
 </button>
 
-<script src="../shared/case-study.js?v=202609061435" defer></script>
+<script src="../shared/case-study.js?v=202609061449" defer></script>
 <script>
 /* The light/dark seam. All input comes from the range element, so there are no
    drag handlers here at all - only a paint step. */

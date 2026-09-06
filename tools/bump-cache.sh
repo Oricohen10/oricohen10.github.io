@@ -41,7 +41,8 @@ python3 - "$STAMP" <<'PY'
 import re, sys, glob, os
 
 stamp = sys.argv[1]
-targets = sorted(glob.glob('cases/*/index.html')) + ['index.html', 'cases/lux/viewer.html']
+targets = (sorted(glob.glob('cases/*/index.html'))
+           + ['index.html', 'cases/lux/viewer.html', 'cases/lux/docs.html'])
 
 # href/src of a shared stylesheet or the shared script, at any depth
 SUBRES = re.compile(
@@ -49,7 +50,7 @@ SUBRES = re.compile(
     r'(?:\?v=[^"]*)?(")')
 # the iframe documents themselves
 IFRAME = re.compile(
-    r'(<iframe[^>]*\bsrc=")(cases/[\w-]+/(?:index|viewer)\.html)(?:\?v=[^"]*)?(")')
+    r'(<iframe[^>]*\bsrc=")(cases/[\w-]+/(?:index|viewer|docs)\.html)(?:\?v=[^"]*)?(")')
 # JSON that JS fetches at runtime. The regexes above only see URLs written in
 # the markup, so cases/lux/data/*.json - fetched by the variables browser - was
 # invisible to this script and would have gone stale exactly the way the shared
