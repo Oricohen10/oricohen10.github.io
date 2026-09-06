@@ -39,8 +39,8 @@
   }
 }
 </script>
-<link rel="stylesheet" href="../../src/tokens.css?v=202609060932"/>
-<link rel="stylesheet" href="../shared/case-study.css?v=202609060932"/>
+<link rel="stylesheet" href="../../src/tokens.css?v=202609061004"/>
+<link rel="stylesheet" href="../shared/case-study.css?v=202609061004"/>
 <script>try{if(localStorage.getItem('ori-theme')==='dark')document.documentElement.setAttribute('data-theme','dark')}catch(e){}
 if(window.self!==window.top){var _s=document.createElement('style');_s.textContent='*{cursor:none!important}';document.head.appendChild(_s);}</script>
 <style>
@@ -55,12 +55,10 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
   --action-primary-hover:  #6ee7b7;
   --action-primary-subtle: rgba(52,211,153,.12);
 }
-/* Bright emerald bg needs dark icon/text for contrast */
-[data-theme="dark"] #scroll-top { color: #1a1a1a; }
 
 /* -- Chip variant ------------------------------------------------------- */
 .chip--ai{background:rgba(4,120,87,.1);color:#047857}
-[data-theme="dark"] .chip--ai{background:rgba(52,211,153,.15);color:#34d399}
+[data-theme="dark"] .chip--ai{background:rgba(52,211,153,.10);color:#34d399}
 </style>
 </head>
 <body>
@@ -103,7 +101,7 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
   </aside>
 
   <!-- Content -->
-  <div class="cs-content">
+  <main class="cs-content">
 
     <!-- Hero -->
     <div class="cs-hero">
@@ -114,7 +112,7 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
     <!-- Background -->
     <div class="cs-section cs-reveal">
       <div class="cs-section-num">
-        <div class="cs-sec-title">Background</div>
+        <h2 class="cs-sec-title">Background</h2>
       </div>
       <p>Verint had best-in-class tools for routing, recording, and workforce management - but nothing for the agent in the middle of a live conversation. Agent Experience was the initiative to change that, and the Copilot panel was the bet at its center.</p>
       <p>It started as a hackathon. The concept - a panel that reads what's happening in real time and responds with context, knowledge, and guidance - was genuinely new territory for Verint. Nothing in the existing product suite pointed toward what this should be. Getting from working prototype to production feature meant building something reliable enough to run during any live customer conversation.</p>
@@ -123,7 +121,7 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
     <!-- Problem -->
     <div class="cs-section cs-reveal">
       <div class="cs-section-num">
-        <div class="cs-sec-title">The problem</div>
+        <h2 class="cs-sec-title">The problem</h2>
       </div>
       <p>Agents are expected to know everything - instantly. While a customer is talking, they hold context, search knowledge bases, stay on top of compliance requirements, manage the conversation itself, and write a wrap-up when it's done.</p>
       <p>All of it is manual. All of it adds up. <strong>Nobody was helping the agent.</strong></p>
@@ -132,7 +130,7 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
     <!-- Solution -->
     <div class="cs-section cs-reveal">
       <div class="cs-section-num">
-        <div class="cs-sec-title">The Copilot</div>
+        <h2 class="cs-sec-title">The Copilot</h2>
       </div>
       <p>A dedicated panel on the right side of the agent desktop. It tracks the conversation and responds - no search, no switching screens, no extra effort.</p>
 
@@ -174,7 +172,7 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
     <!-- Result -->
     <div class="cs-section cs-reveal">
       <div class="cs-section-num">
-        <div class="cs-sec-title">Result</div>
+        <h2 class="cs-sec-title">Result</h2>
       </div>
       <p>The Copilot was mature enough to ship standalone - ahead of the full Agent Experience launch. It became the first AI-first feature in Verint's contact center desktop, and the first time this category of real-time assistance was shown at Verint Engage.</p>
 
@@ -209,7 +207,7 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
     <!-- What I'd do differently -->
     <div class="cs-section cs-reveal">
       <div class="cs-section-num">
-        <div class="cs-sec-title">What I'd do differently</div>
+        <h2 class="cs-sec-title">What I'd do differently</h2>
       </div>
       <div class="diff-item">
           <div class="diff-marg">Scope</div>
@@ -227,7 +225,7 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
         </div>
     </div>
 
-  </div><!-- /cs-content -->
+  </main><!-- /cs-content -->
 </div><!-- /cs-body -->
 
 <button id="scroll-top" aria-label="Back to top">
@@ -236,6 +234,6 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
   </svg>
 </button>
 
-<script src="../shared/case-study.js?v=202609060932" defer></script>
+<script src="../shared/case-study.js?v=202609061004" defer></script>
 </body>
 </html>

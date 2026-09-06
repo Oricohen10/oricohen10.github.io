@@ -16,8 +16,8 @@
 <meta name="twitter:description" content="How Ori Cohen built Verint's enterprise design system from scratch — one language for 40+ products and 10k+ users."/>
 <meta name="twitter:image" content="https://oricohen.co/cases/lux/images/og-image.png"/>
 <meta name="author" content="Ori Cohen"/>
-<link rel="stylesheet" href="../../src/tokens.css?v=202609060932"/>
-<link rel="stylesheet" href="../shared/case-study.css?v=202609060932"/>
+<link rel="stylesheet" href="../../src/tokens.css?v=202609061004"/>
+<link rel="stylesheet" href="../shared/case-study.css?v=202609061004"/>
 <!-- Hide default cursor when embedded in the portfolio iframe -->
 <script>try{if(localStorage.getItem('ori-theme')==='dark')document.documentElement.setAttribute('data-theme','dark')}catch(e){}
 if(window.self!==window.top){var _s=document.createElement('style');_s.textContent='*{cursor:none!important}';document.head.appendChild(_s);}</script>
@@ -33,12 +33,10 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
   --action-primary-hover:  var(--purple-200, #c4b5fd);
   --action-primary-subtle: rgba(167,139,250,.15);
 }
-/* Scroll-to-top: bright purple bg needs dark icon for 3:1 contrast */
-[data-theme="dark"] #scroll-top { color: #1a1a1a; }
 
 /* -- Chip variant ------------------------------------------------------- */
 .chip--system{background:rgba(91,63,199,.1);color:#5b3fc7}
-[data-theme="dark"] .chip--system{background:rgba(167,139,250,.14);color:#a78bfa}
+[data-theme="dark"] .chip--system{background:rgba(167,139,250,.10);color:#af95fa}
 
 /* -- Sidebar tag (pill chip with accent border) ------------------------- */
 .sb-tag{
@@ -66,6 +64,9 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
 .sb-cta:active{background:rgba(98,72,232,.1);color:var(--purple-800, #3a289e);border-color:var(--purple-800, #3a289e)}
 [data-theme="dark"] .sb-cta{color:var(--purple-300, #a78bfa);border-color:var(--purple-400, #8b72f0);box-shadow:0 0 16px rgba(123,97,255,.4)}
 [data-theme="dark"] .sb-cta:hover{background:rgba(123,97,255,.12);color:var(--purple-200, #c4b5fd);border-color:var(--purple-300, #a78bfa);box-shadow:0 0 22px rgba(123,97,255,.55)}
+/* :hover got a dark rule and :active did not, so pressing it in dark used the
+   light value - purple-800 ink on a dark tint, 1.14:1. */
+[data-theme="dark"] .sb-cta:active{background:rgba(123,97,255,.2);color:var(--purple-100, #e8e3ff);border-color:var(--purple-200, #d0c7ff)}
 .sb-cta svg{width:13px;height:13px;flex-shrink:0}
 </style>
 <script type="application/ld+json">
@@ -140,12 +141,12 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
     <a class="sb-cta" href="viewer.html" target="_blank" rel="noopener"
        onclick="if(window.parent!==window){window.parent.openWin('lux-viewer');return false;}">
       Open the live viewer
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg>
     </a>
   </aside>
 
   <!-- Content -->
-  <div class="cs-content">
+  <main class="cs-content">
 
     <!-- Hero -->
     <div class="cs-hero">
@@ -156,7 +157,7 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
     <!-- Section 1: Background -->
     <div class="cs-section cs-reveal">
       <div class="cs-section-num">
-        <div class="cs-sec-title">Background</div>
+        <h2 class="cs-sec-title">Background</h2>
       </div>
       <p>LUX 1.0 carried seven years of design debt. No tokens. No dark mode. No responsive design. Accessibility gaps on nearly every component. It still worked - but it was starting to block product teams who needed to move faster and support more contexts.</p>
       <p>Rebuilding it became one of Verint's top-20 strategic goals. We started from scratch: a new token architecture, Verint's first motion design library, full accessibility coverage, and dark mode - a first in the company's history.</p>
@@ -165,7 +166,7 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
     <!-- Section 2: Challenge -->
     <div class="cs-section cs-reveal">
       <div class="cs-section-num">
-        <div class="cs-sec-title">Challenge</div>
+        <h2 class="cs-sec-title">Challenge</h2>
       </div>
       <p>This was my first time building a design system from the ground up. I had to learn token architecture - primitives, semantics, components - while running the project and the team at the same time. Every sprint was a balancing act: making architectural decisions that would be hard to undo, managing a committee of stakeholders with competing priorities, and keeping the documentation honest enough that teams would actually trust it.</p>
       <p>The biggest technical challenge: closing the gap between design and code entirely. A designer changes a token in Figma - the change opens a PR in GitHub automatically, the developer merges, and it's live. No developer needed for design changes.</p>
@@ -179,7 +180,7 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
     <!-- Section 3: Solution -->
     <div class="cs-section cs-reveal">
       <div class="cs-section-num">
-        <div class="cs-sec-title">Solution</div>
+        <h2 class="cs-sec-title">Solution</h2>
       </div>
       <p>I structured the work into 2-week sprints - system architecture first, then tokens, then components and patterns. I didn't run it alone: a core team with weekly committee reviews kept quality consistent and unblocked decisions fast.</p>
       <p>Alongside the component library, we built Verint's first motion design library - easing curves, duration tokens, and micro-animation specs for every interaction state. The pipeline from Figma to Storybook to GitHub runs fully automated - one token change in Figma, one PR, one merge.</p>
@@ -194,7 +195,7 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
     <div class="stat-grid cs-reveal">
       <div class="stat-card">
         <div class="stat-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
         </div>
         <div class="stat-num">40+</div>
         <div class="stat-title">Products</div>
@@ -202,7 +203,7 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
       </div>
       <div class="stat-card">
         <div class="stat-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
         </div>
         <div class="stat-num">10K+</div>
         <div class="stat-title">Daily Users</div>
@@ -210,7 +211,7 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
       </div>
       <div class="stat-card">
         <div class="stat-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
         </div>
         <div class="stat-num">0</div>
         <div class="stat-title">Hardcoded Values</div>
@@ -221,7 +222,7 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
     <!-- Section 4: Result -->
     <div class="cs-section cs-reveal">
       <div class="cs-section-num">
-        <div class="cs-sec-title">Result</div>
+        <h2 class="cs-sec-title">Result</h2>
       </div>
       <p>LUX 2.0 is live across 40+ Verint products. Zero hardcoded values in the system. Product teams that once waited days for a color fix now merge it themselves in under a minute - no ticket, no developer, no delay.</p>
       <p>Dark mode shipped on day one - the first in Verint's history. The motion library gave every product team a shared language for animation that hadn't existed before. For the first time, every interaction across the platform follows the same timing, the same easing, the same spec.</p>
@@ -243,15 +244,15 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
       </div>
     </div>
 
-  </div>
+  </main>
 </div><!-- /cs-body -->
 
 <button id="scroll-top" aria-label="Back to top">
-  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
     <path d="M8 12V4M8 4L4 8M8 4L12 8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
   </svg>
 </button>
 
-<script src="../shared/case-study.js?v=202609060932" defer></script>
+<script src="../shared/case-study.js?v=202609061004" defer></script>
 </body>
 </html>

@@ -81,9 +81,12 @@ textarea.field{resize:none;overflow-y:auto}
 #name-input{font-size:14px;margin-bottom:12px}
 #btn-go{width:100%;padding:12px;border-radius:var(--r-md);background:var(--hov);border:1px solid var(--bd);color:var(--tx3);font-family:var(--f);font-size:13px;font-weight:600;margin-bottom:10px;cursor:pointer;outline:none;transition:background .14s,color .14s,border-color .14s,box-shadow .14s}
 #btn-go:disabled{pointer-events:none;opacity:.38}
-#btn-go.ready{background:linear-gradient(135deg,var(--purple-500) 0%,var(--purple-700) 100%);border-color:transparent;color:#fff;opacity:1;box-shadow:0 2px 10px rgba(98,72,232,.28)}
-#btn-go.ready:hover{background:linear-gradient(135deg,var(--purple-400) 0%,var(--purple-600) 100%);box-shadow:0 4px 18px rgba(98,72,232,.38)}
-#btn-go.ready:active{background:linear-gradient(135deg,var(--purple-700) 0%,var(--purple-900) 100%);box-shadow:0 1px 6px rgba(98,72,232,.2)}
+/* Same ramp as .btn-primary, and it had the same fault: purple-500 under white
+   is 4.20:1 at rest and purple-400 on hover is 2.78:1. Shifted one step down
+   so no stop passes purple-600, where white crosses 4.5:1. */
+#btn-go.ready{background:linear-gradient(135deg,var(--purple-600) 0%,var(--purple-800) 100%);border-color:transparent;color:var(--gray-0);opacity:1;box-shadow:0 2px 10px rgba(98,72,232,.28)}
+#btn-go.ready:hover{background:linear-gradient(135deg,var(--purple-600) 0%,var(--purple-700) 100%);box-shadow:0 4px 18px rgba(98,72,232,.38)}
+#btn-go.ready:active{background:linear-gradient(135deg,var(--purple-800) 0%,var(--purple-900) 100%);box-shadow:0 1px 6px rgba(98,72,232,.2)}
 /* Skip uses .btn.btn-tertiary — override to match #btn-go height: */
 #btn-skip{width:100%;justify-content:center;font-size:12px;padding:12px 18px}
 .m-av-label{font-size:11px;font-weight:500;color:var(--tx3);margin-bottom:8px}
@@ -193,33 +196,42 @@ i.ph,i.ph-bold,i.ph-fill,i.ph-light{line-height:1;display:flex;align-items:cente
 }
 .btn:disabled,.btn[disabled]{opacity:.38;pointer-events:none}
 
-/* Primary — gradient + shadow. #6248E8 → #4D35C8 on white → WCAG AA ✓ */
+/* Primary.
+   The old comment here read "#6248E8 -> #4D35C8 on white -> WCAG AA" and it
+   was measuring the wrong pair: the button against the PAGE, not the label
+   against the button. Measured properly, white on purple-500 is 4.20:1 and
+   the label is 13px/600, so light mode was already below 4.5:1 - and dark
+   mode was worse for a different reason. --tx-inv means "ink for a light
+   surface", so it flips to #121213 in dark; the background did not flip, it
+   stayed purple. That put near-black text on purple-400 at 3.22:1.
+
+   Two changes. The ink is --gray-0 in both themes, and deliberately NOT
+   --text-on-accent: that token flips because the accent it sits on flips
+   lightness between themes, and this button does not use the accent token. It
+   fills from the fixed purple ramp, which is dark in both themes, so its ink
+   is white in both themes. Getting that wrong is how the bug started.
+   And no stop in any state goes lighter than purple-600, which is where white
+   crosses 4.5:1 (5.81:1). Hover still reads brighter, but by lifting the dark
+   end of the gradient rather than the light end. The separate dark-mode
+   gradient is gone: a purple button on a dark page did not need one, and it
+   was the thing keeping the bug alive.
+     purple-600 5.81:1   purple-700 7.90:1   purple-800 11.43:1 */
 .btn-primary{
-  background:linear-gradient(135deg,var(--purple-500) 0%,var(--purple-700) 100%);
-  color:var(--tx-inv);
+  background:linear-gradient(135deg,var(--purple-600) 0%,var(--purple-800) 100%);
+  color:var(--gray-0);
   box-shadow:0 2px 10px rgba(98,72,232,.28);
 }
 .btn-primary:hover{
-  background:linear-gradient(135deg,var(--purple-400) 0%,var(--purple-600) 100%);
+  background:linear-gradient(135deg,var(--purple-600) 0%,var(--purple-700) 100%);
   box-shadow:0 4px 18px rgba(98,72,232,.38);
 }
 .btn-primary:active{
-  background:linear-gradient(135deg,var(--purple-700) 0%,var(--purple-900) 100%);
+  background:linear-gradient(135deg,var(--purple-800) 0%,var(--purple-900) 100%);
   box-shadow:0 1px 6px rgba(98,72,232,.2);
 }
 .btn-primary:focus-visible{outline:2px solid var(--purple-600);outline-offset:2px}
-/* Dark mode — brighter gradient so it reads well on dark surface */
-[data-theme="dark"] .btn-primary{
-  background:linear-gradient(135deg,var(--purple-400) 0%,var(--purple-600) 100%);
-  box-shadow:0 2px 12px rgba(123,97,255,.35);
-}
-[data-theme="dark"] .btn-primary:hover{
-  background:linear-gradient(135deg,var(--purple-300) 0%,var(--purple-500) 100%);
-  box-shadow:0 4px 20px rgba(123,97,255,.45);
-}
-[data-theme="dark"] .btn-primary:active{
-  background:linear-gradient(135deg,var(--purple-600) 0%,var(--purple-800) 100%);
-}
+[data-theme="dark"] .btn-primary{box-shadow:0 2px 12px rgba(123,97,255,.35)}
+[data-theme="dark"] .btn-primary:hover{box-shadow:0 4px 20px rgba(123,97,255,.45)}
 
 /* Secondary — outlined in purple */
 .btn-secondary{background:transparent;color:var(--purple-600);border:1.5px solid var(--purple-600)}
@@ -228,6 +240,11 @@ i.ph,i.ph-bold,i.ph-fill,i.ph-light{line-height:1;display:flex;align-items:cente
 .btn-secondary:focus-visible{outline:2px solid var(--purple-600);outline-offset:2px}
 [data-theme="dark"] .btn-secondary{color:var(--purple-300);border-color:var(--purple-400)}
 [data-theme="dark"] .btn-secondary:hover{background:rgba(123,97,255,.12);color:var(--purple-200);border-color:var(--purple-300);box-shadow:0 2px 10px rgba(123,97,255,.2)}
+/* :hover had a dark counterpart and :active never did, so pressing the button
+   in dark fell through to the light rule - purple-800 ink on a dark tint,
+   1.14:1. Press should deepen the tint here and brighten the ink, which is the
+   mirror of what it does on white. */
+[data-theme="dark"] .btn-secondary:active{background:rgba(123,97,255,.2);color:var(--purple-100);border-color:var(--purple-200)}
 
 /* Tertiary — ghost, purple text */
 .btn-tertiary{background:transparent;color:var(--purple-600);padding:9px 12px}
@@ -235,7 +252,18 @@ i.ph,i.ph-bold,i.ph-fill,i.ph-light{line-height:1;display:flex;align-items:cente
 .btn-tertiary:active{background:rgba(98,72,232,.1)}
 .btn-tertiary:focus-visible{outline:2px solid var(--purple-600);outline-offset:2px}
 [data-theme="dark"] .btn-tertiary{color:var(--purple-300)}
-[data-theme="dark"] .btn-tertiary:hover{background:rgba(123,97,255,.1)}
+/* The colour has to be stated here, not inherited from the dark base rule.
+   `.btn-tertiary:hover` and `[data-theme="dark"] .btn-tertiary` are both
+   (0,2,0) - an attribute selector weighs the same as a class - so which
+   ink you get while hovering in dark was decided purely by source order.
+   It happened to resolve to purple-300 and pass, but flip the two blocks
+   and it becomes purple-700 on a dark tint at 1.60:1. Not something to
+   leave resting on line numbers. */
+[data-theme="dark"] .btn-tertiary:hover{background:rgba(123,97,255,.1);color:var(--purple-200)}
+/* Same gap as .btn-secondary:active - the base :active sets no colour, so the
+   ink stayed purple-300, but the tint deepened underneath it. Kept explicit so
+   the pair reads the same way. */
+[data-theme="dark"] .btn-tertiary:active{background:rgba(123,97,255,.18);color:var(--purple-200)}
 #hint-btn{position:fixed;bottom:18px;right:236px;width:32px;height:32px;border-radius:50%;background:var(--glass);border:1px solid var(--glass-bd);color:var(--tx2);font-family:var(--f);font-size:13px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:510;transition:background .15s,color .15s,border-color .15s;box-shadow:0 4px 12px rgba(0,0,0,.12);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px)}
 #hint-btn:hover{color:var(--tx);box-shadow:0 4px 16px rgba(0,0,0,.18)}
 #hint-panel{position:fixed;bottom:64px;right:236px;background:var(--panel);border:1px solid var(--bd2);border-radius:12px;padding:14px 16px 12px;font-size:11.5px;color:var(--tx2);box-shadow:0 8px 28px rgba(0,0,0,.15);pointer-events:none;opacity:0;transform:translateY(8px) scale(.97);transition:opacity .18s,transform .18s;z-index:510;white-space:nowrap;min-width:210px}
@@ -263,7 +291,12 @@ i.ph,i.ph-bold,i.ph-fill,i.ph-light{line-height:1;display:flex;align-items:cente
 .bb-divider{width:1px;height:20px;background:var(--bd);margin:0 4px;flex-shrink:0}
 .bb-btn{display:flex;align-items:center;justify-content:center;width:38px;height:38px;border-radius:9px;background:transparent;border:none;color:var(--tx2);transition:background .1s,color .1s}
 .bb-btn:hover,.bb-btn.demo-hov{background:var(--hov);color:var(--tx)}
-.bb-btn.on{background:var(--figma);color:#fff}
+/* --figma follows --action-primary, which is deliberately bright in dark
+   (see tokens.css). White on purple-400 is 2.78:1, so the ink has to
+   flip with the theme here - the same fill-vs-ink split the case study
+   #scroll-top has. --text-on-accent handles it: white in light on
+   purple-600 at 5.81:1, #121213 in dark on purple-400 at 6.73:1. */
+.bb-btn.on{background:var(--figma);color:var(--text-on-accent)}
 .bb-btn.inactive{opacity:.28;pointer-events:none}
 .bb-btn svg{width:18px;height:18px;display:block}
 .bb-right{display:flex;align-items:center;gap:3px}
@@ -344,11 +377,38 @@ i.ph,i.ph-bold,i.ph-fill,i.ph-light{line-height:1;display:flex;align-items:cente
   font-size:7px;font-weight:700;line-height:1;
   color:transparent;flex-shrink:0;transition:color .1s;
   border:1.5px solid rgba(0,0,0,.5);
+  position:relative;
+}
+/* The dot is 10x10. 2.5.8 asks for 24x24, and a 10px close target is a real
+   miss quite apart from the guideline - it is the smallest thing on the page
+   and it is the one that throws work away.
+   The dots are 6px apart, so growing the hit area to a full 24px square would
+   make neighbours overlap and you would close a window aiming at maximise.
+   This claims exactly the 16px pitch horizontally - 10px dot plus half of the
+   6px gap on each side, so neighbours touch but never overlap and a click is
+   never ambiguous - and 24px vertically: 16x24 instead of 10x10, 3.8x the
+   area, with no change to anything you can see.
+   Horizontally it is still 16px rather than 24. Closing that last 8px means
+   spacing the traffic lights further apart or making the dots bigger, which
+   is a change to the macOS-window look rather than an accessibility fix, so
+   it is left as a design decision. */
+.wc::before{
+  content:"";position:absolute;
+  top:-7px;bottom:-7px;left:-3px;right:-3px;
+  border-radius:6px;
 }
 [data-theme="dark"] .wc{border-color:rgba(255,255,255,.4)}
 .wc.cl{background:#FF5F57}.wc.mn{background:#FFBD2E}.wc.mx{background:#28CA41}
-.wcs:hover .wc{color:rgba(0,0,0,.55)}
-[data-theme="dark"] .wcs:hover .wc{color:rgba(255,255,255,.7)}
+/* The glyph ink does NOT flip with the theme, and that is the point. The three
+   fills are fixed - the traffic lights are a physical window motif, the same
+   rule as the phone bezel - so all three are bright in both themes and the
+   ink on them has to be dark in both. The dark override used to set
+   rgba(255,255,255,.7), which is 1.43:1 on the amber dot and 2.14:1 on the
+   red: white ink on a bright fill, invisible. And .55 black was not enough
+   either, at 3.35:1 to 4.14:1.
+   .78 black clears 4.5:1 on all three - worst case 5.47:1 on red - and stays
+   softer than solid black, which on a 7px glyph reads as a smudge. */
+.wcs:hover .wc{color:rgba(0,0,0,.78)}
 .wt{position:absolute;left:0;right:0;text-align:center;font-size:12px;font-weight:500;color:var(--tx3);pointer-events:none;letter-spacing:.01em}
 .wrc{margin-left:auto;display:flex;z-index:1;background:var(--inp);border:1px solid var(--bd);border-radius:7px;padding:2px;gap:2px}
 .wrc-btn{width:24px;height:24px;display:flex;align-items:center;justify-content:center;border-radius:5px;background:transparent;border:none;color:var(--tx3);transition:background .15s,color .1s,box-shadow .1s}

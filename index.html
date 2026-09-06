@@ -91,7 +91,7 @@
 <!-- Cursor — 3 states: arrow (default) · hand (space) · grab (space+drag) -->
 <div id="cursor" aria-hidden="true">
   <!-- State: arrow (Ori's exact Figma cursor) -->
-  <svg id="cur-arrow" width="26" height="28" viewBox="3 2 27 27" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <svg id="cur-arrow" width="26" height="28" viewBox="3 2 27 27" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
     <defs>
       <filter id="cshadow" x="-30%" y="-30%" width="160%" height="160%">
         <feDropShadow dx="0" dy="1" stdDeviation="1.5" flood-color="rgba(0,0,0,0.18)"/>
@@ -103,7 +103,7 @@
     </g>
   </svg>
   <!-- State: open hand (space held — pan mode) — same Group 19.svg design -->
-  <svg id="cur-hand" width="20" height="22" viewBox="3 2 19 22" fill="none" style="display:none;position:absolute;top:0;left:0">
+  <svg id="cur-hand" width="20" height="22" viewBox="3 2 19 22" fill="none" style="display:none;position:absolute;top:0;left:0" aria-hidden="true">
     <defs>
       <filter id="hshad" x="-30%" y="-30%" width="160%" height="160%">
         <feDropShadow dx="0" dy="1" stdDeviation="1.4" flood-color="rgba(0,0,0,0.22)"/>
@@ -115,7 +115,7 @@
     </g>
   </svg>
   <!-- State: open grab (space + drag — actively panning) — from Group 19.svg -->
-  <svg id="cur-grab" width="20" height="22" viewBox="3 2 19 22" fill="none" style="display:none;position:absolute;top:0;left:0">
+  <svg id="cur-grab" width="20" height="22" viewBox="3 2 19 22" fill="none" style="display:none;position:absolute;top:0;left:0" aria-hidden="true">
     <defs>
       <filter id="gshad" x="-30%" y="-30%" width="160%" height="160%">
         <feDropShadow dx="0" dy="1" stdDeviation="1.4" flood-color="rgba(0,0,0,0.22)"/>
@@ -157,10 +157,10 @@
     </div>
     <span class="wt">portfolio.fig</span>
     <div class="wrc">
-      <button class="wrc-btn on" id="vt-grid" data-tip="Grid view" onclick="setView('grid')">
+      <button class="wrc-btn on" id="vt-grid" data-tip="Grid view" aria-label="Grid view" aria-pressed="true" onclick="setView('grid')">
         <i class="ph ph-squares-four"></i>
       </button>
-      <button class="wrc-btn" id="vt-list" data-tip="List view" onclick="setView('list')">
+      <button class="wrc-btn" id="vt-list" data-tip="List view" aria-label="List view" aria-pressed="false" onclick="setView('list')">
         <i class="ph ph-list"></i>
       </button>
     </div>
@@ -227,7 +227,7 @@
     <div class="pg-card" role="button" tabindex="0" onclick="openWin('proj-supervisor')" onkeydown="if(event.key==='Enter'||event.key===' ')openWin('proj-supervisor')">
       <div class="pg-card-thumb">
         <!-- Light theme thumbnail -->
-        <svg class="sh-thumb-light" viewBox="-20 -12 360 204" preserveAspectRatio="xMidYMid slice" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <svg class="sh-thumb-light" viewBox="-20 -12 360 204" preserveAspectRatio="xMidYMid slice" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
           <defs><radialGradient id="shl-a" cx="50%" cy="110%" r="70%"><stop offset="0%" stop-color="#E07840" stop-opacity=".06"/><stop offset="100%" stop-color="#E07840" stop-opacity="0"/></radialGradient></defs>
           <rect x="-20" y="-12" width="360" height="204" fill="#FFF7F0"/>
           <rect x="-20" y="-12" width="360" height="204" fill="url(#shl-a)"/>
@@ -281,7 +281,7 @@
           <rect x="109" y="166" width="26" height="4" rx="2" fill="#5599E0" opacity=".2"/>
         </svg>
         <!-- Dark theme thumbnail -->
-        <svg class="sh-thumb-dark" viewBox="-20 -12 360 204" preserveAspectRatio="xMidYMid slice" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <svg class="sh-thumb-dark" viewBox="-20 -12 360 204" preserveAspectRatio="xMidYMid slice" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
           <defs>
             <filter id="shd-glo"  x="-80%" y="-80%" width="260%" height="260%"><feGaussianBlur in="SourceGraphic" stdDeviation="10"/></filter>
             <filter id="shd-glo2" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur in="SourceGraphic" stdDeviation="4"/></filter>
@@ -421,7 +421,7 @@
     </div>
     <span class="wt">Verint Design System - Case Study</span>
   </div>
-  <iframe class="proj-iframe" allow="fullscreen" src="cases/lux/index.html?v=202609060932" title="Verint Design System 2.0 Case Study" loading="lazy"></iframe>
+  <iframe class="proj-iframe" allow="fullscreen" src="cases/lux/index.html?v=202609061004" title="Verint Design System 2.0 Case Study" loading="lazy"></iframe>
 </div>
 
 <!-- My Verint: case study -->
@@ -433,7 +433,7 @@
     </div>
     <span class="wt">My Verint - Case Study</span>
   </div>
-  <iframe class="proj-iframe" allow="fullscreen" src="cases/myverint/index.html?v=202609060932" title="My Verint Case Study" loading="lazy"></iframe>
+  <iframe class="proj-iframe" allow="fullscreen" src="cases/myverint/index.html?v=202609061004" title="My Verint Case Study" loading="lazy"></iframe>
 </div>
 
 <!-- Verint Copilot: case study -->
@@ -445,7 +445,7 @@
     </div>
     <span class="wt">Agent Copilot - Case Study</span>
   </div>
-  <iframe class="proj-iframe" allow="fullscreen" src="cases/copilot/index.html?v=202609060932" title="Agent Copilot Case Study" loading="lazy"></iframe>
+  <iframe class="proj-iframe" allow="fullscreen" src="cases/copilot/index.html?v=202609061004" title="Agent Copilot Case Study" loading="lazy"></iframe>
 </div>
 
 <!-- LUX Plugins: case study -->
@@ -457,7 +457,7 @@
     </div>
     <span class="wt">LUX Plugins - Case Study</span>
   </div>
-  <iframe class="proj-iframe" allow="fullscreen" src="cases/plugins/index.html?v=202609060932" title="LUX Plugins Case Study" loading="lazy"></iframe>
+  <iframe class="proj-iframe" allow="fullscreen" src="cases/plugins/index.html?v=202609061004" title="LUX Plugins Case Study" loading="lazy"></iframe>
 </div>
 
 <!-- Supervisor Hub: placeholder -->
@@ -474,7 +474,7 @@
   <div class="proj-placeholder">
     <div class="proj-ph-thumb">
       <!-- Light theme placeholder -->
-      <svg class="sh-thumb-light" viewBox="-20 -12 360 204" preserveAspectRatio="xMidYMid slice" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <svg class="sh-thumb-light" viewBox="-20 -12 360 204" preserveAspectRatio="xMidYMid slice" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
         <defs><radialGradient id="shl-b" cx="50%" cy="110%" r="70%"><stop offset="0%" stop-color="#E07840" stop-opacity=".06"/><stop offset="100%" stop-color="#E07840" stop-opacity="0"/></radialGradient></defs>
         <rect x="-20" y="-12" width="360" height="204" fill="#FFF7F0"/>
         <rect x="-20" y="-12" width="360" height="204" fill="url(#shl-b)"/>
@@ -528,7 +528,7 @@
         <rect x="109" y="166" width="26" height="4" rx="2" fill="#5599E0" opacity=".2"/>
       </svg>
       <!-- Dark theme placeholder -->
-      <svg class="sh-thumb-dark" viewBox="-20 -12 360 204" preserveAspectRatio="xMidYMid slice" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <svg class="sh-thumb-dark" viewBox="-20 -12 360 204" preserveAspectRatio="xMidYMid slice" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
         <defs>
           <filter id="shd-glo2b" x="-80%" y="-80%" width="260%" height="260%"><feGaussianBlur in="SourceGraphic" stdDeviation="10"/></filter>
           <filter id="shd-glo3"  x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur in="SourceGraphic" stdDeviation="4"/></filter>
@@ -628,7 +628,7 @@
           <img id="contact-photo" src="Assets/Media/general/ori-profile.webp" alt="Ori Cohen" width="72" height="72"
             style="width:100%;height:100%;object-fit:cover;display:block"
             onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"/>
-          <svg style="display:none;width:44px;height:44px;flex-shrink:0" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <svg style="display:none;width:44px;height:44px;flex-shrink:0" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
             <defs><linearGradient id="cphoto-g" x1="0" y1="0" x2="64" y2="64" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#4ADE80"/><stop offset="48%" stop-color="#38BDF8"/><stop offset="100%" stop-color="#818CF8"/></linearGradient></defs>
             <path d="M18 4 L46 4 A14 14 0 0 1 60 18 L60 56 A4 4 0 0 1 56 60 L18 60 A14 14 0 0 1 4 46 L4 18 A14 14 0 0 1 18 4 Z" fill="url(#cphoto-g)"/>
           </svg>
@@ -660,7 +660,7 @@
       <div><div class="clbl">Phone</div><div class="cval">054-338-3953</div></div>
       <i class="ph ph-caret-right clink-arr"></i>
     </a>
-    <a class="clink" href="Assets/CV/Ori_Cohen_CV.docx" target="_blank" download>
+    <a class="clink" href="Assets/CV/Ori_Cohen_CV.docx" target="_blank" rel="noopener" download>
       <div class="cico"><i class="ph ph-file-arrow-down"></i></div>
       <div><div class="clbl">Resume</div><div class="cval">Download CV (.docx)</div></div>
       <i class="ph ph-caret-right clink-arr"></i>
@@ -692,7 +692,9 @@
         <div style="display:flex;align-items:center;justify-content:space-between;padding:0 14px;height:56px;flex-shrink:0;border-bottom:2px solid #1A1A3A">
           <!-- Player card compact -->
           <div style="display:flex;align-items:center;gap:8px">
-            <div id="px-card-av" style="width:30px;height:30px;display:flex;align-items:center;justify-content:center;border:2px solid #1A1A3A;background:#080816;flex-shrink:0;cursor:pointer" onclick="pxGoSetup()" title="Change character"></div>
+            <div id="px-card-av" role="button" tabindex="0"
+                 aria-label="Change avatar"
+                 onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();pxGoSetup()}" style="width:30px;height:30px;display:flex;align-items:center;justify-content:center;border:2px solid #1A1A3A;background:#080816;flex-shrink:0;cursor:pointer" onclick="pxGoSetup()" title="Change character"></div>
             <div>
               <div id="px-card-name" style="font-family:'Press Start 2P',monospace;font-size:8px;color:#E0E0FF;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:120px"></div>
               <div id="px-hiscore" style="font-family:'Press Start 2P',monospace;font-size:7px;color:#FFD700;margin-top:3px">BEST: 0 PTS</div>
@@ -741,7 +743,7 @@
           <div style="display:flex;justify-content:space-between;font-family:'Press Start 2P',monospace;font-size:6px;color:#9292C8">
             <span>◀ DARK</span><span>FOREGROUND BRIGHTNESS</span><span>LIGHT ▶</span>
           </div>
-          <input type="range" id="px-sl" min="0" max="100" value="50" oninput="pxUpdate()" style="width:100%;height:6px;accent-color:#FF00FF;cursor:pointer;display:block">
+          <input type="range" id="px-sl" min="0" max="100" value="50" aria-label="Foreground brightness" oninput="pxUpdate()" style="width:100%;height:6px;accent-color:#FF00FF;cursor:pointer;display:block">
           <div style="height:5px;border:1px solid #1A1A3A;background:linear-gradient(to right,#000,#fff)"></div>
         </div>
         <div style="flex-shrink:0;padding:0 16px 14px">
@@ -836,7 +838,7 @@
     <span class="wt">Verint Design System - Component Viewer</span>
     <div class="wrc"></div>
   </div>
-  <iframe class="proj-iframe" allow="fullscreen" src="cases/lux/viewer.html?v=202609060932" title="Verint Design System Component Viewer" loading="lazy"></iframe>
+  <iframe class="proj-iframe" allow="fullscreen" src="cases/lux/viewer.html?v=202609061004" title="Verint Design System Component Viewer" loading="lazy"></iframe>
 </div>
 
 <!-- ══════════ APP SHELL ══════════ -->
@@ -844,26 +846,28 @@
 
   <div id="workspace">
     <!-- Figma-style title pill (desktop) -->
-    <div id="title-pill" onclick="toggleSiteMenu(this)">
+    <div id="title-pill" role="button" tabindex="0" aria-haspopup="true" aria-expanded="false"
+         aria-label="Site menu" onclick="toggleSiteMenu(this)"
+         onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleSiteMenu(this)}">
       <img src="Assets/Media/general/ori-profile.webp" width="26" height="26" alt="Ori Cohen" style="border-radius:50%;object-fit:cover;flex-shrink:0;border:1.5px solid rgba(255,255,255,.15)">
       <span id="title-pill-name">Ori's Portfolio</span>
       <i class="ph ph-caret-down tp-chevron-ph"></i>
     </div>
 
     <!-- Canvas: pan + zoom -->
-    <div id="canvas-area">
+    <div id="canvas-area" role="main">
       <div id="cvp">
         <div id="fw">
           <div id="flabel">Welcome!</div>
           <div id="fborder">
-            <div class="rh rh-tl" data-rh="tl"></div>
-            <div class="rh rh-tc" data-rh="tc"></div>
-            <div class="rh rh-tr" data-rh="tr"></div>
-            <div class="rh rh-ml" data-rh="ml"></div>
-            <div class="rh rh-mr" data-rh="mr"></div>
-            <div class="rh rh-bl" data-rh="bl"></div>
-            <div class="rh rh-bc" data-rh="bc"></div>
-            <div class="rh rh-br" data-rh="br"></div>
+            <div class="rh rh-tl" data-rh="tl" aria-hidden="true"></div>
+            <div class="rh rh-tc" data-rh="tc" aria-hidden="true"></div>
+            <div class="rh rh-tr" data-rh="tr" aria-hidden="true"></div>
+            <div class="rh rh-ml" data-rh="ml" aria-hidden="true"></div>
+            <div class="rh rh-mr" data-rh="mr" aria-hidden="true"></div>
+            <div class="rh rh-bl" data-rh="bl" aria-hidden="true"></div>
+            <div class="rh rh-bc" data-rh="bc" aria-hidden="true"></div>
+            <div class="rh rh-br" data-rh="br" aria-hidden="true"></div>
             <div id="welcome">
               <div>
                 <div class="wf-badge"><div class="wf-bdot"></div>Available for the right work</div>
@@ -915,11 +919,11 @@
       <!-- Add comment -->
       <div class="rp-input-wrap">
         <div class="rp-chatbox">
-          <textarea class="rp-ta" id="rp-ta" placeholder="Leave a comment…" rows="2" oninput="syncSendBtn()" onkeyup="syncSendBtn()"></textarea>
+          <textarea class="rp-ta" id="rp-ta" aria-label="Leave a comment" placeholder="Leave a comment…" rows="2" oninput="syncSendBtn()" onkeyup="syncSendBtn()"></textarea>
           <div class="rp-actions">
             <!-- Mic / waveform button -->
-            <button class="rp-mic-btn" id="rp-mic-btn" title="Record voice" onclick="toggleRecording()">
-              <svg viewBox="0 0 14 14" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+            <button class="rp-mic-btn" id="rp-mic-btn" aria-label="Record voice" title="Record voice" onclick="toggleRecording()">
+              <svg viewBox="0 0 14 14" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
                 <rect class="wb" x="1"   y="5"   width="1.6" height="4"  rx=".8"  transform-origin="1.8 7"/>
                 <rect class="wb" x="3.7" y="3"   width="1.6" height="8"  rx=".8"  transform-origin="4.5 7"/>
                 <rect class="wb" x="6.2" y="2"   width="1.6" height="10" rx=".8"  transform-origin="7 7"/>
@@ -928,7 +932,7 @@
               </svg>
             </button>
             <!-- Send button -->
-            <button class="rp-sb" id="rp-sb" disabled title="Post (⌘↵)" onclick="postComment()">
+            <button class="rp-sb" id="rp-sb" disabled aria-label="Post comment" title="Post (⌘↵)" onclick="postComment()">
               <i class="ph ph-arrow-right" style="font-size:15px"></i>
             </button>
           </div>
@@ -999,7 +1003,9 @@
 
   <!-- Top bar: favicon + site name left · hamburger right -->
   <div id="mv-bar">
-    <div id="mv-logo-trigger" class="mv-logo-grp" onclick="toggleSiteMenu(this)">
+    <div id="mv-logo-trigger" class="mv-logo-grp" role="button" tabindex="0" aria-haspopup="true"
+         aria-expanded="false" aria-label="Site menu" onclick="toggleSiteMenu(this)"
+         onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleSiteMenu(this)}">
       <img src="Assets/Media/general/ori-profile.webp" width="26" height="26" alt="Ori Cohen" style="border-radius:50%;object-fit:cover;flex-shrink:0;border:1.5px solid rgba(255,255,255,.15)">
       <span class="mv-site-nm">Ori's Portfolio</span>
       <i class="ph ph-caret-down tp-chevron-ph"></i>
@@ -1010,7 +1016,7 @@
   </div>
 
   <!-- Canvas: dots background + centered welcome frame -->
-  <div id="mv-canvas">
+  <div id="mv-canvas" role="main">
     <div id="mv-welcome">
       <div class="wf-badge"><div class="wf-bdot"></div>Available for the right work</div>
       <h1 class="wf-name">Ori Cohen</h1>
@@ -1026,7 +1032,7 @@
 
   <!-- Slide-in hamburger menu -->
   <div id="mv-menu">
-    <div id="mv-menu-bd" onclick="mvMenuClose()"></div>
+    <div id="mv-menu-bd" aria-hidden="true" onclick="mvMenuClose()"></div>
     <div id="mv-menu-inner">
       <!-- Header -->
       <div class="mv-menu-hdr">
@@ -1116,7 +1122,7 @@
     </a>
     <div class="mv-proj-card mv-proj-card--soon">
       <div class="mv-proj-thumb">
-        <svg viewBox="0 0 360 120" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%;display:block;background:#F4F6F8">
+        <svg viewBox="0 0 360 120" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%;display:block;background:#F4F6F8" aria-hidden="true">
           <!-- bar chart -->
           <rect x="44" y="62" width="20" height="40" rx="3" fill="#64748B" opacity=".2"/>
           <rect x="70" y="42" width="20" height="60" rx="3" fill="#64748B" opacity=".2"/>
@@ -1189,7 +1195,7 @@
         <div class="mv-ccard-lbl">Phone</div>
         <div class="mv-ccard-val">054-338-3953</div>
       </a>
-      <a class="mv-ccard" href="Assets/CV/Ori_Cohen_CV.docx" target="_blank" download>
+      <a class="mv-ccard" href="Assets/CV/Ori_Cohen_CV.docx" target="_blank" rel="noopener" download>
         <div class="mv-ccard-ico"><i class="ph ph-file-arrow-down"></i></div>
         <div class="mv-ccard-lbl">Resume</div>
         <div class="mv-ccard-val">Download CV (.docx)</div>

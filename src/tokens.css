@@ -106,6 +106,15 @@
   --text-brand:     var(--blue-700);     /* #0664a8 — brand/link text, AA compliant 6.18:1 (text.brand.regular) */
   --text-disabled:  var(--vg-500);       /* #b0b6bb — disabled state (text.common.disabled) */
   --text-inverse:   var(--vg-50);        /* #f7f8f8 — text on dark bg (text.common.inverse) */
+  /* Ink for anything sitting ON the accent: a filled button, an active nav
+     pill, a badge. Distinct from --text-inverse, and that distinction is the
+     whole point of it. --text-inverse means "ink for a light surface", so it
+     flips when the theme flips. An accent fill does NOT flip - the button is
+     purple in both themes - so a filled control that reached for
+     --text-inverse got near-black ink on mid purple in dark at 3.22:1. This
+     one flips because the ACCENT changes lightness between themes (dark
+     accents are deliberately bright), which is the opposite trigger. */
+  --text-on-accent: var(--gray-0);       /* #FFFFFF - on purple-600, 5.81:1 */
 
   /* Interactive */
   --action-primary:       var(--purple-600);   /* CTA, active nav, badge — AA accessible on white */
@@ -170,8 +179,27 @@
   --text-brand:     var(--blue-400);     /* #4daefb — lighter blue for dark bg */
   --text-disabled:  var(--vg-750);       /* #585b5e — muted disabled */
   --text-inverse:   var(--vg-950);       /* #121213 — text on light elements within dark theme */
+  /* Flips, for the reason given on the light-theme declaration: the accent
+     itself is bright here, so the ink on top of it has to be dark. #121213 is
+     6.73:1 on purple-400, and 5.61:1 to 9.74:1 on the five project accents. */
+  --text-on-accent: var(--vg-950);       /* #121213 - on purple-400, 6.73:1 */
 
-  /* Interactive — brand colors stay the same in dark */
+  /* Interactive.
+     --action-primary does NOT stay the same in dark, which is what it used to
+     do. #6248E8 (purple-600) is 2.40:1 on --surface-page and 2.17:1 on
+     --surface-raised, so on dark it failed 1.4.11 as a border or focus ring
+     and 1.4.3 anywhere it carried text. Every case study was already working
+     around it with a per-page dark override; the token itself was the trap
+     left for the next page that forgot to. purple-400 clears all three dark
+     surfaces as normal text: 5.02:1 page, 4.54:1 raised, 5.72:1 sunken.
+     Same move as --text-brand, which steps to blue-400 here.
+
+     The consequence is that the accent is now an INK colour on dark and a
+     FILL colour on light, so anything that fills with it needs
+     --text-on-accent rather than a hardcoded #fff. That is the whole reason
+     --text-on-accent exists. */
+  --action-primary:        var(--purple-400);   /* #9F8AFF - AA on dark surfaces */
+  --action-primary-hover:  var(--purple-300);   /* #B0A0FF - brighter on hover */
   --action-primary-subtle: rgba(98,72,232,.15);
   --action-secondary-subtle: rgba(24,160,251,.12);
 

@@ -562,15 +562,37 @@ window.addEventListener('load', () => {
     mvPageOpen('portfolio');
     history.replaceState(null, '', window.location.pathname);
   }
-  // Accessibility: patch .wc (window control) divs with role/keyboard support
+  patchWindowControls();
+});
+
+/* Accessibility: the .wc traffic lights are divs, so they need role, focus and
+   a keyboard path - and they need a NAME. That was the part missing: their
+   text content is "×", "-" and "+", which a screen reader reads as
+   "multiplication sign", "hyphen-minus" and "plus sign", or skips. Twenty
+   controls announced as punctuation. The label is derived from the class so it
+   cannot drift out of sync with the handler the way twenty hand-written
+   aria-labels would, and so a new window gets it for free.
+   Runs on DOMContentLoaded rather than load: window.load waits for every
+   video and font, and until it fired none of these was reachable by keyboard. */
+const WC_LABEL = { cl: 'Close', mn: 'Minimise', mx: 'Maximise' };
+function patchWindowControls() {
   document.querySelectorAll('.wc').forEach(function(el) {
     el.setAttribute('role', 'button');
     el.setAttribute('tabindex', '0');
+    if (!el.getAttribute('aria-label')) {
+      const kind = ['cl', 'mn', 'mx'].find(k => el.classList.contains(k));
+      const win  = el.closest('.win');
+      const name = win && win.getAttribute('aria-label');
+      if (kind) el.setAttribute('aria-label', WC_LABEL[kind] + (name ? ' ' + name : ''));
+    }
+    if (el.dataset.wcPatched) return;
+    el.dataset.wcPatched = '1';
     el.addEventListener('keydown', function(e) {
       if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); el.click(); }
     });
   });
-});
+}
+document.addEventListener('DOMContentLoaded', patchWindowControls);
 
 /* ════════════════════════════════════
    WINDOW SYSTEM
@@ -797,6 +819,11 @@ function setView(v) {
   document.getElementById('view-list').style.display = v==='list' ? 'block' : 'none';
   document.getElementById('vt-grid').classList.toggle('on', v==='grid');
   document.getElementById('vt-list').classList.toggle('on', v==='list');
+  /* The .on class is the only thing that used to carry which view is active,
+     which means it was carried by colour alone. aria-pressed puts the same
+     state in the accessibility tree. */
+  document.getElementById('vt-grid').setAttribute('aria-pressed', v==='grid' ? 'true' : 'false');
+  document.getElementById('vt-list').setAttribute('aria-pressed', v==='list' ? 'true' : 'false');
 }
 
 /* ════════════════════════════════════
@@ -1705,14 +1732,20 @@ function toggleSiteMenu(trigger) {
   });
   menu.classList.add('open');
   trigger.classList.add('open');
+  trigger.setAttribute('aria-expanded', 'true');
 }
 
 function closeSiteMenu() {
   document.getElementById('site-menu').classList.remove('open');
   const tp = document.getElementById('title-pill');
   const mv = document.getElementById('mv-logo-trigger');
-  if (tp) tp.classList.remove('open');
-  if (mv) mv.classList.remove('open');
+  /* aria-expanded has to be reset on BOTH triggers, not just the one that was
+     clicked. closeSiteMenu is called on outside click, on Escape and at the
+     top of toggleSiteMenu, and at none of those points do we know which
+     trigger opened it. Clearing both is idempotent; clearing one leaves a
+     trigger permanently announcing "expanded". */
+  if (tp) { tp.classList.remove('open'); tp.setAttribute('aria-expanded', 'false'); }
+  if (mv) { mv.classList.remove('open'); mv.setAttribute('aria-expanded', 'false'); }
 }
 
 function sharePortfolio(el) {

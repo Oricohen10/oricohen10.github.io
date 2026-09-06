@@ -7,3 +7,7 @@ node_modules/
 *.tmp
 .~lock.*
 cases/lux/images/og-image.webp
+
+# Python bytecode from tools/a11y
+__pycache__/
+*.pyc

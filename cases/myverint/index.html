@@ -16,8 +16,8 @@
 <meta name="author" content="Ori Cohen"/>
 <meta name="twitter:title" content="My Verint - Case Study - Ori Cohen"/>
 <meta name="twitter:description" content="How Ori Cohen redesigned My Verint - merging two disconnected mobile apps into a unified, AI-powered experience for 10,000+ contact center employees."/>
-<link rel="stylesheet" href="../../src/tokens.css?v=202609060932"/>
-<link rel="stylesheet" href="../shared/case-study.css?v=202609060932"/>
+<link rel="stylesheet" href="../../src/tokens.css?v=202609061004"/>
+<link rel="stylesheet" href="../shared/case-study.css?v=202609061004"/>
 <script>try{if(localStorage.getItem('ori-theme')==='dark')document.documentElement.setAttribute('data-theme','dark')}catch(e){}
 if(window.self!==window.top){var _s=document.createElement('style');_s.textContent='*{cursor:none!important}';document.head.appendChild(_s);}</script>
 <style>
@@ -32,14 +32,12 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
   --action-primary-hover:  #F09AAF;
   --action-primary-subtle: rgba(232,113,138,.14);
 }
-/* Bright rose bg needs dark icon/text for contrast */
-[data-theme="dark"] #scroll-top { color: #1a1a1a; }
 /* The reflection markers are margin labels now, not filled circles, so the
    old dark-on-rose override is gone. */
 
 /* -- Chip variant ------------------------------------------------------- */
 .chip--mobile{background:rgba(139,26,46,.1);color:#8B1A2E}
-[data-theme="dark"] .chip--mobile{background:rgba(232,113,138,.14);color:#E8718A}
+[data-theme="dark"] .chip--mobile{background:rgba(232,113,138,.10);color:#EB859A}
 
 
 /* Inline media modules replace the carousel: media sits beside the claim it
@@ -78,7 +76,7 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
 .sc-tab:focus-visible{outline:2px solid var(--action-primary);outline-offset:2px}
 .sc-tab-label{min-width:0}   /* no flex:1 - the badge hugs the label */
 .sc-tab-badge{font-size:11px;font-weight:700;padding:2px 8px;border-radius:var(--radius-full);
-  background:var(--action-primary);color:#fff;letter-spacing:.04em}
+  background:var(--action-primary);color:var(--text-on-accent);letter-spacing:.04em}
 
 /* ── the device. Bezel colours are a physical object, not page chrome, so
       they stay dark in both themes - a dark phone on a light page is
@@ -283,7 +281,7 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
   </aside>
 
   <!-- Content -->
-  <div class="cs-content">
+  <main class="cs-content">
 
     <!-- Hero -->
     <div class="cs-hero">
@@ -294,7 +292,7 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
     <!-- Section 1: Background -->
     <div class="cs-section cs-reveal">
       <div class="cs-section-num">
-        <div class="cs-sec-title">Background</div>
+        <h2 class="cs-sec-title">Background</h2>
       </div>
       <p>Verint ran two separate mobile apps for years - one for supervisors, one for agents. Both grew out of the desktop WFE product as afterthoughts. Mobile was a free add-on: no dedicated budget, no design owner, no system. The work passed hand to hand, accumulating inconsistencies and accessibility gaps along the way.</p>
       <p>The catalyst arrived in 2024: a mandate to integrate Ask Verint - Verint's AI agent - into the mobile experience. You can't build something new on a broken foundation, so we rebuilt the foundation first.</p>
@@ -303,7 +301,7 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
     <!-- Section 2: Challenge -->
     <div class="cs-section cs-reveal">
       <div class="cs-section-num">
-        <div class="cs-sec-title">Challenge</div>
+        <h2 class="cs-sec-title">Challenge</h2>
       </div>
       <p>The problems ran deep: no design system, no accessibility baseline, no documentation, and no access to half the existing flows. Parts of the app were invisible to design entirely.</p>
       <p>The harder challenge was organizational. Stakeholders wanted every desktop capability on mobile - one to one. I disagreed. Desktop and mobile serve <strong>different use cases</strong>. A supervisor plans next month's schedule from a desktop. A contact center agent adding 15 minutes to their shift does it from their phone, between calls, on the floor.</p>
@@ -313,7 +311,7 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
     <!-- Section 3: Solution -->
     <div class="cs-section">
       <div class="cs-section-num">
-        <div class="cs-sec-title">Solution</div>
+        <h2 class="cs-sec-title">Solution</h2>
       </div>
       <p>We merged both apps into one, with role-based capability views - supervisors and agents each see what they need, not everything at once.</p>
       <p>Alongside that, we built My Verint's first mobile design system: color tokens, type scales, responsive behaviors, motion specs, and documentation. A shared language the team had never had.</p>
@@ -322,7 +320,7 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
     <!-- Section: The Design -->
     <div class="cs-section cs-reveal mv-sec">
       <div class="cs-section-num">
-        <div class="cs-sec-title">The Design</div>
+        <h2 class="cs-sec-title">The Design</h2>
       </div>
       <p>MyVerint organizes every workflow into five purpose-built tabs. Agents, managers, and back-office teams each get a view designed around their role, with an AI assistant that ties it all together.</p>
       <div class="mv-show">
@@ -416,7 +414,7 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
     <!-- Section: Ask AI (depth - the turn) -->
     <div class="cs-section cs-reveal">
       <div class="cs-section-num">
-        <div class="cs-sec-title">The feature that changed everything.</div>
+        <h2 class="cs-sec-title">The feature that changed everything.</h2>
       </div>
       <p>Ask AI started as a shortcut and became the primary way people use the app. Instead of navigating to one of those five tabs, employees just ask - and the other four became fallbacks.</p>
       <div class="mv-feature">
@@ -468,7 +466,7 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
     <!-- Section 4: Result -->
     <div class="cs-section cs-reveal" id="result">
       <div class="cs-section-num">
-        <div class="cs-sec-title">Result</div>
+        <h2 class="cs-sec-title">Result</h2>
       </div>
       <p>My Verint replaced both legacy apps - one unified experience across iOS and Android. The mobile design system gave every product team a foundation to build on that hadn't existed before.</p>
       <p>The number that tells the whole story: <strong>85% of users complete all their tasks through Ask Verint</strong>, without touching a single screen. A contact center agent can check their schedule, request time off, and review KPIs in a single conversation. The product changed not just how the app looks, but how people work.</p>
@@ -505,7 +503,7 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
     <!-- Section 5: What I'd do differently -->
     <div class="cs-section cs-reveal">
       <div class="cs-section-num">
-        <div class="cs-sec-title">What I'd do differently</div>
+        <h2 class="cs-sec-title">What I'd do differently</h2>
       </div>
       <div class="diff-item">
         <div class="diff-marg">Process</div>
@@ -523,7 +521,7 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
       </div>
     </div>
 
-  </div>
+  </main>
 </div><!-- /cs-body -->
 
 <button id="scroll-top" aria-label="Back to top">
@@ -532,7 +530,7 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
   </svg>
 </button>
 
-<script src="../shared/case-study.js?v=202609060932" defer></script>
+<script src="../shared/case-study.js?v=202609061004" defer></script>
 <script>
 /* "The Design" tabs - opacity crossfade only.
    Adopted from the original implementation: every video runs continuously

@@ -29,6 +29,44 @@ body{
 img{display:block;max-width:100%}
 button{cursor:pointer;font-family:inherit}
 
+/* ── Focus ────────────────────────────────────────────────────────────────── */
+/* This sheet had no focus rule of any kind, so five case studies fell back to
+   the user-agent ring while index.html carried a hand-tuned one. The plugins
+   page had since grown its own. That is the inconsistency, so the ring lives
+   here now and every page inherits the same one.
+
+   Two rings, not one. A single accent ring is invisible against an accent
+   surface - the selected rail item, the active tab, a tinted card - and a
+   single neutral ring disappears against the page. The inner ring is the
+   accent and the outer is the page colour, so whichever surface sits behind
+   the control, one of the two is always in contrast with it. 1.4.11 asks for
+   3:1 on the indicator; --action-primary is 6.81:1 (plugins) to 9.19:1
+   (myverint) on white and 4.19:1 to 5.13:1 on the dark page, measured per
+   project accent.
+
+   :focus-visible, not :focus, so a mouse click on a card does not leave a
+   ring behind it. */
+:where(a,button,summary,[tabindex]:not([tabindex="-1"]),input,select,textarea):focus-visible{
+  outline:2px solid var(--action-primary);
+  outline-offset:2px;
+  box-shadow:0 0 0 6px var(--surface-default);
+  border-radius:var(--radius-sm);
+}
+/* The spread has to exceed offset + width or the outer ring hides underneath
+   the outline: offset 2 plus width 2 reaches 4px, so a 4px spread would sit
+   exactly beneath it and paint nothing. 6px leaves a visible 4-6px band. */
+/* Controls that already carry their own radius keep it - the ring follows the
+   shape rather than squaring off a pill or a circle. */
+.vs-item:focus-visible,.pf-step:focus-visible,.sc-tab:focus-visible,
+.chip:focus-visible,.back-nav:focus-visible,.sb-cta:focus-visible{border-radius:inherit}
+#scroll-top:focus-visible,.pf-d-close:focus-visible{border-radius:50%}
+/* .vs-btn sits ON the video, so the outer ring has to go. It is an opaque 6px
+   band of --surface-default, which would paint a white donut over the footage
+   in light mode. That button already brings its own contrast - fixed dark
+   chrome and a white outline, for the same reason - so it needs the shape
+   only, not the second ring. */
+.vs-btn:focus-visible{border-radius:50%;box-shadow:none}
+
 /* ── Ambient field ────────────────────────────────────────────────────────── */
 /* One fixed, page-wide layer: a dot lattice plus two radial washes drifting
    in the project accent. Fixed to the viewport rather than bounded per
@@ -435,7 +473,7 @@ button{cursor:pointer;font-family:inherit}
 #scroll-top{
   position:fixed;bottom:28px;right:28px;
   width:38px;height:38px;border-radius:50%;
-  background:var(--action-primary);color:#fff;
+  background:var(--action-primary);color:var(--text-on-accent);
   border:none;cursor:pointer;
   display:flex;align-items:center;justify-content:center;
   box-shadow:0 4px 16px rgba(0,0,0,.18);
@@ -445,6 +483,16 @@ button{cursor:pointer;font-family:inherit}
 }
 #scroll-top.show{opacity:1;transform:translateY(0);pointer-events:auto}
 #scroll-top:hover{background:var(--action-primary-hover)}
+/* The ink is --text-on-accent, not #fff, and that is not cosmetic. In dark
+   every project accent is a BRIGHT colour - that is the whole point of the
+   per-page dark override - so a white arrow on it landed between 1.92:1
+   (copilot green) and 3.34:1 (plugins magenta). None of the five reached the
+   3:1 that 1.4.11 asks of an icon.
+   myverint, lux and copilot each carried their own `#scroll-top{color:#1a1a1a}`
+   patch; plugins and agent-factory never got one, so the arrow was invisible
+   on two of the five pages. The token replaces all three page-level copies:
+   #fff on the light accents (5.48:1 to 9.19:1) and #121213 on the dark ones
+   (5.61:1 to 9.74:1). */
 
 /* ── Responsive ───────────────────────────────────────────────────────────── */
 /* These pages are read inside a RESIZABLE WINDOW, not only on a device, and

@@ -39,8 +39,8 @@
   }
 }
 </script>
-<link rel="stylesheet" href="../../src/tokens.css?v=202609060932"/>
-<link rel="stylesheet" href="../shared/case-study.css?v=202609060932"/>
+<link rel="stylesheet" href="../../src/tokens.css?v=202609061004"/>
+<link rel="stylesheet" href="../shared/case-study.css?v=202609061004"/>
 <script>try{if(localStorage.getItem('ori-theme')==='dark')document.documentElement.setAttribute('data-theme','dark')}catch(e){}
 if(window.self!==window.top){var _s=document.createElement('style');_s.textContent='*{cursor:none!important}';document.head.appendChild(_s);}</script>
 <style>
@@ -58,7 +58,7 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
 
 /* -- Chip variant ------------------------------------------------------- */
 .chip--plugin{background:rgba(157,34,147,.1);color:#9d2293}
-[data-theme="dark"] .chip--plugin{background:rgba(232,121,249,.14);color:#e879f9}
+[data-theme="dark"] .chip--plugin{background:rgba(232,121,249,.10);color:#e879f9}
 /* ══ The reel ═══════════════════════════════════════════════════════════
    One container holds the rail, the stage and the caption, so the writing
    reads as part of the recording rather than as text that happens to follow
@@ -379,7 +379,7 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
   </aside>
 
   <!-- Content -->
-  <div class="cs-content">
+  <main class="cs-content">
 
     <!-- Hero -->
     <div class="cs-hero">
@@ -390,7 +390,7 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
     <!-- Background -->
     <div class="cs-section cs-reveal">
       <div class="cs-section-num">
-        <div class="cs-sec-title">Background</div>
+        <h2 class="cs-sec-title">Background</h2>
       </div>
       <p>LUX 2.0 introduced a three-layer token architecture, a Figma-to-GitHub pipeline, and strict component standards. The existing plugin ecosystem wasn't built for any of it.</p>
       <p>Designers were editing JSON files by hand, committing changes manually, and waiting on developers to trigger builds. Every plugin we evaluated either lacked token awareness, required developer handoff, or wasn't designed for a system of this scale. The tools didn't exist, so we built them.</p>
@@ -399,7 +399,7 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
     <!-- The Plugins -->
     <div class="cs-section cs-reveal">
       <div class="cs-section-num">
-        <div class="cs-sec-title">The Plugins</div>
+        <h2 class="cs-sec-title">The Plugins</h2>
       </div>
       <p>Each plugin targets one gap. Together they cover the full design-to-production loop without leaving Figma.</p>
 
@@ -568,14 +568,14 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
     <!-- Result -->
     <div class="cs-section cs-reveal">
       <div class="cs-section-num">
-        <div class="cs-sec-title">Result</div>
+        <h2 class="cs-sec-title">Result</h2>
       </div>
       <p>The plugins removed four manual steps from the LUX 2.0 design workflow. What used to take 30 minutes of file editing and developer coordination now takes one click. Every plugin ships with the same constraint: it must work without a terminal, without a developer, and without waiting.</p>
 
       <div class="stat-grid">
         <div class="stat-card">
           <div class="stat-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
           </div>
           <div class="stat-num">60s</div>
           <div class="stat-title">Figma to GitHub</div>
@@ -583,7 +583,7 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
         </div>
         <div class="stat-card">
           <div class="stat-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
           </div>
           <div class="stat-num">1,281</div>
           <div class="stat-title">Searchable Icons</div>
@@ -591,7 +591,7 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
         </div>
         <div class="stat-card">
           <div class="stat-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
           </div>
           <div class="stat-num">0</div>
           <div class="stat-title">Terminal Steps</div>
@@ -611,16 +611,16 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
       </div>
     </div>
 
-  </div><!-- /cs-content -->
+  </main><!-- /cs-content -->
 </div><!-- /cs-body -->
 
 <button id="scroll-top" aria-label="Back to top">
-  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
     <path d="M8 12V4M8 4L4 8M8 4L12 8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
   </svg>
 </button>
 
-<script src="../shared/case-study.js?v=202609060932" defer></script>
+<script src="../shared/case-study.js?v=202609061004" defer></script>
 
 <script>
 /* ══ The reel ═══════════════════════════════════════════════════════════════

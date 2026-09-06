@@ -128,105 +128,43 @@
 
 <!-- Back nav (mobile only) -->
 <a href="../../index.html" class="back-nav" aria-label="Back to projects">
-  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="15 18 9 12 15 6"/></svg>
   Back to projects
 </a>
 
 <!--
  ═══════════════════════════════════════════════════════════════════
-  CAROUSEL — used by all projects
-  - Set data-total to match the number of slides
-  - Use VIDEO slides for demos/recordings
-  - Use IMAGE slides for screenshots
-  - Use onclick="openLightbox(N)" on slides when using image lightbox
+  MEDIA
+
+  The carousel and the two lightboxes used to live here. They are gone,
+  and so is the CSS and JS behind them - initCarousel, carUpdate, carMove,
+  playVid, openLightbox and closeVideoLightbox were all deleted from
+  cases/shared/ when the carousels came out. Markup copied from the old
+  version of this file would render a dead tray with no styling.
+
+  What replaces it: media sits beside the claim it evidences. A carousel
+  front-loads all the evidence before any of the argument, and slides 2-4
+  are effectively never seen.
+
+  Use .cs-media for a single figure:
+
+    <figure class="cs-media">
+      <video class="cs-media-vid" data-src="videos/x.mp4"
+             poster="images/x-poster.webp" muted loop playsinline
+             aria-label="[what the recording shows]"></video>
+      <figcaption>[what this proves, not what it is]</figcaption>
+    </figure>
+
+  aria-label is not optional on these. A silent looping recording is
+  decorative only if it adds nothing, and a case study video is the
+  evidence - it needs a name. The two <video> elements in the old block
+  here had none.
+
+  Per-project media modules (myverint's phone + tab switcher, plugins'
+  reel) live in each page's own <style> block, not in the shared sheet.
+  Type scale, spacing, section order and nav stay identical across pages;
+  only the media component changes with the artifact.
  ═══════════════════════════════════════════════════════════════════
--->
-<div class="carousel-shell">
-<div class="carousel-wrap" id="carousel" data-total="4">
-  <div class="carousel-track" id="carousel-track">
-
-    <!-- VIDEO SLIDE example -->
-    <div class="carousel-slide">
-      <video muted playsinline poster="images/slide-poster.jpg" id="vid-0">
-        <source src="videos/slide.mp4" type="video/mp4"/>
-      </video>
-      <button class="car-play" onclick="playVid(0)" aria-label="Play video">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="var(--action-primary)"><polygon points="5 3 19 12 5 21 5 3"/></svg>
-      </button>
-      <button class="car-pause" id="pause-0" onclick="pauseVid(0)" aria-label="Pause video">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="white"><rect x="6" y="4" width="4" height="16" rx="1"/><rect x="14" y="4" width="4" height="16" rx="1"/></svg>
-      </button>
-      <div class="carousel-slide-label">Slide label</div>
-    </div>
-
-    <!-- IMAGE SLIDE example -->
-    <div class="carousel-slide">
-      <img src="images/screenshot.jpg" alt="Description of screenshot" width="1968" height="1107" loading="lazy"/>
-      <div class="carousel-slide-label">Slide label</div>
-    </div>
-
-    <!-- CLICKABLE IMAGE SLIDE (for image lightbox) example -->
-    <!--
-    <div class="carousel-slide" onclick="openLightbox(2)" title="Click to expand">
-      <img src="images/screenshot.jpg" alt="Description" width="1968" height="1107" loading="lazy"/>
-    </div>
-    -->
-
-  </div><!-- /track -->
-
-  <!-- Arrows -->
-  <button class="carousel-btn prev" id="car-prev" onclick="carMove(-1)" aria-label="Previous slide">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
-  </button>
-  <button class="carousel-btn next" id="car-next" onclick="carMove(1)" aria-label="Next slide">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
-  </button>
-
-  <!-- Zoom button (shared JS auto-shows/hides based on slide content) -->
-  <!-- For VIDEO lightbox: -->
-  <button class="carousel-zoom" onclick="openVideoLightbox()" aria-label="View fullscreen">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/></svg>
-  </button>
-  <!-- For IMAGE lightbox, change to: onclick="openLightbox(carIdx)" and the icon to a magnify glass -->
-
-  <!-- Counter -->
-  <div class="carousel-footer">
-    <span class="carousel-counter" id="car-counter">1 / 4</span>
-  </div>
-</div><!-- /carousel-wrap -->
-</div><!-- /carousel-shell -->
-
-<!--
- ═══════════════════════════════════════════════════════════════════
-  LIGHTBOXES — include only the type(s) you need
- ═══════════════════════════════════════════════════════════════════
--->
-
-<!-- VIDEO LIGHTBOX (Plugins, Copilot) -->
-<div class="vlbx" id="vlbx" role="dialog" aria-modal="true" aria-label="Video fullscreen" onclick="closeVideoLightbox()">
-  <button class="vlbx-close" onclick="closeVideoLightbox()" aria-label="Close fullscreen">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-  </button>
-  <div class="vlbx-inner" onclick="event.stopPropagation()">
-    <video id="vlbx-vid" muted playsinline controls></video>
-  </div>
-</div>
-
-<!-- IMAGE LIGHTBOX (LUX) — include if using clickable image slides -->
-<!--
-<div class="lbx" id="lightbox" role="dialog" aria-modal="true" aria-label="Image fullscreen" onclick="closeLightbox(event)">
-  <div class="lbx-inner" id="lbx-inner"></div>
-  <button class="lbx-close" onclick="closeLightbox()" aria-label="Close">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-  </button>
-  <button class="lbx-btn lbx-prev" onclick="lbxMove(-1)" aria-label="Previous">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
-  </button>
-  <button class="lbx-btn lbx-next" onclick="lbxMove(1)" aria-label="Next">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
-  </button>
-  <div class="lbx-counter" id="lbx-counter"></div>
-</div>
 -->
 
 <!--
@@ -262,13 +200,13 @@
     <!--
     <a class="sb-cta" href="[url]" target="_blank" rel="noopener">
       [CTA label]
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg>
     </a>
     -->
   </aside>
 
   <!-- ── CONTENT ── -->
-  <div class="cs-content">
+  <main class="cs-content">
 
     <!-- ── HERO — all projects ── -->
     <div class="cs-hero">
@@ -279,7 +217,7 @@
     <!-- ── SECTION: BACKGROUND — all projects ── -->
     <div class="cs-section cs-reveal">
       <div class="cs-section-num">
-        <div class="cs-sec-title">Background</div>
+        <h2 class="cs-sec-title">Background</h2>
       </div>
       <p>[Background paragraph 1.]</p>
       <p>[Background paragraph 2.]</p>
@@ -288,7 +226,7 @@
     <!-- ── SECTION: CHALLENGE / PROBLEM — LUX, Copilot ── -->
     <div class="cs-section cs-reveal">
       <div class="cs-section-num">
-        <div class="cs-sec-title">The problem</div><!-- or "Challenge" -->
+        <h2 class="cs-sec-title">The problem</h2><!-- or "Challenge" -->
       </div>
       <p>[Problem paragraph 1.]</p>
       <p>[Problem paragraph 2 with <strong>emphasis</strong>.]</p>
@@ -297,7 +235,7 @@
     <!-- ── SECTION: SOLUTION / PLUGIN BLOCKS — all projects ── -->
     <div class="cs-section cs-reveal">
       <div class="cs-section-num">
-        <div class="cs-sec-title">The [solution/plugins/copilot]</div>
+        <h2 class="cs-sec-title">The [solution/plugins/copilot]</h2>
       </div>
       <p>[Intro paragraph.]</p>
 
@@ -357,7 +295,7 @@
     <!-- ── SECTION: RESULT — all projects ── -->
     <div class="cs-section cs-reveal">
       <div class="cs-section-num">
-        <div class="cs-sec-title">Result</div>
+        <h2 class="cs-sec-title">Result</h2>
       </div>
       <p>[Result paragraph.]</p>
 
@@ -365,7 +303,7 @@
       <div class="stat-grid">
         <div class="stat-card">
           <div class="stat-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
           </div>
           <div class="stat-num">[Number]</div>
           <div class="stat-title">[Stat title]</div>
@@ -376,7 +314,7 @@
 
         <div class="stat-card">
           <div class="stat-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
           </div>
           <div class="stat-num">[Number]</div>
           <div class="stat-title">[Stat title]</div>
@@ -385,7 +323,7 @@
 
         <div class="stat-card">
           <div class="stat-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
           </div>
           <div class="stat-num">[Number]</div>
           <div class="stat-title">[Stat title]</div>
@@ -404,11 +342,11 @@
       </div>
     </div>
 
-  </div><!-- /cs-content -->
+  </main><!-- /cs-content -->
 </div><!-- /cs-body -->
 
 <button id="scroll-top" aria-label="Back to top">
-  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
     <path d="M8 12V4M8 4L4 8M8 4L12 8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
   </svg>
 </button>

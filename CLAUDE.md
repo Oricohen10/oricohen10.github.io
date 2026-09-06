@@ -323,6 +323,105 @@ What actually catches the CSS ones:
 - When media looks broken, measure the asset before touching the code:
   codec profile and `pix_fmt` via ffprobe, and frame 0's mean luma. The
   black-rectangle bug above looked exactly like a missing file.
+- **A check that reports zero has to be shown finding something.** The state
+  contrast pass returned "0 findings" and it was not clean, it was broken -
+  it keyed dark overrides into a different bucket from the light rules they
+  override, so nothing ever paired up. Raising the threshold to 7:1 still
+  returned zero, which is what exposed it. Before believing a clean result,
+  loosen the threshold until the check fires. If it never fires, it is not
+  running.
+
+---
+
+## Accessibility
+
+Run the audit. It needs no browser, no npm and no network:
+
+```bash
+python3 tools/a11y/run.py
+```
+
+Seven modules under `tools/a11y/`; `README.md` there explains each and lists
+what it cannot see. Non-zero exit means something failed. As of Sept 2026 all
+four checks pass on all eight pages in both themes.
+
+### Colour is two roles, not one
+The accent is **ink** on dark and **fill** on light, and conflating those
+caused four separate faults in one pass:
+
+- `--action-primary` was purple-600 in both themes. On dark that is 2.40:1 on
+  the page, so it failed as a border or focus ring and failed anywhere it
+  carried text. Every case study was already patching around it per page. It
+  is purple-400 on dark now.
+- Because dark accents are bright, **anything that fills with the accent needs
+  `--text-on-accent`, never a hardcoded `#fff`.** White on the five project
+  accents in dark runs 1.92:1 to 3.34:1. `#scroll-top` was invisible on two of
+  five pages; three pages carried their own `{color:#1a1a1a}` patch.
+- `--text-on-accent` is **not** `--text-inverse`. `--text-inverse` means "ink
+  for a light surface" and flips with the theme. `--text-on-accent` flips
+  because the accent's lightness flips. `.btn-primary` used `--tx-inv` and got
+  near-black text on purple at 3.22:1.
+- A button that fills from the **fixed** purple ramp rather than the accent
+  token gets `var(--gray-0)`, because its surface does not flip either.
+
+### Measure the label against the button, not the button against the page
+The old comment on `.btn-primary` read "#6248E8 -> #4D35C8 on white -> WCAG
+AA". Both numbers were real and neither was the pair that matters. White on
+purple-500 is 4.20:1 and the label is 13px, so it had been failing all along.
+White crosses 4.5:1 at purple-600; no stop in any state may go lighter.
+
+### 1.4.3 applies to :hover and :active too
+`.btn-secondary`, `.btn-tertiary` and lux's `.sb-cta` each had a dark `:hover`
+rule and no dark `:active`, so pressing them in dark fell through to the light
+value - purple-800 ink on a dark tint, 1.14:1. If a component has a dark
+counterpart for one state it needs one for every state it defines.
+
+And **never leave which ink wins to source order**: `.btn-tertiary:hover` and
+`[data-theme="dark"] .btn-tertiary` are both (0,2,0), because an attribute
+selector weighs the same as a class. State the colour on the dark state rule.
+
+### Fixed-object colours do not flip
+The traffic-light dots are a window motif, the same rule as the phone bezel:
+all three fills are bright in both themes, so the glyph on them is dark in
+both. The dark override set `rgba(255,255,255,.7)`, which is 1.43:1 on amber.
+
+### Target size (2.5.8)
+The `.wc` dots are 10x10 with a 6px gap. The hit area is now the full 16px
+pitch by 24px tall via `::before` - 3.8x the area, no overlap, nothing visible
+changed. Still 16px wide rather than 24: closing that needs the traffic lights
+spaced further apart, which is a design decision, not a fix to make silently.
+
+The `.wh` window headers are drag-only. Moving a window is not required to
+read anything - windows open positioned and can be maximised from a button -
+so 2.5.7's single-pointer alternative is covered without keyboard dragging.
+
+### Runtime-patched elements
+`patchWindowControls()` in `main.js` gives every `.wc` its role, tabindex,
+keyboard handler and an aria-label **derived from the class**, so a new window
+gets all four for free and twenty hand-written labels cannot drift. It runs on
+`DOMContentLoaded`, not `load` - `load` waits for every video and font, and
+until it fired none of those controls was reachable by keyboard.
+
+Static scans cannot see any of this. `tools/a11y/structure.py` keeps an
+explicit `RUNTIME_PATCHED` set; add to it rather than letting 21 phantom
+findings bury the real ones.
+
+### False positives worth remembering
+- **Two `<h1>` in `index.html` is correct.** `#app` and `#mv` are swapped by
+  `display:none`, which removes the other from the accessibility tree.
+- **An empty heading filled by JS is not an empty heading.** `#pf-d-title` is
+  written by `render(1)` on load.
+- **`onclick="event.stopPropagation()"` is plumbing, not a control.**
+- **`opacity:0` is a reveal rest state, not a contrast failure.** `.cs-reveal`
+  animates to 1. Treating it as low contrast produced 120 findings at 1.00:1.
+- The lux viewer has a fixed dark palette and no document theme switch - its
+  `data-theme` attributes sit on preview buttons. Defaulting the page colour
+  to white there invented failures.
+
+### cases/_template.html
+It taught a carousel and two lightboxes whose CSS **and** JS were deleted in
+Sept 2026. Anyone starting from it built dead markup. The block is replaced
+with a note on what to use instead; the rest of the file is current.
 
 ---
 
