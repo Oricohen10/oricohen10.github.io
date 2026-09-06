@@ -39,8 +39,8 @@
   }
 }
 </script>
-<link rel="stylesheet" href="../../src/tokens.css?v=202609061047"/>
-<link rel="stylesheet" href="../shared/case-study.css?v=202609061047"/>
+<link rel="stylesheet" href="../../src/tokens.css?v=202609061053"/>
+<link rel="stylesheet" href="../shared/case-study.css?v=202609061053"/>
 <script>try{if(localStorage.getItem('ori-theme')==='dark')document.documentElement.setAttribute('data-theme','dark')}catch(e){}
 if(window.self!==window.top){var _s=document.createElement('style');_s.textContent='*{cursor:none!important}';document.head.appendChild(_s);}</script>
 <style>
@@ -215,11 +215,41 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
    --text-secondary is 6.83:1 on the card in light and 9.29:1 in dark. This is
    a graphical object rather than text, so 3:1 would be the bar under 1.4.11 -
    it clears both. */
-.pf-step::after{content:"";position:absolute;top:50%;right:-12px;
-  width:6px;height:6px;
-  border-top:1.5px solid var(--text-secondary);
-  border-right:1.5px solid var(--text-secondary);
-  transform:translateY(-50%) rotate(45deg)}
+/* A thin arrow rather than a bare chevron: the shaft is what says "flows
+   into", where two rotated borders only pointed.
+
+   Drawn as a mask, not a background image, so the colour still comes from the
+   token and follows the theme. An SVG with a baked-in stroke colour would
+   need a second copy for dark mode and would drift from --text-secondary.
+
+   The numbers are not a taste call, they came from rendering it at its real
+   pixel size and looking. Two things that only show up that way:
+
+   14x10 with an 18x12 viewBox scaled down put the stroke at 0.9px and the
+   arrowhead collapsed into a solid blob. The viewBox is 1:1 with the box now,
+   so a stroke width is an actual pixel count and the head stays open.
+
+   And the shaft is 1.5px on a .5 coordinate, which is the thinnest stroke that
+   FULLY covers one pixel row whatever the raster grid alignment happens to be.
+   At 1.25px it never fully covers a row, so it painted as a two-row band of
+   light grey - thicker looking AND weaker than a crisp single line. At 1px it
+   is crisp only if the alignment is perfect, which is not something to rely
+   on across browsers and zoom levels.
+
+   16px in the 20px column gap leaves 2px clear each side: right:-18px puts the
+   right edge 18px out, the box spans back to -2px, centred on -10px. Wider
+   read slightly better in isolation but would have needed a bigger gap, and
+   that comes straight off the card widths - which is what made step 6
+   disappear last time. */
+.pf-step::after{content:"";position:absolute;top:50%;right:-18px;
+  width:16px;height:12px;
+  transform:translateY(-50%);
+  background-color:var(--text-secondary);
+  -webkit-mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 12'%3E%3Cpath d='M1 6.5h13M10.7 3.2 14 6.5l-3.3 3.3' fill='none' stroke='%23000' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 12'%3E%3Cpath d='M1 6.5h13M10.7 3.2 14 6.5l-3.3 3.3' fill='none' stroke='%23000' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  -webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;
+  -webkit-mask-position:center;mask-position:center;
+  -webkit-mask-size:contain;mask-size:contain}
 .pf-step:nth-child(3n)::after,
 .pf-step:last-child::after{display:none}
 
@@ -620,7 +650,7 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
   </svg>
 </button>
 
-<script src="../shared/case-study.js?v=202609061047" defer></script>
+<script src="../shared/case-study.js?v=202609061053" defer></script>
 
 <script>
 /* ══ The reel ═══════════════════════════════════════════════════════════════
