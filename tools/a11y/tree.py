@@ -92,6 +92,21 @@ def check(page,verbose=False):
         parent_classes={tuple(sorted(n.parent.cls())) for n in targets if n.parent}
         if len(parent_classes)>2: skipped+=1; continue
 
+        # A MODIFIER on a shared base legitimately matches a subset.
+        # .cmp-ann-r and .cmp-ann-l both sit on a .cmp-ann, so
+        # `.cmp-ann-r .cmp-ann-chip` matching 2 of 4 is the design, not a
+        # broken tree - and the two that miss are siblings, which is exactly
+        # the shape the stray-close heuristic looks for. State and utility
+        # classes were already skipped; variants were not.
+        hosts_cls=[set(h.cls()) for h in hosts]
+        base=set.intersection(*hosts_cls)-{anc} if hosts_cls else set()
+        if base:
+            others=[n for n in targets if not n.has_ancestor_class(anc)
+                    and any(n.has_ancestor_class(b) for b in base)]
+            if others:
+                skipped+=1
+                continue
+
         checked+=1
         inside=[n for n in targets if n.has_ancestor_class(anc)]
         outside=[n for n in targets if not n.has_ancestor_class(anc)]
