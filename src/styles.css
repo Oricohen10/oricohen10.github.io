@@ -135,8 +135,6 @@ i.ph,i.ph-bold,i.ph-fill,i.ph-light{line-height:1;display:flex;align-items:cente
 .sm-item i.ph,.sm-item i.ph-bold{font-size:16px;color:var(--tx2);flex-shrink:0}
 .sm-item.share-copied i.ph,.sm-item.share-copied i.ph-bold{color:var(--figma)}
 .cico i.ph,.cico i.ph-bold{font-size:18px}
-.clink>.ph-chevron{font-size:14px;color:var(--tx3);margin-left:auto}
-.pl-icon i.ph,.pl-icon i.ph-bold{font-size:14px}
 .tp-chevron-ph{font-size:13px;color:var(--tx3);transition:transform .15s;line-height:1;display:flex}
 #title-pill.open .tp-chevron-ph{transform:rotate(180deg)}
 #mv-logo-trigger.open .tp-chevron-ph{transform:rotate(180deg)}
@@ -288,7 +286,6 @@ i.ph,i.ph-bold,i.ph-fill,i.ph-light{line-height:1;display:flex;align-items:cente
   transition:background .15s,border-color .15s;
 }
 .bb-left{display:flex;align-items:center;gap:3px}
-.bb-divider{width:1px;height:20px;background:var(--bd);margin:0 4px;flex-shrink:0}
 .bb-btn{display:flex;align-items:center;justify-content:center;width:38px;height:38px;border-radius:9px;background:transparent;border:none;color:var(--tx2);transition:background .1s,color .1s}
 .bb-btn:hover,.bb-btn.demo-hov{background:var(--hov);color:var(--tx)}
 /* White icon in both themes, which needs the FILL pinned rather than the ink
@@ -465,33 +462,24 @@ i.ph,i.ph-bold,i.ph-fill,i.ph-light{line-height:1;display:flex;align-items:cente
 [data-theme="dark"] .pg-card-thumb{background:#1A1412}
 /* ── Chip component ─────────────────────────────────────────
    Reusable color-coded tag. Base + variant class.
-   chip--system | chip--product | chip--ai | chip--plugin | chip--dash |
-   chip--mobile | chip--research | chip--web | chip--data | chip--brand
+   chip--system | chip--ai | chip--plugin | chip--dash | chip--mobile
+   Five more (product, research, web, data, brand) were removed in Sept 2026:
+   declared for project categories that never shipped, referenced only by the
+   comment that listed them.
    ─────────────────────────────────────────────────────── */
 .chip{display:inline-flex;align-items:center;font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:4px 10px;border-radius:6px;white-space:nowrap;flex-shrink:0;line-height:1}
 .chip--system   {background:rgba(91,63,199,.1);color:#5b3fc7}
-.chip--product  {background:rgba(6,100,168,.1);color:var(--tx-brand)}
 .chip--ai       {background:rgba(13,122,112,.1);color:#0d7a70}
 .chip--plugin   {background:rgba(157,34,147,.1);color:#9d2293}
 .chip--dash     {background:rgba(180,83,9,.1);color:#b45309}
 .chip--mobile   {background:rgba(139,26,46,.1);color:#8B1A2E}
-.chip--research {background:rgba(190,18,60,.1);color:#be123c}
-.chip--web      {background:rgba(14,165,233,.1);color:#0284c7}
-.chip--data     {background:rgba(99,102,241,.1);color:#4f46e5}
-.chip--brand    {background:rgba(234,88,12,.1);color:#c2410c}
 [data-theme="dark"] .chip--system   {background:rgba(167,139,250,.14);color:#a78bfa}
-[data-theme="dark"] .chip--product  {background:rgba(96,165,250,.14);color:#60a5fa}
 [data-theme="dark"] .chip--ai       {background:rgba(45,212,191,.14);color:#2dd4bf}
 [data-theme="dark"] .chip--plugin   {background:rgba(232,121,249,.14);color:#e879f9}
 [data-theme="dark"] .chip--dash     {background:rgba(251,191,36,.14);color:#fbbf24}
 [data-theme="dark"] .chip--mobile   {background:rgba(232,113,138,.14);color:#E8718A}
-[data-theme="dark"] .chip--research {background:rgba(251,113,133,.14);color:#fb7185}
-[data-theme="dark"] .chip--web      {background:rgba(56,189,248,.14);color:#38bdf8}
-[data-theme="dark"] .chip--data     {background:rgba(165,180,252,.14);color:#a5b4fc}
-[data-theme="dark"] .chip--brand    {background:rgba(251,146,60,.14);color:#fb923c}
 
 .pg-card-body{padding:10px 2px 4px;display:flex;flex-direction:column;gap:0}
-.pg-chips{display:flex;gap:5px;flex-wrap:wrap;margin-top:8px}
 .pg-card-body > .chip{margin-top:8px;align-self:flex-start}
 .pg-card-name{font-size:15px;font-weight:700;color:var(--tx);margin-bottom:5px;letter-spacing:-.3px}
 .pg-card-desc{text-align:left;text-wrap:balance}
@@ -519,7 +507,6 @@ i.ph,i.ph-bold,i.ph-fill,i.ph-light{line-height:1;display:flex;align-items:cente
 .pl-row:last-child{border-bottom:none}
 .pl-row:hover{background:var(--hov)}
 .pl-name-cell{display:flex;align-items:center;gap:10px}
-.pl-icon{color:var(--tx3);flex-shrink:0;display:flex;font-size:18px}
 .pl-name{font-size:14px;font-weight:700;color:var(--tx);letter-spacing:-.1px}
 .pl-desc{font-size:13px;color:var(--tx2);line-height:1.5}
 .pl-row > .chip{justify-self:end;align-self:center}
@@ -563,8 +550,6 @@ i.ph,i.ph-bold,i.ph-fill,i.ph-light{line-height:1;display:flex;align-items:cente
 .t-prompt{color:#9F8AFF;font-weight:700}
 .t-grey{color:#939393}
 .t-cmd{color:#e5e5e5}
-.t-key{color:#c084fc}
-.t-str{color:#4ade80}
 .t-num{color:#9F8AFF}
 /* ansi_shadow figlet — ASCII art headers, one row per .tline */
 .t-dir{font-family:Consolas,'Courier New',monospace;font-size:11px;color:#9F8AFF;display:block;line-height:1.15;white-space:pre}
@@ -573,7 +558,6 @@ i.ph,i.ph-bold,i.ph-fill,i.ph-light{line-height:1;display:flex;align-items:cente
 /* Decorative banner box — appears after ASCII art name */
 .t-banner{font-family:Consolas,'Courier New',monospace;font-size:16px;color:#9F8AFF;display:block;white-space:pre;line-height:1.2;letter-spacing:0;padding-top:3px}
 /* Subtitle below ASCII art name */
-.t-name{color:#9F8AFF;display:block;padding:3px 0 8px}
 .tlink{color:#60a5fa;text-decoration:none}
 .tlink:hover{text-decoration:underline}
 .tcur{display:inline-block;width:9px;height:14px;background:#9F8AFF;vertical-align:text-bottom;animation:blink .9s step-end infinite;margin-left:1px}
@@ -603,7 +587,6 @@ i.ph,i.ph-bold,i.ph-fill,i.ph-light{line-height:1;display:flex;align-items:cente
 .rpc-av svg{width:22px;height:22px;display:block}
 .rpc-author{font-size:11px;font-weight:700;color:var(--tx)}
 .rpc-time{font-size:10px;color:var(--tx3);flex:1}
-.rpc-num{font-size:9px;color:var(--tx3)}
 .rpc-text{font-size:11px;color:var(--tx2);line-height:1.5;margin-left:28px;word-break:break-word}
 /* ── Comment input — chat card style ── */
 .rp-input-wrap{padding:8px 10px 10px;flex-shrink:0}
@@ -679,7 +662,6 @@ i.ph,i.ph-bold,i.ph-fill,i.ph-light{line-height:1;display:flex;align-items:cente
 .mv-mi.dim{opacity:.35;pointer-events:none}
 .mv-mi i.ph{font-size:18px;flex-shrink:0}
 .mv-mi svg{width:18px;height:18px;flex-shrink:0}
-.mv-mi-badge{font-size:9px;font-weight:600;color:var(--tx3);background:var(--hov);padding:2px 6px;border-radius:4px;margin-left:auto}
 .mv-mi-sep{height:1px;background:var(--bd);margin:4px 8px}
 /* Toggle switch */
 .mv-toggle{width:36px;height:20px;border-radius:10px;background:var(--bd2);position:relative;transition:background .2s;flex-shrink:0;margin-left:auto}

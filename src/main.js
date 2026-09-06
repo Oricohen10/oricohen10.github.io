@@ -94,11 +94,6 @@ function mvPageOpen(id) {
   _hamSet(true);
   if (id === 'about') startMvTerm();
 }
-function mvPageClose(id) {
-  document.getElementById('mv-page-' + id).classList.remove('open');
-  const anyOpen = ['portfolio','about','contact'].some(p => document.getElementById('mv-page-'+p).classList.contains('open'));
-  if (!anyOpen) _hamSet(false);
-}
 function mvCloseAll() {
   ['portfolio','about','contact'].forEach(id => document.getElementById('mv-page-'+id).classList.remove('open'));
   _hamSet(false);
@@ -1096,15 +1091,6 @@ function driftGhost(g) {
 /* ── Move a ghost to specific viewport % coords ──
    ease: optional CSS timing-function string.
    Defaults to the same curve used by driftGhost. ── */
-function moveGhostTo(g, leftPct, topPct, durSec, ease) {
-  if (!g.el) return;
-  clearTimeout(g._driftTimer);
-  g._driftTimer = null;
-  g.el.style.transitionTimingFunction = ease || 'cubic-bezier(.25,.46,.45,.94)';
-  g.el.style.transitionDuration = durSec.toFixed(2) + 's';
-  g.el.style.left = leftPct.toFixed(1) + '%';
-  g.el.style.top  = topPct.toFixed(1)  + '%';
-}
 
 /* ── Show Figma-style speech bubble on a ghost cursor.
    The bubble replaces the name tag visually — gtag hides while active. ── */
