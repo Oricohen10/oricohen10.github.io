@@ -16,8 +16,8 @@
 <meta name="twitter:description" content="How Ori Cohen built Verint's enterprise design system from scratch — one language for 40+ products and 10k+ users."/>
 <meta name="twitter:image" content="https://oricohen.co/cases/lux/images/og-image.png"/>
 <meta name="author" content="Ori Cohen"/>
-<link rel="stylesheet" href="../../src/tokens.css?v=202609061426"/>
-<link rel="stylesheet" href="../shared/case-study.css?v=202609061426"/>
+<link rel="stylesheet" href="../../src/tokens.css?v=202609061435"/>
+<link rel="stylesheet" href="../shared/case-study.css?v=202609061435"/>
 <!-- Hide default cursor when embedded in the portfolio iframe -->
 <script>try{if(localStorage.getItem('ori-theme')==='dark')document.documentElement.setAttribute('data-theme','dark')}catch(e){}
 if(window.self!==window.top){var _s=document.createElement('style');_s.textContent='*{cursor:none!important}';document.head.appendChild(_s);}</script>
@@ -344,31 +344,9 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
   padding:12px 16px;border-bottom:1px solid var(--border-subtle)}
 .dm-label{font-size:10px;font-weight:800;letter-spacing:.12em;
   text-transform:uppercase;color:var(--text-secondary)}
-.dm-tabs{display:flex;gap:2px;margin-left:auto;padding:2px;
-  background:var(--surface-sunken);border-radius:var(--radius-md)}
-.dm-tab{font:inherit;font-size:12px;font-weight:600;cursor:pointer;
-  padding:6px 14px;min-height:28px;border:0;border-radius:6px;
-  background:transparent;color:var(--text-secondary);
-  transition:background .16s,color .16s}
-.dm-tab:hover{color:var(--text-primary)}
-/* The selected tab carries a filled surface AND the ink shift, not colour
-   alone - same reason the reel's rail item has a bar. */
-.dm-tab[aria-selected="true"]{background:var(--surface-default);
-  color:var(--text-primary);box-shadow:0 1px 2px rgba(18,18,19,.10)}
-[data-theme="dark"] .dm-tab[aria-selected="true"]{
-  background:var(--surface-raised);box-shadow:0 1px 3px rgba(0,0,0,.5)}
-
-.dm-body{display:grid;grid-template-columns:minmax(0,381px) minmax(0,1fr);
+[data-theme="dark"] 
+.dm-body{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,268px);
   gap:22px;padding:18px 16px;align-items:start}
-/* The two shots are stacked and crossfaded rather than swapped, because a
-   src swap flashes on first switch and the whole point is that nothing moves.
-   Their edge maps overlap 86%, so the fade reads as a recolour. */
-.dm-stage{position:relative;aspect-ratio:381/249;border-radius:var(--radius-md);
-  overflow:hidden;background:var(--surface-sunken)}
-.dm-shot{position:absolute;inset:0;width:100%;height:100%;display:block;
-  opacity:0;transition:opacity .32s ease}
-.dm-shot.on{opacity:1}
-@media(prefers-reduced-motion:reduce){.dm-shot{transition:none}}
 
 .dm-toks{list-style:none;margin:0;padding:0;display:flex;
   flex-direction:column;gap:9px;min-width:0}
@@ -385,11 +363,83 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
 .dm-foot{padding:0 16px 16px;font-size:12.5px;line-height:1.65;
   color:var(--text-secondary);max-width:74ch}
 .dm-foot b{color:var(--text-primary);font-weight:600}
+/* What each token paints, so the list is readable without the file open. */
+.dm-tok-w{display:block;margin-top:2px;font-size:11px;
+  color:var(--text-tertiary)}
 
-@media(max-width:720px){
+@media(max-width:900px){
   .dm-body{grid-template-columns:1fr;gap:16px}
-  .dm-tabs{margin-left:0}
 }
+
+/* ══ Light / dark, one seam ════════════════════════════════════════════════
+   Recovered from the old site, where this was the best thing on the LUX page.
+   It beats a toggle for a specific reason: both themes are on screen at once
+   with a seam between them, so the identical geometry is verifiable rather
+   than remembered. That IS the argument - dark mode is a mode on the
+   primitives, not a second component set.
+
+   The mechanism is NOT the old one. That was a div with mousedown and
+   touchmove handlers: drag-only, no keyboard, no ARIA, and a pulsing handle
+   with no reduced-motion guard. This is an <input type="range"> covering the
+   frame at opacity 0, which brings arrows, Home/End, real slider semantics,
+   click-to-jump and touch for free - and satisfies 2.5.7, which wants a
+   single-pointer alternative to dragging. The visible handle is a separate
+   layer that only follows --p.                                              */
+.cmp{margin-top:22px;--p:50%}
+.cmp-frame{position:relative;overflow:hidden;border-radius:var(--radius-lg);
+  border:1px solid var(--border-subtle);background:var(--surface-sunken);
+  aspect-ratio:1800/1012}
+.cmp-side{position:absolute;inset:0}
+.cmp-side img{width:100%;height:100%;display:block;object-fit:cover}
+/* Light sits behind at full width; dark is clipped from the right, so the
+   seam is at --p and dark occupies the left. Same arrangement as the old one,
+   so the labels keep their sides. */
+.cmp-dark{clip-path:inset(0 calc(100% - var(--p)) 0 0)}
+
+/* The input is the control. Full size and invisible, so a press anywhere in
+   the frame jumps the seam there and then drags - which the old version could
+   not do, it needed the handle grabbed. */
+.cmp-input{position:absolute;inset:0;z-index:4;width:100%;height:100%;margin:0;
+  opacity:0;cursor:ew-resize;-webkit-appearance:none;appearance:none;
+  background:transparent;
+  /* pan-y, stated rather than left to the default: the input covers a tall
+     image, so a vertical swipe that starts on it has to scroll the page while
+     horizontal drags still move the seam. */
+  touch-action:pan-y}
+.cmp-input::-webkit-slider-thumb{-webkit-appearance:none;width:44px;height:100vh}
+.cmp-input::-moz-range-thumb{width:44px;height:100vh;border:0;background:transparent}
+
+.cmp-handle{position:absolute;top:0;bottom:0;left:var(--p);z-index:3;
+  width:44px;margin-left:-22px;pointer-events:none;
+  display:flex;flex-direction:column;align-items:center}
+.cmp-line{flex:1;width:2px;background:rgba(255,255,255,.72);
+  box-shadow:0 0 6px rgba(0,0,0,.45)}
+.cmp-pill{flex-shrink:0;width:36px;height:36px;border-radius:50%;
+  background:rgba(20,20,24,.95);border:2px solid rgba(255,255,255,.55);
+  color:#fff;display:flex;align-items:center;justify-content:center;
+  box-shadow:0 4px 16px rgba(0,0,0,.5)}
+.cmp-pill svg{width:14px;height:14px;display:block}
+/* The pulse invites the drag, and it stops once the thing has been used -
+   an affordance hint that keeps pulsing is just noise. */
+.cmp:not(.cmp-used) .cmp-pill{animation:cmpPulse 1.9s ease-out infinite}
+@keyframes cmpPulse{
+  0%,100%{box-shadow:0 0 0 0 rgba(255,255,255,.55),0 4px 16px rgba(0,0,0,.5)}
+  50%    {box-shadow:0 0 0 16px rgba(255,255,255,0),0 4px 16px rgba(0,0,0,.5)}
+}
+@media(prefers-reduced-motion:reduce){
+  .cmp:not(.cmp-used) .cmp-pill{animation:none}
+}
+/* The input is invisible, so its focus ring would be too. Put it on the pill. */
+.cmp-input:focus-visible~.cmp-handle .cmp-pill{
+  outline:3px solid var(--action-primary);outline-offset:3px}
+
+.cmp-tags{display:flex;justify-content:space-between;gap:12px;margin-bottom:10px}
+.cmp-tag{font-size:10px;font-weight:800;letter-spacing:.12em;
+  text-transform:uppercase;padding:4px 11px;border-radius:var(--radius-full);
+  border:1px solid var(--border-default);color:var(--text-secondary);
+  background:var(--surface-raised)}
+.cmp-hint{margin-top:10px;text-align:center;font-size:11.5px;
+  color:var(--text-tertiary);letter-spacing:.03em}
 </style>
 <script type="application/ld+json">
 {
@@ -504,7 +554,7 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
       <figure class="cs-media">
       <!-- The variables browser. Replaces the component-library screenshot:
            the same claim, but checkable. -->
-      <div class="vb-shell" data-dv="202609061426">
+      <div class="vb-shell" data-dv="202609061435">
         <div class="vb" id="vb" role="group"
              aria-label="LUX 2.0 variable library, browsable">
           <div class="vb-side">
@@ -554,47 +604,65 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
       <div class="dm">
         <div class="dm-hd">
           <span class="dm-label">Dark mode, day one</span>
-          <div class="dm-tabs" role="tablist" aria-label="Theme">
-            <button class="dm-tab" role="tab" data-t="light" aria-selected="true"
-                    aria-controls="dm-stage">Light</button>
-            <button class="dm-tab" role="tab" data-t="dark" aria-selected="false"
-                    aria-controls="dm-stage">Dark</button>
-          </div>
         </div>
-        <div class="dm-body">
-          <div class="dm-stage" id="dm-stage">
-            <img class="dm-shot on" id="dm-light" src="images/card-light.webp"
-                 width="381" height="249" loading="lazy" decoding="async"
-                 alt="The LUX 2.0 card component in light mode: white surface, dark title and body text, an outlined Cancel button and a filled blue Okay button."/>
-            <img class="dm-shot" id="dm-dark" src="images/card-dark.webp"
-                 width="381" height="249" loading="lazy" decoding="async" aria-hidden="true"
-                 alt="The same card in dark mode: near-black surface, light text, the same two buttons in lighter blue. The layout is identical."/>
+        <div class="dm-body dm-body-wide">
+          <div class="cmp" id="cmp">
+            <div class="cmp-tags">
+              <span class="cmp-tag">Dark</span>
+              <span class="cmp-tag">Light</span>
+            </div>
+            <div class="cmp-frame">
+              <div class="cmp-side cmp-light">
+                <img src="images/af-light.webp" width="1800" height="1012"
+                     loading="lazy" decoding="async"
+                     alt="Verint Agent Factory in light mode: the Add tool provider modal over the Tools Manager page, with a stepper, radio cards, a data table of tool names and annotations, status badges and toggles."/>
+              </div>
+              <div class="cmp-side cmp-dark" aria-hidden="true">
+                <img src="images/af-dark.webp" width="1800" height="1012"
+                     loading="lazy" decoding="async" alt=""/>
+              </div>
+              <input class="cmp-input" id="cmp-input" type="range"
+                     min="0" max="100" value="50" step="1"
+                     aria-label="Reveal the dark theme. Drag or use the arrow keys."/>
+              <div class="cmp-handle" aria-hidden="true">
+                <span class="cmp-line"></span>
+                <span class="cmp-pill">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M8 8L4 12l4 4M16 8l4 4-4 4"/></svg>
+                </span>
+                <span class="cmp-line"></span>
+              </div>
+            </div>
+            <p class="cmp-hint">Drag the handle, or use the arrow keys</p>
           </div>
           <ul class="dm-toks">
             <li class="dm-tok">
-              <span class="dm-tok-n">card/background/default</span>
-              <span class="dm-tok-c"><span class="dm-hop"><i class="dm-sw" style="background-color:#ffffff" aria-hidden="true"></i>#ffffff</span><svg class="dm-arrow" width="10" height="12" viewBox="0 0 10 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 4 7 7.5 3 11"/></svg><span class="dm-hop">background.neutral.soft.regular_level_2</span><svg class="dm-arrow" width="10" height="12" viewBox="0 0 10 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 4 7 7.5 3 11"/></svg><span class="dm-hop">base.white</span></span>
+              <span class="dm-tok-n">layer.level_3</span>
+              <span class="dm-tok-c"><span class="dm-hop"><i class="dm-sw" style="background-color:#ffffff" aria-hidden="true"></i>#ffffff</span><svg class="dm-arrow" width="10" height="12" viewBox="0 0 10 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 4 7 7.5 3 11"/></svg><span class="dm-hop">base.white</span></span>
+              <span class="dm-tok-w">the modal surface</span>
             </li>
             <li class="dm-tok">
-              <span class="dm-tok-n">card/border/color/regular</span>
-              <span class="dm-tok-c"><span class="dm-hop"><i class="dm-sw" style="background-color:#dfe2e4" aria-hidden="true"></i>#dfe2e4</span><svg class="dm-arrow" width="10" height="12" viewBox="0 0 10 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 4 7 7.5 3 11"/></svg><span class="dm-hop">border.neutral.regular</span><svg class="dm-arrow" width="10" height="12" viewBox="0 0 10 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 4 7 7.5 3 11"/></svg><span class="dm-hop">grey.200</span></span>
+              <span class="dm-tok-n">text.neutral.main</span>
+              <span class="dm-tok-c"><span class="dm-hop"><i class="dm-sw" style="background-color:#121213" aria-hidden="true"></i>#121213</span><svg class="dm-arrow" width="10" height="12" viewBox="0 0 10 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 4 7 7.5 3 11"/></svg><span class="dm-hop">grey.950</span></span>
+              <span class="dm-tok-w">headings and table text</span>
             </li>
             <li class="dm-tok">
-              <span class="dm-tok-n">card/text/regular</span>
-              <span class="dm-tok-c"><span class="dm-hop"><i class="dm-sw" style="background-color:#121213" aria-hidden="true"></i>#121213</span><svg class="dm-arrow" width="10" height="12" viewBox="0 0 10 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 4 7 7.5 3 11"/></svg><span class="dm-hop">text.neutral.main</span><svg class="dm-arrow" width="10" height="12" viewBox="0 0 10 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 4 7 7.5 3 11"/></svg><span class="dm-hop">grey.950</span></span>
+              <span class="dm-tok-n">border.neutral.regular</span>
+              <span class="dm-tok-c"><span class="dm-hop"><i class="dm-sw" style="background-color:#dfe2e4" aria-hidden="true"></i>#dfe2e4</span><svg class="dm-arrow" width="10" height="12" viewBox="0 0 10 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 4 7 7.5 3 11"/></svg><span class="dm-hop">grey.200</span></span>
+              <span class="dm-tok-w">table rules and card edges</span>
             </li>
             <li class="dm-tok">
-              <span class="dm-tok-n">card/icon/color/regular</span>
-              <span class="dm-tok-c"><span class="dm-hop"><i class="dm-sw" style="background-color:#6a6d70" aria-hidden="true"></i>#6a6d70</span><svg class="dm-arrow" width="10" height="12" viewBox="0 0 10 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 4 7 7.5 3 11"/></svg><span class="dm-hop">icon.neutral.regular</span><svg class="dm-arrow" width="10" height="12" viewBox="0 0 10 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 4 7 7.5 3 11"/></svg><span class="dm-hop">grey.700</span></span>
+              <span class="dm-tok-n">background.brand.regular</span>
+              <span class="dm-tok-c"><span class="dm-hop"><i class="dm-sw" style="background-color:#006ee5" aria-hidden="true"></i>#006ee5</span><svg class="dm-arrow" width="10" height="12" viewBox="0 0 10 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 4 7 7.5 3 11"/></svg><span class="dm-hop">blue.550</span></span>
+              <span class="dm-tok-w">the Add button and the toggles</span>
             </li>
           </ul>
         </div>
-        <p class="dm-foot">Four colour bindings, and <b>not one of them changes
-          between the themes</b>. Dark mode is a mode on the primitives, not a
-          second component - so the card is drawn once and
-          <code>text.neutral.main</code> resolves to a different grey. That is
-          the whole reason it could ship on day one rather than as a project of
-          its own.</p>
+        <p class="dm-foot">One screen of Agent Factory, one of the 40+ products
+          on LUX. The two halves are the same build - <b>not one token name
+          differs across that seam</b>. Dark mode is a mode on the primitives,
+          so <code>text.neutral.main</code> resolves to a different grey and
+          every component follows without being touched. That is why it could
+          ship on day one rather than as a project of its own.</p>
       </div>
     </div>
 
@@ -660,44 +728,25 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
   </svg>
 </button>
 
-<script src="../shared/case-study.js?v=202609061426" defer></script>
+<script src="../shared/case-study.js?v=202609061435" defer></script>
 <script>
-/* Dark-mode toggle. Independent of the page theme on purpose: this is a
-   depiction of the product in both modes, so it has to be switchable while
-   the page itself stays in whichever theme the visitor chose. */
+/* The light/dark seam. All input comes from the range element, so there are no
+   drag handlers here at all - only a paint step. */
 (function(){
-  var wrap=document.querySelector('.dm');
+  var wrap=document.getElementById('cmp');
   if(!wrap) return;
-  var tabs=[].slice.call(wrap.querySelectorAll('.dm-tab'));
-  var shots={light:document.getElementById('dm-light'),
-             dark: document.getElementById('dm-dark')};
-  function show(which){
-    tabs.forEach(function(t){
-      t.setAttribute('aria-selected', String(t.getAttribute('data-t')===which));
-    });
-    Object.keys(shots).forEach(function(k){
-      var on=k===which;
-      shots[k].classList.toggle('on',on);
-      /* Both images stay in the DOM for the crossfade, so the hidden one has
-         to leave the accessibility tree - otherwise a screen reader reads two
-         descriptions of the same card and the toggle appears to do nothing. */
-      if(on) shots[k].removeAttribute('aria-hidden');
-      else   shots[k].setAttribute('aria-hidden','true');
-    });
+  var input=document.getElementById('cmp-input');
+  function paint(){
+    wrap.style.setProperty('--p', input.value+'%');
+    /* Announce something a listener can act on. Without this a screen reader
+       reads "50" - a number with no unit and no meaning. */
+    input.setAttribute('aria-valuetext', input.value+'% dark');
   }
-  wrap.querySelector('.dm-tabs').addEventListener('click',function(e){
-    var b=e.target.closest('.dm-tab');
-    if(b) show(b.getAttribute('data-t'));
+  input.addEventListener('input',function(){
+    wrap.classList.add('cmp-used');   /* stop the pulse once it has been used */
+    paint();
   });
-  /* Left/Right across the tablist, which is what a tablist is expected to do. */
-  wrap.querySelector('.dm-tabs').addEventListener('keydown',function(e){
-    var i=tabs.indexOf(document.activeElement);
-    if(i<0) return;
-    var n = e.key==='ArrowRight' ? i+1 : e.key==='ArrowLeft' ? i-1 : -1;
-    if(n<0||n>=tabs.length) return;
-    e.preventDefault();
-    tabs[n].focus(); show(tabs[n].getAttribute('data-t'));
-  });
+  paint();
 })();
 </script>
 <script>
