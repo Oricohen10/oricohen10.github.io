@@ -579,3 +579,24 @@ button{cursor:pointer;font-family:inherit}
   .cs-section > p{font-size:14.5px}
   .ai-card-text{font-size:14.5px}
 }
+
+/* ── Mobile type floor ─────────────────────────────────────────────────────
+   LAST in the file on purpose. The first version of this sat above the
+   responsive ladder and did nothing: at 360px both it and the
+   @media(max-width:1000px) block apply, the selectors are the same weight,
+   and the later one wins - so .sb-label stayed at the 10px the 1000px block
+   sets. A narrower breakpoint has to come after a wider one, or it is decided
+   by line number rather than by intent.
+
+   All-caps tracked labels at 9px are a fine desktop detail and a bad phone
+   one. No guideline forces this - 1.4.4 is about zoom, not size - it is here
+   because the smallest type on five case studies was 9px and these pages get
+   read on a phone as often as not.                                          */
+@media(max-width:720px){
+  .sb-label{font-size:10.5px}
+  .chip{font-size:10.5px}
+  .ai-card-label{font-size:10.5px}
+  .cs-section-num,.diff-marg{font-size:10.5px}
+  .plugin-tag{font-size:10.5px}
+  .plugin-num{font-size:10.5px}
+}

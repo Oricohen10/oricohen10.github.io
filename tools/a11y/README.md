@@ -19,6 +19,7 @@ Non-zero exit means something failed. Individual checks also run standalone.
 | `states.py` | the same for `:hover`, `:active`, `:focus`, which 1.4.3 also covers |
 | `structure.py` | landmarks, heading order, names, labels, roles, keyboard, ids, media |
 | `tree.py` | ancestor-path integrity - see below |
+| `mobile.py` | arithmetic on fixed widths at 320-430px, excluding desktop-only shells |
 
 ## Why tree.py exists
 

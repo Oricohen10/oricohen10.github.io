@@ -5,7 +5,8 @@ HERE=os.path.dirname(os.path.abspath(__file__))
 CHECKS=[('contrast','text contrast, both themes, at rest'),
         ('states','contrast in :hover / :active / :focus'),
         ('structure','landmarks, headings, names, roles, keyboard'),
-        ('tree','ancestor-path integrity')]
+        ('tree','ancestor-path integrity'),
+        ('mobile','fixed widths against a 320-430px viewport')]
 fail=0
 for mod,desc in CHECKS:
     print(f'\n{"="*72}\n{mod}.py - {desc}\n{"="*72}')

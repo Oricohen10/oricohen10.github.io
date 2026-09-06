@@ -39,8 +39,8 @@
   }
 }
 </script>
-<link rel="stylesheet" href="../../src/tokens.css?v=202609061513"/>
-<link rel="stylesheet" href="../shared/case-study.css?v=202609061513"/>
+<link rel="stylesheet" href="../../src/tokens.css?v=202609061517"/>
+<link rel="stylesheet" href="../shared/case-study.css?v=202609061517"/>
 <script>try{if(localStorage.getItem('ori-theme')==='dark')document.documentElement.setAttribute('data-theme','dark')}catch(e){}
 if(window.self!==window.top){var _s=document.createElement('style');_s.textContent='*{cursor:none!important}';document.head.appendChild(_s);}</script>
 <style>
@@ -347,6 +347,7 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
   .pf-step:nth-child(2n)::after{display:none}
 }
 @media(max-width:560px){
+  .pf-d-step{font-size:10.5px}
   .vs-rail{padding:8px}
   .vs-item{padding:8px 10px 8px 13px}
   .vs-item-x b{font-size:12.5px}
@@ -359,6 +360,10 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
     justify-items:start;align-items:center;gap:4px 12px;text-align:left;
     padding:12px 14px}
   .pf-step::after{display:none !important}
+  /* The row is one column here, so there is space these did not have in
+     a three-across grid. 8.5px was sized for that grid, not for a phone. */
+  .pf-badge{font-size:10px}
+  .pf-sub{font-size:11.5px}
   .pf-icon{grid-row:span 2}
   .pf-badge{grid-row:span 2;align-self:center}
   .pf-sub{align-self:auto}
@@ -644,7 +649,7 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
   </svg>
 </button>
 
-<script src="../shared/case-study.js?v=202609061513" defer></script>
+<script src="../shared/case-study.js?v=202609061517" defer></script>
 
 <script>
 /* ══ The reel ═══════════════════════════════════════════════════════════════
