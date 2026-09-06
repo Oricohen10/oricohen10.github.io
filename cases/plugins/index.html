@@ -39,8 +39,8 @@
   }
 }
 </script>
-<link rel="stylesheet" href="../../src/tokens.css?v=202609061058"/>
-<link rel="stylesheet" href="../shared/case-study.css?v=202609061058"/>
+<link rel="stylesheet" href="../../src/tokens.css?v=202609061111"/>
+<link rel="stylesheet" href="../shared/case-study.css?v=202609061111"/>
 <script>try{if(localStorage.getItem('ori-theme')==='dark')document.documentElement.setAttribute('data-theme','dark')}catch(e){}
 if(window.self!==window.top){var _s=document.createElement('style');_s.textContent='*{cursor:none!important}';document.head.appendChild(_s);}</script>
 <style>
@@ -181,8 +181,15 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
    sub-line and badge sit on the same four baselines across all six - the
    badges were floating at different heights because "Figma Variables", "TS
    Generation" and "GitHub Actions" wrap to two lines and the others do not. */
+/* 28px between columns, not 20. The connector only had 2px of clear space
+   each side, which is what made the row read as crowded - it was touching
+   both cards. 28px with a 10px caret gives 9px each side. Costs 16px of
+   row width across the two gaps, so cards go from 191px to 185px in the
+   default 1140px project window, still far above the 104px floor that
+   made step 6 vanish. Row gap 12 -> 16 for the same reason vertically,
+   and that one costs nothing horizontally. */
 .pf-flow{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));
-  gap:12px 20px}
+  gap:16px 28px}
 
 /* ── a step ────────────────────────────────────────────────────────────────
    All six cards are the same surface. Tinting the two manual ones read as a
@@ -215,38 +222,25 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
    --text-secondary is 6.83:1 on the card in light and 9.29:1 in dark. This is
    a graphical object rather than text, so 3:1 would be the bar under 1.4.11 -
    it clears both. */
-/* A thin arrow rather than a bare chevron: the shaft is what says "flows
-   into", where two rotated borders only pointed.
+/* A caret, and the room to breathe that the arrow never had.
 
-   Drawn as a mask, not a background image, so the colour still comes from the
-   token and follows the theme. An SVG with a baked-in stroke colour would
-   need a second copy for dark mode and would drift from --text-secondary.
+   Still a mask rather than a background image, so the colour comes from
+   the token and follows the theme. An SVG with the stroke baked in would
+   need a second copy for dark and would drift from --text-secondary.
 
-   The numbers are not a taste call, they came from rendering it at its real
-   pixel size and looking. Two things that only show up that way:
+   10x14 with a 1:1 viewBox, so 1.5 means 1.5 actual pixels. Rendered at
+   true size and compared: 1.75 and 2 both blob at the vertex, where the
+   two diagonals meet and their round joins overlap. 1.5 keeps the corner
+   open, which is the whole shape of a caret.
 
-   14x10 with an 18x12 viewBox scaled down put the stroke at 0.9px and the
-   arrowhead collapsed into a solid blob. The viewBox is 1:1 with the box now,
-   so a stroke width is an actual pixel count and the head stays open.
-
-   And the shaft is 1.5px on a .5 coordinate, which is the thinnest stroke that
-   FULLY covers one pixel row whatever the raster grid alignment happens to be.
-   At 1.25px it never fully covers a row, so it painted as a two-row band of
-   light grey - thicker looking AND weaker than a crisp single line. At 1px it
-   is crisp only if the alignment is perfect, which is not something to rely
-   on across browsers and zoom levels.
-
-   16px in the 20px column gap leaves 2px clear each side: right:-18px puts the
-   right edge 18px out, the box spans back to -2px, centred on -10px. Wider
-   read slightly better in isolation but would have needed a bigger gap, and
-   that comes straight off the card widths - which is what made step 6
-   disappear last time. */
-.pf-step::after{content:"";position:absolute;top:50%;right:-18px;
-  width:16px;height:12px;
+   right:-19px centres it in the 28px gap - gap centre is 14px out, the
+   caret is 10 wide, so its right edge sits at 19 and it spans back to 9. */
+.pf-step::after{content:"";position:absolute;top:50%;right:-19px;
+  width:10px;height:14px;
   transform:translateY(-50%);
   background-color:var(--text-secondary);
-  -webkit-mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 12'%3E%3Cpath d='M1 6.5h13M10.7 3.2 14 6.5l-3.3 3.3' fill='none' stroke='%23000' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
-  mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 12'%3E%3Cpath d='M1 6.5h13M10.7 3.2 14 6.5l-3.3 3.3' fill='none' stroke='%23000' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  -webkit-mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 14'%3E%3Cpath d='M3 4 7 7.5 3 11' fill='none' stroke='%23000' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 14'%3E%3Cpath d='M3 4 7 7.5 3 11' fill='none' stroke='%23000' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
   -webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;
   -webkit-mask-position:center;mask-position:center;
   -webkit-mask-size:contain;mask-size:contain}
@@ -650,7 +644,7 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
   </svg>
 </button>
 
-<script src="../shared/case-study.js?v=202609061058" defer></script>
+<script src="../shared/case-study.js?v=202609061111" defer></script>
 
 <script>
 /* ══ The reel ═══════════════════════════════════════════════════════════════

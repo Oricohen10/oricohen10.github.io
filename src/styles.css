@@ -291,12 +291,29 @@ i.ph,i.ph-bold,i.ph-fill,i.ph-light{line-height:1;display:flex;align-items:cente
 .bb-divider{width:1px;height:20px;background:var(--bd);margin:0 4px;flex-shrink:0}
 .bb-btn{display:flex;align-items:center;justify-content:center;width:38px;height:38px;border-radius:9px;background:transparent;border:none;color:var(--tx2);transition:background .1s,color .1s}
 .bb-btn:hover,.bb-btn.demo-hov{background:var(--hov);color:var(--tx)}
-/* --figma follows --action-primary, which is deliberately bright in dark
-   (see tokens.css). White on purple-400 is 2.78:1, so the ink has to
-   flip with the theme here - the same fill-vs-ink split the case study
-   #scroll-top has. --text-on-accent handles it: white in light on
-   purple-600 at 5.81:1, #121213 in dark on purple-400 at 6.73:1. */
-.bb-btn.on{background:var(--figma);color:var(--text-on-accent)}
+/* White icon in both themes, which needs the FILL pinned rather than the ink
+   flipped. Ori asked for white and was right that it looks better; it just is
+   not accessible on its own. --figma follows --action-primary, which is
+   deliberately bright on dark, and white on purple-400 is 2.78:1 - under even
+   the 3:1 that 1.4.11 asks of an icon. So the pill stops following the accent
+   and takes a fixed purple-500 in both themes, the same way .btn-primary
+   fills from the ramp rather than the token.
+
+   purple-500 is the only step on the ramp that clears 3:1 on all three
+   measures at once, which is why it is not purple-600:
+
+     fill        white icon   vs light bar   vs dark bar
+     purple-400      2.78         2.78          5.30
+     purple-500      4.20         4.20          3.51   <- all three
+     purple-600      5.81         5.81          2.54
+     purple-700      7.90         7.90          1.87
+
+   purple-600 gives a stronger icon but the pill nearly disappears into the
+   dark bar at 2.54:1, and a selected state you cannot find is worse than one
+   that is slightly less crisp. The third column matters because the pill's
+   edge is what says "this one is selected" - the unselected buttons are
+   transparent with --tx2 icons. */
+.bb-btn.on{background:var(--purple-500);color:var(--gray-0)}
 .bb-btn.inactive{opacity:.28;pointer-events:none}
 .bb-btn svg{width:18px;height:18px;display:block}
 .bb-right{display:flex;align-items:center;gap:3px}
