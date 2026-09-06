@@ -16,8 +16,8 @@
 <meta name="twitter:description" content="How Ori Cohen built Verint's enterprise design system from scratch — one language for 40+ products and 10k+ users."/>
 <meta name="twitter:image" content="https://oricohen.co/cases/lux/images/og-image.png"/>
 <meta name="author" content="Ori Cohen"/>
-<link rel="stylesheet" href="../../src/tokens.css?v=202609061449"/>
-<link rel="stylesheet" href="../shared/case-study.css?v=202609061449"/>
+<link rel="stylesheet" href="../../src/tokens.css?v=202609061453"/>
+<link rel="stylesheet" href="../shared/case-study.css?v=202609061453"/>
 <!-- Hide default cursor when embedded in the portfolio iframe -->
 <script>try{if(localStorage.getItem('ori-theme')==='dark')document.documentElement.setAttribute('data-theme','dark')}catch(e){}
 if(window.self!==window.top){var _s=document.createElement('style');_s.textContent='*{cursor:none!important}';document.head.appendChild(_s);}</script>
@@ -329,48 +329,6 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
   .vb-r-n,.vb-r-v{padding:0 9px}
 }
 
-/* ══ Dark mode, one component ══════════════════════════════════════════════
-   The payoff of the panel above it, which is why it sits directly after it:
-   that shows the architecture exists, this shows what the architecture buys.
-   Same card, same six bindings, no second component - only the mode changes.
-
-   Unlike .vb this DOES use site tokens. The panel is a depiction of Figma so
-   it carries Figma's colours; this is our own presentation of his artefact,
-   so it carries ours.                                                       */
-.dm{margin-top:22px;border:1px solid var(--border-subtle);
-  border-radius:var(--radius-lg);background:var(--surface-default);
-  overflow:hidden}
-.dm-hd{display:flex;align-items:center;gap:14px;flex-wrap:wrap;
-  padding:12px 16px;border-bottom:1px solid var(--border-subtle)}
-.dm-label{font-size:10px;font-weight:800;letter-spacing:.12em;
-  text-transform:uppercase;color:var(--text-secondary)}
-[data-theme="dark"] 
-.dm-body{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,268px);
-  gap:22px;padding:18px 16px;align-items:start}
-
-.dm-toks{list-style:none;margin:0;padding:0;display:flex;
-  flex-direction:column;gap:9px;min-width:0}
-.dm-tok{min-width:0}
-.dm-tok-n{display:block;font-family:var(--font-mono);font-size:11.5px;
-  color:var(--text-primary);font-weight:600;overflow-wrap:anywhere}
-.dm-tok-c{display:flex;align-items:center;gap:6px;flex-wrap:wrap;
-  margin-top:3px;font-family:var(--font-mono);font-size:11px;
-  color:var(--text-secondary)}
-.dm-hop{display:inline-flex;align-items:center;gap:5px;overflow-wrap:anywhere}
-.dm-sw{width:11px;height:11px;border-radius:2px;flex-shrink:0;
-  border:1px solid var(--border-default)}
-.dm-arrow{color:var(--text-tertiary);flex-shrink:0}
-.dm-foot{padding:0 16px 16px;font-size:12.5px;line-height:1.65;
-  color:var(--text-secondary);max-width:74ch}
-.dm-foot b{color:var(--text-primary);font-weight:600}
-/* What each token paints, so the list is readable without the file open. */
-.dm-tok-w{display:block;margin-top:2px;font-size:11px;
-  color:var(--text-tertiary)}
-
-@media(max-width:900px){
-  .dm-body{grid-template-columns:1fr;gap:16px}
-}
-
 /* ══ Light / dark, one seam ════════════════════════════════════════════════
    Recovered from the old site, where this was the best thing on the LUX page.
    It beats a toggle for a specific reason: both themes are on screen at once
@@ -433,11 +391,55 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
 .cmp-input:focus-visible~.cmp-handle .cmp-pill{
   outline:3px solid var(--action-primary);outline-offset:3px}
 
-.cmp-tags{display:flex;justify-content:space-between;gap:12px;margin-bottom:10px}
-.cmp-tag{font-size:10px;font-weight:800;letter-spacing:.12em;
-  text-transform:uppercase;padding:4px 11px;border-radius:var(--radius-full);
-  border:1px solid var(--border-default);color:var(--text-secondary);
-  background:var(--surface-raised)}
+
+/* ── Token annotations ─────────────────────────────────────────────────────
+   Ori's idea, and it replaces the token list that used to sit under this
+   frame - better, because it is spatial. Reading
+   "border.neutral.regular - table rules and card edges" asks you to go find
+   the rule; a chip pointing at the rule does not.
+
+   Every coordinate below was measured off the image rather than eyeballed:
+   the brand blue was found by locating #006ee5 blobs (the Add button is the
+   57x27 one at the bottom, the toggles are the 19x16 ones in the Enabled
+   column), and the table rule by finding the widest run of #dfe2e4. So a chip
+   points at the thing it names, not near it.
+
+   The chip carries its own surface and its own ink, fixed in both themes,
+   because the pixels underneath it change from white to near-black as the
+   seam is dragged. Same reasoning as the .vs-btn controls over video on the
+   plugins page: when the backdrop is unknown, the control brings the
+   contrast. #121213 on #ffffff is 16.7:1 either way.                       */
+.cmp-anns{position:absolute;inset:0;z-index:3;pointer-events:none}
+.cmp-ann{position:absolute;display:flex;align-items:center;gap:0;
+  transform:translateY(-50%)}
+.cmp-ann-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0;
+  background:#fff;border:2px solid #121213;
+  box-shadow:0 0 0 1px rgba(255,255,255,.7)}
+.cmp-ann-chip{display:inline-flex;align-items:center;gap:5px;flex-shrink:0;
+  padding:3px 8px;border-radius:5px;
+  background:#fff;color:#121213;
+  border:1px solid rgba(18,18,19,.22);
+  box-shadow:0 2px 8px rgba(0,0,0,.28);
+  font-family:var(--font-mono);font-size:10.5px;font-weight:600;
+  line-height:1.3;white-space:nowrap}
+.cmp-ann-sw{width:9px;height:9px;border-radius:2px;flex-shrink:0;
+  border:1px solid rgba(18,18,19,.28)}
+/* A short straight leader, not a curve. The dot marks the element and the
+   chip sits beside it, which is legible at this size and needs no geometry. */
+.cmp-ann-r .cmp-ann-chip{margin-left:9px}
+.cmp-ann-r::before,.cmp-ann-l::before{content:"";position:absolute;top:50%;
+  width:9px;height:2px;background:#121213;transform:translateY(-50%)}
+.cmp-ann-r::before{left:9px}
+/* row-reverse puts the dot on the right of the box and the chip on its left;
+   the translate then shifts the whole box left by its own width so the DOT,
+   not the box, lands on the anchor coordinate. */
+.cmp-ann-l{flex-direction:row-reverse;transform:translate(-100%,-50%)}
+.cmp-ann-l .cmp-ann-chip{margin-right:9px}
+.cmp-ann-l::before{right:9px}
+/* Below this the frame is too small for four chips to be legible, and half
+   of them would sit on top of each other. The image alone still makes the
+   theme point, which is this element's first job. */
+@media(max-width:760px){.cmp-anns{display:none}}
 .cmp-hint{margin-top:10px;text-align:center;font-size:11.5px;
   color:var(--text-tertiary);letter-spacing:.03em}
 
@@ -604,7 +606,7 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
       <figure class="cs-media">
       <!-- The variables browser. Replaces the component-library screenshot:
            the same claim, but checkable. -->
-      <div class="vb-shell" data-dv="202609061449">
+      <div class="vb-shell" data-dv="202609061453">
         <div class="vb" id="vb" role="group"
              aria-label="LUX 2.0 variable library, browsable">
           <div class="vb-side">
@@ -651,16 +653,7 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
         cannot show - 1,294 of these are references rather than values.</figcaption>
       </figure>
 
-      <div class="dm">
-        <div class="dm-hd">
-          <span class="dm-label">Dark mode, day one</span>
-        </div>
-        <div class="dm-body dm-body-wide">
-          <div class="cmp" id="cmp">
-            <div class="cmp-tags">
-              <span class="cmp-tag">Dark</span>
-              <span class="cmp-tag">Light</span>
-            </div>
+      <div class="cmp" id="cmp">
             <div class="cmp-frame">
               <div class="cmp-side cmp-light">
                 <img src="images/af-light.webp" width="1800" height="1012"
@@ -674,6 +667,24 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
               <input class="cmp-input" id="cmp-input" type="range"
                      min="0" max="100" value="50" step="1"
                      aria-label="Reveal the dark theme. Drag or use the arrow keys."/>
+              <div class="cmp-anns" role="group" aria-label="Token names on the elements they paint">
+                <span class="cmp-ann cmp-ann-r" style="left:38.9%;top:14.8%">
+                  <i class="cmp-ann-dot" aria-hidden="true"></i>
+                  <span class="cmp-ann-chip"><i class="cmp-ann-sw" style="background-color:#ffffff" aria-hidden="true"></i>layer.level_3</span>
+                </span>
+                <span class="cmp-ann cmp-ann-l" style="left:83.3%;top:33.5%">
+                  <i class="cmp-ann-dot" aria-hidden="true"></i>
+                  <span class="cmp-ann-chip"><i class="cmp-ann-sw" style="background-color:#dfe2e4" aria-hidden="true"></i>border.neutral.regular</span>
+                </span>
+                <span class="cmp-ann cmp-ann-r" style="left:29.6%;top:38.9%">
+                  <i class="cmp-ann-dot" aria-hidden="true"></i>
+                  <span class="cmp-ann-chip"><i class="cmp-ann-sw" style="background-color:#121213" aria-hidden="true"></i>text.neutral.main</span>
+                </span>
+                <span class="cmp-ann cmp-ann-l" style="left:83.9%;top:90.8%">
+                  <i class="cmp-ann-dot" aria-hidden="true"></i>
+                  <span class="cmp-ann-chip"><i class="cmp-ann-sw" style="background-color:#006ee5" aria-hidden="true"></i>background.brand.regular</span>
+                </span>
+              </div>
               <div class="cmp-handle" aria-hidden="true">
                 <span class="cmp-line"></span>
                 <span class="cmp-pill">
@@ -684,36 +695,6 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
             </div>
             <p class="cmp-hint">Drag the handle, or use the arrow keys</p>
           </div>
-          <ul class="dm-toks">
-            <li class="dm-tok">
-              <span class="dm-tok-n">layer.level_3</span>
-              <span class="dm-tok-c"><span class="dm-hop"><i class="dm-sw" style="background-color:#ffffff" aria-hidden="true"></i>#ffffff</span><svg class="dm-arrow" width="10" height="12" viewBox="0 0 10 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 4 7 7.5 3 11"/></svg><span class="dm-hop">base.white</span></span>
-              <span class="dm-tok-w">the modal surface</span>
-            </li>
-            <li class="dm-tok">
-              <span class="dm-tok-n">text.neutral.main</span>
-              <span class="dm-tok-c"><span class="dm-hop"><i class="dm-sw" style="background-color:#121213" aria-hidden="true"></i>#121213</span><svg class="dm-arrow" width="10" height="12" viewBox="0 0 10 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 4 7 7.5 3 11"/></svg><span class="dm-hop">grey.950</span></span>
-              <span class="dm-tok-w">headings and table text</span>
-            </li>
-            <li class="dm-tok">
-              <span class="dm-tok-n">border.neutral.regular</span>
-              <span class="dm-tok-c"><span class="dm-hop"><i class="dm-sw" style="background-color:#dfe2e4" aria-hidden="true"></i>#dfe2e4</span><svg class="dm-arrow" width="10" height="12" viewBox="0 0 10 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 4 7 7.5 3 11"/></svg><span class="dm-hop">grey.200</span></span>
-              <span class="dm-tok-w">table rules and card edges</span>
-            </li>
-            <li class="dm-tok">
-              <span class="dm-tok-n">background.brand.regular</span>
-              <span class="dm-tok-c"><span class="dm-hop"><i class="dm-sw" style="background-color:#006ee5" aria-hidden="true"></i>#006ee5</span><svg class="dm-arrow" width="10" height="12" viewBox="0 0 10 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 4 7 7.5 3 11"/></svg><span class="dm-hop">blue.550</span></span>
-              <span class="dm-tok-w">the Add button and the toggles</span>
-            </li>
-          </ul>
-        </div>
-        <p class="dm-foot">One screen of Agent Factory, one of the 40+ products
-          on LUX. The two halves are the same build - <b>not one token name
-          differs across that seam</b>. Dark mode is a mode on the primitives,
-          so <code>text.neutral.main</code> resolves to a different grey and
-          every component follows without being touched. That is why it could
-          ship on day one rather than as a project of its own.</p>
-      </div>
     </div>
 
     <!-- Stat cards -->
@@ -808,7 +789,7 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
   </svg>
 </button>
 
-<script src="../shared/case-study.js?v=202609061449" defer></script>
+<script src="../shared/case-study.js?v=202609061453" defer></script>
 <script>
 /* The light/dark seam. All input comes from the range element, so there are no
    drag handlers here at all - only a paint step. */
