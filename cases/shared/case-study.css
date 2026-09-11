@@ -568,7 +568,14 @@ button{cursor:pointer;font-family:inherit}
   .back-nav{display:flex}
   .cs-body{gap:28px;padding:24px 20px 80px}
   .cs-hero h1{font-size:24px}
-  .cs-hero-sub{font-size:16px;max-width:none}
+  /* Primary, not secondary, and only here. On desktop the lede is 17.5px
+     against 16px body, so size carries the hierarchy and --text-secondary
+     reads as a deliberate step down. At 720 the lede drops to 16 and the body
+     to 15, the size gap closes to a point, and colour is the only thing left
+     saying which is which - at which point the lede is the QUIETER of the two,
+     which is backwards. #d0d3d6 is 12.92:1 on the dark page so nothing was
+     failing; it just looked washed out next to white body copy. */
+  .cs-hero-sub{font-size:16px;max-width:none;color:var(--text-primary)}
   .cs-section > p{font-size:15px}
   .ai-card-text{font-size:15px}
   .stat-grid{grid-template-columns:1fr 1fr}

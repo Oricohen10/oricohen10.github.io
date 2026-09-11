@@ -10,6 +10,18 @@ from tokens import parse_color,ratio,over
 
 STATES=('hover','active','focus','focus-visible')
 
+# Selector chains whose state rule sets only the ink, where the fill comes from
+# somewhere this CSS-only harness cannot join to it. Each one has to be measured
+# by hand and recorded here, by name - the same discipline as RUNTIME_PATCHED in
+# structure.py. Anything NOT on this list gets reported against the page colour
+# with the assumption labelled, rather than dropped.
+INK_ONLY_OK={
+    # `.wcs .wc:hover` sets the glyph; the fill is on the .wc.cl/.mn/.mx
+    # compounds. Measured: rgba(0,0,0,.78) is 7.03 / 12.57 / 9.61 on the
+    # three traffic lights.
+    '.wcs .wc',
+}
+
 def base_of(sel,theme):
     b=re.sub(r':(hover|active|focus-visible|focus)\b','',sel).strip()
     # A dark override keys to the SAME bucket as the light rule it overrides.
@@ -64,17 +76,22 @@ def audit(page,theme):
             worst = min(cands,key=lambda c: ratio(f[0],c))
             r = ratio(f[0],worst)
             if r < 4.5:
-                if not g:
-                    # No background on this selector chain, so the pairing is a
-                    # guess at the page colour. `.wcs .wc:hover` sets only the
-                    # ink; the fill comes from `.wc.cl/.mn/.mx`, a sibling
-                    # compound this harness cannot join. Measured by hand:
-                    # rgba(0,0,0,.78) is 7.03 / 12.57 / 9.61 on the three dots.
-                    continue
+                # `if not g: continue` used to live here. It was written for
+                # ONE case - `.wcs .wc:hover`, which sets only the ink while
+                # the fill comes from the `.wc.cl/.mn/.mx` compounds this
+                # harness cannot join - but it was unconditional, so it
+                # swallowed EVERY state rule that changes only the colour.
+                # Which is most of them. The check reported "0 findings" on a
+                # page carrying a deliberately injected 1.1:1 hover.
+                # Now: named exceptions are skipped by name, and everything
+                # else is reported with the assumption spelled out, because a
+                # flagged guess can be dismissed in a second and a silent drop
+                # cannot be seen at all.
+                if not g and b in INK_ONLY_OK: continue
                 out.append((round(r,2),b,st,
                             '#%02x%02x%02x'%tuple(int(x) for x in f[0][:3]),
                             '#%02x%02x%02x'%tuple(int(x) for x in worst[:3]),
-                            (g[1] if g else 'page')))
+                            (g[1] if g else 'ASSUMED page bg - no background on this chain')))
     return sorted(out)
 
 tot=0

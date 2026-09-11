@@ -39,8 +39,8 @@
   }
 }
 </script>
-<link rel="stylesheet" href="../../src/tokens.css?v=202609061542"/>
-<link rel="stylesheet" href="../shared/case-study.css?v=202609061542"/>
+<link rel="stylesheet" href="../../src/tokens.css?v=202609111405"/>
+<link rel="stylesheet" href="../shared/case-study.css?v=202609111405"/>
 <script>try{if(localStorage.getItem('ori-theme')==='dark')document.documentElement.setAttribute('data-theme','dark')}catch(e){}
 if(window.self!==window.top){var _s=document.createElement('style');_s.textContent='*{cursor:none!important}';document.head.appendChild(_s);}</script>
 <style>
@@ -165,104 +165,36 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
 .vs-caps .vs-cap-p:last-of-type{margin-bottom:0}
 
 /* ── the pipeline, for Token Sync only ──────────────────────────────────
-   Six steps. Each is a real button with the full sentence in its title
-   attribute, so the truncated name has a tooltip on hover and an accessible
-   name for assistive tech. Clicking opens the detail below, in place.        */
+   This used to be six cards above a detail panel, and Ori called it overkill.
+   He was right, and for a reason worth writing down: the card row and the
+   panel were the same six items twice. Each card carried a truncated name, a
+   three-word sub-line and a Manual/Auto badge; the panel below carried the
+   full title, the type, two paragraphs and prev/next through all six. The
+   cards were a table of contents for a document you could already page
+   through, and they cost two grid rows, six hover states, a connector caret
+   with wrap-aware suppression, and three responsive arrangements.
+
+   What the row DID have that the panel did not is the shape of the thing: two
+   manual steps, then four automatic ones. That is the argument of the whole
+   module, and it was spread across six badges you had to collect by eye.
+   The progress rail below states it directly - a Manual group of two and an
+   Automated group of four, sized in proportion - and doubles as the step
+   selector, so one control now does what a row of cards plus a row of dots
+   was doing. */
 .pf{margin-top:26px;padding-top:22px;border-top:1px solid var(--border-subtle)}
 .pf-label{font-size:10px;font-weight:800;letter-spacing:.12em;
   text-transform:uppercase;color:var(--text-secondary);margin-bottom:14px}
-/* Three columns, two rows. Six cards in one row never fit: at the widest
-   window each would get 93.8px against a 104px minimum, so the row overflowed
-   and step 6 scrolled out of sight - which is exactly what it looked like.
-   Three across gives 143 to 217px per card at every width down to an 800px
-   window, so nothing truncates and nothing clamps.
-
-   Every card is its own grid with a fixed row template, so the icon, name,
-   sub-line and badge sit on the same four baselines across all six - the
-   badges were floating at different heights because "Figma Variables", "TS
-   Generation" and "GitHub Actions" wrap to two lines and the others do not. */
-/* 28px between columns, not 20. The connector only had 2px of clear space
-   each side, which is what made the row read as crowded - it was touching
-   both cards. 28px with a 10px caret gives 9px each side. Costs 16px of
-   row width across the two gaps, so cards go from 191px to 185px in the
-   default 1140px project window, still far above the 104px floor that
-   made step 6 vanish. Row gap 12 -> 16 for the same reason vertically,
-   and that one costs nothing horizontally. */
-.pf-flow{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));
-  gap:16px 28px}
-
-/* ── a step ────────────────────────────────────────────────────────────────
-   All six cards are the same surface. Tinting the two manual ones read as a
-   selection state rather than as a category, and it competed with the actual
-   selected state - the accent border - which is the one thing on the row that
-   has to be unmistakable. Manual versus auto stays on the badge. */
-.pf-step{position:relative;
-  display:grid;grid-template-rows:auto auto 1fr auto;justify-items:center;
-  gap:6px;
-  font:inherit;text-align:center;cursor:pointer;
-  padding:16px 12px 13px;border-radius:14px;
-  background:var(--surface-default);
-  border:1px solid var(--border-subtle);
-  transition:border-color .18s,box-shadow .18s,transform .18s,background .18s}
-.pf-step:hover{border-color:color-mix(in srgb,var(--action-primary) 50%,transparent);
-  box-shadow:0 6px 18px color-mix(in srgb,var(--action-primary) 14%,transparent);
-  transform:translateY(-2px)}
-.pf-step:focus-visible{outline:2px solid var(--action-primary);outline-offset:2px}
-.pf-step[aria-expanded="true"]{
-  border-color:var(--action-primary);
-  box-shadow:0 0 0 3px var(--action-primary-subtle),
-             0 6px 18px color-mix(in srgb,var(--action-primary) 16%,transparent)}
-
-/* The chevron carries the sequence now that the numbers are gone, so it is
-   drawn at full strength rather than as a hairline hint: 9px, 2px strokes, in
-   --text-secondary. Still a pseudo-element in the grid gap, so it costs no
-   column width. Suppressed after every third card, where the row wraps and an
-   arrow pointing right would be a lie.
-
-   --text-secondary is 6.83:1 on the card in light and 9.29:1 in dark. This is
-   a graphical object rather than text, so 3:1 would be the bar under 1.4.11 -
-   it clears both. */
-/* A caret, and the room to breathe that the arrow never had.
-
-   Still a mask rather than a background image, so the colour comes from
-   the token and follows the theme. An SVG with the stroke baked in would
-   need a second copy for dark and would drift from --text-secondary.
-
-   10x14 with a 1:1 viewBox, so 1.5 means 1.5 actual pixels. Rendered at
-   true size and compared: 1.75 and 2 both blob at the vertex, where the
-   two diagonals meet and their round joins overlap. 1.5 keeps the corner
-   open, which is the whole shape of a caret.
-
-   right:-19px centres it in the 28px gap - gap centre is 14px out, the
-   caret is 10 wide, so its right edge sits at 19 and it spans back to 9. */
-.pf-step::after{content:"";position:absolute;top:50%;right:-19px;
-  width:10px;height:14px;
-  transform:translateY(-50%);
-  background-color:var(--text-secondary);
-  -webkit-mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 14'%3E%3Cpath d='M3 4 7 7.5 3 11' fill='none' stroke='%23000' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
-  mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 14'%3E%3Cpath d='M3 4 7 7.5 3 11' fill='none' stroke='%23000' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
-  -webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;
-  -webkit-mask-position:center;mask-position:center;
-  -webkit-mask-size:contain;mask-size:contain}
-.pf-step:nth-child(3n)::after,
-.pf-step:last-child::after{display:none}
-
-.pf-icon{font-size:19px;line-height:1}
-.pf-name{font-size:12.5px;font-weight:700;color:var(--text-primary);line-height:1.3}
-.pf-sub{font-size:10.5px;line-height:1.35;color:var(--text-secondary);align-self:start}
 .pf-badge{font-size:8.5px;font-weight:800;letter-spacing:.07em;
   text-transform:uppercase;padding:3px 8px;border-radius:var(--radius-full);
   white-space:nowrap}
-.pf-step[data-type="manual"] .pf-badge,#pf-d-badge[data-type="manual"]{
+#pf-d-badge[data-type="manual"]{
   background:color-mix(in srgb, var(--action-primary) 7%, transparent);
   color:var(--action-primary)}
 /* the light accent on its own tint is 4.4:1 in dark, so dark steps up */
-[data-theme="dark"] .pf-step[data-type="manual"] .pf-badge,
 [data-theme="dark"] #pf-d-badge[data-type="manual"]{color:#ee9bfb;
   background:color-mix(in srgb, var(--action-primary) 12%, transparent)}
-.pf-step[data-type="auto"] .pf-badge,#pf-d-badge[data-type="auto"]{
+#pf-d-badge[data-type="auto"]{
   background:rgba(21,128,61,.1);color:#146c33}
-[data-theme="dark"] .pf-step[data-type="auto"] .pf-badge,
 [data-theme="dark"] #pf-d-badge[data-type="auto"]{background:rgba(74,222,128,.13);color:#7ee2a8}
 
 /* ── the step detail, inline ───────────────────────────────────────────── */
@@ -280,12 +212,10 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
   text-transform:uppercase;color:var(--text-secondary);margin-bottom:3px}
 .pf-d-title{font-size:16px;font-weight:800;letter-spacing:-.2px;
   color:var(--text-primary);margin:0;line-height:1.3;text-wrap:pretty}
-.pf-d-close{flex-shrink:0;width:28px;height:28px;border:0;border-radius:50%;
-  cursor:pointer;display:flex;align-items:center;justify-content:center;
-  background:transparent;color:var(--text-secondary);transition:background .15s,color .15s}
-.pf-d-close:hover{background:var(--action-primary-subtle);color:var(--text-primary)}
-.pf-d-close:focus-visible{outline:2px solid var(--action-primary);outline-offset:1px}
-.pf-d-close svg{width:14px;height:14px;display:block}
+/* The close button is gone with the card row. It existed so the panel could
+   collapse back to the six cards; with no cards to go back to, closing would
+   leave an empty container and a heading describing nothing. The panel is the
+   module now, so it is always open. */
 /* Two classes: .cs-section p in the shared sheet is (0,1,1) and would win on
    colour, size, leading and margin against a single class. */
 .pf-detail .pf-d-body p{font-size:13.5px;line-height:1.75;
@@ -309,9 +239,52 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
    together. Tertiary passes on both surfaces at 4.77:1 and 7.17:1. */
 .pf-d-btn[disabled]{cursor:default;color:var(--text-tertiary);background:transparent}
 .pf-d-btn svg{width:15px;height:15px;display:block}
-.pf-d-dots{display:flex;gap:5px;margin:0 auto}
-.pf-d-dots i{width:6px;height:6px;border-radius:50%;background:var(--border-default)}
-.pf-d-dots i.on{background:var(--action-primary);transform:scale(1.25)}
+/* ── the progress rail ─────────────────────────────────────────────────────
+   Replaces six dots AND the six cards above them. The dots said "there are
+   six of these and you are on the third"; the cards said which was manual and
+   which was automatic. This says both, and it is the selector too.
+
+   The two groups are flex:2 and flex:4, so their widths are their step counts.
+   That proportion is the point: you can see that two thirds of the pipeline
+   is untouched by a human before you read a word of it. */
+.pf-rail{flex:1;min-width:0;display:flex;align-items:flex-end;gap:14px}
+/* flex comes from the JS as an inline style, derived from the step count, so
+   there is no CSS rule per group type here. Two places declaring the same
+   proportion is two places to get it wrong when a step is added. */
+.pf-rail-grp{min-width:0;display:flex;flex-direction:column;gap:6px}
+.pf-rail-lbl{font-size:8.5px;font-weight:800;letter-spacing:.09em;
+  text-transform:uppercase;color:var(--text-tertiary);white-space:nowrap}
+.pf-rail-segs{display:flex;gap:3px}
+/* The button is 22px tall for a usable target; the visible bar is the 6px
+   pseudo-element inside it. 2.5.8 wants 24x24 and these are 22 - the
+   exception it allows is an inline control in a sentence, which this is not,
+   so this is a real if small gap. Closing it means a taller nav row; noted
+   rather than fixed silently. */
+.pf-seg{flex:1;min-width:6px;height:22px;padding:0;border:0;display:block;
+  background:transparent;cursor:pointer;position:relative}
+.pf-seg::after{content:"";position:absolute;left:0;right:0;top:8px;height:6px;
+  border-radius:3px;background:var(--border-default);
+  transition:background .16s}
+.pf-seg:hover::after{background:var(--text-tertiary)}
+.pf-seg[aria-current="step"]::after{background:var(--action-primary)}
+/* Two dark overrides, both measured rather than eyeballed.
+   TRACK: --border-default (#464646) leaves the current segment at 2.83:1
+   against its neighbours, under the 3:1 that 1.4.11 asks of a state
+   indicator. #3d3d3d takes it to 3.26:1. It costs track visibility against
+   the panel (1.56 to 1.35), which is the right way round to trade: the empty
+   track is decoration, and which step you are on is information. Light needs
+   no change - #BFBFBF against the magenta is already 3.70:1.
+   HOVER: --text-tertiary is #b0b6bb on dark, luminance .463 against the
+   accent's .265 - so hovering a step you are NOT on made it brighter than the
+   one you are. #5e5e5e is clearly a hover (1.68:1 over the track) and stays
+   subordinate to the accent. In light the token is darker than the accent
+   rather than lighter, so the same rule already reads correctly there. */
+[data-theme="dark"] .pf-seg::after{background:#3d3d3d}
+[data-theme="dark"] .pf-seg:hover::after{background:#5e5e5e}
+[data-theme="dark"] .pf-seg[aria-current="step"]::after{background:var(--action-primary)}
+.pf-seg:focus-visible{outline:2px solid var(--action-primary);outline-offset:1px;
+  border-radius:5px}
+@media(prefers-reduced-motion:reduce){.pf-seg::after{transition:none}}
 
 @media(prefers-reduced-motion:reduce){
   .vs-track{transition:none}
@@ -328,45 +301,49 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
    1920x1080 capture to stay legible, so the rail goes on top and the stage
    takes the full container. */
 @media(max-width:900px){
-  .vs{grid-template-columns:1fr}
+  /* minmax(0,1fr), not 1fr. This was the whole bug behind the clipped tab
+     strip: the rail already had flex-direction:row and overflow-x:auto, but a
+     grid item defaults to min-width:auto, so it refused to shrink below the
+     width of four tabs. overflow-x therefore never had anything to scroll -
+     the track simply grew past the column and .vs sets overflow:hidden, so
+     "04 Icon Library Picker" was cut off with no way to reach it.
+     The column has to be allowed to be narrower than its content before
+     anything inside it can scroll. */
+  .vs{grid-template-columns:minmax(0,1fr)}
   .vs-main{padding:14px}
   .vs-rail{flex-direction:row;overflow-x:auto;scrollbar-width:none;
     border-right:0;border-bottom:1px solid var(--border-subtle);
-    padding:10px}
+    padding:10px;min-width:0;
+    /* Snap so a flick lands on a tab rather than between two. No edge-fade
+       mask: CSS cannot tell when the track is scrolled to its end, so a
+       permanent gradient would sit on the last tab once you got there and
+       read as a rendering fault. Reaching the off-screen tabs is handled by
+       scrolling the selected one into view instead. */
+    scroll-snap-type:x proximity;-webkit-overflow-scrolling:touch}
   .vs-rail::-webkit-scrollbar{display:none}
-  .vs-item{width:auto;flex-shrink:0;padding:9px 12px 9px 15px}
+  .vs-item{width:auto;flex-shrink:0;padding:9px 12px 9px 15px;
+    scroll-snap-align:start}
   .vs-item-x em{display:none}          /* the tag is the first thing to go */
   .vs-item-x b{white-space:nowrap}
   .vs-caps{padding:18px 0 2px}
   /* the controls stop being a hover affordance on touch, so they stay put */
   .vs-ctl{opacity:1;pointer-events:auto}
-  /* two across rather than three: at this width three cards are under 120px
-     and the two-line names start clamping again */
-  .pf-flow{grid-template-columns:repeat(2,minmax(0,1fr))}
-  .pf-step:nth-child(3n)::after{display:block}
-  .pf-step:nth-child(2n)::after{display:none}
 }
 @media(max-width:560px){
+  /* At 320px the nav row leaves the rail about 136px, so the two-step Manual
+     group is ~41px wide while "MANUAL &middot; 2" needs ~60px at 8.5px with
+     .09em tracking. The label is nowrap, so it overflowed its own group and
+     ran into "AUTOMATED". Dropping the count takes it to ~36px and it fits;
+     the count is the one part the panel already states ("Step 2 of 6"). */
+  .pf-rail-cnt{display:none}
+  .pf-rail{gap:10px}
   .pf-d-step{font-size:10.5px}
   .vs-rail{padding:8px}
   .vs-item{padding:8px 10px 8px 13px}
   .vs-item-x b{font-size:12.5px}
   .vs-caps{padding:16px 0 2px}
   .vs-cap-h{font-size:17px}
-  /* one column on a phone. The connector line would point at nothing, so the
-     cards simply stack in order. */
-  .pf-flow{grid-template-columns:1fr;gap:8px}
-  .pf-step{grid-template-rows:none;grid-template-columns:auto 1fr auto;
-    justify-items:start;align-items:center;gap:4px 12px;text-align:left;
-    padding:12px 14px}
-  .pf-step::after{display:none !important}
-  /* The row is one column here, so there is space these did not have in
-     a three-across grid. 8.5px was sized for that grid, not for a phone. */
   .pf-badge{font-size:10px}
-  .pf-sub{font-size:11.5px}
-  .pf-icon{grid-row:span 2}
-  .pf-badge{grid-row:span 2;align-self:center}
-  .pf-sub{align-self:auto}
   .vs-caps .vs-cap-p{font-size:14px}
 }
 
@@ -515,50 +492,6 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
               designer who made the decision is the one who ships it.</p>
             <div class="pf">
               <div class="pf-label">How the pipeline works</div>
-              <div class="pf-flow" id="pf-flow">
-                <button class="pf-step" data-s="1" data-type="manual"
-                        title="Designer updates Figma Variables" aria-expanded="true">
-                  <span class="pf-icon" aria-hidden="true">🎨</span>
-                  <span class="pf-name">Figma Variables</span>
-                  <span class="pf-sub">Edit a value</span>
-                  <span class="pf-badge">Manual</span>
-                </button>
-                <button class="pf-step" data-s="2" data-type="manual"
-                        title="One click in Verint Token Sync" aria-expanded="false">
-                  <span class="pf-icon" aria-hidden="true">🔌</span>
-                  <span class="pf-name">Token Sync</span>
-                  <span class="pf-sub">One click</span>
-                  <span class="pf-badge">Manual</span>
-                </button>
-                <button class="pf-step" data-s="3" data-type="auto"
-                        title="Four TypeScript files generated in the browser" aria-expanded="false">
-                  <span class="pf-icon" aria-hidden="true">📝</span>
-                  <span class="pf-name">TS Generation</span>
-                  <span class="pf-sub">4 files, in-browser</span>
-                  <span class="pf-badge">Auto</span>
-                </button>
-                <button class="pf-step" data-s="4" data-type="auto"
-                        title="Plugin pushes to GitHub and opens a PR" aria-expanded="false">
-                  <span class="pf-icon" aria-hidden="true">😺</span>
-                  <span class="pf-name">GitHub Push</span>
-                  <span class="pf-sub">Branch + PR</span>
-                  <span class="pf-badge">Auto</span>
-                </button>
-                <button class="pf-step" data-s="5" data-type="auto"
-                        title="GitHub Actions validates and auto-merges" aria-expanded="false">
-                  <span class="pf-icon" aria-hidden="true">⚙️</span>
-                  <span class="pf-name">GitHub Actions</span>
-                  <span class="pf-sub">Validate + merge</span>
-                  <span class="pf-badge">Auto</span>
-                </button>
-                <button class="pf-step" data-s="6" data-type="auto"
-                        title="Tokens live on main in under 60 seconds" aria-expanded="false">
-                  <span class="pf-icon" aria-hidden="true">🚀</span>
-                  <span class="pf-name">Live on Main</span>
-                  <span class="pf-sub">Under 60 seconds</span>
-                  <span class="pf-badge">Auto</span>
-                </button>
-              </div>
               <div class="pf-detail" id="pf-detail">
                 <div class="pf-d-head">
                   <div class="pf-d-titles">
@@ -566,12 +499,14 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
                     <h4 class="pf-d-title" id="pf-d-title"></h4>
                   </div>
                   <span class="pf-badge" id="pf-d-badge"></span>
-                  <button class="pf-d-close" id="pf-d-close" aria-label="Close step detail"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
                 </div>
                 <div class="pf-d-body" id="pf-d-body"></div>
                 <div class="pf-d-nav">
                   <button class="pf-d-btn" id="pf-d-prev" aria-label="Previous step"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="15 18 9 12 15 6"/></svg></button>
-                  <span class="pf-d-dots" id="pf-d-dots" aria-hidden="true"></span>
+                  <!-- Segments are written by JS from the same PF array that
+                       fills the panel, so a seventh step cannot appear in one
+                       and not the other. -->
+                  <div class="pf-rail" id="pf-rail"></div>
                   <button class="pf-d-btn" id="pf-d-next" aria-label="Next step"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg></button>
                 </div>
               </div>
@@ -649,7 +584,7 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
   </svg>
 </button>
 
-<script src="../shared/case-study.js?v=202609061542" defer></script>
+<script src="../shared/case-study.js?v=202609111405" defer></script>
 
 <script>
 /* ══ The reel ═══════════════════════════════════════════════════════════════
@@ -701,6 +636,23 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
     playBtn.setAttribute('aria-label', paused ? 'Play video' : 'Pause video');
   }
 
+  /* Below 900 the rail is a horizontal scroller and the selected tab can sit
+     off to the right. This nudges the RAIL, not the element: scrollIntoView
+     would have been one line, but block:'nearest' still scrolls an ancestor
+     when the element is below the fold, so calling go(0) on load would have
+     jumped the page down to the reel. scrollBy on the rail cannot move
+     anything but the rail. */
+  var rail = vs.querySelector('.vs-rail');
+  function revealTab(b){
+    if (!rail || rail.scrollWidth <= rail.clientWidth + 1) return;
+    var r = rail.getBoundingClientRect(), t = b.getBoundingClientRect(), d = 0;
+    if (t.left  < r.left  + 10) d = t.left  - r.left  - 10;
+    else if (t.right > r.right - 10) d = t.right - r.right + 10;
+    if (!d) return;
+    if (rail.scrollBy) rail.scrollBy({left:d, behavior: reduce ? 'auto' : 'smooth'});
+    else rail.scrollLeft += d;
+  }
+
   function go(i){
     idx = Math.max(0, Math.min(N - 1, i));
     vs.style.setProperty('--i', idx);
@@ -710,6 +662,7 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
       b.classList.toggle('on', on);
       b.setAttribute('aria-selected', on ? 'true' : 'false');
       b.tabIndex = on ? 0 : -1;
+      if (on) revealTab(b);
     });
     /* Re-triggering the caption animation needs the class off, a reflow, then
        on again, or stepping back to the same caption does nothing. */
@@ -803,74 +756,87 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
      page, which reads like something failed. Inline also keeps it inside the
      one container.                                                          */
   var PF = [{"icon": "🎨", "type": "manual", "title": "Designer updates Figma Variables", "body": "<p>The token architecture uses three Figma variable collections. Primitives holds raw values: hex colors, rem sizes, millisecond durations. Semantics Light and Semantics Dark map those primitives to role-based names. Components bind semantic tokens to specific UI patterns.</p><p>When a designer changes a value in any collection, that single edit is the only manual input the entire pipeline needs. No annotation, no handoff note, no Jira ticket.</p>"}, {"icon": "🔌", "type": "manual", "title": "One click in Verint Token Sync", "body": "<p>The plugin calls the Figma Variables REST API and pulls all three collections at once. It resolves aliases across collections so every semantic token has a concrete value before code generation starts.</p><p>The single-click trigger is intentional. Designers push on their own schedule, not on a cron job. It gives them ownership over what lands in the repository.</p>"}, {"icon": "📝", "type": "auto", "title": "Four TypeScript files generated in the browser", "body": "<p>The plugin runs a code generation pass inside the Figma plugin sandbox and writes four typed TypeScript files: <code>primitives.ts</code> for raw values, <code>semanticsLight.ts</code> and <code>semanticsDark.ts</code> for role-based mappings, and <code>components.tsx</code> for component-level bindings.</p><p>All four files use a consistent export shape so consuming components import exactly the token they need. No JSON, no CSS variables at this stage. Typed constants only.</p>"}, {"icon": "😺", "type": "auto", "title": "Plugin pushes to GitHub and opens a PR", "body": "<p>The plugin base64-encodes each file and calls the GitHub Contents API to write them to a feature branch. It then calls the GitHub Pull Requests API to open a PR against <code>main</code> with a commit message that names the changed tokens.</p><p>There is no server in this path. The plugin holds a scoped GitHub token in Figma plugin storage and makes all API calls from inside the sandbox. The entire push-and-PR sequence completes in under two seconds.</p>"}, {"icon": "⚙️", "type": "auto", "title": "GitHub Actions validates and auto-merges", "body": "<p>A GitHub Actions workflow runs <code>tsc --noEmit</code> against the four generated files. If TypeScript compilation passes, the workflow calls the GitHub Merge API and squash-merges the PR automatically. If it fails, the PR stays open and the checks surface shows exactly which file broke.</p><p>The TypeScript check is the safety net. Generated code that references a token with a type mismatch or a broken alias fails the build before it ever reaches <code>main</code>.</p>"}, {"icon": "🚀", "type": "auto", "title": "Tokens live on main in under 60 seconds", "body": "<p>The squash-merge lands on <code>main</code> with a clean commit message referencing the changed tokens. Storybook, the component library build, and any product that imports the token package all pick up the update on their next install or CI run.</p><p>The full cycle from Figma save to merged PR is under 60 seconds. The designer sees the PR open in the plugin UI and gets a confirmation when it merges. No developer was paged.</p>"}];
-  var pfFlow  = document.getElementById('pf-flow');
-  var pfDet   = document.getElementById('pf-detail');
-  if (pfFlow && pfDet) {
-    var pfSteps = pfFlow.querySelectorAll('.pf-step');
+  var pfRail = document.getElementById('pf-rail');
+  var pfDet  = document.getElementById('pf-detail');
+  if (pfRail && pfDet) {
     var dStep = document.getElementById('pf-d-step');
     var dTtl  = document.getElementById('pf-d-title');
     var dBadge= document.getElementById('pf-d-badge');
     var dBody = document.getElementById('pf-d-body');
-    var dDots = document.getElementById('pf-d-dots');
     var dPrev = document.getElementById('pf-d-prev');
     var dNext = document.getElementById('pf-d-next');
-    /* Step 1 is open from the start. With the panel closed, nothing signalled
-       that the cards were clickable at all - an open panel is the affordance. */
-    var open_ = 1;
+    var cur   = 1;
 
-    dDots.innerHTML = PF.map(function(){ return '<i></i>'; }).join('');
-    var dots = dDots.querySelectorAll('i');
+    /* Build the rail from PF, grouping consecutive steps of the same type.
+       Grouping is derived, not hardcoded to "two then four": if a step's type
+       changes in the data the rail regroups itself, and it cannot disagree
+       with the badge in the panel because both read the same field. */
+    (function(){
+      var groups = [], g = null;
+      PF.forEach(function(d, k){
+        if (!g || g.type !== d.type) { g = {type:d.type, from:k+1, n:0}; groups.push(g); }
+        g.n++;
+      });
+      pfRail.innerHTML = groups.map(function(gr){
+        var segs = '';
+        for (var n = gr.from; n < gr.from + gr.n; n++){
+          segs += '<button type="button" class="pf-seg" data-s="' + n + '"' +
+                  ' aria-label="Step ' + n + ' of ' + PF.length + ': ' +
+                  PF[n-1].title.replace(/"/g,'&quot;') + '"></button>';
+        }
+        return '<span class="pf-rail-grp" data-t="' + gr.type + '"' +
+               ' style="flex:' + gr.n + '">' +
+               '<span class="pf-rail-lbl">' +
+               (gr.type === 'manual' ? 'Manual' : 'Automated') +
+               '<span class="pf-rail-cnt"> &middot; ' + gr.n + '</span>' +
+               '</span>' +
+               '<span class="pf-rail-segs">' + segs + '</span></span>';
+      }).join('');
+    })();
+    var segs = pfRail.querySelectorAll('.pf-seg');
 
     function render(n){
       var d = PF[n-1];
-      open_ = n;
-      dStep.textContent = 'Step ' + n + ' of ' + PF.length;
-      dTtl.textContent  = d.title;
+      cur = n;
+      dStep.textContent  = 'Step ' + n + ' of ' + PF.length;
+      dTtl.textContent   = d.title;
       dBadge.textContent = d.type === 'manual' ? 'Manual' : 'Auto';
       dBadge.setAttribute('data-type', d.type);
-      dBody.innerHTML = d.body;
-      dots.forEach(function(el,i){ el.classList.toggle('on', i === n-1); });
+      dBody.innerHTML    = d.body;
+      segs.forEach(function(b){
+        /* aria-current, not aria-selected: this is a position in a sequence,
+           which is what aria-current="step" means, and it needs no tablist or
+           tabpanel scaffolding around it to be correct. */
+        if (+b.dataset.s === n) b.setAttribute('aria-current','step');
+        else b.removeAttribute('aria-current');
+      });
       dPrev.disabled = n === 1;
       dNext.disabled = n === PF.length;
-      pfSteps.forEach(function(b){
-        b.setAttribute('aria-expanded', (+b.dataset.s === n) ? 'true' : 'false');
-      });
-      pfDet.hidden = false;
       /* re-run the entry animation when stepping between steps */
       pfDet.style.animation = 'none'; void pfDet.offsetWidth; pfDet.style.animation = '';
     }
-    function close(){
-      open_ = 0;
-      pfDet.hidden = true;
-      pfSteps.forEach(function(b){ b.setAttribute('aria-expanded','false'); });
-    }
 
-    pfSteps.forEach(function(b){
-      b.addEventListener('click', function(){
-        var n = +b.dataset.s;
-        if (open_ === n) { close(); b.focus(); }
-        else render(n);
-      });
+    segs.forEach(function(b){
+      b.addEventListener('click', function(){ render(+b.dataset.s); });
     });
-    dPrev.addEventListener('click', function(){ if (open_ > 1) render(open_ - 1); });
-    dNext.addEventListener('click', function(){ if (open_ < PF.length) render(open_ + 1); });
-    document.getElementById('pf-d-close').addEventListener('click', function(){
-      var n = open_; close();
-      var b = pfFlow.querySelector('.pf-step[data-s="' + n + '"]');
-      if (b) b.focus();          /* focus goes back to what opened it */
+    dPrev.addEventListener('click', function(){ if (cur > 1) render(cur - 1); });
+    dNext.addEventListener('click', function(){ if (cur < PF.length) render(cur + 1); });
+    /* Arrow keys step through, but only while focus is inside the module.
+       It used to be a document-level listener gated on the panel being open;
+       the panel never closes now, so the same listener would have swallowed
+       left and right for the whole page. */
+    pfDet.addEventListener('keydown', function(e){
+      if (e.key === 'ArrowRight' && cur < PF.length) { render(cur + 1); focusSeg(); }
+      else if (e.key === 'ArrowLeft' && cur > 1) { render(cur - 1); focusSeg(); }
     });
-    /* Escape closes it, and left/right step through - only while it is open */
-    document.addEventListener('keydown', function(e){
-      if (!open_) return;
-      if (e.key === 'Escape') { var n=open_; close();
-        var b = pfFlow.querySelector('.pf-step[data-s="' + n + '"]'); if (b) b.focus(); }
-      else if (e.key === 'ArrowRight' && open_ < PF.length) render(open_ + 1);
-      else if (e.key === 'ArrowLeft'  && open_ > 1) render(open_ - 1);
-    });
+    function focusSeg(){
+      var b = pfRail.querySelector('.pf-seg[data-s="' + cur + '"]');
+      if (b && pfRail.contains(document.activeElement)) b.focus();
+    }
+    render(1);
   }
 
   go(0);
-  if (pfFlow && pfDet) render(1);
 })();
 </script>
 </body>

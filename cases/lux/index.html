@@ -16,8 +16,8 @@
 <meta name="twitter:description" content="How Ori Cohen built Verint's enterprise design system from scratch — one language for 40+ products and 10k+ users."/>
 <meta name="twitter:image" content="https://oricohen.co/cases/lux/images/og-image.png"/>
 <meta name="author" content="Ori Cohen"/>
-<link rel="stylesheet" href="../../src/tokens.css?v=202609061542"/>
-<link rel="stylesheet" href="../shared/case-study.css?v=202609061542"/>
+<link rel="stylesheet" href="../../src/tokens.css?v=202609111405"/>
+<link rel="stylesheet" href="../shared/case-study.css?v=202609111405"/>
 <!-- Hide default cursor when embedded in the portfolio iframe -->
 <script>try{if(localStorage.getItem('ori-theme')==='dark')document.documentElement.setAttribute('data-theme','dark')}catch(e){}
 if(window.self!==window.top){var _s=document.createElement('style');_s.textContent='*{cursor:none!important}';document.head.appendChild(_s);}</script>
@@ -245,12 +245,12 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
 .vb-search input::placeholder{color:var(--vb-ink-3t)}
 .vb-search input:focus{border-color:var(--vb-accent);
   outline:2px solid var(--vb-accent-a);outline-offset:-1px}
-/* Figma's own panel chrome - the expand and close affordances. Decorative:
-   they are part of the picture, not controls, so they are out of the
-   accessibility tree and cannot be clicked. A fake close button that does
-   nothing is worse than no close button. */
-.vb-chrome{display:flex;gap:2px;color:var(--vb-ink-3);pointer-events:none}
-.vb-chrome svg{width:14px;height:14px;display:block}
+/* Figma's expand, close and side-panel icons used to be drawn here as
+   decoration - aria-hidden, pointer-events:none, part of the picture rather
+   than controls. That reasoning was wrong in the way that only shows up in
+   use: fidelity to the reference is not worth a control that looks live and
+   does nothing. Someone reaches for the close button, nothing happens, and
+   now they distrust the parts that DO work. Removed, not disabled. */
 
 .vb-head,.vb-r{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);
   align-items:center}
@@ -324,13 +324,48 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
 @media(max-width:860px){
   .vb{grid-template-columns:200px minmax(0,1fr);height:470px}
 }
+/* Ori reported this as "the parts are reversed, the search bar and the column
+   headers should not be at the bottom, it is broken". They were not reversed.
+   The rail was UNBOUNDED: .vb-side is the auto row, and six collection rows
+   plus two section labels plus a 132px group list is about 400px of a 560px
+   panel. .vb-main got the remaining 160px, and the search bar (40), the
+   Name/Value header (30) and the trace strip (44) take 114 of those - leaving
+   roughly 46px of table, which is one row and the hint.
+
+   So the panel looked like a list, then a search bar floating in the middle,
+   then headers with nothing under them. Every part was in its right place and
+   the thing still read as broken, because the table had no room to look like
+   a table.
+
+   The fix is to bound the rail rather than to reorder anything. Collections
+   become a horizontal strip of chips - six items, one line, scrolls sideways
+   if it needs to - which takes the rail from ~400px to ~180px and gives the
+   table about 260px, or eight rows. That is enough for it to read as a table,
+   and the search sits directly under a compact nav strip instead of halfway
+   down the panel. */
 @media(max-width:720px){
   .vb{grid-template-columns:1fr;grid-template-rows:auto minmax(0,1fr);height:560px}
-  .vb-side{border-right:0;border-bottom:1px solid var(--vb-line)}
-  /* Sidebar on top, so it takes a slice and the table gets the rest. The
-     rail cap is a max-height rather than a height so a short collection does
-     not leave dead space above the table. */
-  .vb-groups{max-height:132px}
+  .vb-side{border-right:0;border-bottom:1px solid var(--vb-line);display:block}
+  .vb-sec{padding:9px 12px 5px}
+  /* "Collections" as a label buys nothing once the chips are a single row
+     under a header that already says Variables, and it costs 27px of the
+     rail budget the table needs. The list keeps its aria-label. */
+  .vb-sec-colls{display:none}
+  #vb-colls{display:flex;gap:6px;padding:8px 12px 9px;
+    overflow-x:auto;overflow-y:hidden;
+    /* pan-x only would trap a vertical swipe that starts on the strip. */
+    scrollbar-width:none;-webkit-overflow-scrolling:touch}
+  #vb-colls::-webkit-scrollbar{display:none}
+  #vb-colls li{flex:0 0 auto}
+  #vb-colls .vb-row{width:auto;padding:6px 11px;border-radius:999px;
+    border:1px solid var(--vb-line);white-space:nowrap;gap:6px}
+  /* The 2px selected bar is a vertical-list affordance; on a chip the fill
+     and the border already carry the state, and the bar lands on the pill's
+     rounded edge looking like a rendering fault. */
+  #vb-colls .vb-row[aria-selected="true"]{background:var(--vb-selb);
+    border-color:var(--vb-accent)}
+  #vb-colls .vb-row[aria-selected="true"]::before{display:none}
+  .vb-groups{max-height:104px;overflow-y:auto}
   .vb-search{flex:1 1 auto;margin-left:0}
 }
 @media(max-width:560px){
@@ -396,44 +431,82 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
 .cmp-input:focus-visible~.cmp-handle .cmp-pill{
   outline:3px solid var(--action-primary);outline-offset:3px}
 
-/* ── Token annotations ─────────────────────────────────────────────────────
-   Third arrangement, and the reasons for the change are worth keeping.
+/* ── Token annotations: hotspots ───────────────────────────────────────────
+   Fourth arrangement, and this one is a different idea rather than a nudge of
+   the last one. The three before it all tried to place four labels
+   permanently around a dense screenshot:
 
-   v1 put the chips ON the image. Ori liked it but a chip parked on a dense
-   application screenshot hides the thing it points at.
-   v2 moved them into gutters either side. That fixed the occlusion and broke
-   something worse: two 190px gutters ate 380px of an 880px column, so the
-   screenshot rendered at barely half size and looked, accurately, sad.
-   v3 - this one - gives the whole column back to the image and lets the chips
-   overlap its edges. They sit over the left nav and the empty right margin of
-   the screenshot, which carry no detail, and hang 10px outside the frame so
-   the eye reads them as labels rather than as part of the UI.
+   v1 put the chips ON the image, where they hid the thing they pointed at.
+   v2 moved them into gutters either side, which cost 380px of an 880px column
+     and left the screenshot at barely half size.
+   v3 gave the column back and let the chips overlap the frame edges, joined to
+     their dots by leader lines.
 
-   THE LINES DID NOT CONNECT, and that was a real bug rather than a taste
-   problem. The in-frame leader was .cmp-dot::before with width:var(--x). A
-   percentage width resolves against the containing block, and .cmp-dot is
-   position:absolute and 9px wide - so it was the containing block. 38.9%
-   became 3.5px instead of 342px. Every leader was two to seven pixels long,
-   which is why the chips looked stranded.
-   The leader is its own element inside .cmp-ov now. That layer is inset:0 of
-   the frame, so a percentage finally measures against the frame.            */
-.cmp{margin-top:22px;--p:50%}
-.cmp-stage{position:relative}
+   v3 also carried a real bug for a while: the leader was .cmp-dot::before with
+   width:var(--x), and a percentage width resolves against the containing block
+   - the 9px absolutely positioned dot. 38.9% came out as 3.5px, so every
+   leader was a few pixels long and the chips looked stranded. Fixing that made
+   the lines the right length and did not fix the impression, because the
+   arrangement itself was the problem: a chip pinned to a frame edge is
+   always far from its anchor, and a line across a busy UI screenshot has to
+   compete with the UI's own borders and dividers to be read as a connector.
+
+   v4 stops trying. The label is not ambient information, it is an answer to a
+   question, so it appears when asked: each anchor is a 24px button, and the
+   chip opens against it. Adjacency IS the connection, so there are no leader
+   lines left to misread, and nothing covers the screenshot until someone asks
+   it to. The chip opens toward the nearer frame edge (Ori's side rule: the
+   primary button at x:83.9% is labelled to the right) and can spill into the
+   gutter, which is affordable precisely because it is transient.
+
+   Hover and focus reveal; a click pins, so touch and keyboard get the same
+   thing without a hover state they cannot produce. */
+.cmp{margin-top:22px;--p:50%;--cmp-gut:7%}
+/* The inset is the other thing Ori asked for: a slightly smaller image with
+   air around it. It also gives an opened chip somewhere to go. The elevation
+   under it is asymmetric per the shared rule - short and faint on white,
+   deep on near-black. */
+.cmp-stage{position:relative;padding:0 var(--cmp-gut)}
 .cmp-frame{position:relative;overflow:hidden;border-radius:var(--radius-lg);
   border:1px solid var(--border-subtle);background:var(--surface-sunken);
-  aspect-ratio:1800/1012}
+  aspect-ratio:1800/1012;
+  box-shadow:0 18px 40px rgba(18,18,19,.16)}
+[data-theme="dark"] .cmp-frame{box-shadow:0 48px 96px rgba(0,0,0,.8)}
 
-/* dots and leaders - inside the frame, so percentages mean frame percentages */
-.cmp-ov{position:absolute;inset:0;z-index:3;pointer-events:none}
-.cmp-lead{position:absolute;top:var(--y);height:1px;
-  background:#8f959c;transform:translateY(-50%);
-  box-shadow:0 0 0 .5px rgba(255,255,255,.55)}
-.cmp-lead{left:0;width:var(--x)}
-.cmp-dot{position:absolute;left:var(--x);top:var(--y);
-  width:11px;height:11px;border-radius:50%;
+/* The hotspot layer is a sibling of the frame, not a child: .cmp-frame sets
+   overflow:hidden for the clip-path seam, and a chip that opens toward the
+   gutter would be cut off at the frame edge. Inset by --cmp-gut it occupies
+   exactly the frame's rectangle, so --x still reads as a percentage across
+   the screenshot, and it is free of the clip.
+
+   z-index 5 puts it above .cmp-input (4), so the buttons are clickable at
+   all - but only the buttons are. The layer passes pointer events through,
+   which keeps the rest of the frame draggable and a press anywhere else
+   still jumping the seam. */
+.cmp-hots{position:absolute;top:0;bottom:0;
+  left:var(--cmp-gut);right:var(--cmp-gut);
+  z-index:5;pointer-events:none}
+.cmp-hot{position:absolute;left:var(--x);top:var(--y);
   transform:translate(-50%,-50%);
+  /* 24x24 for 2.5.8. The visible dot stays 11px; the target is the button. */
+  width:24px;height:24px;padding:0;border:0;background:transparent;
+  cursor:pointer;pointer-events:auto;
+  display:flex;align-items:center;justify-content:center}
+.cmp-dot{width:11px;height:11px;border-radius:50%;position:relative;
   background:#fff;border:2.5px solid #121213;
-  box-shadow:0 0 0 1.5px rgba(255,255,255,.85),0 1px 3px rgba(0,0,0,.4)}
+  box-shadow:0 0 0 1.5px rgba(255,255,255,.85),0 1px 3px rgba(0,0,0,.4);
+  transition:transform .14s ease}
+/* Fixed colours, both themes, for the same reason the phone bezel is dark on
+   a light page: a dot sits on whichever half of the seam it lands on, so it
+   cannot take its colour from the document theme. White core with a near-black
+   ring and a white halo reads on both. */
+.cmp-hot:hover .cmp-dot,
+.cmp-hot:focus-visible .cmp-dot,
+.cmp-hot[aria-pressed="true"] .cmp-dot{transform:scale(1.25)}
+.cmp-hot:focus-visible{outline:3px solid var(--action-primary);
+  outline-offset:2px;border-radius:50%}
+@media(prefers-reduced-motion:reduce){.cmp-dot{transition:none}}
+
 /* A slow ring leaving each dot. It is a separate pseudo-element rather than a
    box-shadow animation on the dot itself, because the dot's shadow is doing
    two other jobs - the white halo that keeps it legible over both halves of
@@ -441,73 +514,99 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
    both.
 
    The ring rides on transform and opacity only, so it composites and never
-   triggers layout. Each dot is offset by a different delay: four rings
-   pulsing in unison reads as a machine, four out of step reads as something
-   alive, and it also stops the eye locking onto one rhythm.
+   triggers layout. Each dot is offset by a different delay, set as --d on the
+   element: four rings pulsing in unison read as a machine, four out of step
+   read as something alive. An earlier version used nth-of-type and selected
+   the wrong elements, because the leader lines were <i> too.
 
-   4.5s is deliberately slow. This sits under a paragraph asking you to drag a
-   handle, so the dots should say "these are the points" and then get out of
-   the way, not compete for attention while you read. */
+   It now does a second job. These are controls, and a static dot on a
+   screenshot does not announce itself as one; the ring is the only thing
+   saying "there is something here". So it keeps going, but it stops on the
+   one you are pointing at, which is the usual affordance-hint rule applied
+   per element rather than to the whole module. */
 .cmp-dot::after{content:"";position:absolute;inset:-2.5px;border-radius:50%;
   border:1.5px solid rgba(18,18,19,.55);
   animation:cmpPing 4.5s cubic-bezier(.2,.6,.3,1) var(--d,0s) infinite;
   pointer-events:none}
-/* The delay comes from --d on each dot, not from nth-of-type. The leads are
-   <i> too, so the dots are the 2nd, 4th, 6th and 8th of their type - a
-   positional selector here selected a lead, a dot and a lead. Setting it on
-   the element cannot drift when the markup order changes. */
+.cmp-hot:hover .cmp-dot::after,
+.cmp-hot:focus-visible .cmp-dot::after,
+.cmp-hot[aria-pressed="true"] .cmp-dot::after{animation:none;opacity:0}
 @keyframes cmpPing{
   0%      {transform:scale(1);   opacity:.75}
   55%,100%{transform:scale(2.9); opacity:0}
 }
-/* Same guard as every other decorative animation on the site, and it has to
-   resolve to the resting state rather than to a mid-animation frame - an
-   expanded ring frozen at opacity 0 would be invisible, which is fine, but a
-   frozen ring at full opacity would look like a second dot. */
+/* Same guard as every other decorative animation on the site, resolved to the
+   resting state - a ring frozen mid-animation at full opacity would look like
+   a second dot. */
 @media(prefers-reduced-motion:reduce){
   .cmp-dot::after{animation:none;opacity:0}
 }
 
-/* the chips, overlapping the frame edges */
-.cmp-chips{position:absolute;inset:0;z-index:4;pointer-events:none}
-.cmp-ann{position:absolute;top:var(--y);display:flex;align-items:center;gap:7px;
-  transform:translateY(-50%);
-  padding:5px 11px;border-radius:var(--radius-full);
+/* ── the chip ──────────────────────────────────────────────────────────────
+   Two lines, namespace over leaf, and that is a width decision before it is a
+   typographic one. background.brand.regular on one line is about 180px of
+   mono; opening rightwards from x:83.9% on a 660px frame there are 174px to
+   the gutter's outer edge, so the single line does not fit at the narrowest
+   two-column width. Split, the widest line is background.brand at ~137px and
+   it clears everywhere the side chips are shown. It also matches how the
+   variables browser above prints a row. */
+.cmp-ann{position:absolute;top:50%;transform:translateY(-50%);
+  display:flex;align-items:center;gap:8px;
+  padding:5px 10px;border-radius:var(--radius-md, 8px);
   background:var(--surface-default);
-  /* A border in BOTH themes now, not just dark. The chip used to sit on the
-     page, where a shadow was enough; it sits on the screenshot now, and a
-     white pill on a white area of the screenshot has no edge at all without
-     one. */
+  /* A border in both themes, not just dark: the chip opens over a screenshot,
+     and a white pill on a white region of that screenshot has no edge at all
+     without one. */
   border:1px solid rgba(18,18,19,.20);
-  box-shadow:0 2px 10px rgba(18,18,19,.20);
-  font-family:var(--font-mono);font-size:10.5px;font-weight:600;
-  color:var(--text-secondary);line-height:1.3;white-space:nowrap}
+  box-shadow:0 4px 14px rgba(18,18,19,.22);
+  font-family:var(--font-mono);line-height:1.25;white-space:nowrap;
+  /* Transient, so it must not eat the drag. Only the 24px dot is a target. */
+  pointer-events:none;
+  opacity:0;visibility:hidden;
+  transition:opacity .15s ease, visibility .15s}
 [data-theme="dark"] .cmp-ann{border-color:rgba(255,255,255,.26);
-  box-shadow:0 4px 16px rgba(0,0,0,.6)}
-/* All four on the left, and that is the fix for the occlusion problem:
-   a chip is about 190px of an 880px frame, so a right-edge chip spans
-   79% to 101% - and both right-hand anchors sit at 83%, underneath it.
-   A chip covering the dot it points at is worse than an unbalanced
-   composition. From the left, every dot is to the RIGHT of every chip,
-   so nothing is hidden and the leader length itself says how far in the
-   element sits. The rows were chosen for clearance too: 73, 166, 303 and
-   449px on a 495px frame, so the closest pair is 93px apart against a
-   24px chip. */
-.cmp-ann{left:-10px}
-.cmp-ann-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;
+  box-shadow:0 6px 20px rgba(0,0,0,.6)}
+.cmp-hot-l .cmp-ann{right:calc(100% + 4px)}
+.cmp-hot-r .cmp-ann{left:calc(100% + 4px)}
+.cmp-hot:hover .cmp-ann,
+.cmp-hot:focus-visible .cmp-ann,
+.cmp-hot[aria-pressed="true"] .cmp-ann{opacity:1;visibility:visible}
+/* An open chip has to sit above its neighbours' dots, or a dot draws on top
+   of the pill. Raising the whole button is enough and needs no extra layer. */
+.cmp-hot:hover,.cmp-hot:focus-visible,.cmp-hot[aria-pressed="true"]{z-index:2}
+@media(prefers-reduced-motion:reduce){.cmp-ann{transition:none}}
+.cmp-ann-dot{width:11px;height:11px;border-radius:3px;flex-shrink:0;
   border:1px solid rgba(18,18,19,.18)}
 [data-theme="dark"] .cmp-ann-dot{border-color:rgba(255,255,255,.28)}
+.cmp-ann-t{display:flex;flex-direction:column;min-width:0}
+.cmp-ann-ns{font-size:10px;font-weight:600;color:var(--text-tertiary)}
+.cmp-ann-lf{font-size:11px;font-weight:700;color:var(--text-primary)}
+.cmp-hot-l .cmp-ann{flex-direction:row-reverse}
+.cmp-hot-l .cmp-ann-t{align-items:flex-end}
 
-/* Below this the frame is too narrow for a chip to overlap without covering
-   the content it names, so they become a legend underneath and the dots and
-   leaders come off. The image alone still makes the theme point. */
-@media(max-width:760px){
-  .cmp-chips{position:static;display:flex;flex-wrap:wrap;gap:8px;
-    padding-top:12px;pointer-events:auto}
-  .cmp-ann{position:static;transform:none;left:auto}
-  .cmp-ov{display:none}
+/* Below this the frame is too narrow to open a chip beside a dot without it
+   crossing the whole image, so the four become a static legend underneath and
+   the hotspots come off. Same information, no interaction to discover on a
+   screen where there is no hover to discover it with.
+
+   The base rule comes FIRST and the media query second, on purpose. Both
+   selectors are (0,1,0), so whichever is written last wins - the mobile type
+   floor in the shared sheet was silently dead for exactly this reason. */
+.cmp-legend{display:none}
+@media(max-width:820px){
+  .cmp{--cmp-gut:0%}
+  .cmp-hots{display:none}
+  .cmp-legend{display:flex;flex-wrap:wrap;gap:8px;padding-top:12px}
 }
-.cmp-hint{grid-column:1/-1;margin-top:10px;text-align:center;font-size:11.5px;
+.cmp-lg{display:flex;align-items:center;gap:7px;
+  padding:4px 9px;border-radius:var(--radius-md, 8px);
+  background:var(--surface-raised);border:1px solid var(--border-subtle);
+  font-family:var(--font-mono);font-size:10.5px;font-weight:600;
+  color:var(--text-secondary);line-height:1.3;white-space:nowrap}
+.cmp-lg i{width:11px;height:11px;border-radius:3px;flex-shrink:0;
+  border:1px solid rgba(18,18,19,.18)}
+[data-theme="dark"] .cmp-lg i{border-color:rgba(255,255,255,.28)}
+.cmp-hint{margin-top:10px;text-align:center;font-size:11.5px;
   color:var(--text-tertiary);letter-spacing:.03em}
 
 </style>
@@ -626,17 +725,14 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
       <figure class="cs-media">
       <!-- The variables browser. Replaces the component-library screenshot:
            the same claim, but checkable. -->
-      <div class="vb-shell" data-dv="202609061542">
+      <div class="vb-shell" data-dv="202609111405">
         <div class="vb" id="vb" role="group"
              aria-label="LUX 2.0 variable library, browsable">
           <div class="vb-side">
             <div class="vb-side-hd">
               <span>Variables</span>
-              <span class="vb-chrome" aria-hidden="true">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="3" y="4" width="18" height="16" rx="2"/><line x1="9" y1="4" x2="9" y2="20"/></svg>
-              </span>
             </div>
-            <div class="vb-sec"><span>Collections</span></div>
+            <div class="vb-sec vb-sec-colls"><span>Collections</span></div>
             <ul class="vb-list" id="vb-colls" role="tablist"
                 aria-label="Variable collections"></ul>
             <div class="vb-sec"><span>Groups</span></div>
@@ -651,10 +747,6 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
                        aria-label="Search variables by name or value"
                        autocomplete="off" spellcheck="false"/>
               </label>
-              <span class="vb-chrome" aria-hidden="true">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="15 4 20 4 20 9"/><polyline points="9 20 4 20 4 15"/><line x1="20" y1="4" x2="13.5" y2="10.5"/><line x1="4" y1="20" x2="10.5" y2="13.5"/></svg>
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-              </span>
             </div>
             <div class="vb-head" aria-hidden="true"><span>Name</span><span>Value</span></div>
             <div class="vb-scroll" id="vb-scroll" tabindex="0"
@@ -681,17 +773,17 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
       <div class="cs-section-num">
         <h2 class="cs-sec-title">The design</h2>
       </div>
-      <p>Nothing in LUX 2.0 carries a colour of its own. A component points at
-        a semantic token, that token points at a primitive, and the primitive
-        is the only place a value is ever written down. Change it once and
-        every product using it moves with it, which is what makes a system of
-        this size something a small team can actually maintain.</p>
-      <p>Dark mode is what that architecture buys. It is not a second set of
-        components or a parallel library to keep in step, it is a mode on the
-        primitives, so one build renders either theme. Drag the handle below
-        and watch what does not happen: nothing moves. Same layout, same
-        spacing, same component, same token names on both sides of the seam.
-        Only the values behind those names change.</p>
+      <p>Colour is the visible half of a token system and the smaller half. A
+        component in LUX 2.0 holds no values directly. It points at a semantic
+        token, that token points at a primitive, and the primitive is the only
+        place a number or a hex gets written down. The same chain carries 15
+        spacing steps, 11 corner radii, 14 icon sizes, 6 border widths, 9 font
+        sizes and 5 line heights.</p>
+      <p>Dark theme was one of the things this rebuild added, and it was built
+        on that chain rather than beside it: a second set of values on the
+        primitives, not a second library to keep in step. Drag the handle.
+        Spacing, radius, type and the token names all hold on both sides of
+        the seam, and only what those names resolve to changes.</p>
       <div class="cmp" id="cmp">
             <div class="cmp-stage">
             <div class="cmp-frame">
@@ -707,16 +799,6 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
               <input class="cmp-input" id="cmp-input" type="range"
                      min="0" max="100" value="50" step="1"
                      aria-label="Reveal the dark theme. Drag or use the arrow keys."/>
-                <div class="cmp-ov" aria-hidden="true">
-                <i class="cmp-lead" style="--x:38.9%;--y:14.8%"></i>
-                <i class="cmp-dot" style="--x:38.9%;--y:14.8%"></i>
-                <i class="cmp-lead" style="--x:56.3%;--y:33.5%"></i>
-                <i class="cmp-dot" style="--x:56.3%;--y:33.5%;--d:0.55s"></i>
-                <i class="cmp-lead" style="--x:29.6%;--y:61.2%"></i>
-                <i class="cmp-dot" style="--x:29.6%;--y:61.2%;--d:1.1s"></i>
-                <i class="cmp-lead" style="--x:83.9%;--y:90.8%"></i>
-                <i class="cmp-dot" style="--x:83.9%;--y:90.8%;--d:1.65s"></i>
-                </div>
               <div class="cmp-handle" aria-hidden="true">
                 <span class="cmp-line"></span>
                 <span class="cmp-pill">
@@ -725,27 +807,81 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
                 <span class="cmp-line"></span>
               </div>
             </div>
-                      <div class="cmp-chips" role="list"
-                 aria-label="Token names on the elements they paint">
-              <span class="cmp-ann" role="listitem" style="--y:14.8%">
-                <i class="cmp-ann-dot" style="background-color:#ffffff"></i>
-                <span class="cmp-ann-n">layer.level_3</span>
-              </span>
-              <span class="cmp-ann" role="listitem" style="--y:33.5%">
-                <i class="cmp-ann-dot" style="background-color:#dfe2e4"></i>
-                <span class="cmp-ann-n">border.neutral.regular</span>
-              </span>
-              <span class="cmp-ann" role="listitem" style="--y:61.2%">
-                <i class="cmp-ann-dot" style="background-color:#121213"></i>
-                <span class="cmp-ann-n">text.neutral.main</span>
-              </span>
-              <span class="cmp-ann" role="listitem" style="--y:90.8%">
-                <i class="cmp-ann-dot" style="background-color:#006ee5"></i>
-                <span class="cmp-ann-n">background.brand.regular</span>
-              </span>
+            <!-- Hotspots. OUTSIDE .cmp-frame, which sets overflow:hidden and
+                 would clip an opened chip at the frame edge. The layer is
+                 inset by --cmp-gut instead, so its box is exactly the frame's
+                 and --x still means "percent across the screenshot", while a
+                 chip is free to spill into the gutter.
+
+                 Each button's aria-label carries the full token path, so the
+                 chip inside is decoration of what the accessible name already
+                 says, and is aria-hidden. -->
+            <div class="cmp-hots">
+                <button type="button" class="cmp-hot cmp-hot-l"
+                        style="--x:38.9%;--y:14.8%" aria-pressed="false"
+                        aria-label="Modal surface, painted by layer.level_3">
+                  <span class="cmp-dot"></span>
+                  <span class="cmp-ann" aria-hidden="true">
+                    <i class="cmp-ann-dot" style="background-color:#ffffff"></i>
+                    <span class="cmp-ann-t">
+                      <span class="cmp-ann-ns">layer</span>
+                      <span class="cmp-ann-lf">level_3</span>
+                    </span>
+                  </span>
+                </button>
+                <button type="button" class="cmp-hot cmp-hot-r"
+                        style="--x:56.3%;--y:33.5%;--d:0.55s" aria-pressed="false"
+                        aria-label="Radio card border, painted by border.neutral.regular">
+                  <span class="cmp-dot"></span>
+                  <span class="cmp-ann" aria-hidden="true">
+                    <i class="cmp-ann-dot" style="background-color:#dfe2e4"></i>
+                    <span class="cmp-ann-t">
+                      <span class="cmp-ann-ns">border.neutral</span>
+                      <span class="cmp-ann-lf">regular</span>
+                    </span>
+                  </span>
+                </button>
+                <button type="button" class="cmp-hot cmp-hot-l"
+                        style="--x:29.6%;--y:61.2%;--d:1.1s" aria-pressed="false"
+                        aria-label="Table cell text, painted by text.neutral.main">
+                  <span class="cmp-dot"></span>
+                  <span class="cmp-ann" aria-hidden="true">
+                    <i class="cmp-ann-dot" style="background-color:#121213"></i>
+                    <span class="cmp-ann-t">
+                      <span class="cmp-ann-ns">text.neutral</span>
+                      <span class="cmp-ann-lf">main</span>
+                    </span>
+                  </span>
+                </button>
+                <button type="button" class="cmp-hot cmp-hot-r"
+                        style="--x:83.9%;--y:90.8%;--d:1.65s" aria-pressed="false"
+                        aria-label="Primary button fill, painted by background.brand.regular">
+                  <span class="cmp-dot"></span>
+                  <span class="cmp-ann" aria-hidden="true">
+                    <i class="cmp-ann-dot" style="background-color:#006ee5"></i>
+                    <span class="cmp-ann-t">
+                      <span class="cmp-ann-ns">background.brand</span>
+                      <span class="cmp-ann-lf">regular</span>
+                    </span>
+                  </span>
+                </button>
             </div>
             </div>
-            <p class="cmp-hint">Drag the handle, or use the arrow keys</p>
+            <!-- The narrow-width fallback for the hotspots above. Shown by the
+                 820px media query, hidden otherwise, so the information is
+                 never only behind an interaction a touch screen cannot offer. -->
+            <div class="cmp-legend" role="list"
+                 aria-label="Tokens painting this screen">
+              <span class="cmp-lg" role="listitem">
+                <i style="background-color:#ffffff"></i>layer.level_3</span>
+              <span class="cmp-lg" role="listitem">
+                <i style="background-color:#dfe2e4"></i>border.neutral.regular</span>
+              <span class="cmp-lg" role="listitem">
+                <i style="background-color:#121213"></i>text.neutral.main</span>
+              <span class="cmp-lg" role="listitem">
+                <i style="background-color:#006ee5"></i>background.brand.regular</span>
+            </div>
+            <p class="cmp-hint">Drag the handle to move the seam, or tap a point to see the token behind it</p>
             </div>
     </div>
 
@@ -809,7 +945,7 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
   </svg>
 </button>
 
-<script src="../shared/case-study.js?v=202609061542" defer></script>
+<script src="../shared/case-study.js?v=202609111405" defer></script>
 <script>
 /* The light/dark seam. All input comes from the range element, so there are no
    drag handlers here at all - only a paint step. */
@@ -828,6 +964,31 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
     paint();
   });
   paint();
+
+  /* The hotspots. Hover and focus are handled entirely in CSS; this only adds
+     pinning, which is what makes them work on a touch screen and by keyboard
+     - neither of which can produce a hover state.
+
+     One pinned at a time. Four chips open at once over a screenshot is the v1
+     occlusion problem again, arrived at by a different route. */
+  var hots=wrap.querySelectorAll('.cmp-hot');
+  Array.prototype.forEach.call(hots,function(btn){
+    btn.addEventListener('click',function(){
+      var on=btn.getAttribute('aria-pressed')==='true';
+      Array.prototype.forEach.call(hots,function(o){
+        o.setAttribute('aria-pressed','false');
+      });
+      btn.setAttribute('aria-pressed', on?'false':'true');
+    });
+  });
+  /* Escape closes, because a pinned chip is the only thing on this page that
+     stays open until told otherwise. */
+  wrap.addEventListener('keydown',function(e){
+    if(e.key!=='Escape') return;
+    Array.prototype.forEach.call(hots,function(o){
+      o.setAttribute('aria-pressed','false');
+    });
+  });
 })();
 </script>
 <script>
