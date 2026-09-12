@@ -111,9 +111,22 @@ button{cursor:pointer;font-family:inherit}
 
    Worth knowing: this field runs in every OPEN project window, so three
    windows open at once means six of these animating. Closing windows you are
-   not reading is the cheapest performance win available on this site. */
+   not reading is the cheapest performance win available on this site.
+
+   A note on an optimisation NOT taken: shrinking these elements and scaling
+   them up further looks like a big win on paper, since a smooth low-opacity
+   gradient has no detail to lose and the texture would be 72% smaller. It
+   probably saves nothing. Chromium rasterises a layer with an accelerated
+   transform animation at the animation's MAXIMUM scale, so a 34vmax element
+   animated to 2.29x rasterises at the same 78vmax as a 64vmax element animated
+   to 1.22x. Do not make that change without profiling it first. */
 .cs-field i{position:absolute;display:block;border-radius:50%;
   will-change:transform}
+/* Paused while the tab is in the background. An animation on a hidden tab is
+   usually throttled by the browser anyway, but "usually" depends on whether
+   the compositor considers the layer visible, and these are position:fixed
+   inside an iframe. Stating it costs one rule and removes the doubt. */
+html[data-cs-hidden] .cs-field i{animation-play-state:paused}
 .cs-field i:nth-child(1){width:64vmax;height:64vmax;top:-22vmax;right:-16vmax;
   background:radial-gradient(circle closest-side,var(--cs-wash-a),transparent 70%);
   animation:csFieldA 17s ease-in-out infinite alternate}

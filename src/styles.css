@@ -93,8 +93,14 @@ textarea.field{resize:none;overflow-y:auto}
 .m-av-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-bottom:20px}
 .m-av-opt{display:flex;align-items:stretch;cursor:pointer;border-radius:12px;border:2px solid transparent;overflow:hidden;aspect-ratio:1;transition:border-color .15s,box-shadow .15s,transform .12s;user-select:none;-webkit-tap-highlight-color:transparent}
 .m-av-opt:hover:not(.sel){border-color:var(--bd2);transform:translateY(-1px) scale(1.04)}
-.m-av-opt.sel{border-color:var(--purple-500);box-shadow:0 0 0 4px rgba(123,97,255,.18),0 6px 24px rgba(123,97,255,.28);animation:av-glow 2.4s ease-in-out infinite;transform:translateY(-2px)}
-@keyframes av-glow{0%,100%{box-shadow:0 0 0 4px rgba(123,97,255,.18),0 6px 24px rgba(123,97,255,.28)}50%{box-shadow:0 0 0 6px rgba(123,97,255,.28),0 8px 32px rgba(123,97,255,.42)}}
+/* Static, no pulse. av-glow animated box-shadow forever, which is a repaint
+   every frame, and it was the last of two such animations on the site. A ring
+   on a pseudo-element was not an option here - .m-av-opt sets overflow:hidden
+   for the avatar art, so anything outside the box is clipped.
+   Dropping it costs nothing: a 2px purple border, a 4px ring and a 2px lift
+   already state the selection unambiguously, and a selected state that keeps
+   pulsing is the same noise as an affordance hint that never stops. */
+.m-av-opt.sel{border-color:var(--purple-500);box-shadow:0 0 0 4px rgba(123,97,255,.18),0 6px 24px rgba(123,97,255,.28);transform:translateY(-2px)}
 .m-av-img-wrap{width:100%;height:100%;display:flex;align-items:center;justify-content:center;padding:12%;box-sizing:border-box}
 .m-av-img-wrap svg{display:block;width:100%;height:100%;flex-shrink:0}
 

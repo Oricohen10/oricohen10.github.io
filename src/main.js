@@ -1666,10 +1666,14 @@ window.addEventListener('load', () => {
    its window is dragged or resized, when the canvas is panned or zoomed, and
    when the browser window changes size. All of those set the dirty flag
    below, so a stale rect cannot outlive a move. */
+/* A generation counter rather than a boolean. A boolean can only record "some
+   frame is stale", and the handler cleared it as soon as any one frame
+   re-measured, so the rest kept serving rects from before the move. Bumping a
+   number invalidates every frame at once and each re-measures independently. */
 const _mmRect = new WeakMap();
 let _mmFrames = null;
-let _mmDirty = true;
-window.invalidateIframeRects = function(){ _mmDirty = true; };
+let _mmGen = 1;
+window.invalidateIframeRects = function(){ _mmGen++; };
 ['resize','scroll'].forEach(function(ev){
   window.addEventListener(ev, window.invalidateIframeRects, { passive: true });
 });
@@ -1687,8 +1691,19 @@ window.addEventListener('message', function(e) {
   for (const f of _mmFrames) { try { if (f.contentWindow === e.source) { src = f; break; } } catch(_){} }
   if (!src) return;
 
-  let r = _mmDirty ? null : _mmRect.get(src);
-  if (!r) { r = src.getBoundingClientRect(); _mmRect.set(src, r); _mmDirty = false; }
+  /* _mmDirty used to be cleared here, the moment the FIRST frame refreshed its
+     rect. With more than one window open that left every other frame holding a
+     rect measured before the move, so the custom cursor sat at an offset over
+     those frames until something else invalidated them - which looks exactly
+     like the cursor "sticking".
+
+     The flag is per-frame now: a generation counter says which frames have
+     re-measured since the last invalidation, so each one refreshes once and
+     then reads from the cache. Same single getBoundingClientRect per frame per
+     invalidation as before, but correct for all of them rather than one. */
+  let e2 = _mmRect.get(src);
+  let r  = (e2 && e2.gen === _mmGen) ? e2.rect : null;
+  if (!r) { r = src.getBoundingClientRect(); _mmRect.set(src, { gen: _mmGen, rect: r }); }
 
   curEl.style.visibility = '';
   const [ox, oy] = CUR_OFFSET[curState] || [4, 4];

@@ -14,6 +14,22 @@
  * navigation, which is bound to the same keys.
  */
 
+/* ── Background tabs stop animating ────────────────────────────────────────
+   Flips an attribute the stylesheet uses to pause the ambient field. Browsers
+   throttle rAF and usually compositor animations on a hidden tab, but these
+   washes are position:fixed inside an iframe and whether the compositor keeps
+   ticking them is an implementation detail. This makes it explicit, and it is
+   the one performance lever here that is free: nobody is looking at the page. */
+(function(){
+  var root = document.documentElement;
+  function sync(){
+    if (document.hidden) root.setAttribute('data-cs-hidden','');
+    else root.removeAttribute('data-cs-hidden');
+  }
+  document.addEventListener('visibilitychange', sync);
+  sync();
+})();
+
 /* ── Back nav: on mobile, append #projects so main.js opens the projects page */
 document.addEventListener('DOMContentLoaded', function() {
   var backNav = document.querySelector('.back-nav');
