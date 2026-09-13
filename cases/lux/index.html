@@ -16,8 +16,8 @@
 <meta name="twitter:description" content="How Ori Cohen built Verint's enterprise design system from scratch — one language for 40+ products and 10k+ users."/>
 <meta name="twitter:image" content="https://oricohen.co/cases/lux/images/og-image.png"/>
 <meta name="author" content="Ori Cohen"/>
-<link rel="stylesheet" href="../../src/tokens.css?v=202609132146"/>
-<link rel="stylesheet" href="../shared/case-study.css?v=202609132146"/>
+<link rel="stylesheet" href="../../src/tokens.css?v=202609132151"/>
+<link rel="stylesheet" href="../shared/case-study.css?v=202609132151"/>
 <!-- Hide default cursor when embedded in the portfolio iframe -->
 <script>try{if(localStorage.getItem('ori-theme')==='dark')document.documentElement.setAttribute('data-theme','dark')}catch(e){}
 if(window.self!==window.top){var _s=document.createElement('style');_s.textContent='*{cursor:none!important}';document.head.appendChild(_s);}</script>
@@ -316,6 +316,39 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
 .vb-arrow{color:var(--vb-ink-3);flex-shrink:0}
 .vb-foot-hint{color:var(--vb-ink-3t)}
 
+/* ── narrow-width nav (mobile) ─────────────────────────────────────────────
+   Ori's note was that the phone layout read as messy and the hierarchy was
+   not clear, and the count is the reason: six stacked bands of chrome before
+   any data. A clipped horizontal strip of collections, then a Groups label,
+   then a scrolling list of groups with carets and counts, then search, then
+   the column header, then group headers inside the table itself - two of
+   those looked almost identical while one was navigation and the other was
+   content.
+
+   This replaces the first three with two labelled selects. The words
+   "Collection" and "Group" state the containment that the old layout only
+   implied, one control means one decision at a time, and it costs about 90px
+   against the roughly 200px the strip and the rail took - which goes back to
+   the table, the only part anyone came for. */
+.vb-mnav{display:none}
+/* Label beside the select, not above it. Above reads marginally better but
+   costs 35px across the two rows - 125px against 90px - and on a 560px panel
+   that is an extra row and a half of the table, which is the thing anyone
+   actually came here for. A fixed 64px label column keeps the two selects
+   left-aligned with each other, so the pair still reads as one path. */
+.vb-mf{display:flex;align-items:center;gap:10px;min-width:0}
+.vb-mlab{flex:0 0 64px;font-size:9.5px;font-weight:700;letter-spacing:.08em;
+  text-transform:uppercase;color:var(--vb-ink-3t)}
+.vb-msel{width:100%;font:inherit;font-size:12.5px;
+  padding:7px 9px;border-radius:6px;
+  border:1px solid var(--vb-line);background:var(--vb-bg-input);
+  color:var(--vb-ink);
+  /* The native arrow is kept. A custom one would need appearance:none, which
+     on iOS also drops the tap-to-open affordance styling. */
+  max-width:100%}
+.vb-msel:focus{border-color:var(--vb-accent);
+  outline:2px solid var(--vb-accent-a);outline-offset:-1px}
+
 /* ── narrow ────────────────────────────────────────────────────────────────
    Same ladder as the rest of the page. Below 720 the sidebar goes on top and
    the collections scroll sideways, because a 236px rail plus a two-column
@@ -344,30 +377,27 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
    and the search sits directly under a compact nav strip instead of halfway
    down the panel. */
 @media(max-width:720px){
-  .vb{grid-template-columns:1fr;grid-template-rows:auto minmax(0,1fr);height:560px}
-  .vb-side{border-right:0;border-bottom:1px solid var(--vb-line);display:block}
-  .vb-sec{padding:9px 12px 5px}
-  /* "Collections" as a label buys nothing once the chips are a single row
-     under a header that already says Variables, and it costs 27px of the
-     rail budget the table needs. The list keeps its aria-label. */
-  .vb-sec-colls{display:none}
-  #vb-colls{display:flex;gap:6px;padding:8px 12px 9px;
-    overflow-x:auto;overflow-y:hidden;
-    /* pan-x only would trap a vertical swipe that starts on the strip. */
-    scrollbar-width:none;-webkit-overflow-scrolling:touch}
-  #vb-colls::-webkit-scrollbar{display:none}
-  #vb-colls li{flex:0 0 auto}
-  #vb-colls .vb-row{width:auto;padding:6px 11px;border-radius:999px;
-    border:1px solid var(--vb-line);white-space:nowrap;gap:6px}
-  /* The 2px selected bar is a vertical-list affordance; on a chip the fill
-     and the border already carry the state, and the bar lands on the pill's
-     rounded edge looking like a rendering fault. */
-  #vb-colls .vb-row[aria-selected="true"]{background:var(--vb-selb);
-    border-color:var(--vb-accent)}
-  #vb-colls .vb-row[aria-selected="true"]::before{display:none}
-  .vb-groups{max-height:104px;overflow-y:auto}
+  /* One row now, not two: the rail is gone at this width and the two selects
+     above the table replace it, so .vb-main gets the whole panel.
+
+     Everything that used to style the rail here - the collections as a
+     horizontal chip strip, the suppressed "Collections" label, the capped
+     group list - went with it. That strip was the previous attempt at this
+     problem and it is what Ori was looking at: clipped at the left edge with
+     no sign there was more, and stacked above a second scrolling list that
+     looked like content but was navigation. */
+  .vb{grid-template-columns:1fr;grid-template-rows:minmax(0,1fr);height:560px}
+  .vb-side{display:none}
+  .vb-mnav{display:flex;flex-direction:column;gap:8px;
+    padding:10px 12px;border-bottom:1px solid var(--vb-line)}
+  /* The trace strip is a 44px band holding one sentence of instruction until
+     something is actually selected. On a phone that is the table's space.
+     :has() rather than a JS class - where it is unsupported the hint simply
+     shows, which is exactly today's behaviour. */
+  .vb-foot:has(.vb-foot-hint){display:none}
   .vb-search{flex:1 1 auto;margin-left:0}
 }
+
 @media(max-width:560px){
   .vb-head,.vb-r{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
   .vb-r-n,.vb-r-v{padding:0 9px}
@@ -801,14 +831,14 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
       <figure class="cs-media">
       <!-- The variables browser. Replaces the component-library screenshot:
            the same claim, but checkable. -->
-      <div class="vb-shell" data-dv="202609132146">
+      <div class="vb-shell" data-dv="202609132151">
         <div class="vb" id="vb" role="group"
              aria-label="LUX 2.0 variable library, browsable">
           <div class="vb-side">
             <div class="vb-side-hd">
               <span>Variables</span>
             </div>
-            <div class="vb-sec vb-sec-colls"><span>Collections</span></div>
+            <div class="vb-sec"><span>Collections</span></div>
             <ul class="vb-list" id="vb-colls" role="tablist"
                 aria-label="Variable collections"></ul>
             <div class="vb-sec"><span>Groups</span></div>
@@ -816,6 +846,23 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
                 aria-label="Groups in the selected collection"></ul>
           </div>
           <div class="vb-main">
+            <!-- Narrow-width navigation. Hidden above 720px, where the rail
+                 on the left does this job. Two native selects rather than a
+                 custom control: on a phone they open the OS picker, which is
+                 the clearest "choose one of these" affordance there is, and
+                 they bring their own keyboard, labelling and scrolling.
+                 Stacked, not side by side, so they read top to bottom in the
+                 order things actually contain each other. -->
+            <div class="vb-mnav">
+              <div class="vb-mf">
+                <label class="vb-mlab" for="vb-msel-c">Collection</label>
+                <select class="vb-msel" id="vb-msel-c"></select>
+              </div>
+              <div class="vb-mf">
+                <label class="vb-mlab" for="vb-msel-g">Group</label>
+                <select class="vb-msel" id="vb-msel-g"></select>
+              </div>
+            </div>
             <div class="vb-top">
               <label class="vb-search">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><line x1="20" y1="20" x2="16.2" y2="16.2"/></svg>
@@ -1016,7 +1063,7 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
   </svg>
 </button>
 
-<script src="../shared/case-study.js?v=202609132146" defer></script>
+<script src="../shared/case-study.js?v=202609132151" defer></script>
 <script>
 /* The light/dark seam. All input comes from the range element, so there are no
    drag handlers here at all - only a paint step. */
@@ -1143,6 +1190,8 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
   var win    = document.getElementById('vb-win');
   var collsEl= document.getElementById('vb-colls');
   var grpsEl = document.getElementById('vb-groups');
+  var mselC  = document.getElementById('vb-msel-c');
+  var mselG  = document.getElementById('vb-msel-g');
   var footEl = document.getElementById('vb-foot');
   var qEl    = document.getElementById('vb-q');
 
@@ -1278,12 +1327,20 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
   });
 
   /* ── left rail ────────────────────────────────────────────────────────── */
+  /* The rail and the mobile select are filled from the same call, so they
+     cannot disagree about what exists or what is current. Only one of the two
+     is visible at any width; keeping both in sync is cheaper than keeping
+     track of which one is live. */
   function renderColls(){
     collsEl.innerHTML = DATA.order.map(function(c){
       return '<li role="presentation"><button class="vb-row" role="tab" data-c="' +
         esc(c) + '" aria-selected="' + (c === cur) + '">' +
         '<span class="vb-row-n">' + esc(c) + '</span>' +
         '<span class="vb-row-c">' + DATA.counts[c] + '</span></button></li>';
+    }).join('');
+    mselC.innerHTML = DATA.order.map(function(c){
+      return '<option value="' + esc(c) + '"' + (c === cur ? ' selected' : '') +
+        '>' + esc(c) + '  (' + DATA.counts[c] + ')</option>';
     }).join('');
   }
   var open = {};                /* level-1 group -> expanded? */
@@ -1344,6 +1401,23 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
       html += '</li>';
     });
     grpsEl.innerHTML = html;
+
+    /* A select cannot nest, so the two-level tree flattens. Subgroup keys are
+       already "parent/child", which is unambiguous without an indent trick -
+       and an indent made of spaces is not reliable in a native picker. */
+    var opts = '<option value=""' + (curGroup === '' ? ' selected' : '') +
+      '>All  (' + rows.length + ')</option>';
+    Object.keys(l1).forEach(function(g){
+      opts += '<option value="' + esc(g) + '"' + (curGroup === g ? ' selected' : '') +
+        '>' + esc(g) + '  (' + l1[g] + ')</option>';
+      var sub = kids[g];
+      if (!sub) return;
+      Object.keys(sub).forEach(function(k){
+        opts += '<option value="' + esc(k) + '"' + (curGroup === k ? ' selected' : '') +
+          '>' + esc(k) + '  (' + sub[k] + ')</option>';
+      });
+    });
+    mselG.innerHTML = opts;
   }
 
   collsEl.addEventListener('click', function(e){
@@ -1366,6 +1440,11 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
     var b = e.target.closest('[data-g]');
     if (!b) return;
     curGroup = b.getAttribute('data-g');
+    renderGroups(); build();
+  });
+  mselC.addEventListener('change', function(){ select(mselC.value); });
+  mselG.addEventListener('change', function(){
+    curGroup = mselG.value;
     renderGroups(); build();
   });
   qEl.addEventListener('input', function(){ query = qEl.value; build(); });
