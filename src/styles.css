@@ -46,9 +46,28 @@ body{font-family:var(--f);background:var(--canvas);color:var(--tx)}
 [data-tip].demo-hov::after,[data-tip].demo-hov::before{opacity:1}
 
 /* ── Modal ── */
-#modal-bg{position:fixed;inset:0;z-index:2000;display:flex;align-items:center;justify-content:center;background:var(--mbg);backdrop-filter:blur(3px);opacity:0;pointer-events:none;transition:opacity .3s,background .15s}
-#modal-bg.show{opacity:1;pointer-events:auto}
-#modal-bg.hide{opacity:0;pointer-events:none}
+/* NO backdrop-filter, and visibility:hidden rather than opacity alone. Both
+   halves of that were costing real frames.
+
+   The filter was blur(3px) across position:fixed;inset:0 - the whole viewport.
+   It had been here since July and was cheap, because a backdrop-filter is only
+   recomputed when the backdrop changes and what sat behind it was static. The
+   ambient field changed that: every open case-study window now has two
+   compositor layers drifting forever behind this element, so the browser had
+   to re-blur the entire viewport every frame for as long as the modal was up.
+   That is the intro popup feeling heavy. A 3px blur under a 25% (light) or 60%
+   (dark) black scrim is nearly invisible anyway - the scrim was always doing
+   the separating.
+
+   And the element was only ever faded to opacity:0, never taken out of the
+   render tree, so on desktop it stayed a full-viewport filtered surface for
+   the whole session. Whether a browser skips the filter at opacity:0 is an
+   implementation detail, which is not something to rely on. visibility:hidden
+   is honest about it, still transitions, and keeps the element focusable-safe
+   because visibility is inherited by its subtree. */
+#modal-bg{position:fixed;inset:0;z-index:2000;display:flex;align-items:center;justify-content:center;background:var(--mbg);opacity:0;visibility:hidden;pointer-events:none;transition:opacity .3s,visibility .3s,background .15s}
+#modal-bg.show{opacity:1;visibility:visible;pointer-events:auto}
+#modal-bg.hide{opacity:0;visibility:hidden;pointer-events:none}
 #modal-box{background:var(--mbox);border:1px solid var(--mbd);border-radius:16px;padding:28px 28px 24px;width:400px;box-shadow:0 32px 80px rgba(0,0,0,.22),0 0 0 1px rgba(0,0,0,.04);transform:scale(.92) translateY(20px);transition:transform .4s cubic-bezier(.34,1.56,.64,1),background .15s,border-color .15s}
 #modal-bg.show #modal-box{transform:scale(1) translateY(0)}
 .m-badge{display:flex;align-items:center;gap:6px;font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--figma);margin-bottom:12px}

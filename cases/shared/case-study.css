@@ -122,11 +122,21 @@ button{cursor:pointer;font-family:inherit}
    to 1.22x. Do not make that change without profiling it first. */
 .cs-field i{position:absolute;display:block;border-radius:50%;
   will-change:transform}
-/* Paused while the tab is in the background. An animation on a hidden tab is
-   usually throttled by the browser anyway, but "usually" depends on whether
-   the compositor considers the layer visible, and these are position:fixed
-   inside an iframe. Stating it costs one rule and removes the doubt. */
-html[data-cs-hidden] .cs-field i{animation-play-state:paused}
+/* Paused on two triggers, set by two different owners, which is why they are
+   two attributes rather than one - they would otherwise fight over the same
+   value and whichever wrote last would win.
+
+   data-cs-hidden: set by this page's own case-study.js on visibilitychange.
+     An animation on a hidden tab is usually throttled by the browser anyway,
+     but "usually" depends on whether the compositor considers the layer
+     visible, and these are position:fixed inside an iframe.
+
+   data-cs-idle:   set by the PARENT page on every window raise, on any project
+     window that is not the front-most one. A covered window is still composited
+     - the browser has no idea you cannot see it - so without this, three open
+     windows meant six washes drifting forever and five of them for nobody. */
+html[data-cs-hidden] .cs-field i,
+html[data-cs-idle]   .cs-field i{animation-play-state:paused}
 .cs-field i:nth-child(1){width:64vmax;height:64vmax;top:-22vmax;right:-16vmax;
   background:radial-gradient(circle closest-side,var(--cs-wash-a),transparent 70%);
   animation:csFieldA 17s ease-in-out infinite alternate}

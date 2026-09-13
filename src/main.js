@@ -663,7 +663,10 @@ function closeWin(id) {
   const w = document.getElementById('win-' + id);
   if (!w) return;
   w.classList.remove('show','collapsed');
-  setTimeout(() => { w.style.display = 'none'; updateCloseAll(); }, 200);
+  /* syncFieldIdle after the display:none lands, not before: closing the front
+     window promotes whatever was under it, and that window is still flagged
+     idle until something recomputes which one is on top. */
+  setTimeout(() => { w.style.display = 'none'; updateCloseAll(); syncFieldIdle(); }, 200);
   const b = document.getElementById('nav-' + id);
   if (b) b.classList.remove('on');
   if (w._opener && w._opener.focus) w._opener.focus();
@@ -725,7 +728,45 @@ function closeAllWins() {
   setTimeout(() => { WIN_IDS.forEach(id=>{ const w=document.getElementById('win-'+id); if(w) delete w._placed; }); cascadeX=60; cascadeY=50; }, 220);
 }
 
-function front(w) { w.style.zIndex = ++wZ; }
+function front(w) { w.style.zIndex = ++wZ; syncFieldIdle(); }
+
+/* ── Only the front-most project window animates ───────────────────────────
+   Each case study runs an ambient field: two compositor layers drifting
+   forever. A window that is covered by another one is still composited - the
+   browser cannot tell you are not looking at it - so with three windows open,
+   six washes were animating and four of them were behind something.
+
+   closeWin already sets display:none, which stops a closed window's field for
+   free. This is the covered-but-open case, which was the one still costing.
+
+   It sets data-cs-idle rather than the data-cs-hidden the iframe sets for
+   itself on visibilitychange. Two owners writing one attribute would mean the
+   later write clearing the earlier one's reason; the stylesheet pauses on
+   either. Same-origin, so reaching into contentDocument is allowed, and it is
+   wrapped anyway because contentDocument is null until the frame has a
+   document - which is why load is wired up below as well. */
+function syncFieldIdle() {
+  const open = [...document.querySelectorAll('.win')]
+    .filter(w => w.style.display && w.style.display !== 'none');
+  let top = null, topZ = -Infinity;
+  for (const w of open) {
+    const z = +w.style.zIndex || 0;
+    if (z >= topZ) { topZ = z; top = w; }
+  }
+  for (const w of open) {
+    const f = w.querySelector('.proj-iframe');
+    if (!f) continue;
+    try {
+      const html = f.contentDocument && f.contentDocument.documentElement;
+      if (!html) continue;
+      if (w === top) html.removeAttribute('data-cs-idle');
+      else html.setAttribute('data-cs-idle', '');
+    } catch (_) { /* not ready, or not reachable; load handler retries */ }
+  }
+}
+document.querySelectorAll('.proj-iframe').forEach(f => {
+  f.addEventListener('load', syncFieldIdle);
+});
 
 
 /* ════════════════════════════════════
