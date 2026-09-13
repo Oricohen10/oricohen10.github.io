@@ -16,8 +16,8 @@
 <meta name="twitter:description" content="How Ori Cohen built Verint's enterprise design system from scratch — one language for 40+ products and 10k+ users."/>
 <meta name="twitter:image" content="https://oricohen.co/cases/lux/images/og-image.png"/>
 <meta name="author" content="Ori Cohen"/>
-<link rel="stylesheet" href="../../src/tokens.css?v=202609132135"/>
-<link rel="stylesheet" href="../shared/case-study.css?v=202609132135"/>
+<link rel="stylesheet" href="../../src/tokens.css?v=202609132146"/>
+<link rel="stylesheet" href="../shared/case-study.css?v=202609132146"/>
 <!-- Hide default cursor when embedded in the portfolio iframe -->
 <script>try{if(localStorage.getItem('ori-theme')==='dark')document.documentElement.setAttribute('data-theme','dark')}catch(e){}
 if(window.self!==window.top){var _s=document.createElement('style');_s.textContent='*{cursor:none!important}';document.head.appendChild(_s);}</script>
@@ -494,7 +494,12 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
 
    With the breakout the worst case at 1140px is +14.8px of clearance instead
    of -6.4px, and every width that shows chips is clean. Verified 390-1440px. */
-.cmp{margin-top:22px;--p:50%;--cmp-gut:13%}
+/* Gutter is 0 by DEFAULT, which is the narrow case: the image uses the full
+   width of the module and the chip opens over it. The wide block near the
+   bottom puts the 13% back, because that is where edge-pinned chips need
+   somewhere to sit. Narrow inherited 13% before this, which is what left the
+   image inset on a phone with a chip half outside it. */
+.cmp{margin-top:22px;--p:50%;--cmp-gut:0%}
 @media(min-width:1001px){
   .cmp{margin-left:-56px}
 }
@@ -586,8 +591,11 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
   color:var(--text-primary);line-height:1.3;white-space:nowrap}
 [data-theme="dark"] .cmp-ann{border-color:rgba(255,255,255,.26);
   box-shadow:0 6px 20px rgba(0,0,0,.6)}
-.cmp-ann-l{left:0}
-.cmp-ann-r{right:0}
+/* No left/right here on purpose. The two modes want different positioning
+   for these classes, and both would be (0,1,0) against the base .cmp-ann
+   rule, so whichever appeared later would win - decided by line number, not
+   by intent. Instead the base gives ONE position (centred, below) and the
+   wide block is the only place that pins to an edge. Nothing to conflict. */
 .cmp-ann-dot{width:11px;height:11px;border-radius:3px;flex-shrink:0;
   border:1px solid rgba(18,18,19,.18)}
 [data-theme="dark"] .cmp-ann-dot{border-color:rgba(255,255,255,.28)}
@@ -604,6 +612,32 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
 .cmp-ann.is-open,.cmp-lead.is-open{opacity:1;visibility:visible}
 .cmp-hot{cursor:pointer}
 .cmp-hint-w{display:none}
+
+/* The open chip sits ON the image, centred, and offset vertically clear of
+   the dot that opened it.
+
+   Centred rather than edge-pinned because at phone widths there is no edge to
+   pin to that works: the module is 280-342px, the chip is 185px, so a chip
+   against either edge covers most of the width AND lands on top of its own
+   dot - the 83.9% anchor sits at 287px of a 342px frame, right where a
+   right-pinned chip is. Centred, it spans 78 to 263 of 342 and the dot stays
+   outside it vertically instead.
+
+   30px of offset: the chip is 27px tall, so its near edge lands 16.5px from
+   the dot centre against a 9px dot-plus-halo radius - a 7.5px gap. 26px was
+   the first value and measured out at 3.5px, which is a touching-but-not-
+   overlapping look rather than a deliberate one. The bottom anchor at 90.8% opens UPWARD, otherwise the chip would
+   hang off the image.
+
+   Occlusion is fine here in a way it was not for the permanent desktop chips:
+   this appears because someone asked for it and goes away again. */
+.cmp-ann{left:50%;right:auto;
+  transform:translate(-50%,-50%);
+  top:calc(var(--y) + 30px)}
+.cmp-ann-up{top:calc(var(--y) - 30px)}
+/* No leaders in this mode. The chip is a few pixels from its dot, so a line
+   between them would be shorter than the gap it is meant to bridge. */
+.cmp-lead{display:none}
 /* The ping is the only thing saying a dot is a control, so it runs in this
    mode and stops on the one that is open. Transform and opacity only, so it
    composites instead of repainting. */
@@ -631,6 +665,14 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
    narrowest, where a 200px sidebar, a 56px gap and 88px of padding leave the
    column narrower than a 980px single-column page. It gets hotspots. */
 @media (min-width:880px) and (max-width:1000px), (min-width:1100px){
+  .cmp{--cmp-gut:13%}
+  .cmp-lead{display:block}
+  /* back to a row-aligned chip pinned to the stage edge, with the leader
+     carrying the distance to the dot */
+  .cmp-ann{top:var(--y);transform:translateY(-50%)}
+  .cmp-ann-l{left:0;right:auto}
+  .cmp-ann-r{left:auto;right:0}
+  .cmp-ann-up{top:var(--y)}
   .cmp-ann,.cmp-lead{opacity:1;visibility:visible;transition:none}
   /* Not controls in this mode - the information is already on screen, so a
      button that only removes it is noise. Kept in the DOM with the dot as its
@@ -759,7 +801,7 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
       <figure class="cs-media">
       <!-- The variables browser. Replaces the component-library screenshot:
            the same claim, but checkable. -->
-      <div class="vb-shell" data-dv="202609132135">
+      <div class="vb-shell" data-dv="202609132146">
         <div class="vb" id="vb" role="group"
              aria-label="LUX 2.0 variable library, browsable">
           <div class="vb-side">
@@ -898,7 +940,7 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
                 <i class="cmp-ann-dot" style="background-color:#121213"></i>
                 <span class="cmp-ann-n">text.neutral.main</span>
               </span>
-              <span class="cmp-ann cmp-ann-r" data-n="4"
+              <span class="cmp-ann cmp-ann-r cmp-ann-up" data-n="4"
                     style="--y:90.8%" aria-hidden="true">
                 <i class="cmp-ann-dot" style="background-color:#006ee5"></i>
                 <span class="cmp-ann-n">background.brand.regular</span>
@@ -974,7 +1016,7 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
   </svg>
 </button>
 
-<script src="../shared/case-study.js?v=202609132135" defer></script>
+<script src="../shared/case-study.js?v=202609132146" defer></script>
 <script>
 /* The light/dark seam. All input comes from the range element, so there are no
    drag handlers here at all - only a paint step. */
