@@ -16,8 +16,8 @@
 <meta name="twitter:description" content="How Ori Cohen built Verint's enterprise design system from scratch — one language for 40+ products and 10k+ users."/>
 <meta name="twitter:image" content="https://oricohen.co/cases/lux/images/og-image.png"/>
 <meta name="author" content="Ori Cohen"/>
-<link rel="stylesheet" href="../../src/tokens.css?v=202609132151"/>
-<link rel="stylesheet" href="../shared/case-study.css?v=202609132151"/>
+<link rel="stylesheet" href="../../src/tokens.css?v=202609132154"/>
+<link rel="stylesheet" href="../shared/case-study.css?v=202609132154"/>
 <!-- Hide default cursor when embedded in the portfolio iframe -->
 <script>try{if(localStorage.getItem('ori-theme')==='dark')document.documentElement.setAttribute('data-theme','dark')}catch(e){}
 if(window.self!==window.top){var _s=document.createElement('style');_s.textContent='*{cursor:none!important}';document.head.appendChild(_s);}</script>
@@ -831,7 +831,7 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
       <figure class="cs-media">
       <!-- The variables browser. Replaces the component-library screenshot:
            the same claim, but checkable. -->
-      <div class="vb-shell" data-dv="202609132151">
+      <div class="vb-shell" data-dv="202609132154">
         <div class="vb" id="vb" role="group"
              aria-label="LUX 2.0 variable library, browsable">
           <div class="vb-side">
@@ -1063,7 +1063,7 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
   </svg>
 </button>
 
-<script src="../shared/case-study.js?v=202609132151" defer></script>
+<script src="../shared/case-study.js?v=202609132154" defer></script>
 <script>
 /* The light/dark seam. All input comes from the range element, so there are no
    drag handlers here at all - only a paint step. */
@@ -1100,14 +1100,68 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
   var anns = wrap.querySelectorAll('.cmp-ann');
   var leads= wrap.querySelectorAll('.cmp-lead');
 
+  /* Place the open chip beside the dot that opened it.
+
+     Ori asked for it to open next to its hotspot and to the left of it, so
+     left is the first choice. It cannot be the only choice: the chip is 185px
+     and the leftmost anchor sits at 29.6%, which on a 284px phone frame
+     leaves 84px to its left. So the order is left, then right, then the CSS
+     fallback (centred, offset 30px clear of the dot), which is the only one
+     that always fits - at 320px two of the four anchors have room on neither
+     side. From about 390px up, all four open adjacent.
+
+     Measured from rects rather than computed from the --x percentages,
+     because that stays correct whatever the gutter is doing, and rects are
+     read here once per open rather than per frame. */
+  var stageEl = wrap.querySelector('.cmp-stage');
+  var GAP = 8, EDGE = 4;
+  function place(btn, chip){
+    chip.style.left = chip.style.right = chip.style.top = chip.style.transform = '';
+    if (mq.matches) return;            /* wide mode is positioned by CSS */
+    var s = stageEl.getBoundingClientRect();
+    var d = btn.getBoundingClientRect();
+    var w = chip.offsetWidth;          /* visibility:hidden still has layout */
+    var cx = d.left - s.left + d.width / 2;
+    var cy = d.top  - s.top  + d.height / 2;
+    var half = d.width / 2, left = null;
+    if (cx - half - GAP - w >= EDGE) left = cx - half - GAP - w;
+    else if (cx + half + GAP + w <= s.width - EDGE) left = cx + half + GAP;
+    if (left === null) return;
+    chip.style.left = left + 'px';
+    chip.style.right = 'auto';
+    chip.style.top = cy + 'px';
+    chip.style.transform = 'translateY(-50%)';
+  }
+
   function pair(n, on){
     Array.prototype.forEach.call(anns, function(el){
-      el.classList.toggle('is-open', on && el.dataset.n === n);
+      var mine = on && el.dataset.n === n;
+      el.classList.toggle('is-open', mine);
+      if (!mine) { el.style.left = el.style.right = el.style.top = el.style.transform = ''; }
     });
     Array.prototype.forEach.call(leads, function(el){
       el.classList.toggle('is-open', on && el.dataset.n === n);
     });
+    if (!on || n == null) return;
+    var btn  = wrap.querySelector('.cmp-hot[data-n="' + n + '"]');
+    var chip = wrap.querySelector('.cmp-ann[data-n="' + n + '"]');
+    if (btn && chip) place(btn, chip);
   }
+
+  /* The frame changes width on rotate and on a window resize, so an open chip
+     has to be measured again. Coalesced to one frame - resize fires in bursts
+     and each of these reads two rects. */
+  var rq = false;
+  window.addEventListener('resize', function(){
+    if (rq) return; rq = true;
+    requestAnimationFrame(function(){
+      rq = false;
+      var open = wrap.querySelector('.cmp-ann.is-open');
+      if (!open) return;
+      var btn = wrap.querySelector('.cmp-hot[data-n="' + open.dataset.n + '"]');
+      if (btn) place(btn, open);
+    });
+  }, { passive: true });
   function clear(){
     Array.prototype.forEach.call(hots, function(o){ o.setAttribute('aria-pressed','false'); });
     pair(null, false);
