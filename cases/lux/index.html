@@ -16,8 +16,8 @@
 <meta name="twitter:description" content="How Ori Cohen built Verint's enterprise design system from scratch — one language for 40+ products and 10k+ users."/>
 <meta name="twitter:image" content="https://oricohen.co/cases/lux/images/og-image.png"/>
 <meta name="author" content="Ori Cohen"/>
-<link rel="stylesheet" href="../../src/tokens.css?v=202609132109"/>
-<link rel="stylesheet" href="../shared/case-study.css?v=202609132109"/>
+<link rel="stylesheet" href="../../src/tokens.css?v=202609132135"/>
+<link rel="stylesheet" href="../shared/case-study.css?v=202609132135"/>
 <!-- Hide default cursor when embedded in the portfolio iframe -->
 <script>try{if(localStorage.getItem('ori-theme')==='dark')document.documentElement.setAttribute('data-theme','dark')}catch(e){}
 if(window.self!==window.top){var _s=document.createElement('style');_s.textContent='*{cursor:none!important}';document.head.appendChild(_s);}</script>
@@ -475,7 +475,29 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
    No infinite animation in this module at desktop width. The ping ring is the
    affordance hint for the hotspots, so it only runs in the mode that has
    hotspots. */
-.cmp{margin-top:22px;--p:50%;--cmp-gut:7%}
+/* 13% gutters and a 56px breakout, and both numbers come from one
+   constraint: a chip pinned to the stage edge must not cover the dot it
+   names, and the binding dot is the primary button at x:83.9%.
+
+   A full token name on one line is 185px of 10px mono. Pinned to the edge of
+   a 796px column - which is what a 1140px window gives, after 200px of
+   sidebar, a 56px gap and 88px of padding - it crossed 6px PAST its own dot.
+   No gutter fixes that: the arithmetic needs the module itself to be wider,
+   and every gutter big enough took the image under 70% of the column, which
+   is the v2 mistake.
+
+   So the module borrows the 56px grid gap between the sidebar and the text.
+   That space is empty - the content column starts at 200+56, so -56px puts
+   this block's left edge flush against the sidebar and overlaps nothing. It
+   cannot break out further: the sidebar is sticky and always on screen, so
+   anything past 56px would slide under it.
+
+   With the breakout the worst case at 1140px is +14.8px of clearance instead
+   of -6.4px, and every width that shows chips is clean. Verified 390-1440px. */
+.cmp{margin-top:22px;--p:50%;--cmp-gut:13%}
+@media(min-width:1001px){
+  .cmp{margin-left:-56px}
+}
 .cmp-stage{position:relative;padding:0 var(--cmp-gut)}
 .cmp-frame{position:relative;overflow:hidden;border-radius:var(--radius-lg);
   border:1px solid var(--border-subtle);background:var(--surface-sunken);
@@ -537,31 +559,35 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
   outline-offset:2px;border-radius:50%}
 
 /* ── the chip ──────────────────────────────────────────────────────────────
-   Pinned to the stage edge, so it overlaps only the outermost slice of the
-   frame and the leader carries the distance. max-width:132px with wrapping is
-   a hard cap rather than arithmetic: the first version sized this from a
-   monospace advance of 0.6em worked out in my head and left 2px of clearance,
-   and measured properly it overflowed the column by up to 49px against 44px
-   of page padding. 132px holds whatever the font does, and a long path takes a
-   third line instead of leaving the page. */
+   One line, the full token path, nothing else.
+
+   The previous version split it over two lines - namespace in tertiary grey
+   above, leaf in bold primary below - and capped the width at 132px. Both
+   were wrong. The split invented a hierarchy the token does not have: a
+   token is one identifier, and `background.brand` is not a heading with
+   `regular` as its subtitle. And the cap turned the longest name into
+   "background.bran / d", breaking a word mid-letter, because a token path
+   has no spaces for overflow-wrap to use.
+
+   So: no cap, no wrap, one weight, one colour. The width is whatever the
+   name needs, and the geometry above is what makes room for it.
+
+   The swatch is always on the LEFT, on both sides of the image. It used to
+   flip with row-reverse on the right-hand chips so it sat nearest the image,
+   which read as two different components. Colour-then-name is one shape to
+   recognise, wherever the chip is. */
 .cmp-ann{position:absolute;top:var(--y);transform:translateY(-50%);
   display:flex;align-items:center;gap:8px;
-  max-width:132px;
-  padding:5px 10px;border-radius:var(--radius-md, 8px);
+  padding:6px 10px;border-radius:var(--radius-md, 8px);
   background:var(--surface-default);
   border:1px solid rgba(18,18,19,.20);
   box-shadow:0 4px 14px rgba(18,18,19,.22);
-  font-family:var(--font-mono);line-height:1.25}
+  font-family:var(--font-mono);font-size:10px;font-weight:600;
+  color:var(--text-primary);line-height:1.3;white-space:nowrap}
 [data-theme="dark"] .cmp-ann{border-color:rgba(255,255,255,.26);
   box-shadow:0 6px 20px rgba(0,0,0,.6)}
 .cmp-ann-l{left:0}
-.cmp-ann-r{right:0;flex-direction:row-reverse}
-.cmp-ann-r .cmp-ann-t{align-items:flex-end}
-/* overflow-wrap:anywhere, because a token path has no spaces - without it the
-   max-width above would be advisory only. */
-.cmp-ann-t{display:flex;flex-direction:column;min-width:0;overflow-wrap:anywhere}
-.cmp-ann-ns{font-size:10px;font-weight:600;color:var(--text-tertiary)}
-.cmp-ann-lf{font-size:11px;font-weight:700;color:var(--text-primary)}
+.cmp-ann-r{right:0}
 .cmp-ann-dot{width:11px;height:11px;border-radius:3px;flex-shrink:0;
   border:1px solid rgba(18,18,19,.18)}
 [data-theme="dark"] .cmp-ann-dot{border-color:rgba(255,255,255,.28)}
@@ -604,7 +630,7 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
    The 1000-1060 gap is real: that band is the two-column layout at its
    narrowest, where a 200px sidebar, a 56px gap and 88px of padding leave the
    column narrower than a 980px single-column page. It gets hotspots. */
-@media (min-width:760px) and (max-width:1000px), (min-width:1060px){
+@media (min-width:880px) and (max-width:1000px), (min-width:1100px){
   .cmp-ann,.cmp-lead{opacity:1;visibility:visible;transition:none}
   /* Not controls in this mode - the information is already on screen, so a
      button that only removes it is noise. Kept in the DOM with the dot as its
@@ -733,7 +759,7 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
       <figure class="cs-media">
       <!-- The variables browser. Replaces the component-library screenshot:
            the same claim, but checkable. -->
-      <div class="vb-shell" data-dv="202609132109">
+      <div class="vb-shell" data-dv="202609132135">
         <div class="vb" id="vb" role="group"
              aria-label="LUX 2.0 variable library, browsable">
           <div class="vb-side">
@@ -860,34 +886,22 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
               <span class="cmp-ann cmp-ann-l" data-n="1"
                     style="--y:14.8%" aria-hidden="true">
                 <i class="cmp-ann-dot" style="background-color:#ffffff"></i>
-                <span class="cmp-ann-t">
-                  <span class="cmp-ann-ns">layer</span>
-                  <span class="cmp-ann-lf">level_3</span>
-                </span>
+                <span class="cmp-ann-n">layer.level_3</span>
               </span>
               <span class="cmp-ann cmp-ann-r" data-n="2"
                     style="--y:33.5%" aria-hidden="true">
                 <i class="cmp-ann-dot" style="background-color:#dfe2e4"></i>
-                <span class="cmp-ann-t">
-                  <span class="cmp-ann-ns">border.neutral</span>
-                  <span class="cmp-ann-lf">regular</span>
-                </span>
+                <span class="cmp-ann-n">border.neutral.regular</span>
               </span>
               <span class="cmp-ann cmp-ann-l" data-n="3"
                     style="--y:61.2%" aria-hidden="true">
                 <i class="cmp-ann-dot" style="background-color:#121213"></i>
-                <span class="cmp-ann-t">
-                  <span class="cmp-ann-ns">text.neutral</span>
-                  <span class="cmp-ann-lf">main</span>
-                </span>
+                <span class="cmp-ann-n">text.neutral.main</span>
               </span>
               <span class="cmp-ann cmp-ann-r" data-n="4"
                     style="--y:90.8%" aria-hidden="true">
                 <i class="cmp-ann-dot" style="background-color:#006ee5"></i>
-                <span class="cmp-ann-t">
-                  <span class="cmp-ann-ns">background.brand</span>
-                  <span class="cmp-ann-lf">regular</span>
-                </span>
+                <span class="cmp-ann-n">background.brand.regular</span>
               </span>
             </div>
             </div>
@@ -960,7 +974,7 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
   </svg>
 </button>
 
-<script src="../shared/case-study.js?v=202609132109" defer></script>
+<script src="../shared/case-study.js?v=202609132135" defer></script>
 <script>
 /* The light/dark seam. All input comes from the range element, so there are no
    drag handlers here at all - only a paint step. */
@@ -991,7 +1005,7 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
      on the dots, but CSS cannot take an element out of the tab order. Without
      this, a desktop visitor got four tab stops that looked like buttons,
      announced a pressed state, and did nothing when activated. */
-  var WIDE = '(min-width:760px) and (max-width:1000px), (min-width:1060px)';
+  var WIDE = '(min-width:880px) and (max-width:1000px), (min-width:1100px)';
   var mq   = window.matchMedia(WIDE);
   var hots = wrap.querySelectorAll('.cmp-hot');
   var anns = wrap.querySelectorAll('.cmp-ann');
