@@ -94,9 +94,20 @@
       var css = on ? '.cs-field{display:none!important}' : '';
       eachFrameDoc(function (d) { styleInto(d, '_perf_field', css); });
     }],
-    ['custom cursor', function (on) {
-      styleInto(document, '_perf_cur',
-        on ? '#cursor,#ctag,#ghost-layer{display:none!important}' : '');
+    /* This toggle was wrong in the first version and told us nothing: it hid
+       #cursor but left the global html,body,*{cursor:none!important}, so
+       ticking it removed the pointer entirely. You cannot judge whether
+       movement feels responsive with no cursor on screen.
+       It has to give the NATIVE cursor back - in the parent and in every
+       framed case study, each of which injects its own cursor:none when it
+       detects it is in a frame. Equal specificity, so a later !important
+       rule wins; these are appended after those. */
+    ['custom cursor (restores the native one)', function (on) {
+      var css = on ? 'html,body,*{cursor:auto!important}#cursor,#ctag,#ghost-layer{display:none!important}' : '';
+      styleInto(document, '_perf_cur', css);
+      eachFrameDoc(function (d) {
+        styleInto(d, '_perf_cur', on ? 'html,body,*{cursor:auto!important}' : '');
+      });
     }],
     ['all video', function (on) {
       eachFrameDoc(function (d) {
@@ -131,8 +142,11 @@
 
   var hint = document.createElement('div');
   hint.style.cssText = 'margin-top:7px;color:#9a9a9a;max-width:220px;white-space:normal';
-  hint.textContent = 'Tick one at a time and watch FPS / long tasks. Whichever ' +
-                     'one moves the numbers is the culprit.';
+  hint.textContent = 'If FPS is 60 and long tasks is 0, the page is NOT ' +
+                     'dropping frames and no toggle will move these numbers. ' +
+                     'In that case the thing to judge is the cursor one, by ' +
+                     'feel and not by the readout: it is latency, not frame ' +
+                     'rate.';
   box.appendChild(hint);
 
   /* ── report once a second ─────────────────────────────────────────────── */

@@ -753,20 +753,31 @@ function syncFieldIdle() {
     const z = +w.style.zIndex || 0;
     if (z >= topZ) { topZ = z; top = w; }
   }
-  for (const w of open) {
-    const f = w.querySelector('.proj-iframe');
-    if (!f) continue;
+  /* Iterate EVERY project iframe, not just the ones inside open windows.
+     The first version looped over open windows only, which meant that with no
+     window open it did nothing at all - and that is the most common state on
+     this page. Closing a window sets display:none on the window, but the
+     iframe inside it stays loaded and its document keeps animating, so after
+     opening and closing a few case studies you had five loaded frames with
+     ten washes drifting for nobody. The perf HUD showed exactly that:
+     "open windows 0, loaded frames 5".
+     Idle is now the default and only the front-most open window is exempt. */
+  document.querySelectorAll('.proj-iframe').forEach(f => {
     try {
       const html = f.contentDocument && f.contentDocument.documentElement;
-      if (!html) continue;
-      if (w === top) html.removeAttribute('data-cs-idle');
+      if (!html) return;
+      const live = top && top.contains(f);
+      if (live) html.removeAttribute('data-cs-idle');
       else html.setAttribute('data-cs-idle', '');
     } catch (_) { /* not ready, or not reachable; load handler retries */ }
-  }
+  });
 }
 document.querySelectorAll('.proj-iframe').forEach(f => {
   f.addEventListener('load', syncFieldIdle);
 });
+/* And once now, for any frame that finished before the listener above was
+   attached. With no window open this is what flags all of them idle. */
+syncFieldIdle();
 
 
 /* ════════════════════════════════════
