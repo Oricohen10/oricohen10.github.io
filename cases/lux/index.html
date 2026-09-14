@@ -16,8 +16,8 @@
 <meta name="twitter:description" content="How Ori Cohen built Verint's enterprise design system from scratch — one language for 40+ products and 10k+ users."/>
 <meta name="twitter:image" content="https://oricohen.co/cases/lux/images/og-image.png"/>
 <meta name="author" content="Ori Cohen"/>
-<link rel="stylesheet" href="../../src/tokens.css?v=202609132154"/>
-<link rel="stylesheet" href="../shared/case-study.css?v=202609132154"/>
+<link rel="stylesheet" href="../../src/tokens.css?v=202609132210"/>
+<link rel="stylesheet" href="../shared/case-study.css?v=202609132210"/>
 <!-- Hide default cursor when embedded in the portfolio iframe -->
 <script>try{if(localStorage.getItem('ori-theme')==='dark')document.documentElement.setAttribute('data-theme','dark')}catch(e){}
 if(window.self!==window.top){var _s=document.createElement('style');_s.textContent='*{cursor:none!important}';document.head.appendChild(_s);}</script>
@@ -403,77 +403,14 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
   .vb-r-n,.vb-r-v{padding:0 9px}
 }
 
-/* ══ Light / dark, one seam ════════════════════════════════════════════════
-   Recovered from the old site, where this was the best thing on the LUX page.
-   It beats a toggle for a specific reason: both themes are on screen at once
-   with a seam between them, so the identical geometry is verifiable rather
-   than remembered. That IS the argument - dark mode is a mode on the
-   primitives, not a second component set.
+/* ══ Light / dark, one seam ══════════════════════════════════════════════════
+   The mechanism and the box now live in cases/shared/case-study.css, because
+   the Copilot case study needed the same comparison for its wrap-up
+   before/after. Moved, not copied.
 
-   The mechanism is NOT the old one. That was a div with mousedown and
-   touchmove handlers: drag-only, no keyboard, no ARIA, and a pulsing handle
-   with no reduced-motion guard. This is an <input type="range"> covering the
-   frame at opacity 0, which brings arrows, Home/End, real slider semantics,
-   click-to-jump and touch for free - and satisfies 2.5.7, which wants a
-   single-pointer alternative to dragging. The visible handle is a separate
-   layer that only follows --p.                                              */
-.cmp-side{position:absolute;inset:0}
-.cmp-side img{width:100%;height:100%;display:block;object-fit:cover}
-/* Light sits behind at full width; dark is clipped from the right, so the
-   seam is at --p and dark occupies the left. Same arrangement as the old one,
-   so the labels keep their sides. */
-.cmp-dark{clip-path:inset(0 calc(100% - var(--p)) 0 0)}
-
-/* The input is the control. Full size and invisible, so a press anywhere in
-   the frame jumps the seam there and then drags - which the old version could
-   not do, it needed the handle grabbed. */
-.cmp-input{position:absolute;inset:0;z-index:4;width:100%;height:100%;margin:0;
-  opacity:0;cursor:ew-resize;-webkit-appearance:none;appearance:none;
-  background:transparent;
-  /* pan-y, stated rather than left to the default: the input covers a tall
-     image, so a vertical swipe that starts on it has to scroll the page while
-     horizontal drags still move the seam. */
-  touch-action:pan-y}
-.cmp-input::-webkit-slider-thumb{-webkit-appearance:none;width:44px;height:100vh}
-.cmp-input::-moz-range-thumb{width:44px;height:100vh;border:0;background:transparent}
-
-.cmp-handle{position:absolute;top:0;bottom:0;left:var(--p);z-index:3;
-  width:44px;margin-left:-22px;pointer-events:none;
-  display:flex;flex-direction:column;align-items:center}
-.cmp-line{flex:1;width:2px;background:rgba(255,255,255,.72);
-  box-shadow:0 0 6px rgba(0,0,0,.45)}
-/* position:relative so the ::after ring below can inset against it. */
-.cmp-pill{position:relative;flex-shrink:0;width:36px;height:36px;border-radius:50%;
-  background:rgba(20,20,24,.95);border:2px solid rgba(255,255,255,.55);
-  color:#fff;display:flex;align-items:center;justify-content:center;
-  box-shadow:0 4px 16px rgba(0,0,0,.5)}
-.cmp-pill svg{width:14px;height:14px;display:block}
-/* The pulse invites the drag, and it stops once the thing has been used -
-   an affordance hint that keeps pulsing is just noise.
-
-   It is a ring on a pseudo-element animating transform and opacity, NOT a
-   box-shadow animation. The box-shadow version spread a 16px shadow out and
-   back forever, and box-shadow is painted: every frame invalidated a region
-   around the handle, which sits on top of a large image whose clip-path the
-   seam is also changing. Transform and opacity composite instead, so the ring
-   is a GPU matrix on a cached 36px texture and touches no paint at all. Same
-   animation to look at, and it was one of only two infinite box-shadow
-   animations on the site. */
-.cmp-pill::after{content:"";position:absolute;inset:-2px;border-radius:50%;
-  border:2px solid rgba(255,255,255,.55);pointer-events:none;opacity:0}
-.cmp:not(.cmp-used) .cmp-pill::after{
-  animation:cmpPulse 1.9s ease-out infinite}
-@keyframes cmpPulse{
-  0%  {transform:scale(1);   opacity:.55}
-  70%,100%{transform:scale(1.95); opacity:0}
-}
-@media(prefers-reduced-motion:reduce){
-  .cmp:not(.cmp-used) .cmp-pill::after{animation:none;opacity:0}
-}
-/* The input is invisible, so its focus ring would be too. Put it on the pill. */
-.cmp-input:focus-visible~.cmp-handle .cmp-pill{
-  outline:3px solid var(--action-primary);outline-offset:3px}
-
+   What is still here is everything specific to what THIS page compares: the
+   token chips, their leader lines, the hotspot dots, and the gutter that
+   makes room for the chips. Two shared parameters are set below.           */
 /* ── Token annotations ─────────────────────────────────────────────────────
    Fifth arrangement. The history matters because each version fixed the last
    one's real fault and introduced its own:
@@ -529,21 +466,18 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
    bottom puts the 13% back, because that is where edge-pinned chips need
    somewhere to sit. Narrow inherited 13% before this, which is what left the
    image inset on a phone with a chip half outside it. */
-.cmp{margin-top:22px;--p:50%;--cmp-gut:0%}
+/* --cmp-ar is the aspect of the two screenshots; the shared sheet defaults
+   to 16/9. --cmp-gut is 0 here and 13% in the wide block far below, which is
+   where the edge-pinned chips need the room.
+
+   The -56px is LUX only: it borrows the empty grid gap beside the sticky
+   sidebar so a 185px chip clears the dot it names at a 1140px window. Nothing
+   else on the site needs it, which is why it did not travel to the shared
+   sheet with the rest. */
+.cmp{--cmp-ar:1800/1012}
 @media(min-width:1001px){
   .cmp{margin-left:-56px}
 }
-.cmp-stage{position:relative;padding:0 var(--cmp-gut)}
-.cmp-frame{position:relative;overflow:hidden;border-radius:var(--radius-lg);
-  border:1px solid var(--border-subtle);background:var(--surface-sunken);
-  aspect-ratio:1800/1012;
-  /* 18px/40px, and dark gets 26/52 rather than the 48/96 it had. A 96px blur
-     on an 800x450 box is a large paint region, and it sits under a child whose
-     clip-path changes on every frame of a drag, so it was being re-painted
-     while the seam moved. 52px still reads as depth on near-black. */
-  box-shadow:0 18px 40px rgba(18,18,19,.16)}
-[data-theme="dark"] .cmp-frame{box-shadow:0 26px 52px rgba(0,0,0,.72)}
-
 /* Two layers, both sized to a known box so percentages mean what they say.
    .cmp-ov is the frame rectangle, because --x is "percent across the
    screenshot". .cmp-chips is the whole stage, because a chip is pinned to the
@@ -712,8 +646,6 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
   .cmp-hint-n{display:none}
   .cmp-hint-w{display:inline}
 }
-.cmp-hint{margin-top:10px;text-align:center;font-size:11.5px;
-  color:var(--text-tertiary);letter-spacing:.03em}
 
 </style>
 <script type="application/ld+json">
@@ -831,7 +763,7 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
       <figure class="cs-media">
       <!-- The variables browser. Replaces the component-library screenshot:
            the same claim, but checkable. -->
-      <div class="vb-shell" data-dv="202609132154">
+      <div class="vb-shell" data-dv="202609132210">
         <div class="vb" id="vb" role="group"
              aria-label="LUX 2.0 variable library, browsable">
           <div class="vb-side">
@@ -907,7 +839,7 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
         primitives, not a second library to keep in step. Drag the handle.
         Spacing, radius, type and the token names all hold on both sides of
         the seam, and only what those names resolve to changes.</p>
-      <div class="cmp" id="cmp">
+      <div class="cmp" id="cmp" data-cmp-unit="dark">
             <div class="cmp-stage">
             <div class="cmp-frame">
               <div class="cmp-side cmp-light">
@@ -915,7 +847,7 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
                      loading="lazy" decoding="async"
                      alt="Verint Agent Factory in light mode: the Add tool provider modal over the Tools Manager page, with a stepper, radio cards, a data table of tool names and annotations, status badges and toggles."/>
               </div>
-              <div class="cmp-side cmp-dark" aria-hidden="true">
+              <div class="cmp-side cmp-dark cmp-clip" aria-hidden="true">
                 <img src="images/af-dark.webp" width="1800" height="1012"
                      loading="lazy" decoding="async" alt=""/>
               </div>
@@ -1063,25 +995,14 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
   </svg>
 </button>
 
-<script src="../shared/case-study.js?v=202609132154" defer></script>
+<script src="../shared/case-study.js?v=202609132210" defer></script>
 <script>
-/* The light/dark seam. All input comes from the range element, so there are no
-   drag handlers here at all - only a paint step. */
+/* The seam itself is driven by cases/shared/case-study.js, which wires every
+   .cmp on the page. What is left here is the token hotspots, which are
+   specific to what this page compares. */
 (function(){
   var wrap=document.getElementById('cmp');
   if(!wrap) return;
-  var input=document.getElementById('cmp-input');
-  function paint(){
-    wrap.style.setProperty('--p', input.value+'%');
-    /* Announce something a listener can act on. Without this a screen reader
-       reads "50" - a number with no unit and no meaning. */
-    input.setAttribute('aria-valuetext', input.value+'% dark');
-  }
-  input.addEventListener('input',function(){
-    wrap.classList.add('cmp-used');   /* stop the pulse once it has been used */
-    paint();
-  });
-  paint();
 
   /* The hotspots, narrow widths only.
 

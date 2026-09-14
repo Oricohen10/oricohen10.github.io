@@ -30,6 +30,32 @@
   sync();
 })();
 
+/* ── Before/after comparison ───────────────────────────────────────────────
+   Shared because two case studies use it now. All input comes from an
+   <input type="range"> covering the frame at opacity 0, so there are no drag
+   handlers here at all - only a paint step. That is what gives it arrow keys,
+   Home/End, click-to-jump, touch and real slider semantics for free, and it
+   is what satisfies 2.5.7's ask for a single-pointer alternative to dragging.
+
+   Generic over every .cmp on the page rather than one hardcoded id, which is
+   what let it move out of the LUX page. The label announced to a screen
+   reader comes from data-cmp-unit on the element, because "50" on its own is
+   a number with no meaning: LUX says "50% dark", Copilot says "50% after". */
+document.querySelectorAll('.cmp').forEach(function(wrap){
+  var input = wrap.querySelector('input[type="range"]');
+  if (!input) return;
+  var unit = wrap.getAttribute('data-cmp-unit') || '';
+  function paint(){
+    wrap.style.setProperty('--p', input.value + '%');
+    input.setAttribute('aria-valuetext', input.value + '%' + (unit ? ' ' + unit : ''));
+  }
+  input.addEventListener('input', function(){
+    wrap.classList.add('cmp-used');   /* stop the pulse once it has been used */
+    paint();
+  });
+  paint();
+});
+
 /* ── Back nav: on mobile, append #projects so main.js opens the projects page */
 document.addEventListener('DOMContentLoaded', function() {
   var backNav = document.querySelector('.back-nav');

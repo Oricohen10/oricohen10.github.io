@@ -314,63 +314,124 @@ html[data-cs-idle]   .cs-field i{animation-play-state:paused}
 .cs-section > p:last-child{margin-bottom:0}
 .cs-section > p strong{color:var(--text-primary);font-weight:700}
 
-/* ── Plugin blocks ────────────────────────────────────────────────────────── */
-.plugins-list{
-  display:flex;flex-direction:column;gap:16px;
-  margin-top:24px;
-}
-.plugin-block{
-  position:relative;
-  border-radius:16px;
-  border:1px solid var(--border-subtle);
-  padding:30px 36px 30px 40px;
-  overflow:hidden;
-  background:var(--surface-default);
-  box-shadow:0 2px 12px rgba(0,0,0,.04);
-  transition:box-shadow .2s;
-}
-[data-theme="dark"] .plugin-block{box-shadow:none}
-.plugin-block:hover{box-shadow:0 6px 28px color-mix(in srgb, var(--action-primary) 10%, transparent)}
-[data-theme="dark"] .plugin-block:hover{box-shadow:0 0 0 1px var(--action-primary)}
-.plugin-block::before{
-  content:'';
-  position:absolute;
-  left:0;top:0;bottom:0;width:4px;
-  background:var(--action-primary);
-  border-radius:4px 0 0 4px;
-}
-.plugin-head{
-  display:flex;align-items:center;gap:10px;
-  margin-bottom:14px;
-}
-.plugin-num{
-  font-size:10px;font-weight:800;letter-spacing:.12em;
-  text-transform:uppercase;color:var(--text-tertiary);
-}
-.plugin-tag{
-  font-size:9px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;
-  color:var(--action-primary);
-  background:var(--action-primary-subtle);
-  padding:3px 9px;border-radius:4px;
-}
-.plugin-title{
-  font-size:22px;font-weight:800;letter-spacing:-.4px;
-  color:var(--text-primary);margin-bottom:10px;
-}
-.plugin-desc{
-  font-size:14px;color:var(--text-secondary);
-  line-height:1.75;max-width:560px;
-  /* explicit now: it used to inherit margin-bottom from .cs-section p, which
-     no longer reaches it */
-  margin:0 0 12px;
-}
 
-/* The pipeline diagram and the mock GitHub PR card were removed in Sept 2026
-   along with the Token Sync bench they belonged to - the plugins page is a
-   video reel now. Roughly 130 lines. Checked first: no page carries .pv-*,
-   .pr-* or the .diff-line / .diff-file-head diff classes. Note those are a
-   different family from .diff-item / .diff-marg / .diff-lesson / .diff-text,
-   which are the reflection block below and very much in use. */
+/* ══ Before/after comparison, one seam ═════════════════════════════════════
+   SHARED, because two case studies now use it: the LUX light/dark seam and
+   the Copilot wrap-up before/after. It was written inline on the LUX page
+   first; this is that code moved, not a second copy of it.
+
+   What stayed behind on LUX is everything specific to what LUX compares: the
+   token chips, their leader lines, the hotspot dots and the gutter that makes
+   room for them. What moved here is the mechanism and the box.
+
+   Two things are parameters rather than values, because they were LUX's
+   answers and not the component's:
+     --cmp-ar   the aspect ratio of the pair of images
+     --cmp-gut  side padding, for a page that needs room beside the frame
+   A page that needs neither sets neither.
+
+.cmp{margin-top:22px;--p:50%;--cmp-gut:0%}
+.cmp-stage{position:relative;padding:0 var(--cmp-gut)}
+.cmp-frame{position:relative;overflow:hidden;border-radius:var(--radius-lg);
+  border:1px solid var(--border-subtle);background:var(--surface-sunken);
+  /* Per page: the two images decide this, not the component. */
+  aspect-ratio:var(--cmp-ar, 16/9);
+  /* 18px/40px light, 26px/52px dark. Shadows are not symmetric between
+     themes, and the dark one was 48/96 until it was measured: a 96px blur on
+     an 800x450 box is a large paint region, and it sits under a child whose
+     clip-path changes on every frame of a drag. 52px still reads as depth on
+     near-black. */
+  box-shadow:0 18px 40px rgba(18,18,19,.16)}
+[data-theme="dark"] .cmp-frame{box-shadow:0 26px 52px rgba(0,0,0,.72)}
+
+.cmp-side{position:absolute;inset:0}
+.cmp-side img{width:100%;height:100%;display:block;object-fit:cover}
+/* One side sits behind at full width; the other is clipped from the right, so
+   the seam is at --p and the clipped side occupies the left.
+
+   .cmp-clip, not .cmp-dark. The rule was named for what LUX happens to put in
+   it, and Copilot puts "before" there instead - a class called cmp-dark
+   holding a screenshot of an empty text field is a comment that lies. The
+   page keeps its own semantic class alongside this one. */
+.cmp-clip{clip-path:inset(0 calc(100% - var(--p)) 0 0)}
+
+/* The input is the control. Full size and invisible, so a press anywhere in
+   the frame jumps the seam there and then drags - which the old version could
+   not do, it needed the handle grabbed. */
+.cmp-input{position:absolute;inset:0;z-index:4;width:100%;height:100%;margin:0;
+  opacity:0;cursor:ew-resize;-webkit-appearance:none;appearance:none;
+  background:transparent;
+  /* pan-y, stated rather than left to the default: the input covers a tall
+     image, so a vertical swipe that starts on it has to scroll the page while
+     horizontal drags still move the seam. */
+  touch-action:pan-y}
+.cmp-input::-webkit-slider-thumb{-webkit-appearance:none;width:44px;height:100vh}
+.cmp-input::-moz-range-thumb{width:44px;height:100vh;border:0;background:transparent}
+
+.cmp-handle{position:absolute;top:0;bottom:0;left:var(--p);z-index:3;
+  width:44px;margin-left:-22px;pointer-events:none;
+  display:flex;flex-direction:column;align-items:center}
+.cmp-line{flex:1;width:2px;background:rgba(255,255,255,.72);
+  box-shadow:0 0 6px rgba(0,0,0,.45)}
+/* position:relative so the ::after ring below can inset against it. */
+.cmp-pill{position:relative;flex-shrink:0;width:36px;height:36px;border-radius:50%;
+  background:rgba(20,20,24,.95);border:2px solid rgba(255,255,255,.55);
+  color:#fff;display:flex;align-items:center;justify-content:center;
+  box-shadow:0 4px 16px rgba(0,0,0,.5)}
+.cmp-pill svg{width:14px;height:14px;display:block}
+/* The pulse invites the drag, and it stops once the thing has been used -
+   an affordance hint that keeps pulsing is just noise.
+
+   It is a ring on a pseudo-element animating transform and opacity, NOT a
+   box-shadow animation. The box-shadow version spread a 16px shadow out and
+   back forever, and box-shadow is painted: every frame invalidated a region
+   around the handle, which sits on top of a large image whose clip-path the
+   seam is also changing. Transform and opacity composite instead, so the ring
+   is a GPU matrix on a cached 36px texture and touches no paint at all. Same
+   animation to look at, and it was one of only two infinite box-shadow
+   animations on the site. */
+.cmp-pill::after{content:"";position:absolute;inset:-2px;border-radius:50%;
+  border:2px solid rgba(255,255,255,.55);pointer-events:none;opacity:0}
+.cmp:not(.cmp-used) .cmp-pill::after{
+  animation:cmpPulse 1.9s ease-out infinite}
+@keyframes cmpPulse{
+  0%  {transform:scale(1);   opacity:.55}
+  70%,100%{transform:scale(1.95); opacity:0}
+}
+@media(prefers-reduced-motion:reduce){
+  .cmp:not(.cmp-used) .cmp-pill::after{animation:none;opacity:0}
+}
+/* The input is invisible, so its focus ring would be too. Put it on the pill. */
+.cmp-input:focus-visible~.cmp-handle .cmp-pill{
+  outline:3px solid var(--action-primary);outline-offset:3px}
+
+.cmp-hint{margin-top:10px;text-align:center;font-size:11.5px;
+  color:var(--text-tertiary);letter-spacing:.03em}
+
+/* ── side labels ───────────────────────────────────────────────────────────
+   Not on LUX, which names its halves through the token chips instead. Placed
+   top-left and top-right and pinned to the FRAME rather than to the seam, so
+   they never slide under the handle or collide with each other as it moves.
+   Fixed dark chrome on purpose: a label sits on whichever image is behind it,
+   so it cannot take its colour from the document theme, the same reasoning as
+   the handle and the phone bezel. */
+.cmp-label{position:absolute;top:10px;z-index:2;pointer-events:none;
+  padding:4px 10px;border-radius:var(--radius-full);
+  background:rgba(16,17,19,.82);color:#fff;
+  font-size:10px;font-weight:800;letter-spacing:.07em;text-transform:uppercase;
+  line-height:1.3}
+.cmp-label-a{left:10px}
+.cmp-label-b{right:10px}
+
+/* ── Plugin blocks: removed ────────────────────────────────────────────────
+   .plugins-list, .plugin-block, .plugin-head, .plugin-num, .plugin-tag,
+   .plugin-title and .plugin-desc lived here, 54 lines of them. Only the
+   Copilot page ever used them - the Plugins case study, despite the name,
+   uses the .vs reel - and the Copilot page's three cards were replaced by the
+   interactive player, which says the same three things by showing them.
+   Nothing on the site referenced these afterwards, so they went with the
+   markup rather than being left behind for the next dead-code scan to find.
+   In git if they are wanted back.                                          */
 
 /* ── Stat cards ───────────────────────────────────────────────────────────── */
 .stat-grid{
@@ -604,8 +665,6 @@ html[data-cs-idle]   .cs-field i{animation-play-state:paused}
   .stat-grid{grid-template-columns:1fr 1fr}
   .stat-grid .stat-card:last-child{grid-column:1/-1}
   .stat-num{font-size:36px}
-  .plugin-block{padding:18px 18px 18px 22px}
-  .plugin-title{font-size:17px}
 }
 @media(max-width:480px){
   .cs-body{padding:20px 18px 80px}
@@ -634,6 +693,4 @@ html[data-cs-idle]   .cs-field i{animation-play-state:paused}
   .chip{font-size:10.5px}
   .ai-card-label{font-size:10.5px}
   .cs-section-num,.diff-marg{font-size:10.5px}
-  .plugin-tag{font-size:10.5px}
-  .plugin-num{font-size:10.5px}
 }

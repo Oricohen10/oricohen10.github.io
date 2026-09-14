@@ -55,12 +55,27 @@ def main():
         # mobile, plus #modal-bg which the 767px block hides outright. Judging
         # those against a 320px viewport produced 8 findings and all 8 were
         # unreachable content.
+        # A second kind of unreachable: a subtree that is laid out at a fixed
+        # size and then transform:scale()d down inside a clipping parent. The
+        # Copilot player does exactly this - .cp-stage is 1370x898 with
+        # transform-origin:top left, .cp-fit sets overflow:hidden, and the JS
+        # does scale = Math.min(1, fit.clientWidth / 1370), so it can never be
+        # wider than the space it has. Judging the declared widths against a
+        # 320px viewport reported four overflows that cannot happen.
+        #
+        # This is arithmetic on stylesheet values; a transform is invisible to
+        # it. Named explicitly rather than inferred, so adding a scaled module
+        # is a deliberate entry here and not a silent hole. Anything NOT in
+        # this set is still judged.
+        SCALED_HOSTS={'cp-fit'}
         dom=parse(page)
         unreachable=set()
         for n in dom.root.walk():
             host=None
             for a in [n]+list(n.ancestors()):
-                if a.attrs.get('id') in ('app','modal-bg') or 'win' in a.cls():
+                if (a.attrs.get('id') in ('app','modal-bg')
+                        or 'win' in a.cls()
+                        or SCALED_HOSTS & set(a.cls())):
                     host=a; break
             if host is not None: unreachable.update(n.cls()+[n.attrs.get('id','')])
         present=set()
