@@ -39,8 +39,8 @@
   }
 }
 </script>
-<link rel="stylesheet" href="../../src/tokens.css?v=202609231800"/>
-<link rel="stylesheet" href="../shared/case-study.css?v=202609231800"/>
+<link rel="stylesheet" href="../../src/tokens.css?v=202609231911"/>
+<link rel="stylesheet" href="../shared/case-study.css?v=202609231911"/>
 <script>try{if(localStorage.getItem('ori-theme')==='dark')document.documentElement.setAttribute('data-theme','dark')}catch(e){}
 if(window.self!==window.top){var _s=document.createElement('style');_s.textContent='*{cursor:none!important}';document.head.appendChild(_s);}</script>
 <style>
@@ -74,8 +74,19 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
   align-items:center;justify-content:center;gap:10px;
   padding:24px;text-align:center;
   border:2px dashed var(--border-default);border-radius:var(--radius-lg)}
-.cmp-ph-before{background:var(--surface-sunken)}
-.cmp-ph-after{background:color-mix(in srgb,var(--action-primary) 6%,var(--surface-raised))}
+.cmp-ph-before{background:var(--surface-sunken);padding-right:calc(50% + 24px)}
+.cmp-ph-after{background:color-mix(in srgb,var(--action-primary) 6%,var(--surface-raised));padding-left:calc(50% + 24px)}
+/* Each label centres in its own half. Both layers are full-frame, so centred
+   on the frame they printed on top of each other at the seam. */
+
+/* The figure sits straight under the hero, where .cs-content's 52px flex gap
+   already spaces it. Its own 26px and the seam's 22px stacked on top made
+   100px, the one gap on the page twice the section rhythm. */
+.cs-content > .cs-media{margin-top:0}
+.cs-content > .cs-media > .cmp{margin-top:0}
+/* A phone-width half is ~170px across and ~110px tall, not enough for the
+   description and filename under the kicker, which ran into the pills. */
+@media(max-width:720px){.cmp-ph .cmp-ph-t,.cmp-ph .cmp-ph-f{display:none}}
 .cmp-ph-k{font-size:11px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;
   color:var(--action-primary)}
 .cmp-ph-t{max-width:34ch;font-size:13px;line-height:1.6;color:var(--text-secondary)}
@@ -742,7 +753,7 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
   </svg>
 </button>
 
-<script src="../shared/case-study.js?v=202609231800" defer></script>
+<script src="../shared/case-study.js?v=202609231911" defer></script>
 <script>
 (function(){
   var stage = document.getElementById('cpStage'),

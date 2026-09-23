@@ -609,7 +609,12 @@ html[data-cs-idle]   .cs-field i{animation-play-state:paused}
    1140 now, and the page itself goes single column at 1000 so the content gets
    the sidebar's width back before things get tight. */
 @media(max-width:1000px){
-  .cs-body{grid-template-columns:1fr;gap:28px;padding:32px 24px 90px}
+  /* minmax(0,1fr), not 1fr. A bare 1fr has a min-content floor, so the
+     widest thing in the column sets the column: the Copilot player's 1370px
+     stage pushed it to 1180px at every width under 1000, and body's
+     overflow-x:clip hid the rest of the page off the right edge. The desktop
+     rule above already says minmax(0,1fr) for the same reason. */
+  .cs-body{grid-template-columns:minmax(0,1fr);gap:28px;padding:32px 24px 90px}
   /* ── The meta block becomes one card ──────────────────────────────────
      On mobile this stack used to carry four separate rules: the accent bar
      down the left of the fields, the .sb-div above the nutshell, the
