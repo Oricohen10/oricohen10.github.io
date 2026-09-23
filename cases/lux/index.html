@@ -16,8 +16,8 @@
 <meta name="twitter:description" content="How Ori Cohen built Verint's enterprise design system from scratch — one language for 40+ products and 10k+ users."/>
 <meta name="twitter:image" content="https://oricohen.co/cases/lux/images/og-image.png"/>
 <meta name="author" content="Ori Cohen"/>
-<link rel="stylesheet" href="../../src/tokens.css?v=202609132210"/>
-<link rel="stylesheet" href="../shared/case-study.css?v=202609132210"/>
+<link rel="stylesheet" href="../../src/tokens.css?v=202609231800"/>
+<link rel="stylesheet" href="../shared/case-study.css?v=202609231800"/>
 <!-- Hide default cursor when embedded in the portfolio iframe -->
 <script>try{if(localStorage.getItem('ori-theme')==='dark')document.documentElement.setAttribute('data-theme','dark')}catch(e){}
 if(window.self!==window.top){var _s=document.createElement('style');_s.textContent='*{cursor:none!important}';document.head.appendChild(_s);}</script>
@@ -437,7 +437,7 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
 
    Two chips left, two right, by Ori's rule - the label goes to the edge its
    element is nearest, so the primary button at x:83.9% is labelled from the
-   right. With anchors at 29.6, 38.9, 56.3 and 83.9 that splits 2/2 on its own.
+   right. With anchors at 29.6, 38.9, 62 and 83.9 that splits 2/2 on its own.
 
    No infinite animation in this module at desktop width. The ping ring is the
    affordance hint for the hotspots, so it only runs in the mode that has
@@ -763,7 +763,7 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
       <figure class="cs-media">
       <!-- The variables browser. Replaces the component-library screenshot:
            the same claim, but checkable. -->
-      <div class="vb-shell" data-dv="202609132210">
+      <div class="vb-shell" data-dv="202609231800">
         <div class="vb" id="vb" role="group"
              aria-label="LUX 2.0 variable library, browsable">
           <div class="vb-side">
@@ -874,7 +874,7 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
                 <i class="cmp-lead cmp-lead-l" data-n="1"
                    style="--x:38.9%;--y:14.8%"></i>
                 <i class="cmp-lead cmp-lead-r" data-n="2"
-                   style="--x:56.3%;--y:33.5%"></i>
+                   style="--x:62%;--y:27.6%"></i>
                 <i class="cmp-lead cmp-lead-l" data-n="3"
                    style="--x:29.6%;--y:61.2%"></i>
                 <i class="cmp-lead cmp-lead-r" data-n="4"
@@ -887,7 +887,7 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
                   <span class="cmp-dot"></span>
                 </button>
                 <button type="button" class="cmp-hot" data-n="2"
-                        style="--x:56.3%;--y:33.5%;--d:0.55s" aria-pressed="false"
+                        style="--x:62%;--y:27.6%;--d:0.55s" aria-pressed="false"
                         aria-label="Radio card border, painted by border.neutral.regular">
                   <span class="cmp-dot"></span>
                 </button>
@@ -910,7 +910,7 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
                 <span class="cmp-ann-n">layer.level_3</span>
               </span>
               <span class="cmp-ann cmp-ann-r" data-n="2"
-                    style="--y:33.5%" aria-hidden="true">
+                    style="--y:27.6%" aria-hidden="true">
                 <i class="cmp-ann-dot" style="background-color:#dfe2e4"></i>
                 <span class="cmp-ann-n">border.neutral.regular</span>
               </span>
@@ -995,7 +995,7 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
   </svg>
 </button>
 
-<script src="../shared/case-study.js?v=202609132210" defer></script>
+<script src="../shared/case-study.js?v=202609231800" defer></script>
 <script>
 /* The seam itself is driven by cases/shared/case-study.js, which wires every
    .cmp on the page. What is left here is the token hotspots, which are

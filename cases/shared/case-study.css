@@ -328,7 +328,7 @@ html[data-cs-idle]   .cs-field i{animation-play-state:paused}
    answers and not the component's:
      --cmp-ar   the aspect ratio of the pair of images
      --cmp-gut  side padding, for a page that needs room beside the frame
-   A page that needs neither sets neither.
+   A page that needs neither sets neither. */
 
 .cmp{margin-top:22px;--p:50%;--cmp-gut:0%}
 .cmp-stage{position:relative;padding:0 var(--cmp-gut)}

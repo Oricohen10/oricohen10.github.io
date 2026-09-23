@@ -309,6 +309,13 @@ every `.b` actually has `.a` in its ancestor chain. Balance counters
 cannot see this; a path walk cannot miss it.
 
 What actually catches the CSS ones:
+- **An unclosed `/*` swallows every rule up to the next `*/`.** Valid CSS,
+  no warning. When the seam moved into the shared sheet its header comment
+  lost its `*/`, which silently deleted `.cmp`, `.cmp-stage` and most of
+  `.cmp-frame`: the frame collapsed to 0px, the image spilled out cropped,
+  and `--cmp-gut` was undefined so every LUX hotspot stacked on the left
+  edge. Scan: any comment body containing `\n.class{prop:` is a swallowed
+  rule.
 - Split the stylesheet **by cascade context** (base, then each `@media`)
   and flag any selector declared twice within one context. A media query
   repeating a base selector is correct; the same selector twice in one
