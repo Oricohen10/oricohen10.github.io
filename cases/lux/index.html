@@ -4,6 +4,8 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Verint Design System - Case Study - Ori Cohen</title>
+<link rel="icon" type="image/svg+xml" href="../../Assets/favicon.svg"/>
+<link rel="apple-touch-icon" href="../../Assets/apple-touch-icon.png"/>
 <meta name="description" content="How Ori Cohen built Verint's enterprise design system from scratch — one language for 40+ products and 10k+ users."/>
 <link rel="canonical" href="https://oricohen.co/cases/lux/"/>
 <meta property="og:type" content="article"/>
@@ -16,8 +18,8 @@
 <meta name="twitter:description" content="How Ori Cohen built Verint's enterprise design system from scratch — one language for 40+ products and 10k+ users."/>
 <meta name="twitter:image" content="https://oricohen.co/cases/lux/images/og-image.png"/>
 <meta name="author" content="Ori Cohen"/>
-<link rel="stylesheet" href="../../src/tokens.css?v=202609300818"/>
-<link rel="stylesheet" href="../shared/case-study.css?v=202609300818"/>
+<link rel="stylesheet" href="../../src/tokens.css?v=202609300843"/>
+<link rel="stylesheet" href="../shared/case-study.css?v=202609300843"/>
 <!-- Hide default cursor when embedded in the portfolio iframe -->
 <script>try{if(localStorage.getItem('ori-theme')==='dark')document.documentElement.setAttribute('data-theme','dark')}catch(e){}
 if(window.self!==window.top){var _s=document.createElement('style');_s.textContent='*{cursor:none!important}';document.head.appendChild(_s);}</script>
@@ -36,7 +38,9 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
 
 /* -- Chip variant ------------------------------------------------------- */
 .chip--system{background:rgba(91,63,199,.1);color:#5b3fc7}
-[data-theme="dark"] .chip--system{background:rgba(167,139,250,.10);color:#af95fa}
+/* 20% toward white from the old value: on the tinted mobile meta card the
+   chip measured 3.80:1. Now 4.64:1, and higher still on desktop. */
+[data-theme="dark"] .chip--system{background:rgba(167,139,250,.10);color:#bfaafb}
 
 /* -- Sidebar tag (pill chip with accent border) ------------------------- */
 
@@ -200,16 +204,16 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
   border:0;background:transparent;color:var(--vb-ink);
   padding:5px 8px;min-height:24px;border-radius:5px}
 .vb-row:hover{background:var(--vb-line-2)}
-.vb-row[aria-selected="true"]{background:var(--vb-sel);font-weight:600;
+.vb-row[aria-selected="true"],.vb-row[aria-current="true"]{background:var(--vb-sel);font-weight:600;
   position:relative}
-.vb-groups .vb-row[aria-selected="true"]{background:var(--vb-selb)}
-.vb-row[aria-selected="true"]::before{content:"";position:absolute;
+.vb-groups .vb-row[aria-current="true"]{background:var(--vb-selb)}
+.vb-row[aria-selected="true"]::before,.vb-row[aria-current="true"]::before{content:"";position:absolute;
   left:0;top:3px;bottom:3px;width:2px;border-radius:2px;
   background:var(--vb-accent)}
 .vb-row-n{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;
   white-space:nowrap}
 .vb-row-c{flex-shrink:0;color:var(--vb-ink-3t);font-variant-numeric:tabular-nums}
-.vb-row[aria-selected="true"] .vb-row-c{color:var(--vb-ink-2)}
+.vb-row[aria-selected="true"] .vb-row-c,.vb-row[aria-current="true"] .vb-row-c{color:var(--vb-ink-2)}
 .vb-groups{overflow-y:auto;flex:1;min-height:0}
 /* A group row is a toggle plus a label, two controls rather than one. The
    caret expands, the name filters. Overloading a single row with both is
@@ -695,7 +699,7 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
 <div class="cs-body">
 
   <!-- Sidebar -->
-  <aside class="sidebar">
+  <aside class="sidebar" aria-label="Project details">
     <span class="chip chip--system">Design System</span>
     <div class="sb-fields">
       <div>
@@ -763,7 +767,7 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
       <figure class="cs-media">
       <!-- The variables browser. Replaces the component-library screenshot:
            the same claim, but checkable. -->
-      <div class="vb-shell" data-dv="202609300818">
+      <div class="vb-shell" data-dv="202609300843">
         <div class="vb" id="vb" role="group"
              aria-label="LUX 2.0 variable library, browsable">
           <div class="vb-side">
@@ -995,7 +999,7 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
   </svg>
 </button>
 
-<script src="../shared/case-study.js?v=202609300818" defer></script>
+<script src="../shared/case-study.js?v=202609300843" defer></script>
 <script>
 /* The seam itself is driven by cases/shared/case-study.js, which wires every
    .cmp on the page. What is left here is the token hotspots, which are
@@ -1339,12 +1343,12 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
 
     function label(cls, g, name, count){
       return '<button class="vb-row ' + cls + '" data-g="' + esc(g) + '"' +
-        ' aria-selected="' + (curGroup === g) + '">' +
+        (curGroup === g ? ' aria-current="true"' : '') + '>' +
         '<span class="vb-row-n">' + esc(name) + '</span>' +
         '<span class="vb-row-c">' + count + '</span></button>';
     }
 
-    var html = '<li role="presentation"><div class="vb-grow">' +
+    var html = '<li><div class="vb-grow">' +
       '<span class="vb-spacer" aria-hidden="true"></span>' +
       label('', '', 'All', rows.length) + '</div></li>';
 
@@ -1352,7 +1356,7 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
       var sub = kids[g], subKeys = sub ? Object.keys(sub) : [];
       var id = 'vb-g-' + i;
       var isOpen = !!open[g];
-      html += '<li role="presentation"><div class="vb-grow">';
+      html += '<li><div class="vb-grow">';
       if (subKeys.length){
         /* A disclosure button, not a div with a click handler: it gets the
            role, the keyboard and aria-expanded for free. */
@@ -1367,7 +1371,7 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
       if (subKeys.length){
         html += '<ul class="vb-sub" id="' + id + '"' + (isOpen ? '' : ' hidden') + '>';
         subKeys.forEach(function(k){
-          html += '<li role="presentation"><div class="vb-grow">' +
+          html += '<li><div class="vb-grow">' +
             '<span class="vb-spacer" aria-hidden="true"></span>' +
             label('', k, k.split('/')[1], sub[k]) + '</div></li>';
         });

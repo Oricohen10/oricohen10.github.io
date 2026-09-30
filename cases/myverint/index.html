@@ -4,6 +4,8 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>My Verint - Case Study - Ori Cohen</title>
+<link rel="icon" type="image/svg+xml" href="../../Assets/favicon.svg"/>
+<link rel="apple-touch-icon" href="../../Assets/apple-touch-icon.png"/>
 <meta name="description" content="How Ori Cohen redesigned My Verint - merging two disconnected mobile apps into a unified, AI-powered experience for 10,000+ contact center employees."/>
 <link rel="canonical" href="https://oricohen.co/cases/myverint/"/>
 <meta property="og:type" content="article"/>
@@ -16,8 +18,8 @@
 <meta name="author" content="Ori Cohen"/>
 <meta name="twitter:title" content="My Verint - Case Study - Ori Cohen"/>
 <meta name="twitter:description" content="How Ori Cohen redesigned My Verint - merging two disconnected mobile apps into a unified, AI-powered experience for 10,000+ contact center employees."/>
-<link rel="stylesheet" href="../../src/tokens.css?v=202609300818"/>
-<link rel="stylesheet" href="../shared/case-study.css?v=202609300818"/>
+<link rel="stylesheet" href="../../src/tokens.css?v=202609300843"/>
+<link rel="stylesheet" href="../shared/case-study.css?v=202609300843"/>
 <script>try{if(localStorage.getItem('ori-theme')==='dark')document.documentElement.setAttribute('data-theme','dark')}catch(e){}
 if(window.self!==window.top){var _s=document.createElement('style');_s.textContent='*{cursor:none!important}';document.head.appendChild(_s);}</script>
 <style>
@@ -37,7 +39,9 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
 
 /* -- Chip variant ------------------------------------------------------- */
 .chip--mobile{background:rgba(139,26,46,.1);color:#8B1A2E}
-[data-theme="dark"] .chip--mobile{background:rgba(232,113,138,.10);color:#EB859A}
+/* 20% toward white from the old value: on the tinted mobile meta card the
+   chip measured 3.92:1. Now 4.75:1, and higher still on desktop. */
+[data-theme="dark"] .chip--mobile{background:rgba(232,113,138,.10);color:#ef9dae}
 
 
 /* Inline media modules replace the carousel: media sits beside the claim it
@@ -75,6 +79,9 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
 .sc-tab.active{background:var(--action-primary-subtle);color:var(--action-primary);font-weight:700}
 .sc-tab:focus-visible{outline:2px solid var(--action-primary);outline-offset:2px}
 .sc-tab-label{min-width:0}   /* no flex:1 - the badge hugs the label */
+/* The active label sits on its own accent tint, where the dark accent
+   #E8718A was 3.87:1. 20% lighter is 4.83:1. */
+[data-theme="dark"] .sc-tab.active .sc-tab-label{color:#ed8da1}
 .sc-tab-badge{font-size:11px;font-weight:700;padding:2px 8px;border-radius:var(--radius-full);
   background:var(--action-primary);color:var(--text-on-accent);letter-spacing:.04em}
 
@@ -256,7 +263,7 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
 <div class="cs-body">
 
   <!-- Sidebar -->
-  <aside class="sidebar">
+  <aside class="sidebar" aria-label="Project details">
     <span class="chip chip--mobile">Mobile</span>
     <div class="sb-fields">
       <div>
@@ -530,7 +537,7 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
   </svg>
 </button>
 
-<script src="../shared/case-study.js?v=202609300818" defer></script>
+<script src="../shared/case-study.js?v=202609300843" defer></script>
 <script>
 /* "The Design" tabs - opacity crossfade only.
    Adopted from the original implementation: every video runs continuously

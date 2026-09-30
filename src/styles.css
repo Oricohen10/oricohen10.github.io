@@ -71,6 +71,9 @@ body{font-family:var(--f);background:var(--canvas);color:var(--tx)}
 #modal-box{background:var(--mbox);border:1px solid var(--mbd);border-radius:16px;padding:28px 28px 24px;width:400px;box-shadow:0 32px 80px rgba(0,0,0,.22),0 0 0 1px rgba(0,0,0,.04);transform:scale(.92) translateY(20px);transition:transform .4s cubic-bezier(.34,1.56,.64,1),background .15s,border-color .15s}
 #modal-bg.show #modal-box{transform:scale(1) translateY(0)}
 .m-badge{display:flex;align-items:center;gap:6px;font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--figma);margin-bottom:12px}
+/* The homepage keeps purple-600 as its accent in dark (its buttons fill from
+   the fixed ramp), so as ink this badge was 2.4:1. purple-300 is 6.2:1. */
+[data-theme="dark"] .m-badge{color:var(--purple-300)}
 .m-dot{width:6px;height:6px;background:var(--figma);border-radius:50%;animation:pulse 1.8s infinite}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
 .m-q{font-size:17px;font-weight:700;color:var(--tx);letter-spacing:-.3px;line-height:1.35;margin-bottom:18px}
@@ -178,7 +181,10 @@ i.ph,i.ph-bold,i.ph-fill,i.ph-light{line-height:1;display:flex;align-items:cente
 }
 #fw svg{shape-rendering:geometricPrecision}
 #flabel{position:absolute;bottom:calc(100% + 7px);left:0;font-size:11px;font-weight:600;color:var(--tx-brand);white-space:nowrap;pointer-events:auto;user-select:none;padding:2px 4px}
-#fborder{position:relative;border:2px solid var(--blue);background:var(--frm);transition:background .15s}
+/* 600x420 is main.js's fW/fH default. Stated here too so the frame paints at
+   its final size; unsized, it grew into place ~180ms after load and pushed
+   the welcome copy and CTAs with it (CLS 0.11 on its own). */
+#fborder{position:relative;border:2px solid var(--blue);background:var(--frm);transition:background .15s;width:600px;height:420px}
 .rh{position:absolute;width:7px;height:7px;background:#fff;border:1.5px solid var(--blue);border-radius:1px;z-index:5;transition:transform .1s}
 .rh:hover{transform:scale(1.3)}
 .rh-tl{top:-4px;left:-4px}.rh-tc{top:-4px;left:calc(50% - 3.5px)}.rh-tr{top:-4px;right:-4px}
@@ -606,7 +612,9 @@ i.ph,i.ph-bold,i.ph-fill,i.ph-light{line-height:1;display:flex;align-items:cente
 /* ── Presence + Comments panel ── */
 .rp-section{border-bottom:1px solid var(--bd);flex-shrink:0}
 .rp-sh{padding:9px 12px;display:flex;align-items:center;gap:6px;font-size:11px;font-weight:700;color:var(--tx);flex-shrink:0}
-.rp-avatars{display:flex;padding:4px 12px 10px}
+/* min-height = one .rp-av. The portraits are injected by JS, and the empty
+   row used to collapse and then push Comments down 28px when they arrived. */
+.rp-avatars{display:flex;padding:4px 12px 10px;min-height:28px;box-sizing:content-box}
 .rp-av{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;color:#fff;position:relative;flex-shrink:0;overflow:hidden;box-sizing:border-box;border:2.5px solid var(--panel);margin-right:-7px;z-index:1;cursor:default;transition:transform .15s,box-shadow .15s}
 .rp-av:hover{transform:translateY(-3px) scale(1.1);z-index:10!important;box-shadow:0 4px 14px rgba(0,0,0,.35)}
 .rp-av:last-child{margin-right:0}

@@ -4,6 +4,8 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Agent Factory - Case Study - Ori Cohen</title>
+<link rel="icon" type="image/svg+xml" href="../../Assets/favicon.svg"/>
+<link rel="apple-touch-icon" href="../../Assets/apple-touch-icon.png"/>
 <meta name="description" content="Designing Verint Agent Factory - the platform for building, managing, and orchestrating AI agents in the enterprise contact center."/>
 <link rel="canonical" href="https://oricohen.co/cases/agent-factory/"/>
 <meta property="og:type" content="article"/>
@@ -12,8 +14,8 @@
 <meta property="og:url" content="https://oricohen.co/cases/agent-factory/"/>
 <meta property="og:image" content="https://oricohen.co/cases/agent-factory/images/og-image.jpg"/>
 <meta name="twitter:card" content="summary_large_image"/>
-<link rel="stylesheet" href="../../src/tokens.css?v=202609300818"/>
-<link rel="stylesheet" href="../shared/case-study.css?v=202609300818"/>
+<link rel="stylesheet" href="../../src/tokens.css?v=202609300843"/>
+<link rel="stylesheet" href="../shared/case-study.css?v=202609300843"/>
 <script>if(window.self!==window.top){var _s=document.createElement('style');_s.textContent='*{cursor:none!important}';document.head.appendChild(_s);}</script>
 <style>
 /* -- Project accent: Agent Factory = Verint blue ------------------------- */
@@ -30,7 +32,9 @@
 
 /* -- Chip variant ------------------------------------------------------- */
 .chip--platform{background:rgba(6,100,168,.1);color:#0664a8}
-[data-theme="dark"] .chip--platform{background:rgba(96,165,250,.10);color:#66a9fa}
+/* 20% toward white from the old value: on the tinted mobile meta card the
+   chip measured 3.88:1. Now 4.69:1, and higher still on desktop. */
+[data-theme="dark"] .chip--platform{background:rgba(96,165,250,.10);color:#85bafb}
 
 /* -- Carousel: light background for screenshots ------------------------- */
 </style>
@@ -74,7 +78,7 @@
 <div class="cs-body">
 
   <!-- Sidebar -->
-  <aside class="sidebar">
+  <aside class="sidebar" aria-label="Project details">
     <span class="chip chip--platform">AI Platform</span>
     <div class="sb-fields">
       <div>
@@ -114,6 +118,6 @@
   </main><!-- /cs-content -->
 </div><!-- /cs-body -->
 
-<script src="../shared/case-study.js?v=202609300818"></script>
+<script src="../shared/case-study.js?v=202609300843"></script>
 </body>
 </html>

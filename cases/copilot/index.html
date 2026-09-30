@@ -4,6 +4,8 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Agent Copilot - Case Study - Ori Cohen</title>
+<link rel="icon" type="image/svg+xml" href="../../Assets/favicon.svg"/>
+<link rel="apple-touch-icon" href="../../Assets/apple-touch-icon.png"/>
 <meta name="description" content="Designing the real-time AI panel that coaches contact center agents during live customer conversations. Hackathon to Verint Engage in six months."/>
 <link rel="canonical" href="https://oricohen.co/cases/copilot/"/>
 <meta property="og:type" content="article"/>
@@ -39,8 +41,8 @@
   }
 }
 </script>
-<link rel="stylesheet" href="../../src/tokens.css?v=202609300818"/>
-<link rel="stylesheet" href="../shared/case-study.css?v=202609300818"/>
+<link rel="stylesheet" href="../../src/tokens.css?v=202609300843"/>
+<link rel="stylesheet" href="../shared/case-study.css?v=202609300843"/>
 <script>try{if(localStorage.getItem('ori-theme')==='dark')document.documentElement.setAttribute('data-theme','dark')}catch(e){}
 if(window.self!==window.top){var _s=document.createElement('style');_s.textContent='*{cursor:none!important}';document.head.appendChild(_s);}</script>
 <style>
@@ -57,7 +59,9 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
 }
 
 /* -- Chip variant ------------------------------------------------------- */
-.chip--ai{background:rgba(4,120,87,.1);color:#047857}
+/* emerald-800 ink, not 700: on the tinted mobile meta card #047857 was
+   4.17:1. #065f46 is 5.84:1 there and 6.65:1 on desktop. */
+.chip--ai{background:rgba(4,120,87,.1);color:#065f46}
 [data-theme="dark"] .chip--ai{background:rgba(52,211,153,.10);color:#34d399}
 
 
@@ -418,7 +422,7 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
 <div class="cs-body">
 
   <!-- Sidebar -->
-  <aside class="sidebar">
+  <aside class="sidebar" aria-label="Project details">
     <span class="chip chip--ai">AI Product</span>
     <div class="sb-fields">
       <div>
@@ -630,7 +634,7 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
 
                     <div class="cp-split"></div>
 
-                    <aside class="cp-journey">
+                    <div class="cp-journey">
                       <div class="cp-jtabs"><span>Latest Contact</span><span class="on">Customer Journey</span><span>Recent Cases</span></div>
                       <div class="cp-jbody">
                         <div class="cp-jitem">
@@ -657,16 +661,16 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
                           </div>
                         </div>
                       </div>
-                    </aside>
+                    </div>
                   </div>
                 </div>
 
                 <!-- copilot panel -->
-                <aside class="cp-panel">
+                <div class="cp-panel">
                   <div class="cp-panelhead" id="cpHead"><i class="cp-bot"></i>Copilot<i class="cp-chev end"></i></div>
                   <div class="cp-cards" id="cpCards"></div>
                   <div class="cp-ask"><span>Type your question here</span><i class="ic ic-send"></i></div>
-                </aside>
+                </div>
               </div>
             </div>
           </div>
@@ -753,7 +757,7 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
   </svg>
 </button>
 
-<script src="../shared/case-study.js?v=202609300818" defer></script>
+<script src="../shared/case-study.js?v=202609300843" defer></script>
 <script>
 (function(){
   var stage = document.getElementById('cpStage'),

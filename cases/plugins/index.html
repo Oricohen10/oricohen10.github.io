@@ -4,6 +4,8 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>LUX Plugins - Case Study - Ori Cohen</title>
+<link rel="icon" type="image/svg+xml" href="../../Assets/favicon.svg"/>
+<link rel="apple-touch-icon" href="../../Assets/apple-touch-icon.png"/>
 <meta name="description" content="Four Figma plugins built for LUX 2.0 - token sync, layout scaffolding, table generator, and icon picker. Designer to GitHub in 60 seconds."/>
 <link rel="canonical" href="https://oricohen.co/cases/plugins/"/>
 <meta property="og:type" content="article"/>
@@ -39,8 +41,8 @@
   }
 }
 </script>
-<link rel="stylesheet" href="../../src/tokens.css?v=202609300818"/>
-<link rel="stylesheet" href="../shared/case-study.css?v=202609300818"/>
+<link rel="stylesheet" href="../../src/tokens.css?v=202609300843"/>
+<link rel="stylesheet" href="../shared/case-study.css?v=202609300843"/>
 <script>try{if(localStorage.getItem('ori-theme')==='dark')document.documentElement.setAttribute('data-theme','dark')}catch(e){}
 if(window.self!==window.top){var _s=document.createElement('style');_s.textContent='*{cursor:none!important}';document.head.appendChild(_s);}</script>
 <style>
@@ -58,7 +60,9 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
 
 /* -- Chip variant ------------------------------------------------------- */
 .chip--plugin{background:rgba(157,34,147,.1);color:#9d2293}
-[data-theme="dark"] .chip--plugin{background:rgba(232,121,249,.10);color:#e879f9}
+/* 20% toward white from the old value: on the tinted mobile meta card the
+   chip measured 4.03:1. Now 4.83:1, and higher still on desktop. */
+[data-theme="dark"] .chip--plugin{background:rgba(232,121,249,.10);color:#ed94fa}
 /* ══ The reel ═══════════════════════════════════════════════════════════
    One container holds the rail, the stage and the caption, so the writing
    reads as part of the recording rather than as text that happens to follow
@@ -364,7 +368,7 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
 <div class="cs-body">
 
   <!-- Sidebar -->
-  <aside class="sidebar">
+  <aside class="sidebar" aria-label="Project details">
     <span class="chip chip--plugin">Figma Plugin</span>
     <div class="sb-fields">
       <div>
@@ -584,7 +588,7 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
   </svg>
 </button>
 
-<script src="../shared/case-study.js?v=202609300818" defer></script>
+<script src="../shared/case-study.js?v=202609300843" defer></script>
 
 <script>
 /* ══ The reel ═══════════════════════════════════════════════════════════════

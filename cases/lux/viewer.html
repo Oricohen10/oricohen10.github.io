@@ -4,6 +4,9 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>LUX 2.0 - Design System Viewer</title>
+<meta name="description" content="Browse the LUX 2.0 design system components in light and dark themes, from buttons and form inputs to tabs, cards and tree views."/>
+<link rel="icon" type="image/svg+xml" href="../../Assets/favicon.svg"/>
+<link rel="apple-touch-icon" href="../../Assets/apple-touch-icon.png"/>
 <!-- Hide default cursor when embedded in the portfolio iframe -->
 <script>if(window.self!==window.top){var _s=document.createElement('style');_s.textContent='*{cursor:none!important}';document.head.appendChild(_s);}</script>
 <style>
@@ -385,7 +388,8 @@ html,body{height:100%;overflow:hidden;font-family:-apple-system,'Inter',sans-ser
   display: flex;
   gap: 8px;
   pointer-events: none;
-  opacity: .5;
+  /* No container opacity: at .5 the keys measured 2.35:1. --ink-3 on
+     --surface is 5.53:1 and already reads as secondary. */
 }
 .kb {
   font-size: 10px;
@@ -522,7 +526,7 @@ html,body{height:100%;overflow:hidden;font-family:-apple-system,'Inter',sans-ser
       </div>
     </div>
 
-    <nav id="nav">
+    <nav id="nav" aria-label="Components">
       <!-- Built by JS -->
     </nav>
 
@@ -749,8 +753,15 @@ function buildSidebar() {
 
     const header = document.createElement('div');
     header.className = 'cat-header';
-    header.innerHTML = `<span class="cat-name">${cat.name}</span><span class="cat-arrow">▾</span>`;
+    header.innerHTML = `<span class="cat-name">${cat.name}</span><span class="cat-arrow" aria-hidden="true">▾</span>`;
+    /* Clickable divs, so they get the CLAUDE.md trio: role, tabindex, keys.
+       Before this neither a category nor a component could be reached by
+       keyboard or announced as a control. */
+    header.setAttribute('role', 'button');
+    header.tabIndex = 0;
+    header.setAttribute('aria-expanded', 'true');
     header.addEventListener('click', () => toggleCat(header));
+    header.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggleCat(header); } });
 
     const items = document.createElement('div');
     items.className = 'cat-items';
@@ -760,8 +771,11 @@ function buildSidebar() {
       item.className = 'comp-item';
       item.dataset.catId = cat.id;
       item.dataset.compId = comp.id;
-      item.innerHTML = `<span class="comp-dot"></span><span class="comp-label">${comp.label}</span>`;
+      item.innerHTML = `<span class="comp-dot" aria-hidden="true"></span><span class="comp-label">${comp.label}</span>`;
+      item.setAttribute('role', 'button');
+      item.tabIndex = 0;
       item.addEventListener('click', () => selectComp(cat.id, comp.id));
+      item.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); selectComp(cat.id, comp.id); } });
       items.appendChild(item);
     });
 
@@ -775,6 +789,7 @@ function buildSidebar() {
 
 function toggleCat(header) {
   header.classList.toggle('collapsed');
+  header.setAttribute('aria-expanded', String(!header.classList.contains('collapsed')));
   header.nextElementSibling.classList.toggle('collapsed');
 }
 
@@ -787,7 +802,9 @@ function selectComp(catId, compId) {
 
   // Update sidebar active state
   document.querySelectorAll('.comp-item').forEach(el => {
-    el.classList.toggle('active', el.dataset.catId === catId && el.dataset.compId === compId);
+    const on = el.dataset.catId === catId && el.dataset.compId === compId;
+    el.classList.toggle('active', on);
+    if (on) el.setAttribute('aria-current', 'true'); else el.removeAttribute('aria-current');
   });
 
   // Find data
