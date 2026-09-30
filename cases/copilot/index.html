@@ -39,8 +39,8 @@
   }
 }
 </script>
-<link rel="stylesheet" href="../../src/tokens.css?v=202609300801"/>
-<link rel="stylesheet" href="../shared/case-study.css?v=202609300801"/>
+<link rel="stylesheet" href="../../src/tokens.css?v=202609300818"/>
+<link rel="stylesheet" href="../shared/case-study.css?v=202609300818"/>
 <script>try{if(localStorage.getItem('ori-theme')==='dark')document.documentElement.setAttribute('data-theme','dark')}catch(e){}
 if(window.self!==window.top){var _s=document.createElement('style');_s.textContent='*{cursor:none!important}';document.head.appendChild(_s);}</script>
 <style>
@@ -61,38 +61,18 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
 [data-theme="dark"] .chip--ai{background:rgba(52,211,153,.10);color:#34d399}
 
 
-/* ── before/after placeholder ──────────────────────────────────────────────
-   Page-local and clearly temporary: dashed, labelled, and naming the file it
-   is waiting for. It has to be unmistakably provisional, because committing
-   it publishes it - the sync timer puts this on the live site within a minute
-   and Ori is sending that link to employers.
+/* ── Hackathon vs shipped seam ────────────────────────────────────────────
+   Labels sit in a row above the frame. The stage gets the room; the shared
+   .cmp-label keeps its look, only its anchor changes. */
+.cmp-wrapup{--cmp-ar:16/9}  /* both exports cut to 1600x900 */
+.cmp-wrapup .cmp-stage{padding-top:30px}
+.cmp-wrapup .cmp-label{top:0}
+.cmp-wrapup .cmp-label-a{left:0}
+.cmp-wrapup .cmp-label-b{right:0}
 
-   The aspect is a guess until the real images land, so it is stated here
-   rather than left to the shared 16/9 default. */
-.cmp-wrapup{--cmp-ar:1370/898}  /* the full agent desktop, same frame as the player; confirm against the real exports */
-.cmp-ph{position:absolute;inset:0;display:flex;flex-direction:column;
-  align-items:center;justify-content:center;gap:10px;
-  padding:24px;text-align:center;
-  border:2px dashed var(--border-default);border-radius:var(--radius-lg)}
-.cmp-ph-before{background:var(--surface-sunken);padding-right:calc(50% + 24px)}
-.cmp-ph-after{background:color-mix(in srgb,var(--action-primary) 6%,var(--surface-raised));padding-left:calc(50% + 24px)}
-/* Each label centres in its own half. Both layers are full-frame, so centred
-   on the frame they printed on top of each other at the seam. */
-
-/* The figure sits straight under the hero, where .cs-content's 52px flex gap
-   already spaces it. Its own 26px and the seam's 22px stacked on top made
-   100px, the one gap on the page twice the section rhythm. */
-.cs-content > .cs-media{margin-top:0}
-.cs-content > .cs-media > .cmp{margin-top:0}
-/* A phone-width half is ~170px across and ~110px tall, not enough for the
-   description and filename under the kicker, which ran into the pills. */
-@media(max-width:720px){.cmp-ph .cmp-ph-t,.cmp-ph .cmp-ph-f{display:none}}
-.cmp-ph-k{font-size:11px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;
-  color:var(--action-primary)}
-.cmp-ph-t{max-width:34ch;font-size:13px;line-height:1.6;color:var(--text-secondary)}
-.cmp-ph-f{font-family:var(--font-mono);font-size:11px;
-  padding:3px 8px;border-radius:4px;
-  background:var(--surface-default);color:var(--text-tertiary)}
+/* Inside a section the figure's own 26px is the gap; the seam's 22px on top
+   of it would make this the one figure on the page set further off its text. */
+.cmp-fig > .cmp{margin-top:0}
 
 /* ══ Agent Copilot player ══════════════════════════════════════════════════
    Pasted verbatim from the supplied fragment. Everything is scoped to
@@ -472,64 +452,6 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
     </div>
 
     <!-- Background -->
-    <!-- ══ Before/after: hackathon vs shipped ═════════════════════════════════
-         PLACEHOLDER. The two images are not in the repo yet - the upload that
-         asked for this element did not include copilot-case-study/, so there
-         is nothing to compare. What is here is the finished interaction with a
-         labelled empty state in each half, so only the two files have to drop
-         in later.
-
-         REFRAMED (Sept 30): hackathon design on the left of the seam, shipped
-         design behind it. Both are the full agent desktop, because the Copilot
-         panel sits on the right and the comparison is only honest whole.
-
-         To activate: save the two states as images/copilot-hackathon.webp and
-         images/copilot-shipped.webp (plus .png fallbacks), swap each
-         .cmp-ph div for the <picture> commented out beside it, set --cmp-ar to
-         their real aspect, and delete the .cmp-ph rules from the style block.
-
-         To hide it instead, put a hidden attribute on the figure element
-         below. One attribute, nothing else to unpick.
-
-         The slider is the shared .cmp component, the same one as the LUX
-         light/dark seam, which moved into cases/shared for this. It brings
-         arrow keys, Home/End, click-to-jump and touch with it.            -->
-    <figure class="cs-media">
-      <div class="cmp cmp-wrapup" id="cmp-wrapup" data-cmp-unit="hackathon">
-        <div class="cmp-stage">
-          <div class="cmp-frame">
-            <!-- base layer: SHIPPED, full width, sits behind -->
-            <div class="cmp-side">
-              <div class="cmp-ph cmp-ph-after">
-                <span class="cmp-ph-k">Shipped</span>
-                <span class="cmp-ph-t">The agent desktop as released, with the final Copilot panel on the right</span>
-                <code class="cmp-ph-f">images/copilot-shipped.webp</code>
-              </div>
-            </div>
-            <!-- clipped layer: HACKATHON, occupies the left of the seam -->
-            <div class="cmp-side cmp-clip" aria-hidden="true">
-              <div class="cmp-ph cmp-ph-before">
-                <span class="cmp-ph-k">Hackathon</span>
-                <span class="cmp-ph-t">The same desktop with the first Copilot panel, as designed in the hackathon</span>
-                <code class="cmp-ph-f">images/copilot-hackathon.webp</code>
-              </div>
-            </div>
-            <input class="cmp-input" type="range" min="0" max="100" value="50" step="1"
-                   aria-label="Compare the hackathon design with the shipped design. Drag or use the arrow keys."/>
-            <span class="cmp-label cmp-label-a">Hackathon</span>
-            <span class="cmp-label cmp-label-b">Shipped</span>
-            <div class="cmp-handle" aria-hidden="true">
-              <span class="cmp-line"></span>
-              <span class="cmp-pill">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M8 8L4 12l4 4M16 8l4 4-4 4"/></svg>
-              </span>
-              <span class="cmp-line"></span>
-            </div>
-          </div>
-        </div>
-      </div>
-      <figcaption>From the hackathon to the shipped panel. Drag across to see either design in full.</figcaption>
-    </figure>
 
     <div class="cs-section cs-reveal">
       <div class="cs-section-num">
@@ -537,6 +459,67 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
       </div>
       <p>Verint had best-in-class tools for routing, recording, and workforce management - but nothing for the agent in the middle of a live conversation. Agent Experience was the initiative to change that, and the Copilot panel was the bet at its center.</p>
       <p>It started as a hackathon. The concept - a panel that reads what's happening in real time and responds with context, knowledge, and guidance - was genuinely new territory for Verint. Nothing in the existing product suite pointed toward what this should be. Getting from working prototype to production feature meant building something reliable enough to run during any live customer conversation.</p>
+
+      <!-- Placed here, not under the hero: the reader only knows there was a
+           hackathon once this paragraph has said so. -->
+      <!-- ══ Before/after: hackathon vs shipped ═════════════════════════════════
+           Hackathon design on the left of the seam, shipped design behind it.
+           Both are the full agent desktop, because the Copilot panel sits on
+           the right and the comparison is only honest whole. The handle travels
+           0 to 100, so either one can be seen in full.
+
+           Images are 1600x900 (2x the column), masked: account number, phone,
+           messaging handle and date of birth, and the test note under the
+           customer name removed. Sources were Ori's exports of Sept 30.
+
+           HIDDEN (Sept 30) until a clean shipped frame arrives: the current
+           shipped export shows test content in the Copilot panel ("why can't
+           squirrels ride bikes?"), dogs named Bruce The Destroyer, and lorem
+           ipsum. To show it, delete the hidden attribute on the figure below.
+
+           The slider is the shared .cmp component, the same one as the LUX
+           light/dark seam, which moved into cases/shared for this. It brings
+           arrow keys, Home/End, click-to-jump and touch with it.            -->
+      <figure class="cs-media cmp-fig" hidden>
+        <div class="cmp cmp-wrapup" id="cmp-wrapup" data-cmp-unit="hackathon">
+          <div class="cmp-stage">
+            <!-- Above the frame, not on it: both images are full desktops with
+                 UI in every corner, so an on-image label always covers something. -->
+            <span class="cmp-label cmp-label-a">Hackathon</span>
+            <span class="cmp-label cmp-label-b">Shipped</span>
+            <div class="cmp-frame">
+              <!-- base layer: SHIPPED, full width, sits behind -->
+              <div class="cmp-side">
+                <picture>
+                  <source srcset="images/copilot-shipped.webp" type="image/webp"/>
+                  <img src="images/copilot-shipped.png" width="1600" height="900"
+                       loading="lazy" decoding="async"
+                       alt="Shipped design of the agent desktop: the chat on the left, the customer profile and interaction history in the middle, and the Copilot panel on the right answering the agent's questions in cards, each with sources, a helpful rating and a box to ask more."/>
+                </picture>
+              </div>
+              <!-- clipped layer: HACKATHON, occupies the left of the seam -->
+              <div class="cmp-side cmp-clip">
+                <picture>
+                  <source srcset="images/copilot-hackathon.webp" type="image/webp"/>
+                  <img src="images/copilot-hackathon.png" width="1600" height="900"
+                       loading="lazy" decoding="async"
+                       alt="Hackathon design of the agent desktop: the chat on the left, customer details in the middle, and a Verint Copilot panel on the right with a robot mascot, a green chat summary card and a list of facts about the customer."/>
+                </picture>
+              </div>
+              <input class="cmp-input" type="range" min="0" max="100" value="50" step="1"
+                     aria-label="Compare the hackathon design with the shipped design. Drag or use the arrow keys."/>
+              <div class="cmp-handle" aria-hidden="true">
+                <span class="cmp-line"></span>
+                <span class="cmp-pill">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M8 8L4 12l4 4M16 8l4 4-4 4"/></svg>
+                </span>
+                <span class="cmp-line"></span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <figcaption>From the hackathon to the shipped panel. Drag across to see either design in full.</figcaption>
+      </figure>
     </div>
 
     <!-- Problem -->
@@ -770,7 +753,7 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
   </svg>
 </button>
 
-<script src="../shared/case-study.js?v=202609300801" defer></script>
+<script src="../shared/case-study.js?v=202609300818" defer></script>
 <script>
 (function(){
   var stage = document.getElementById('cpStage'),

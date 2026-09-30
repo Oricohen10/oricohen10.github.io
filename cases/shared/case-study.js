@@ -58,6 +58,7 @@ document.querySelectorAll('.cmp').forEach(function(wrap){
   function edges(){
     if (!frame) return;
     var w = frame.clientWidth, x = input.value / 100 * w, half = 20, shift = 0;
+    if (!w) return;   /* not laid out yet (hidden, or in a closed window) */
     if (x < half) shift = half - x;
     else if (x > w - half) shift = (w - half) - x;
     wrap.style.setProperty('--pill-x', shift + 'px');
@@ -73,7 +74,12 @@ document.querySelectorAll('.cmp').forEach(function(wrap){
     wrap.classList.add('cmp-used');   /* stop the pulse once it has been used */
     paint();
   });
-  window.addEventListener('resize', edges, { passive: true });
+  /* Observe the frame, not the window. The case studies load in homepage
+     windows that may be closed at first, and a figure can start `hidden`:
+     either way the frame is 0px wide when paint() first runs, and a window
+     resize never fires when it later appears. A ResizeObserver does. */
+  if (frame && 'ResizeObserver' in window) new ResizeObserver(edges).observe(frame);
+  else window.addEventListener('resize', edges, { passive: true });
   paint();
 });
 
