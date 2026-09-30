@@ -41,8 +41,8 @@
   }
 }
 </script>
-<link rel="stylesheet" href="../../src/tokens.css?v=202609301108"/>
-<link rel="stylesheet" href="../shared/case-study.css?v=202609301108"/>
+<link rel="stylesheet" href="../../src/tokens.css?v=202609301118"/>
+<link rel="stylesheet" href="../shared/case-study.css?v=202609301118"/>
 <script>try{if(localStorage.getItem('ori-theme')==='dark')document.documentElement.setAttribute('data-theme','dark')}catch(e){}
 if(window.self!==window.top){var _s=document.createElement('style');_s.textContent='*{cursor:none!important}';document.head.appendChild(_s);}</script>
 <style>
@@ -73,6 +73,10 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
 .cmp-wrapup .cmp-label{top:0}
 .cmp-wrapup .cmp-label-a{left:0}
 .cmp-wrapup .cmp-label-b{right:0}
+/* "Hackathon" and "Shipped" as written, not all caps: Ori's call. The shared
+   label is 10px uppercase with tracking; sentence case needs neither the
+   tracking nor the small size to read as a label. */
+.cmp-wrapup .cmp-label{text-transform:none;letter-spacing:0;font-size:12px;font-weight:700}
 
 /* Inside a section the figure's own 26px is the gap; the seam's 22px on top
    of it would make this the one figure on the page set further off its text. */
@@ -476,14 +480,10 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
            messaging handle and date of birth, and the test note under the
            customer name removed. Sources were Ori's exports of Sept 30.
 
-           SHIPPED SIDE (Sept 30): a still of the player below at step 5, the
-         handover, captured at its native 1370x898 at 2x and cut to 16:9 by
-         trimming the empty reply box at the bottom. The player is rebuilt
-         from the shipped Figma frames and plays the same David Campbell
-         mortgage conversation as the hackathon screenshot, so both halves
-         show the same moment: the hackathon's Chat Summary against the
-         shipped Self-Service Summary and Customer Insights. The raw shipped
-         export Ori sent was not used; its Copilot panel held test content.
+           SHIPPED SIDE: Ori's export of the shipped agent desktop (Sept 30),
+         masked before use: account number and phone number, and the test
+         note under the customer name ("This customer is blind!!!" plus lorem
+         ipsum) removed. Ori chose it over a still of the player below.
          -->
       <figure class="cs-media cmp-fig">
         <div class="cmp cmp-wrapup" id="cmp-wrapup" data-cmp-unit="hackathon">
@@ -499,7 +499,7 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
                   <source srcset="images/copilot-shipped.webp" type="image/webp"/>
                   <img src="images/copilot-shipped.png" width="1600" height="900"
                        loading="lazy" decoding="async"
-                       alt="Shipped design at the same handover moment: the chat on the left, the customer journey in the middle, and the Copilot panel on the right with a Self-Service Summary of the bot conversation and a Customer Insights card showing who is calling and why."/>
+                       alt="Shipped design of the agent desktop: the chat on the left, the customer profile and interaction history in the middle, and the Copilot panel on the right answering the agent's questions in cards, each with sources, a helpful rating and a box to ask more."/>
                 </picture>
               </div>
               <!-- clipped layer: HACKATHON, occupies the left of the seam -->
@@ -523,7 +523,7 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
             </div>
           </div>
         </div>
-        <figcaption>The same handover, as designed in the hackathon and as shipped. Drag across to see either in full.</figcaption>
+        <figcaption>From the hackathon to the shipped product. Drag across to see either in full.</figcaption>
       </figure>
     </div>
 
@@ -758,7 +758,7 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
   </svg>
 </button>
 
-<script src="../shared/case-study.js?v=202609301108" defer></script>
+<script src="../shared/case-study.js?v=202609301118" defer></script>
 <script>
 (function(){
   var stage = document.getElementById('cpStage'),
