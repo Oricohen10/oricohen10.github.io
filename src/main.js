@@ -672,9 +672,23 @@ function closeWin(id) {
   if (w._opener && w._opener.focus) w._opener.focus();
 }
 
+/* A toolbar button closes its window only when that window is the one in
+   front. If it is open but buried under other windows, or collapsed, the
+   click brings it forward instead. Before this, clicking "Projects" while its
+   window sat behind a case study closed it - the visitor saw nothing change,
+   clicked again, and it reopened behind. PostHog recorded that as rage
+   clicks on nav-projects and nav-about on launch day. */
+function isFrontWin(w) {
+  const z = +w.style.zIndex || 0;
+  return ![...document.querySelectorAll('.win')].some(o =>
+    o !== w && o.style.display && o.style.display !== 'none' && (+o.style.zIndex || 0) > z);
+}
 function toggleWin(id) {
   const w = document.getElementById('win-' + id);
-  (!w || !w.style.display || w.style.display==='none') ? openWin(id) : closeWin(id);
+  if (!w || !w.style.display || w.style.display === 'none') return openWin(id);
+  if (w.classList.contains('collapsed')) { w.classList.remove('collapsed'); front(w); w.focus(); return; }
+  if (!isFrontWin(w)) { front(w); w.focus(); return; }
+  closeWin(id);
 }
 
 function minimizeWin(id) {

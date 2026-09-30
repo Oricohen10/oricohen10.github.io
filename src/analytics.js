@@ -2,10 +2,16 @@
    One file for every page. Loaded with defer, never blocks paint, and does
    nothing at all until POSTHOG_KEY is set.
 
-   Cookieless on purpose: persistence 'memory' keeps the anonymous id in the
-   page, not in a cookie or localStorage, so there is no consent banner in
-   front of the first impression. The trade: a visitor who comes back
-   tomorrow counts as a new visitor. For a portfolio that is the right trade.
+   Cookieless on purpose: persistence 'sessionStorage' keeps the anonymous
+   id for one browser tab and drops it when the tab closes. No cookie and no
+   localStorage, so no consent banner in front of the first impression. The
+   trade: a visitor who comes back tomorrow counts as a new visitor. For a
+   portfolio that is the right trade.
+
+   It was 'memory' on launch day, which lives in one page. On a phone every
+   case study is its own page, so homepage -> LUX -> Copilot counted as three
+   visitors: 57 "visitors" against ~27 real ones in the first two hours.
+   sessionStorage survives those navigations within the tab.
 
    Frames. The homepage opens each case study in an iframe. If every frame
    ran its own PostHog, one visitor would appear as several people, each with
@@ -48,7 +54,7 @@
     !function(t,e){var o,n,p,r;e.__SV||(window.posthog=e,e._i=[],e.init=function(i,s,a){function g(t,e){var o=e.split(".");2==o.length&&(t=t[o[0]],e=o[1]),t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}}(p=t.createElement("script")).type="text/javascript",p.crossOrigin="anonymous",p.async=!0,p.src=s.api_host.replace(".i.posthog.com","-assets.i.posthog.com")+"/static/array.js",(r=t.getElementsByTagName("script")[0]).parentNode.insertBefore(p,r);var u=e;for(void 0!==a?u=e[a]=[]:a="posthog",u.people=u.people||[],u.toString=function(t){var e="posthog";return"posthog"!==a&&(e+="."+a),t||(e+=" (stub)"),e},u.people.toString=function(){return u.toString(1)+".people (stub)"},o="init capture register register_once unregister identify alias set_config reset opt_in_capturing opt_out_capturing has_opted_out_capturing get_distinct_id get_property getFeatureFlag isFeatureEnabled onFeatureFlags".split(" "),n=0;n<o.length;n++)g(u,o[n]);e._i.push([i,s,a])},e.__SV=1)}(document,window.posthog||[]);
     window.posthog.init(POSTHOG_KEY, {
       api_host: POSTHOG_HOST,
-      persistence: 'memory',
+      persistence: 'sessionStorage',
       person_profiles: 'identified_only',
       capture_pageview: true,
       capture_pageleave: true,
