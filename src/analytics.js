@@ -16,7 +16,7 @@
 
    Events, beyond PostHog's own pageviews and link autocapture:
      window_opened          homepage window, {window}
-     case_study_viewed      {case_study, framed}
+     case_study_viewed      {case_study}, direct visits only
      case_study_scrolled    {case_study, depth: 25|50|75|100}
      comparison_used        Copilot hackathon/shipped seam, first drag only
      comparison_fullscreen  Copilot full screen opened
@@ -83,7 +83,11 @@
     if (!caseId) return;
 
     /* ── case studies ─────────────────────────────────────────────────── */
-    capture('case_study_viewed', { case_study: caseId, framed: framed });
+    /* Direct visits only. The homepage preloads every case-study window in
+       the background so they open instantly, and a view counted at load time
+       fired for all five on every homepage visit. In a frame, the homepage's
+       window_opened is the real "viewed" signal. */
+    if (!framed) capture('case_study_viewed', { case_study: caseId, framed: false });
 
     var marks = [25, 50, 75, 100], hit = {}, rq = false;
     function depth() {
