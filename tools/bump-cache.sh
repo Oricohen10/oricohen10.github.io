@@ -45,7 +45,7 @@ targets = sorted(glob.glob('cases/*/index.html')) + ['index.html', 'cases/lux/vi
 
 # href/src of a shared stylesheet or the shared script, at any depth
 SUBRES = re.compile(
-    r'((?:href|src)=")((?:\.\./)*(?:src/tokens\.css|shared/case-study\.(?:css|js)))'
+    r'((?:href|src)=")((?:\.\./)*(?:src/tokens\.css|src/analytics\.js|shared/case-study\.(?:css|js)))'
     r'(?:\?v=[^"]*)?(")')
 # the iframe documents themselves
 IFRAME = re.compile(
