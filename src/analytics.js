@@ -23,7 +23,7 @@
      player_chapter         Copilot player chapter button, {chapter}
      cv_downloaded, contact_clicked {method}                              */
 (function () {
-  var POSTHOG_KEY  = '';                         // phc_... Project API key
+  var POSTHOG_KEY  = 'phc_kqzmEGfSt4XaerpkYDHgHdzTHCU8tJqtivG6AtQdyKii';  // public by design
   var POSTHOG_HOST = 'https://eu.i.posthog.com';
 
   var framed = window.top !== window.self;
