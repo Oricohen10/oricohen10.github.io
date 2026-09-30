@@ -41,8 +41,8 @@
   }
 }
 </script>
-<link rel="stylesheet" href="../../src/tokens.css?v=202609301118"/>
-<link rel="stylesheet" href="../shared/case-study.css?v=202609301118"/>
+<link rel="stylesheet" href="../../src/tokens.css?v=202609301135"/>
+<link rel="stylesheet" href="../shared/case-study.css?v=202609301135"/>
 <script>try{if(localStorage.getItem('ori-theme')==='dark')document.documentElement.setAttribute('data-theme','dark')}catch(e){}
 if(window.self!==window.top){var _s=document.createElement('style');_s.textContent='*{cursor:none!important}';document.head.appendChild(_s);}</script>
 <style>
@@ -68,7 +68,7 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
 /* ── Hackathon vs shipped seam ────────────────────────────────────────────
    Labels sit in a row above the frame. The stage gets the room; the shared
    .cmp-label keeps its look, only its anchor changes. */
-.cmp-wrapup{--cmp-ar:16/9}  /* both exports cut to 1600x900 */
+.cmp-wrapup{--cmp-ar:16/9}  /* both exports cut to 16:9, 1600 and 2400 wide */
 .cmp-wrapup .cmp-stage{padding-top:30px}
 .cmp-wrapup .cmp-label{top:0}
 .cmp-wrapup .cmp-label-a{left:0}
@@ -77,6 +77,33 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
    label is 10px uppercase with tracking; sentence case needs neither the
    tracking nor the small size to read as a label. */
 .cmp-wrapup .cmp-label{text-transform:none;letter-spacing:0;font-size:12px;font-weight:700}
+/* Full screen button, centred in the label row so it names neither side. */
+.cmp-expand{position:absolute;top:0;left:50%;transform:translateX(-50%);z-index:2;
+  display:inline-flex;align-items:center;gap:6px;padding:4px 11px;
+  border-radius:var(--radius-full);border:1px solid var(--border-default);
+  background:var(--surface-default);color:var(--text-primary);
+  font-family:inherit;font-size:12px;font-weight:600;line-height:1.3;cursor:pointer}
+.cmp-expand:hover{background:var(--surface-raised)}
+.cmp-expand:focus-visible{outline:3px solid var(--action-primary);outline-offset:2px}
+
+/* The dialog. Sized by the viewport's height as well as its width, so the
+   16:9 frame fits whole on a wide short laptop screen, not just a tall one. */
+.cmp-dlg{border:0;margin:0;padding:64px 24px 24px;background:transparent;
+  width:100vw;height:100vh;height:100dvh;max-width:none;max-height:none;overflow:hidden}
+.cmp-dlg[open]{display:flex;align-items:center;justify-content:center}
+.cmp-dlg::backdrop{background:rgba(10,11,13,.97)}
+html:has(.cmp-dlg[open]){overflow:hidden}
+.cmp-dlg .cmp{width:min(100%, calc((100dvh - 118px) * 16 / 9));margin:0}
+.cmp-dlg .cmp-expand{display:none}
+/* Fixed chrome on a fixed dark backdrop, so fixed colours in both themes. */
+.cmp-dlg .cmp-label{background:#fff;color:#121213}
+.cmp-dlg .cmp-frame{box-shadow:none}
+.cmp-dlg-x{position:fixed;top:14px;right:16px;width:44px;height:44px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;cursor:pointer;
+  border:1px solid rgba(255,255,255,.4);background:rgba(255,255,255,.12);color:#fff}
+.cmp-dlg-x:hover{background:rgba(255,255,255,.22)}
+.cmp-dlg-x:focus-visible{outline:3px solid #fff;outline-offset:2px}
+@media(max-width:720px){.cmp-dlg{padding:64px 12px 16px}}
 
 /* Inside a section the figure's own 26px is the gap; the seam's 22px on top
    of it would make this the one figure on the page set further off its text. */
@@ -492,11 +519,16 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
                  UI in every corner, so an on-image label always covers something. -->
             <span class="cmp-label cmp-label-a">Hackathon</span>
             <span class="cmp-label cmp-label-b">Shipped</span>
+            <button type="button" class="cmp-expand" aria-expanded="false" aria-controls="cmp-dlg">
+              <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>
+              Full screen
+            </button>
             <div class="cmp-frame">
               <!-- base layer: SHIPPED, full width, sits behind -->
               <div class="cmp-side">
                 <picture>
-                  <source srcset="images/copilot-shipped.webp" type="image/webp"/>
+                  <source type="image/webp" sizes="(max-width:720px) 100vw, 1200px"
+                          srcset="images/copilot-shipped-1600.webp 1600w, images/copilot-shipped-2400.webp 2400w"/>
                   <img src="images/copilot-shipped.png" width="1600" height="900"
                        loading="lazy" decoding="async"
                        alt="Shipped design of the agent desktop: the chat on the left, the customer profile and interaction history in the middle, and the Copilot panel on the right answering the agent's questions in cards, each with sources, a helpful rating and a box to ask more."/>
@@ -505,7 +537,8 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
               <!-- clipped layer: HACKATHON, occupies the left of the seam -->
               <div class="cmp-side cmp-clip">
                 <picture>
-                  <source srcset="images/copilot-hackathon.webp" type="image/webp"/>
+                  <source type="image/webp" sizes="(max-width:720px) 100vw, 1200px"
+                          srcset="images/copilot-hackathon-1600.webp 1600w, images/copilot-hackathon-2400.webp 2400w"/>
                   <img src="images/copilot-hackathon.png" width="1600" height="900"
                        loading="lazy" decoding="async"
                        alt="Hackathon design of the agent desktop: the chat on the left, customer details in the middle, and a Verint Copilot panel on the right with a robot mascot, a green chat summary card and a list of facts about the customer."/>
@@ -523,8 +556,20 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
             </div>
           </div>
         </div>
-        <figcaption>From the hackathon to the shipped product. Drag across to see either in full.</figcaption>
+        <figcaption>From the hackathon to the shipped product. Drag across to see either in full, or open it full screen.</figcaption>
       </figure>
+      <!-- Full screen. A native dialog, not a fixed overlay: this sits inside a
+           .cs-reveal section, whose transform makes position:fixed resolve
+           against the section instead of the viewport. showModal() puts the
+           dialog in the top layer, which ignores that, and brings Esc, focus
+           containment and an inert page with it. The comparison itself is
+           moved in and back out, so there is one copy and its seam position
+           survives the round trip. -->
+      <dialog class="cmp-dlg" id="cmp-dlg" aria-label="Hackathon and Shipped, full screen">
+        <button type="button" class="cmp-dlg-x" aria-label="Close full screen">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+        </button>
+      </dialog>
     </div>
 
     <!-- Problem -->
@@ -758,7 +803,30 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
   </svg>
 </button>
 
-<script src="../shared/case-study.js?v=202609301118" defer></script>
+<script src="../shared/case-study.js?v=202609301135" defer></script>
+<script>
+/* Hackathon and Shipped, full screen. Page-local: only this comparison has it. */
+(function(){
+  var cmp=document.getElementById('cmp-wrapup'), dlg=document.getElementById('cmp-dlg');
+  if(!cmp||!dlg) return;
+  var btn=cmp.querySelector('.cmp-expand');
+  if(typeof dlg.showModal!=='function'){ btn.hidden=true; return; }
+  var home=cmp.parentNode, next=cmp.nextSibling;
+  btn.addEventListener('click', function(){
+    dlg.appendChild(cmp); dlg.showModal();
+    btn.setAttribute('aria-expanded','true');
+    cmp.querySelector('.cmp-input').focus();
+  });
+  dlg.addEventListener('close', function(){
+    home.insertBefore(cmp, next);
+    btn.setAttribute('aria-expanded','false');
+    btn.focus();
+  });
+  dlg.querySelector('.cmp-dlg-x').addEventListener('click', function(){ dlg.close(); });
+  /* A click on the backdrop lands on the dialog itself; one inside it does not. */
+  dlg.addEventListener('click', function(e){ if(e.target===dlg) dlg.close(); });
+})();
+</script>
 <script>
 (function(){
   var stage = document.getElementById('cpStage'),
