@@ -45,14 +45,35 @@ document.querySelectorAll('.cmp').forEach(function(wrap){
   var input = wrap.querySelector('input[type="range"]');
   if (!input) return;
   var unit = wrap.getAttribute('data-cmp-unit') || '';
+  var frame = wrap.querySelector('.cmp-frame');
+  var labA = wrap.querySelector('.cmp-label-a'), labB = wrap.querySelector('.cmp-label-b');
+  /* The seam runs the full width, 0 to 100, so either image can be seen
+     whole. Two things would otherwise break at the ends: the pill is centred
+     on the seam, so at 0% or 100% half of it sat outside the frame and was
+     clipped; and a corner label stayed up over the other image once its own
+     side was dragged away. So the pill is nudged back inside (the line stays
+     exactly on the seam), and a label hides once the seam crosses it.
+     Measured in px here because the frame is the only box that knows its
+     width - CSS cannot turn --p into pixels of a different element. */
+  function edges(){
+    if (!frame) return;
+    var w = frame.clientWidth, x = input.value / 100 * w, half = 20, shift = 0;
+    if (x < half) shift = half - x;
+    else if (x > w - half) shift = (w - half) - x;
+    wrap.style.setProperty('--pill-x', shift + 'px');
+    if (labA) labA.classList.toggle('cmp-label-off', x < labA.offsetLeft + labA.offsetWidth + 8);
+    if (labB) labB.classList.toggle('cmp-label-off', x > labB.offsetLeft - 8);
+  }
   function paint(){
     wrap.style.setProperty('--p', input.value + '%');
     input.setAttribute('aria-valuetext', input.value + '%' + (unit ? ' ' + unit : ''));
+    edges();
   }
   input.addEventListener('input', function(){
     wrap.classList.add('cmp-used');   /* stop the pulse once it has been used */
     paint();
   });
+  window.addEventListener('resize', edges, { passive: true });
   paint();
 });
 

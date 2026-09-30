@@ -39,8 +39,8 @@
   }
 }
 </script>
-<link rel="stylesheet" href="../../src/tokens.css?v=202609231911"/>
-<link rel="stylesheet" href="../shared/case-study.css?v=202609231911"/>
+<link rel="stylesheet" href="../../src/tokens.css?v=202609300801"/>
+<link rel="stylesheet" href="../shared/case-study.css?v=202609300801"/>
 <script>try{if(localStorage.getItem('ori-theme')==='dark')document.documentElement.setAttribute('data-theme','dark')}catch(e){}
 if(window.self!==window.top){var _s=document.createElement('style');_s.textContent='*{cursor:none!important}';document.head.appendChild(_s);}</script>
 <style>
@@ -69,7 +69,7 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
 
    The aspect is a guess until the real images land, so it is stated here
    rather than left to the shared 16/9 default. */
-.cmp-wrapup{--cmp-ar:16/10}
+.cmp-wrapup{--cmp-ar:1370/898}  /* the full agent desktop, same frame as the player; confirm against the real exports */
 .cmp-ph{position:absolute;inset:0;display:flex;flex-direction:column;
   align-items:center;justify-content:center;gap:10px;
   padding:24px;text-align:center;
@@ -403,6 +403,19 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
   font-size:13.5px; line-height:1.55; color:var(--ink); min-height:3.1em;
 }
 
+/* ── page-level: the controls belong to the screen ──────────────────────
+   Not part of the pasted fragment, and colours are untouched (the only one
+   used is the stage's own border, #c3cbd3). What changes is geometry: the
+   bar was a separate 720px card 14px below a full-width screen, so the two
+   read as unrelated objects with misaligned edges. Now the bar is the
+   screen's bottom edge - same width, same border, square seam, rounded only
+   at the outer corners - so the slider reads as the scrubber of the replay
+   above it. Ori asked for this on Sept 30. */
+.cp-wrap .cp-fit{border-radius:6px 6px 0 0}
+.cp-wrap .cp-stage{border-bottom-left-radius:0;border-bottom-right-radius:0}
+.cp-wrap .cp-ctrl{margin-top:0;max-width:none;border-color:#c3cbd3;border-top:0;
+  border-radius:0 0 6px 6px;padding:12px 16px 14px}
+
 @media (prefers-reduced-motion:reduce){
   .cp-out,.cp-dots i,.cp-panelhead.busy .cp-bot,.cp-card .foot .ok.pop,.cp-caret,
   .cp-card.cp-flash,.cp-slot.growing > *,.cp-slot.growing .cp-card,.cp-slot.growing .bub{animation:none}
@@ -459,15 +472,19 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
     </div>
 
     <!-- Background -->
-    <!-- ══ Before/after: the wrap-up field ═══════════════════════════════════
+    <!-- ══ Before/after: hackathon vs shipped ═════════════════════════════════
          PLACEHOLDER. The two images are not in the repo yet - the upload that
          asked for this element did not include copilot-case-study/, so there
          is nothing to compare. What is here is the finished interaction with a
          labelled empty state in each half, so only the two files have to drop
          in later.
 
-         To activate: save the two states as images/wrapup-before.webp and
-         images/wrapup-after.webp (plus .png fallbacks), swap each
+         REFRAMED (Sept 30): hackathon design on the left of the seam, shipped
+         design behind it. Both are the full agent desktop, because the Copilot
+         panel sits on the right and the comparison is only honest whole.
+
+         To activate: save the two states as images/copilot-hackathon.webp and
+         images/copilot-shipped.webp (plus .png fallbacks), swap each
          .cmp-ph div for the <picture> commented out beside it, set --cmp-ar to
          their real aspect, and delete the .cmp-ph rules from the style block.
 
@@ -478,29 +495,29 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
          light/dark seam, which moved into cases/shared for this. It brings
          arrow keys, Home/End, click-to-jump and touch with it.            -->
     <figure class="cs-media">
-      <div class="cmp cmp-wrapup" id="cmp-wrapup" data-cmp-unit="after">
+      <div class="cmp cmp-wrapup" id="cmp-wrapup" data-cmp-unit="hackathon">
         <div class="cmp-stage">
           <div class="cmp-frame">
-            <!-- base layer: AFTER, full width, sits behind -->
+            <!-- base layer: SHIPPED, full width, sits behind -->
             <div class="cmp-side">
               <div class="cmp-ph cmp-ph-after">
-                <span class="cmp-ph-k">After</span>
-                <span class="cmp-ph-t">Wrap-up field holding the generated summary, Save enabled, Call complete summary card visible in the Copilot panel</span>
-                <code class="cmp-ph-f">images/wrapup-after.webp</code>
+                <span class="cmp-ph-k">Shipped</span>
+                <span class="cmp-ph-t">The agent desktop as released, with the final Copilot panel on the right</span>
+                <code class="cmp-ph-f">images/copilot-shipped.webp</code>
               </div>
             </div>
-            <!-- clipped layer: BEFORE, occupies the left of the seam -->
+            <!-- clipped layer: HACKATHON, occupies the left of the seam -->
             <div class="cmp-side cmp-clip" aria-hidden="true">
               <div class="cmp-ph cmp-ph-before">
-                <span class="cmp-ph-k">Before</span>
-                <span class="cmp-ph-t">Empty wrap-up editor, placeholder "Type your summary here...", Save disabled</span>
-                <code class="cmp-ph-f">images/wrapup-before.webp</code>
+                <span class="cmp-ph-k">Hackathon</span>
+                <span class="cmp-ph-t">The same desktop with the first Copilot panel, as designed in the hackathon</span>
+                <code class="cmp-ph-f">images/copilot-hackathon.webp</code>
               </div>
             </div>
             <input class="cmp-input" type="range" min="0" max="100" value="50" step="1"
-                   aria-label="Reveal the summary Copilot wrote. Drag or use the arrow keys."/>
-            <span class="cmp-label cmp-label-a">Before</span>
-            <span class="cmp-label cmp-label-b">After</span>
+                   aria-label="Compare the hackathon design with the shipped design. Drag or use the arrow keys."/>
+            <span class="cmp-label cmp-label-a">Hackathon</span>
+            <span class="cmp-label cmp-label-b">Shipped</span>
             <div class="cmp-handle" aria-hidden="true">
               <span class="cmp-line"></span>
               <span class="cmp-pill">
@@ -511,7 +528,7 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
           </div>
         </div>
       </div>
-      <figcaption>The same field, the same moment. The agent edits instead of writing.</figcaption>
+      <figcaption>From the hackathon to the shipped panel. Drag across to see either design in full.</figcaption>
     </figure>
 
     <div class="cs-section cs-reveal">
@@ -753,7 +770,7 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
   </svg>
 </button>
 
-<script src="../shared/case-study.js?v=202609231911" defer></script>
+<script src="../shared/case-study.js?v=202609300801" defer></script>
 <script>
 (function(){
   var stage = document.getElementById('cpStage'),

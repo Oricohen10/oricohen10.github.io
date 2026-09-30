@@ -379,6 +379,10 @@ html[data-cs-idle]   .cs-field i{animation-play-state:paused}
   color:#fff;display:flex;align-items:center;justify-content:center;
   box-shadow:0 4px 16px rgba(0,0,0,.5)}
 .cmp-pill svg{width:14px;height:14px;display:block}
+/* JS sets --pill-x at the two ends of travel so the pill stays inside the
+   frame while the line stays on the seam. `translate`, not `transform`, so it
+   composes with nothing else set on the pill. */
+.cmp-pill{translate:var(--pill-x,0px) 0}
 /* The pulse invites the drag, and it stops once the thing has been used -
    an affordance hint that keeps pulsing is just noise.
 
@@ -422,6 +426,9 @@ html[data-cs-idle]   .cs-field i{animation-play-state:paused}
   line-height:1.3}
 .cmp-label-a{left:10px}
 .cmp-label-b{right:10px}
+.cmp-label{transition:opacity .15s ease}
+.cmp-label-off{opacity:0}
+@media(prefers-reduced-motion:reduce){.cmp-label{transition:none}}
 
 /* ── Plugin blocks: removed ────────────────────────────────────────────────
    .plugins-list, .plugin-block, .plugin-head, .plugin-num, .plugin-tag,
