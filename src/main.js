@@ -1509,17 +1509,32 @@ window.addEventListener('load', () => {
   window.pxGoTitle=function(){refreshTitle();show('px-title');};
 
   /* ── Leaderboard ── */
+  /* A preloaded high-score table, arcade style, so a first visitor has
+     someone to beat instead of "NO SCORES YET". Nothing is fetched and
+     nothing is sent: the visitor's own scores still live only in their
+     browser and are merged in by score. Dates are relative to today so the
+     table never looks abandoned. Two "Recruiter" rows on purpose - it is the
+     name a visitor gets when they skip the greeting - which is why "you" is
+     decided by where an entry came from (mine:true), never by name. */
+  const PX_SEED=[
+    {name:'Ori',      avatarId:7, score:290, ago:1},
+    {name:'Recruiter',avatarId:2, score:255, ago:2},
+    {name:'Alon',     avatarId:0, score:225, ago:3},
+    {name:'Noa',      avatarId:3, score:195, ago:1},
+    {name:'Recruiter',avatarId:1, score:160, ago:4},
+    {name:'Shiri',    avatarId:6, score:130, ago:2},
+  ];
+  function seedRows(){
+    return PX_SEED.map(s=>{const d=new Date(Date.now()-s.ago*864e5);
+      return {name:s.name,avatarId:s.avatarId,score:s.score,
+        date:d.toLocaleDateString('en-GB',{day:'2-digit',month:'2-digit',year:'2-digit'})};});
+  }
   window.pxShowBoard=function(){
-    const allScores=getScores().slice().sort((a,b)=>b.score-a.score);
+    const mine=getScores().map(s=>Object.assign({},s,{mine:true}));
+    const allScores=mine.concat(seedRows()).sort((a,b)=>b.score-a.score);
     const list=document.getElementById('px-board-list');if(!list)return;
-    if(!allScores.length){
-      list.innerHTML='<div style="font-family:\'Press Start 2P\',monospace;font-size:8px;color:#9292C8;text-align:center;padding:80px 20px">NO SCORES YET.<br><br>BE THE FIRST!</div>';
-      show('px-board');return;
-    }
-    const u=getUser();
-    const userName=u?u.name:null;
-    /* find best score entry for current user */
-    const myIdx=userName?allScores.findIndex(s=>s.name===userName):-1;
+    /* the visitor's best entry: the first of theirs in score order */
+    const myIdx=allScores.findIndex(s=>s.mine);
     function scoreRow(s,rank,highlight){
       const medal=rank===1?'🥇':rank===2?'🥈':rank===3?'🥉':`#${rank}`;
       /* border fades with rank; highlight overrides with cyan */
@@ -1544,9 +1559,9 @@ window.addEventListener('load', () => {
       </div>`;
     }
     const top5=allScores.slice(0,5);
-    let html=top5.map((s,i)=>scoreRow(s,i+1,false)).join('');
-    /* always show current player below divider */
-    if(myIdx>=0){
+    let html=top5.map((s,i)=>scoreRow(s,i+1,i===myIdx)).join('');
+    /* the visitor's rank below a divider, unless it is already in the top 5 */
+    if(myIdx>=5){
       const myEntry=allScores[myIdx];
       html+=`<div style="display:flex;align-items:center;gap:6px;padding:8px 12px">
         <div style="flex:1;height:1px;background:#2A2A4A"></div>
