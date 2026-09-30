@@ -41,8 +41,8 @@
   }
 }
 </script>
-<link rel="stylesheet" href="../../src/tokens.css?v=202609300843"/>
-<link rel="stylesheet" href="../shared/case-study.css?v=202609300843"/>
+<link rel="stylesheet" href="../../src/tokens.css?v=202609301108"/>
+<link rel="stylesheet" href="../shared/case-study.css?v=202609301108"/>
 <script>try{if(localStorage.getItem('ori-theme')==='dark')document.documentElement.setAttribute('data-theme','dark')}catch(e){}
 if(window.self!==window.top){var _s=document.createElement('style');_s.textContent='*{cursor:none!important}';document.head.appendChild(_s);}</script>
 <style>
@@ -476,15 +476,16 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
            messaging handle and date of birth, and the test note under the
            customer name removed. Sources were Ori's exports of Sept 30.
 
-           HIDDEN (Sept 30) until a clean shipped frame arrives: the current
-           shipped export shows test content in the Copilot panel ("why can't
-           squirrels ride bikes?"), dogs named Bruce The Destroyer, and lorem
-           ipsum. To show it, delete the hidden attribute on the figure below.
-
-           The slider is the shared .cmp component, the same one as the LUX
-           light/dark seam, which moved into cases/shared for this. It brings
-           arrow keys, Home/End, click-to-jump and touch with it.            -->
-      <figure class="cs-media cmp-fig" hidden>
+           SHIPPED SIDE (Sept 30): a still of the player below at step 5, the
+         handover, captured at its native 1370x898 at 2x and cut to 16:9 by
+         trimming the empty reply box at the bottom. The player is rebuilt
+         from the shipped Figma frames and plays the same David Campbell
+         mortgage conversation as the hackathon screenshot, so both halves
+         show the same moment: the hackathon's Chat Summary against the
+         shipped Self-Service Summary and Customer Insights. The raw shipped
+         export Ori sent was not used; its Copilot panel held test content.
+         -->
+      <figure class="cs-media cmp-fig">
         <div class="cmp cmp-wrapup" id="cmp-wrapup" data-cmp-unit="hackathon">
           <div class="cmp-stage">
             <!-- Above the frame, not on it: both images are full desktops with
@@ -498,7 +499,7 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
                   <source srcset="images/copilot-shipped.webp" type="image/webp"/>
                   <img src="images/copilot-shipped.png" width="1600" height="900"
                        loading="lazy" decoding="async"
-                       alt="Shipped design of the agent desktop: the chat on the left, the customer profile and interaction history in the middle, and the Copilot panel on the right answering the agent's questions in cards, each with sources, a helpful rating and a box to ask more."/>
+                       alt="Shipped design at the same handover moment: the chat on the left, the customer journey in the middle, and the Copilot panel on the right with a Self-Service Summary of the bot conversation and a Customer Insights card showing who is calling and why."/>
                 </picture>
               </div>
               <!-- clipped layer: HACKATHON, occupies the left of the seam -->
@@ -522,7 +523,7 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
             </div>
           </div>
         </div>
-        <figcaption>From the hackathon to the shipped panel. Drag across to see either design in full.</figcaption>
+        <figcaption>The same handover, as designed in the hackathon and as shipped. Drag across to see either in full.</figcaption>
       </figure>
     </div>
 
@@ -757,7 +758,7 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
   </svg>
 </button>
 
-<script src="../shared/case-study.js?v=202609300843" defer></script>
+<script src="../shared/case-study.js?v=202609301108" defer></script>
 <script>
 (function(){
   var stage = document.getElementById('cpStage'),
@@ -826,7 +827,7 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
         '<dt>Hold time</dt><dd>8m 04s</dd>'+
         '<dt>Account number</dt><dd>9024&bull;&bull;&bull;WJL2</dd>'+
         '<dt>Phone number</dt><dd>565-098-&bull;&bull;&bull;&bull;</dd>'+
-        '<dt>Address</dt><dd>82 Winter Street, Madras, TX</dd></dl>'+
+        '<dt>Address</dt><dd>•• W•••••• Street, Madras, TX</dd></dl>'+
         '<div class="cp-tags"><span>English</span><span>&#9733; Existing Customer</span><span>Called 2 days ago</span></div></div>';
     },
     know: function(st){
