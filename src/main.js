@@ -672,23 +672,9 @@ function closeWin(id) {
   if (w._opener && w._opener.focus) w._opener.focus();
 }
 
-/* A toolbar button closes its window only when that window is the one in
-   front. If it is open but buried under other windows, or collapsed, the
-   click brings it forward instead. Before this, clicking "Projects" while its
-   window sat behind a case study closed it - the visitor saw nothing change,
-   clicked again, and it reopened behind. PostHog recorded that as rage
-   clicks on nav-projects and nav-about on launch day. */
-function isFrontWin(w) {
-  const z = +w.style.zIndex || 0;
-  return ![...document.querySelectorAll('.win')].some(o =>
-    o !== w && o.style.display && o.style.display !== 'none' && (+o.style.zIndex || 0) > z);
-}
 function toggleWin(id) {
   const w = document.getElementById('win-' + id);
-  if (!w || !w.style.display || w.style.display === 'none') return openWin(id);
-  if (w.classList.contains('collapsed')) { w.classList.remove('collapsed'); front(w); w.focus(); return; }
-  if (!isFrontWin(w)) { front(w); w.focus(); return; }
-  closeWin(id);
+  (!w || !w.style.display || w.style.display==='none') ? openWin(id) : closeWin(id);
 }
 
 function minimizeWin(id) {
@@ -742,7 +728,23 @@ function closeAllWins() {
   setTimeout(() => { WIN_IDS.forEach(id=>{ const w=document.getElementById('win-'+id); if(w) delete w._placed; }); cascadeX=60; cascadeY=50; }, 220);
 }
 
-function front(w) { w.style.zIndex = ++wZ; syncFieldIdle(); }
+/* Windows live in a z-index band, 600 up to WIN_Z_MAX, under the toolbar
+   (#bottombar, 1500) and the modal (2000). wZ used to climb forever, so after
+   a few clicks every window sat above the toolbar and covered it. When the
+   band fills, the windows are renumbered from 600 in their current order:
+   same stacking, room to climb again. */
+const WIN_Z_MIN = 600, WIN_Z_MAX = 1400;
+function front(w) {
+  if (wZ >= WIN_Z_MAX) {
+    const wins = [...document.querySelectorAll('.win')]
+      .filter(o => o !== w)
+      .sort((a, b) => (+a.style.zIndex || 0) - (+b.style.zIndex || 0));
+    wZ = WIN_Z_MIN;
+    wins.forEach(o => { o.style.zIndex = ++wZ; });
+  }
+  w.style.zIndex = ++wZ;
+  syncFieldIdle();
+}
 
 /* ── Only the front-most project window animates ───────────────────────────
    Each case study runs an ambient field: two compositor layers drifting
@@ -1742,6 +1744,18 @@ let _mmGen = 1;
 window.invalidateIframeRects = function(){ _mmGen++; };
 ['resize','scroll'].forEach(function(ev){
   window.addEventListener(ev, window.invalidateIframeRects, { passive: true });
+});
+
+/* A press inside a case study never reaches this document - the iframe
+   swallows it - so the window's own mousedown-to-front above could only be
+   triggered from its header. The frame posts 'iframe-down' on pointerdown
+   (cases/shared/case-study.js, and inline in the LUX viewer) and the window
+   that holds it comes forward, same as a press on the header. */
+window.addEventListener('message', function(e) {
+  if (!e.data || e.data.type !== 'iframe-down' || e.origin !== location.origin) return;
+  for (const f of document.querySelectorAll('.proj-iframe')) {
+    if (f.contentWindow === e.source) { const w = f.closest('.win'); if (w) front(w); break; }
+  }
 });
 
 window.addEventListener('message', function(e) {

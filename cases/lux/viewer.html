@@ -1132,6 +1132,17 @@ if (window.self !== window.top) {
 }
 
 </script>
-<script src="../../src/analytics.js?v=202609301441" defer></script>
+<script>
+/* ── Tell the homepage when the page is pressed ──────────────────────────
+   Inside a homepage window, a press here never reaches the parent document,
+   so the parent cannot bring this window to the front on its own. */
+(function(){
+  if (window.self === window.top) return;
+  document.addEventListener('pointerdown', function(){
+    try { window.parent.postMessage({ type:'iframe-down' }, location.origin); } catch(err){}
+  }, { passive: true, capture: true });
+})();
+</script>
+<script src="../../src/analytics.js?v=202609301507" defer></script>
 </body>
 </html>

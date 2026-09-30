@@ -119,6 +119,16 @@ window.addEventListener('message', function(e) {
   }, { passive: true });
 })();
 
+/* ── Tell the homepage when the page is pressed ──────────────────────────
+   Inside a homepage window, a press here never reaches the parent document,
+   so the parent cannot bring this window to the front on its own. */
+(function(){
+  if (window.self === window.top) return;
+  document.addEventListener('pointerdown', function(){
+    try { window.parent.postMessage({ type:'iframe-down' }, location.origin); } catch(err){}
+  }, { passive: true, capture: true });
+})();
+
 /* ── Scroll reveal ───────────────────────────────────────────────────────── */
 var revealObserver = new IntersectionObserver(function(entries) {
   entries.forEach(function(entry) {

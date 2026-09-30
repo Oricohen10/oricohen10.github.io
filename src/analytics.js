@@ -59,7 +59,12 @@
       capture_pageview: true,
       capture_pageleave: true,
       autocapture: true,
-      session_recording: { maskAllInputs: true }
+      /* blockSelector: decorative motion is left out of replays. The custom
+         cursor, the ghost cursors and the clock mutate every frame or every
+         few seconds, and recording them cost the homepage +43% CPU against no
+         replay (measured, launch day). Skipping them: +14%. A replay still
+         shows every window, click, scroll and case study. */
+      session_recording: { maskAllInputs: true, blockSelector: '#cursor, .gcur, #tb-clock' }
     });
     /* Events relayed up from case studies in homepage windows. */
     window.addEventListener('message', function (e) {
