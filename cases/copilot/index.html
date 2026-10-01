@@ -41,8 +41,8 @@
   }
 }
 </script>
-<link rel="stylesheet" href="../../src/tokens.css?v=202609301507"/>
-<link rel="stylesheet" href="../shared/case-study.css?v=202609301507"/>
+<link rel="stylesheet" href="../../src/tokens.css?v=202610010846"/>
+<link rel="stylesheet" href="../shared/case-study.css?v=202610010846"/>
 <script>try{if(localStorage.getItem('ori-theme')==='dark')document.documentElement.setAttribute('data-theme','dark')}catch(e){}
 if(window.self!==window.top){var _s=document.createElement('style');_s.textContent='*{cursor:none!important}';document.head.appendChild(_s);}</script>
 <style>
@@ -77,14 +77,23 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
    label is 10px uppercase with tracking; sentence case needs neither the
    tracking nor the small size to read as a label. */
 .cmp-wrapup .cmp-label{text-transform:none;letter-spacing:0;font-size:12px;font-weight:700}
-/* Full screen button, centred in the label row so it names neither side. */
-.cmp-expand{position:absolute;top:0;left:50%;transform:translateX(-50%);z-index:2;
-  display:inline-flex;align-items:center;gap:6px;padding:4px 11px;
-  border-radius:var(--radius-full);border:1px solid var(--border-default);
-  background:var(--surface-default);color:var(--text-primary);
-  font-family:inherit;font-size:12px;font-weight:600;line-height:1.3;cursor:pointer}
-.cmp-expand:hover{background:var(--surface-raised)}
+/* Full screen: icon only, the same chrome as the Plugins video expand button
+   (.vs-btn.vs-exp) - fixed dark circle, white glyph (15.3:1) - so the
+   portfolio has one way of saying "full screen". */
+.cmp-cap{display:flex;align-items:flex-start;justify-content:space-between;gap:16px}
+.cmp-expand{flex-shrink:0;margin-top:-2px;
+  width:34px;height:34px;padding:0;border:0;border-radius:50%;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  background:rgba(18,19,20,.82);color:#fff;transition:background .16s,transform .16s}
+.cmp-expand:hover{background:rgba(18,19,20,.95);transform:scale(1.07)}
 .cmp-expand:focus-visible{outline:3px solid var(--action-primary);outline-offset:2px}
+/* On the dark page the circle needs an edge to separate from the background. */
+[data-theme="dark"] .cmp-expand{box-shadow:inset 0 0 0 1px rgba(255,255,255,.22)}
+.cmp-expand svg{width:16px;height:16px;display:block}
+@media(prefers-reduced-motion:reduce){.cmp-expand{transition:none}.cmp-expand:hover{transform:none}}
+/* An app window, not a card: a tighter radius reads as the product's own
+   chrome. 12px on a square screenshot looked clipped. */
+.cmp-wrapup .cmp-frame{border-radius:var(--radius-md, 8px)}
 
 /* The dialog. Sized by the viewport's height as well as its width, so the
    16:9 frame fits whole on a wide short laptop screen, not just a tall one. */
@@ -519,10 +528,6 @@ html:has(.cmp-dlg[open]){overflow:hidden}
                  UI in every corner, so an on-image label always covers something. -->
             <span class="cmp-label cmp-label-a">Hackathon</span>
             <span class="cmp-label cmp-label-b">Shipped</span>
-            <button type="button" class="cmp-expand" aria-expanded="false" aria-controls="cmp-dlg">
-              <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>
-              Full screen
-            </button>
             <div class="cmp-frame">
               <!-- base layer: SHIPPED, full width, sits behind -->
               <div class="cmp-side">
@@ -556,7 +561,16 @@ html:has(.cmp-dlg[open]){overflow:hidden}
             </div>
           </div>
         </div>
-        <figcaption>From the hackathon to the shipped product. Drag across to see either in full, or open it full screen.</figcaption>
+        <!-- Full screen sits at the right end of the caption line, under the
+             frame's bottom-right corner. Overlaid on the image it covered the
+             Copilot input's send button - product UI, not empty space. -->
+        <figcaption class="cmp-cap">
+          <span>From the hackathon to the shipped product. Drag across to see either in full, or open it full screen.</span>
+          <button type="button" class="cmp-expand" aria-expanded="false" aria-controls="cmp-dlg"
+                  aria-label="Open the comparison full screen">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/></svg>
+          </button>
+        </figcaption>
       </figure>
       <!-- Full screen. A native dialog, not a fixed overlay: this sits inside a
            .cs-reveal section, whose transform makes position:fixed resolve
@@ -803,14 +817,14 @@ html:has(.cmp-dlg[open]){overflow:hidden}
   </svg>
 </button>
 
-<script src="../shared/case-study.js?v=202609301507" defer></script>
-<script src="../../src/analytics.js?v=202609301507" defer></script>
+<script src="../shared/case-study.js?v=202610010846" defer></script>
+<script src="../../src/analytics.js?v=202610010846" defer></script>
 <script>
 /* Hackathon and Shipped, full screen. Page-local: only this comparison has it. */
 (function(){
   var cmp=document.getElementById('cmp-wrapup'), dlg=document.getElementById('cmp-dlg');
   if(!cmp||!dlg) return;
-  var btn=cmp.querySelector('.cmp-expand');
+  var btn=document.querySelector('.cmp-fig .cmp-expand');
   if(typeof dlg.showModal!=='function'){ btn.hidden=true; return; }
   var home=cmp.parentNode, next=cmp.nextSibling;
   btn.addEventListener('click', function(){
