@@ -552,9 +552,10 @@ function clamp(v, lo, hi) { return Math.max(lo, Math.min(hi, v)); }
 /* Center NOW, not on load. 'load' waits for every image and font, so the
    frame used to paint at the canvas origin (top-left) and then jump to the
    centre a beat later. Stylesheets block this deferred script, so layout is
-   final here. index.html hides #cvp (html.cv-wait) until this line runs, so
-   the uncentred first paint never shows; an inline 3s timeout lifts it if
-   this script ever fails. */
+   final here. index.html already centred it with the same arithmetic in an
+   inline script at the end of <body> (so the canvas is revealed without
+   waiting for this file to download); this call lands on the same transform.
+   Change the numbers here and there together. */
 applyFrame();
 centerFrame();
 const _initPan = { x: panX, y: panY };

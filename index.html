@@ -29,18 +29,20 @@
 [data-theme="dark"]{--thdr:#1C1C1C;--thdr-bd:var(--border-subtle);--dot:rgba(255,255,255,.04)}
 .skip-nav{position:absolute;top:-100%;left:0;z-index:99999;padding:8px 16px;background:var(--figma);color:#fff;font-size:14px;font-weight:600;border-radius:0 0 8px 0;text-decoration:none;transition:top .1s}
 .skip-nav:focus{top:0}
-html.cv-wait #cvp{visibility:hidden}
+#cvp{transition:opacity .18s ease-out}
+html.cv-wait #cvp{opacity:0;transition:none}
+@media(prefers-reduced-motion:reduce){#cvp{transition:none}}
 </style>
 <!-- Restore saved theme before CSS paints — prevents flash of light mode on reload -->
 <script>try{if(localStorage.getItem('ori-theme')==='dark')document.documentElement.setAttribute('data-theme','dark')}catch(e){}
-/* Hide the canvas until main.js has centred the frame (see "Init" there). The timeout is a safety net only. */
+/* Hide the canvas until the inline script before main.js has centred the frame. The timeout is a safety net only. */
 document.documentElement.classList.add('cv-wait');setTimeout(function(){document.documentElement.classList.remove('cv-wait')},3000);</script>
 <!-- Preload icon font — starts downloading immediately instead of after phosphor.css is parsed -->
 <link rel="preload" href="Assets/fonts/phosphor/Phosphor.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="Assets/Media/general/ori-profile.webp" as="image" type="image/webp"/>
 <link rel="sitemap" type="application/xml" href="/sitemap.xml"/>
 <link rel="stylesheet" href="Assets/fonts/phosphor/phosphor.css"/>
-<link rel="stylesheet" href="src/styles.css"/>
+<link rel="stylesheet" href="src/styles.css?v=202610021718"/>
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -423,7 +425,7 @@ document.documentElement.classList.add('cv-wait');setTimeout(function(){document
     </div>
     <span class="wt">Verint Design System - Case Study</span>
   </div>
-  <iframe class="proj-iframe" allow="fullscreen" src="cases/lux/index.html?v=202610021520" title="Verint Design System 2.0 Case Study" loading="lazy"></iframe>
+  <iframe class="proj-iframe" allow="fullscreen" src="cases/lux/index.html?v=202610021718" title="Verint Design System 2.0 Case Study" loading="lazy"></iframe>
 </div>
 
 <!-- My Verint: case study -->
@@ -435,7 +437,7 @@ document.documentElement.classList.add('cv-wait');setTimeout(function(){document
     </div>
     <span class="wt">My Verint - Case Study</span>
   </div>
-  <iframe class="proj-iframe" allow="fullscreen" src="cases/myverint/index.html?v=202610021520" title="My Verint Case Study" loading="lazy"></iframe>
+  <iframe class="proj-iframe" allow="fullscreen" src="cases/myverint/index.html?v=202610021718" title="My Verint Case Study" loading="lazy"></iframe>
 </div>
 
 <!-- Verint Copilot: case study -->
@@ -447,7 +449,7 @@ document.documentElement.classList.add('cv-wait');setTimeout(function(){document
     </div>
     <span class="wt">Agent Copilot - Case Study</span>
   </div>
-  <iframe class="proj-iframe" allow="fullscreen" src="cases/copilot/index.html?v=202610021520" title="Agent Copilot Case Study" loading="lazy"></iframe>
+  <iframe class="proj-iframe" allow="fullscreen" src="cases/copilot/index.html?v=202610021718" title="Agent Copilot Case Study" loading="lazy"></iframe>
 </div>
 
 <!-- LUX Plugins: case study -->
@@ -459,7 +461,7 @@ document.documentElement.classList.add('cv-wait');setTimeout(function(){document
     </div>
     <span class="wt">LUX Plugins - Case Study</span>
   </div>
-  <iframe class="proj-iframe" allow="fullscreen" src="cases/plugins/index.html?v=202610021520" title="LUX Plugins Case Study" loading="lazy"></iframe>
+  <iframe class="proj-iframe" allow="fullscreen" src="cases/plugins/index.html?v=202610021718" title="LUX Plugins Case Study" loading="lazy"></iframe>
 </div>
 
 <!-- Supervisor Hub: placeholder -->
@@ -838,7 +840,7 @@ document.documentElement.classList.add('cv-wait');setTimeout(function(){document
     <span class="wt">Verint Design System - Component Viewer</span>
     <div class="wrc"></div>
   </div>
-  <iframe class="proj-iframe" allow="fullscreen" src="cases/lux/viewer.html?v=202610021520" title="Verint Design System Component Viewer" loading="lazy"></iframe>
+  <iframe class="proj-iframe" allow="fullscreen" src="cases/lux/viewer.html?v=202610021718" title="Verint Design System Component Viewer" loading="lazy"></iframe>
 </div>
 
 <!-- ══════════ APP SHELL ══════════ -->
@@ -1204,8 +1206,25 @@ document.documentElement.classList.add('cv-wait');setTimeout(function(){document
   </div>
 </div>
 
-<script src="src/main.js" defer></script>
-<script src="src/analytics.js?v=202610021520" defer></script>
+<script>
+/* Centre the welcome frame at parse time, before main.js has even downloaded,
+   then reveal the canvas. Same arithmetic as centerFrame() in main.js, which
+   repeats it later and lands on the identical transform, so nothing moves.
+   Keep the two in step: 228 = right panel 220 + 8 margin; 600x420 = frame. */
+(function(){
+  var d = document.documentElement;
+  try {
+    var ca = document.getElementById('canvas-area'), cvp = document.getElementById('cvp');
+    if (ca && cvp && ca.offsetWidth) {
+      var r = ca.getBoundingClientRect();
+      cvp.style.transform = 'translate(' + ((r.width - 228 - 600) / 2) + 'px,' + ((r.height - 420) / 2) + 'px) scale(1)';
+    }
+  } catch (e) {}
+  d.classList.remove('cv-wait');
+})();
+</script>
+<script src="src/main.js?v=202610021718" defer></script>
+<script src="src/analytics.js?v=202610021718" defer></script>
 <!-- Performance overlay, opt-in via ?perf=1. The guard means that in normal
      use nothing is fetched and no observer is installed - the cost of having
      this available is this comment and one regex test. -->
