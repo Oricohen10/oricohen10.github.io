@@ -27,7 +27,9 @@
      comparison_used        Copilot hackathon/shipped seam, first drag only
      comparison_fullscreen  Copilot full screen opened
      player_chapter         Copilot player chapter button, {chapter}
-     cv_downloaded, contact_clicked {method}                              */
+     cv_downloaded, contact_clicked {method}
+     portfolio_shared       site menu share, {method: native|copy}
+     game_started, game_round {round, ratio, points}, game_finished {score}  */
 (function () {
   var POSTHOG_KEY  = 'phc_kqzmEGfSt4XaerpkYDHgHdzTHCU8tJqtivG6AtQdyKii';  // public by design
   var POSTHOG_HOST = 'https://eu.i.posthog.com';

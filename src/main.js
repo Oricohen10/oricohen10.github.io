@@ -1125,8 +1125,7 @@ function initGhosts() {
       `<div class="gtag" style="background:${g.color}">${g.name}</div>`;
 
     /* Start positions: staggered so they aren't stacked */
-    el.style.left = (22 + i * 35) + '%';
-    el.style.top  = (28 + i * 22) + '%';
+    el.style.transform = `translate(${22 + i * 35}vw,${28 + i * 22}vh)`;
 
     layer.appendChild(el);
     g.el = el;
@@ -1148,9 +1147,13 @@ function driftGhost(g) {
   const pause   = 3000 + Math.random() * 4000; /* 3-7 s pause */
 
   /* Override the CSS transition duration for this move */
+  /* transform, not left/top. A left/top transition re-runs layout and paint on
+     the main thread every frame, and with two ghosts each moving 7-13s out of
+     every 10-20s that was a layout pass on nearly every frame the homepage was
+     open, idle or not. A transform transition runs on the compositor. The layer
+     is exactly 100vw x 100vh, so vw/vh are the same numbers the % were. */
   g.el.style.transitionDuration = dur.toFixed(2) + 's';
-  g.el.style.left = newLeft.toFixed(1) + '%';
-  g.el.style.top  = newTop.toFixed(1) + '%';
+  g.el.style.transform = `translate(${newLeft.toFixed(1)}vw,${newTop.toFixed(1)}vh)`;
 
   clearTimeout(g._driftTimer);
   g._driftTimer = setTimeout(() => driftGhost(g), dur * 1000 + pause);
@@ -1575,9 +1578,12 @@ window.addEventListener('load', () => {
   };
 
   /* ── Game ── */
+  /* Analytics: numbers only. The player's typed name never leaves the page. */
+  function pxTrack(ev,props){ if(window.ocTrack) window.ocTrack(ev,props||{}); }
   window.pxStartGame=function(){
     const bgs=shuffle(BG_POOL).slice(0,3);
     ST={round:0,score:0,bgs,curBg:'',curFg:'',roundScores:[0,0,0]};
+    pxTrack('game_started');
     loadRound();
   };
 
@@ -1603,6 +1609,7 @@ window.addEventListener('load', () => {
     const pts=Math.max(0,Math.round(100-dist*50));
     ST.roundScores[ST.round]=pts;
     ST.score+=pts;
+    pxTrack('game_round',{round:ST.round+1,ratio:+ratio.toFixed(2),points:pts});
     showResult(ratio,dist,pts);
   };
 
@@ -1628,6 +1635,7 @@ window.addEventListener('load', () => {
 
   window.pxShowEnd=function(){
     const s=ST.score;
+    pxTrack('game_finished',{score:s});
     const u=getUser()||{name:'PLAYER ONE',avatarId:0};
     const d=avData(u.avatarId);
 
@@ -1844,20 +1852,49 @@ function closeSiteMenu() {
   if (mv) { mv.classList.remove('open'); mv.setAttribute('aria-expanded', 'false'); }
 }
 
+/* Share. On a phone the native share sheet is what people expect, and it is
+   the only thing that works in the LinkedIn in-app browser, where most of the
+   traffic comes from: its WebView blocks the async clipboard, writeText()
+   rejects, and the old code ran the same "Copied" feedback in .catch() as in
+   .then(), so a failed copy looked like a successful one. Now:
+   1. coarse pointer + navigator.share -> native sheet (cancelling is not an error)
+   2. navigator.clipboard.writeText
+   3. execCommand('copy') on a selected input, checked, not assumed
+   4. all failed -> say so and show the address, so it can be copied by hand  */
 function sharePortfolio(el) {
   const url = 'https://oricohen.co/';
-  const doShare = () => {
-    const savedHTML = el.innerHTML;
-    el.classList.add('share-copied');
-    el.innerHTML = `<i class="ph ph-check" style="font-size:16px;color:var(--figma)"></i>Copied to clipboard`;
-    setTimeout(() => { el.innerHTML = savedHTML; el.classList.remove('share-copied'); }, 2200);
+  const track = (method) => { if (window.ocTrack) window.ocTrack('portfolio_shared', { method }); };
+  const flash = (ok, label) => {
+    if (el._shareT) clearTimeout(el._shareT); else el._shareHTML = el.innerHTML;
+    el.classList.toggle('share-copied', ok);
+    el.innerHTML = ok
+      ? `<i class="ph ph-check" style="font-size:16px;color:var(--figma)"></i>${label}`
+      : `<i class="ph ph-link" style="font-size:16px"></i>${label}`;
+    el._shareT = setTimeout(() => { el.innerHTML = el._shareHTML; el.classList.remove('share-copied'); el._shareT = null; }, ok ? 2200 : 6000);
   };
-  if (navigator.clipboard && navigator.clipboard.writeText) {
-    navigator.clipboard.writeText(url).then(doShare).catch(doShare);
-  } else {
-    try { const ta = Object.assign(document.createElement('textarea'), {value:url,style:'position:fixed;opacity:0'}); document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta); } catch(e) {}
-    doShare();
-  }
+  const legacyCopy = () => {
+    const ta = document.createElement('textarea');
+    ta.value = url; ta.readOnly = true;
+    ta.style.cssText = 'position:fixed;top:0;left:0;opacity:0;font-size:16px';  /* 16px: no iOS zoom */
+    document.body.appendChild(ta);
+    ta.focus(); ta.select(); ta.setSelectionRange(0, url.length);             /* iOS ignores select() */
+    let ok = false; try { ok = document.execCommand('copy'); } catch (e) {}
+    document.body.removeChild(ta);
+    return ok;
+  };
+  const copy = () => {
+    const done = () => { flash(true, 'Link copied'); track('copy'); };
+    const fallback = () => legacyCopy() ? done() : flash(false, 'oricohen.co');
+    if (navigator.clipboard && navigator.clipboard.writeText && window.isSecureContext) {
+      navigator.clipboard.writeText(url).then(done, fallback);
+    } else fallback();
+  };
+  const touch = window.matchMedia && matchMedia('(pointer:coarse)').matches;
+  if (touch && navigator.share) {
+    navigator.share({ title: 'Ori Cohen - Product Designer', text: 'Ori Cohen\'s product design portfolio', url })
+      .then(() => { track('native'); closeSiteMenu(); })
+      .catch(err => { if (err && err.name !== 'AbortError') copy(); });  /* AbortError = user closed the sheet */
+  } else copy();
 }
 
 // Close menu on outside click

@@ -99,23 +99,32 @@ window.addEventListener('message', function(e) {
 });
 
 /* ── Relay mousemove so the portfolio's custom cursor tracks inside iframes ─
-   Coalesced to one message per animation frame. Unthrottled this fired on
+   Throttled to the frame rate (see the leading-edge note below). Unthrottled this fired on
    every mousemove - 60 to 120 postMessages a second per open iframe - and for
    each one the parent ran a querySelectorAll and a getBoundingClientRect. The
    cursor cannot move more than once per frame anyway, so the extra messages
    bought nothing and cost a forced layout each. */
 (function(){
   if (window.self === window.top) return;   /* only matters inside the frame */
-  var mx = 0, my = 0, queued = false;
-  function flush(){
-    queued = false;
+  /* Leading edge, not trailing. The first move in a frame is posted at once;
+     only extra moves in the same frame are held for the rAF flush. Deferring
+     every move to rAF put the custom cursor a frame or two behind the hand,
+     which is the "laggy" feel over a case study. Same message budget: at most
+     one immediate post plus one flush per frame, and no rAF at all while the
+     mouse is still. */
+  var mx = 0, my = 0, sentThisFrame = false, pending = false;
+  function post(){
     try { window.parent.postMessage({ type:'iframe-mm', x:mx, y:my }, '*'); } catch(err){}
+  }
+  function frame(){
+    sentThisFrame = false;
+    if (pending) { pending = false; post(); }   /* last position of the frame */
   }
   document.addEventListener('mousemove', function(e){
     mx = e.clientX; my = e.clientY;
-    if (queued) return;
-    queued = true;
-    requestAnimationFrame(flush);
+    if (sentThisFrame) { pending = true; return; }
+    post(); sentThisFrame = true;
+    requestAnimationFrame(frame);
   }, { passive: true });
 })();
 
