@@ -29,9 +29,12 @@
 [data-theme="dark"]{--thdr:#1C1C1C;--thdr-bd:var(--border-subtle);--dot:rgba(255,255,255,.04)}
 .skip-nav{position:absolute;top:-100%;left:0;z-index:99999;padding:8px 16px;background:var(--figma);color:#fff;font-size:14px;font-weight:600;border-radius:0 0 8px 0;text-decoration:none;transition:top .1s}
 .skip-nav:focus{top:0}
+html.cv-wait #cvp{visibility:hidden}
 </style>
 <!-- Restore saved theme before CSS paints — prevents flash of light mode on reload -->
-<script>try{if(localStorage.getItem('ori-theme')==='dark')document.documentElement.setAttribute('data-theme','dark')}catch(e){}</script>
+<script>try{if(localStorage.getItem('ori-theme')==='dark')document.documentElement.setAttribute('data-theme','dark')}catch(e){}
+/* Hide the canvas until main.js has centred the frame (see "Init" there). The timeout is a safety net only. */
+document.documentElement.classList.add('cv-wait');setTimeout(function(){document.documentElement.classList.remove('cv-wait')},3000);</script>
 <!-- Preload icon font — starts downloading immediately instead of after phosphor.css is parsed -->
 <link rel="preload" href="Assets/fonts/phosphor/Phosphor.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="Assets/Media/general/ori-profile.webp" as="image" type="image/webp"/>

@@ -549,9 +549,20 @@ document.addEventListener('mouseup', () => {
 function clamp(v, lo, hi) { return Math.max(lo, Math.min(hi, v)); }
 
 /* Init */
+/* Center NOW, not on load. 'load' waits for every image and font, so the
+   frame used to paint at the canvas origin (top-left) and then jump to the
+   centre a beat later. Stylesheets block this deferred script, so layout is
+   final here. index.html hides #cvp (html.cv-wait) until this line runs, so
+   the uncentred first paint never shows; an inline 3s timeout lifts it if
+   this script ever fails. */
+applyFrame();
+centerFrame();
+const _initPan = { x: panX, y: panY };
+document.documentElement.classList.remove('cv-wait');
 window.addEventListener('load', () => {
-  applyFrame();
-  centerFrame();
+  /* Re-centre only if nobody has moved the canvas yet; a late jump after the
+     visitor has started panning would be worse than the one this replaces. */
+  if (zoom === 1 && panX === _initPan.x && panY === _initPan.y) centerFrame();
   // If returning from a case study on mobile, open the projects page
   if (window.location.hash === '#projects' && window.innerWidth < 768) {
     mvPageOpen('portfolio');
