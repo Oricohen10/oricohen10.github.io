@@ -1040,7 +1040,7 @@ function startMvTerm() {
 /* ════════════════════════════════════
    PORTRAIT SVGs — 28×28 illustrated faces
 ════════════════════════════════════ */
-const ORI_PHOTO = "Assets/Media/general/ori-profile.webp";
+const ORI_PHOTO = "Assets/Media/general/ori-profile-144.webp";
 const PORTRAITS = {
   ori: `<svg width="28" height="28" viewBox="0 0 28 28" xmlns="http://www.w3.org/2000/svg">
     <ellipse cx="14" cy="9" rx="11.5" ry="8.5" fill="#1C1208"/>
@@ -1402,7 +1402,7 @@ function attachJTip(el, text) {
 function initPortraitAvatars() {
   const container = document.getElementById('rp-avatars');
   if (!container) return;
-  const ORI_PHOTO = "Assets/Media/general/ori-profile.webp";
+  const ORI_PHOTO = "Assets/Media/general/ori-profile-144.webp";
   const members = [
     { id:'ori',    name:'Ori Cohen', color:'#7B61FF', portrait:`<img src="${ORI_PHOTO}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;display:block" alt="Ori Cohen" onerror="this.style.display='none'">` },
     { id:'shrek',  name:'Shrek',     color:'#2e7a18', portrait: PORTRAITS.shrek  },
