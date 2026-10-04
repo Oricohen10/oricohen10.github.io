@@ -937,7 +937,7 @@ const TERM = [
   {h:''},
   {h:'<span class="t-prompt">Verint · Design Lead</span>   <span class="t-grey">2022-2026</span>'},
   {h:''},
-  {h:'Started as an IC, grew to senior, then to lead. I designed'},
+  {h:'Started as an IC and grew into the lead role. I designed'},
   {h:'for contact center agents - people making'},
   {h:'hundreds of decisions per day who need software that gets'},
   {h:'out of the way. Real users. Real pressure. No room to hide.'},
