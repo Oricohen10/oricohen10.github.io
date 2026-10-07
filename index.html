@@ -45,7 +45,7 @@ document.documentElement.classList.add('cv-wait');setTimeout(function(){document
 <link rel="preload" href="Assets/Media/general/ori-profile-144.webp" as="image" type="image/webp"/>
 <link rel="sitemap" type="application/xml" href="/sitemap.xml"/>
 <link rel="stylesheet" href="Assets/fonts/phosphor/phosphor.css"/>
-<link rel="stylesheet" href="src/styles.css?v=202610041622"/>
+<link rel="stylesheet" href="src/styles.css?v=202610070648"/>
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -428,7 +428,7 @@ document.documentElement.classList.add('cv-wait');setTimeout(function(){document
     </div>
     <span class="wt">Verint Design System - Case Study</span>
   </div>
-  <iframe class="proj-iframe" allow="fullscreen" src="cases/lux/index.html?v=202610041622" title="Verint Design System 2.0 Case Study" loading="lazy"></iframe>
+  <iframe class="proj-iframe" allow="fullscreen" src="cases/lux/index.html?v=202610070648" title="Verint Design System 2.0 Case Study" loading="lazy"></iframe>
 </div>
 
 <!-- My Verint: case study -->
@@ -440,7 +440,7 @@ document.documentElement.classList.add('cv-wait');setTimeout(function(){document
     </div>
     <span class="wt">My Verint - Case Study</span>
   </div>
-  <iframe class="proj-iframe" allow="fullscreen" src="cases/myverint/index.html?v=202610041622" title="My Verint Case Study" loading="lazy"></iframe>
+  <iframe class="proj-iframe" allow="fullscreen" src="cases/myverint/index.html?v=202610070648" title="My Verint Case Study" loading="lazy"></iframe>
 </div>
 
 <!-- Verint Copilot: case study -->
@@ -452,7 +452,7 @@ document.documentElement.classList.add('cv-wait');setTimeout(function(){document
     </div>
     <span class="wt">Agent Copilot - Case Study</span>
   </div>
-  <iframe class="proj-iframe" allow="fullscreen" src="cases/copilot/index.html?v=202610041622" title="Agent Copilot Case Study" loading="lazy"></iframe>
+  <iframe class="proj-iframe" allow="fullscreen" src="cases/copilot/index.html?v=202610070648" title="Agent Copilot Case Study" loading="lazy"></iframe>
 </div>
 
 <!-- LUX Plugins: case study -->
@@ -464,7 +464,7 @@ document.documentElement.classList.add('cv-wait');setTimeout(function(){document
     </div>
     <span class="wt">LUX Plugins - Case Study</span>
   </div>
-  <iframe class="proj-iframe" allow="fullscreen" src="cases/plugins/index.html?v=202610041622" title="LUX Plugins Case Study" loading="lazy"></iframe>
+  <iframe class="proj-iframe" allow="fullscreen" src="cases/plugins/index.html?v=202610070648" title="LUX Plugins Case Study" loading="lazy"></iframe>
 </div>
 
 <!-- Supervisor Hub: placeholder -->
@@ -672,7 +672,76 @@ document.documentElement.classList.add('cv-wait');setTimeout(function(){document
       <div><div class="clbl">Resume</div><div class="cval">Download CV (.docx)</div></div>
       <i class="ph ph-caret-right clink-arr"></i>
     </a>
-    <div style="height:8px"></div>
+    <div class="lg-links">
+      <button type="button" onclick="openLegal('privacy')">Privacy</button>
+      <span aria-hidden="true">·</span>
+      <button type="button" onclick="openLegal('accessibility')">Accessibility</button>
+    </div>
+  </div>
+</div>
+
+
+<!-- Privacy -->
+<div class="win lg-win" id="win-privacy" role="dialog" aria-modal="true" aria-label="Privacy" style="width:520px;height:560px">
+  <div class="wh" onmousedown="startDrag(event,'win-privacy')">
+    <div class="wcs">
+      <div class="wc cl" onclick="closeWin('privacy')">×</div>
+      <div class="wc mx" onclick="maximizeWin('privacy')">+</div>
+    </div>
+    <span class="wt">privacy.md</span>
+  </div>
+  <div class="wb">
+    <div class="lg-body" id="lg-privacy">
+      <p class="lg-lede">This is a personal portfolio. It doesn't sell anything, show ads or share your data with anyone. Here's what it collects and why.</p>
+      <h3>Who's responsible</h3>
+      <p>Ori Cohen, Tel Aviv, Israel. For questions or requests, email <a href="mailto:oricohenw@gmail.com">oricohenw@gmail.com</a>.</p>
+      <h3>Analytics</h3>
+      <p>I use PostHog, hosted in the EU, to see which projects people read. It records page views, clicks, scroll depth, the windows you open, your device and browser, and your approximate city and country, based on your IP address.</p>
+      <p>It also records session replays, so I can spot where the site is confusing. Anything you type is masked, and I can't tell who you are.</p>
+      <h3>No cookies</h3>
+      <p>Analytics don't use cookies, so there's no consent banner. A random ID is kept in your browser tab and deleted when you close it. If you come back tomorrow, you count as a new visitor.</p>
+      <h3>Saved on your device</h3>
+      <p>Your name and avatar, theme, comments and game scores are stored only in your browser. None of it is sent to me, except comments.</p>
+      <h3>Comments</h3>
+      <p>When you post a comment, your name and message are emailed to me through FormSubmit. I use them only to read and reply, and I'll delete them if you ask.</p>
+      <h3>Other services</h3>
+      <p>GitHub Pages hosts the site and keeps standard server logs. The contrast game loads a font from Google Fonts when you open it. Voice comments use your browser's built-in speech recognition, which Chrome processes through Google. Your audio never reaches this site.</p>
+      <h3>Retention and your rights</h3>
+      <p>Analytics data is kept under PostHog's standard retention limits. You can ask to see or delete any data about you at any time, or file a complaint with the Israeli Privacy Protection Authority.</p>
+      <p class="lg-date">Last updated: October 2026</p>
+    </div>
+  </div>
+</div>
+
+<!-- Accessibility statement -->
+<div class="win lg-win" id="win-accessibility" role="dialog" aria-modal="true" aria-label="Accessibility statement" style="width:520px;height:560px">
+  <div class="wh" onmousedown="startDrag(event,'win-accessibility')">
+    <div class="wcs">
+      <div class="wc cl" onclick="closeWin('accessibility')">×</div>
+      <div class="wc mx" onclick="maximizeWin('accessibility')">+</div>
+    </div>
+    <span class="wt">accessibility.md</span>
+  </div>
+  <div class="wb">
+    <div class="lg-body" id="lg-accessibility">
+      <p class="lg-lede">Accessibility is part of my job, so I hold this site to the same standard as the products I ship.</p>
+      <h3>Standard</h3>
+      <p>This site aims to meet WCAG 2.2 Level AA, which also covers Israeli Standard IS 5568.</p>
+      <h3>What I've done</h3>
+      <ul>
+        <li>Every window, menu and case study works with a keyboard, with a visible focus indicator.</li>
+        <li>Text contrast is at least 4.5:1, in both light and dark mode.</li>
+        <li>Images and videos have text alternatives, and windows and controls are labeled for screen readers.</li>
+        <li>You can always zoom, and case studies reduce animation when your system asks for it.</li>
+        <li>Every page scores 100 for accessibility in Lighthouse.</li>
+      </ul>
+      <h3>Known limitations</h3>
+      <p>Dragging windows and panning the canvas need a mouse, but you never have to do either. Windows open in place, and every section is available from the toolbar.</p>
+      <p>Some decorative animation on the homepage, like the live cursors, keeps running when reduced motion is on. The contrast game is visual by design. Demo videos are silent screen recordings, so there's nothing to caption.</p>
+      <h3>Found a barrier?</h3>
+      <p>Let me know at <a href="mailto:oricohenw@gmail.com">oricohenw@gmail.com</a> or <a href="tel:0543383953">054-338-3953</a>. I'll get back to you within a few days.</p>
+      <p class="lg-date">Last reviewed: October 2026</p>
+    </div>
   </div>
 </div>
 
@@ -843,7 +912,7 @@ document.documentElement.classList.add('cv-wait');setTimeout(function(){document
     <span class="wt">Verint Design System - Component Viewer</span>
     <div class="wrc"></div>
   </div>
-  <iframe class="proj-iframe" allow="fullscreen" src="cases/lux/viewer.html?v=202610041622" title="Verint Design System Component Viewer" loading="lazy"></iframe>
+  <iframe class="proj-iframe" allow="fullscreen" src="cases/lux/viewer.html?v=202610070648" title="Verint Design System Component Viewer" loading="lazy"></iframe>
 </div>
 
 <!-- ══════════ APP SHELL ══════════ -->
@@ -1000,8 +1069,7 @@ document.documentElement.classList.add('cv-wait');setTimeout(function(){document
   <div class="sm-divider"></div>
   <button class="sm-item" onclick="sharePortfolio(this)">
     <i class="ph ph-share-network"></i>Share portfolio
-  </button>
-</div>
+  </button></div>
 
 <!-- Mobile view -->
 <div id="mv">
@@ -1206,7 +1274,23 @@ document.documentElement.classList.add('cv-wait');setTimeout(function(){document
         <div class="mv-ccard-val">Download CV (.docx)</div>
       </a>
     </div>
+    <div class="lg-links">
+      <button type="button" onclick="openLegal('privacy')">Privacy</button>
+      <span aria-hidden="true">·</span>
+      <button type="button" onclick="openLegal('accessibility')">Accessibility</button>
+    </div>
   </div>
+</div>
+
+<!-- Mobile full-page: Privacy and Accessibility. Bodies are copied from the
+     desktop windows by initLegalPages() in main.js, so the text lives once. -->
+<div id="mv-page-privacy" class="mv-page" role="dialog" aria-label="Privacy">
+  <div class="mv-ph"><button type="button" class="mv-back" onclick="mvPageBack('privacy')" aria-label="Back to Contact"><svg viewBox="0 0 16 16" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 3 5 8l5 5"/></svg><span>Contact</span></button><span class="mv-page-title">Privacy</span></div>
+  <div class="mv-pb" style="background:var(--panel)"><div class="lg-body" data-legal="privacy"></div></div>
+</div>
+<div id="mv-page-accessibility" class="mv-page" role="dialog" aria-label="Accessibility statement">
+  <div class="mv-ph"><button type="button" class="mv-back" onclick="mvPageBack('accessibility')" aria-label="Back to Contact"><svg viewBox="0 0 16 16" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 3 5 8l5 5"/></svg><span>Contact</span></button><span class="mv-page-title">Accessibility</span></div>
+  <div class="mv-pb" style="background:var(--panel)"><div class="lg-body" data-legal="accessibility"></div></div>
 </div>
 
 <script>
@@ -1226,8 +1310,8 @@ document.documentElement.classList.add('cv-wait');setTimeout(function(){document
   d.classList.remove('cv-wait');
 })();
 </script>
-<script src="src/main.js?v=202610041622" defer></script>
-<script src="src/analytics.js?v=202610041622" defer></script>
+<script src="src/main.js?v=202610070648" defer></script>
+<script src="src/analytics.js?v=202610070648" defer></script>
 <!-- Performance overlay, opt-in via ?perf=1. The guard means that in normal
      use nothing is fetched and no observer is installed - the cost of having
      this available is this comment and one regex test. -->

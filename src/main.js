@@ -94,16 +94,37 @@ function mvPageOpen(id) {
   _hamSet(true);
   if (id === 'about') startMvTerm();
 }
+const MV_PAGES = ['portfolio','about','contact','privacy','accessibility'];
 function mvCloseAll() {
-  ['portfolio','about','contact'].forEach(id => document.getElementById('mv-page-'+id).classList.remove('open'));
+  MV_PAGES.forEach(id => document.getElementById('mv-page-'+id).classList.remove('open'));
   _hamSet(false);
 }
 function mvHamClick() {
-  const anyPage = ['portfolio','about','contact'].some(id => document.getElementById('mv-page-'+id).classList.contains('open'));
+  const anyPage = MV_PAGES.some(id => document.getElementById('mv-page-'+id).classList.contains('open'));
   if (anyPage) { mvCloseAll(); return; }
   if (document.getElementById('mv-menu').classList.contains('open')) { mvMenuClose(); return; }
   mvMenuOpen();
 }
+
+/* ── Privacy and Accessibility ─────────────────────────────────────────
+   One text, two homes: a window on desktop, a full page on mobile. The
+   mobile pages copy their body from the window at load. */
+function openLegal(id) {
+  if (window.innerWidth < 768) mvPageOpen(id);
+  else openWin(id);
+}
+/* Mobile drill-down back: close only this page, revealing Contact under it. */
+function mvPageBack(id) {
+  document.getElementById('mv-page-' + id).classList.remove('open');
+  if (!MV_PAGES.some(p => document.getElementById('mv-page-' + p).classList.contains('open'))) _hamSet(false);
+}
+function initLegalPages() {
+  document.querySelectorAll('[data-legal]').forEach(el => {
+    const src = document.getElementById('lg-' + el.dataset.legal);
+    if (src) el.innerHTML = src.innerHTML;
+  });
+}
+document.addEventListener('DOMContentLoaded', initLegalPages);
 
 /* ── Voice recording (SpeechRecognition) ── */
 let _isRecording = false, _speechRecog = null;
@@ -607,7 +628,7 @@ document.addEventListener('DOMContentLoaded', patchWindowControls);
 let wZ = 600, drag = null, dox = 0, doy = 0;
 let cascadeX = 60, cascadeY = 50;
 const STEP = 28;
-const WIN_IDS = ['projects','about','contact','proj-lux','proj-myverint','proj-copilot','proj-plugins','proj-supervisor','a11y','lux-viewer'];
+const WIN_IDS = ['projects','about','contact','proj-lux','proj-myverint','proj-copilot','proj-plugins','proj-supervisor','a11y','lux-viewer','privacy','accessibility'];
 
 function updateCloseAll() {
   const anyOpen = WIN_IDS.some(id => {

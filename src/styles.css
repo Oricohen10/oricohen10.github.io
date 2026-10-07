@@ -824,3 +824,20 @@ i.ph,i.ph-bold,i.ph-fill,i.ph-light{line-height:1;display:flex;align-items:cente
 /* Project list rows */
 .pl-row:focus-visible{outline:2px solid var(--purple-600);outline-offset:-2px}
 [data-theme="dark"] .pl-row:focus-visible{outline-color:var(--purple-400)}
+
+/* ── Privacy and Accessibility (window + mobile page) ── */
+.lg-win .wb{background:var(--wbg)}
+.lg-body{padding:22px 28px 30px;max-width:62ch;color:var(--tx2);font-size:13px;line-height:1.65}
+.lg-body h3{font-size:13px;font-weight:700;color:var(--tx);margin:22px 0 6px;letter-spacing:-.1px}
+.lg-body p{margin:0 0 10px}
+.lg-body ul{margin:0 0 10px;padding-left:18px}
+.lg-body li{margin:0 0 6px}
+.lg-body a{color:var(--tx-brand);text-decoration:underline;text-underline-offset:2px}
+.lg-body .lg-lede{font-size:14px;color:var(--tx);line-height:1.6;margin-bottom:4px}
+.lg-body .lg-date{font-size:11.5px;color:var(--tx3);margin-top:22px}
+.lg-links{display:flex;justify-content:center;align-items:center;gap:8px;padding:10px 0 14px;border-top:1px solid var(--bd3);font-size:11.5px;color:var(--tx3)}
+.lg-links button{background:none;border:0;padding:4px 2px;font:inherit;color:var(--tx2);cursor:pointer;text-decoration:underline;text-underline-offset:2px}
+.lg-links button:hover{color:var(--tx)}
+@media (max-width:767px){.lg-body{padding:22px 20px 40px;font-size:14px}.lg-body h3{font-size:14px}}
+.mv-back{position:absolute;left:6px;top:50%;transform:translateY(-50%);display:flex;align-items:center;gap:2px;min-height:44px;padding:0 8px;background:none;border:0;font:inherit;font-size:14px;font-weight:500;color:var(--tx-brand);cursor:pointer}
+.mv-page:has(.mv-back) .mv-ph{position:relative}
