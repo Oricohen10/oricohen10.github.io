@@ -6,16 +6,16 @@
 <title>LUX 2.0, Verint's Enterprise Design System - Case Study - Ori Cohen</title>
 <link rel="icon" type="image/svg+xml" href="../../Assets/favicon.svg"/>
 <link rel="apple-touch-icon" href="../../Assets/apple-touch-icon.png"/>
-<meta name="description" content="How Ori Cohen built Verint's enterprise design system from scratch - one language for 40+ products and 10k+ users."/>
+<meta name="description" content="How Ori Cohen built Verint's enterprise design system from scratch: one design language for 40+ products."/>
 <link rel="canonical" href="https://oricohen.co/cases/lux/"/>
 <meta property="og:type" content="article"/>
 <meta property="og:title" content="Verint Design System - Case Study - Ori Cohen"/>
-<meta property="og:description" content="How Ori Cohen built Verint's enterprise design system from scratch - one language for 40+ products and 10k+ users."/>
+<meta property="og:description" content="How Ori Cohen built Verint's enterprise design system from scratch: one design language for 40+ products."/>
 <meta property="og:url" content="https://oricohen.co/cases/lux/"/>
 <meta property="og:image" content="https://oricohen.co/cases/lux/images/og-image.png"/>
 <meta name="twitter:card" content="summary_large_image"/>
 <meta name="twitter:title" content="Verint Design System - Case Study - Ori Cohen"/>
-<meta name="twitter:description" content="How Ori Cohen built Verint's enterprise design system from scratch - one language for 40+ products and 10k+ users."/>
+<meta name="twitter:description" content="How Ori Cohen built Verint's enterprise design system from scratch: one design language for 40+ products."/>
 <meta name="twitter:image" content="https://oricohen.co/cases/lux/images/og-image.png"/>
 <meta name="author" content="Ori Cohen"/>
 <link rel="stylesheet" href="../../src/tokens.css?v=202610070648"/>
@@ -659,7 +659,7 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
   "@id": "https://oricohen.co/cases/lux/",
   "url": "https://oricohen.co/cases/lux/",
   "headline": "Verint Design System 2.0 - Case Study",
-  "description": "How I built Verint's enterprise design system from scratch - one design language for 40+ products and 10,000+ users.",
+  "description": "How I built Verint's enterprise design system from scratch: one design language for 40+ products.",
   "image": "https://oricohen.co/cases/lux/images/og-image.png",
   "author": {
     "@type": "Person",
@@ -720,7 +720,7 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
       </div>
     </div>
     <div class="sb-div"></div>
-    <p class="sb-nut">Rebuilt Verint's design system from scratch - token architecture, dark mode, motion library, and a fully automated Figma-to-code pipeline.</p>
+    <p class="sb-nut">Rebuilt Verint's design system from scratch: token architecture, dark mode, a motion library, and a fully automated Figma-to-code pipeline.</p>
     <a class="sb-cta" href="viewer.html" target="_blank" rel="noopener"
        onclick="if(window.parent!==window){window.parent.openWin('lux-viewer');return false;}">
       Open the live viewer
@@ -734,7 +734,7 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
     <!-- Hero -->
     <div class="cs-hero">
       <h1>One system. 40+ products.<br/><span class="cs-hero-accent">Zero hardcoded values.</span></h1>
-      <p class="cs-hero-sub">LUX 2.0 replaced seven years of design debt with a token-driven system that lets a designer change a color in Figma and see it live in code - without filing a ticket.</p>
+      <p class="cs-hero-sub">LUX 2.0 replaced seven years of design debt with a token-driven system. A designer changes a color in Figma and it reaches code without a ticket.</p>
     </div>
 
     <!-- Section 1: Background -->
@@ -742,8 +742,8 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
       <div class="cs-section-num">
         <h2 class="cs-sec-title">Background</h2>
       </div>
-      <p>LUX 1.0 carried seven years of design debt. No tokens. No dark mode. No responsive design. Accessibility gaps on nearly every component. It still worked - but it was starting to block product teams who needed to move faster and support more contexts.</p>
-      <p>Rebuilding it became one of Verint's top-20 strategic goals. We started from scratch: a new token architecture, Verint's first motion design library, full accessibility coverage, and dark mode - a first in the company's history.</p>
+      <p>LUX 1.0 had no tokens, no dark mode, no responsive layouts, and accessibility gaps on nearly every component. It still worked, but it was slowing down product teams that needed to move faster and support more contexts.</p>
+      <p>Rebuilding it became one of Verint's top-20 strategic goals. We started from scratch: a new token architecture, Verint's first motion library, full accessibility coverage, and the company's first dark mode.</p>
     </div>
 
     
@@ -753,8 +753,8 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
       <div class="cs-section-num">
         <h2 class="cs-sec-title">Challenge</h2>
       </div>
-      <p>This was my first time building a design system from the ground up. I had to learn token architecture - primitives, semantics, components - while running the project and the team at the same time. Every sprint was a balancing act: making architectural decisions that would be hard to undo, managing a committee of stakeholders with competing priorities, and keeping the documentation honest enough that teams would actually trust it.</p>
-      <p>The biggest technical challenge: closing the gap between design and code entirely. A designer changes a token in Figma - the change opens a PR in GitHub automatically, the developer merges, and it's live. No developer needed for design changes.</p>
+      <p>I led the rebuild from the ground up while running the team, and learned token architecture (primitives, semantics, components) along the way. Every sprint meant balancing three things: architectural decisions that would be hard to undo, a committee of stakeholders with competing priorities, and documentation honest enough that teams would trust it.</p>
+      <p>The biggest technical goal was closing the gap between design and code. A designer changes a token in Figma, a pull request opens automatically, a type check runs, and the change merges without a developer.</p>
     </div>
 
     <!-- Section 3: Solution -->
@@ -762,8 +762,8 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
       <div class="cs-section-num">
         <h2 class="cs-sec-title">Solution</h2>
       </div>
-      <p>I structured the work into 2-week sprints - system architecture first, then tokens, then components and patterns. I didn't run it alone: a core team with weekly committee reviews kept quality consistent and unblocked decisions fast.</p>
-      <p>Alongside the component library, we built Verint's first motion design library - easing curves, duration tokens, and micro-animation specs for every interaction state. The pipeline from Figma to Storybook to GitHub runs fully automated - one token change in Figma, one PR, one merge.</p>
+      <p>I split the work into 2-week sprints: architecture first, then tokens, then components and patterns. A core team and weekly committee reviews kept quality consistent and decisions moving.</p>
+      <p>Alongside the component library, we built Verint's first motion library: easing curves, duration tokens, and micro-animation specs for every interaction state. The Figma-to-GitHub pipeline is fully automated, so one token change in Figma becomes one merged pull request.</p>
       <figure class="cs-media">
       <!-- The variables browser. Replaces the component-library screenshot:
            the same claim, but checkable. -->
@@ -819,9 +819,9 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
         </div>
       </div>
       <figcaption>The real library, not a screenshot: 1,573 variables exported
-        from the Figma file with Token Sync. Selecting a row traces its alias
-        chain down to the primitive it lands on, which is the part a screenshot
-        cannot show - 1,294 of these are references rather than values.</figcaption>
+        from the Figma file with Token Sync. Select a row to trace its alias
+        chain down to the primitive it resolves to, the part a screenshot
+        cannot show. 1,294 of these are references, not raw values.</figcaption>
       </figure>
 
       
@@ -832,7 +832,7 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
       <div class="cs-section-num">
         <h2 class="cs-sec-title">The design</h2>
       </div>
-      <p>Colour is the visible half of a token system and the smaller half. A
+      <p>Color is the visible half of a token system and the smaller half. A
         component in LUX 2.0 holds no values directly. It points at a semantic
         token, that token points at a primitive, and the primitive is the only
         place a number or a hex gets written down. The same chain carries 15
@@ -946,8 +946,8 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
         <h2 class="cs-sec-title">Result</h2>
       </div>
     
-      <p>LUX 2.0 is live across 40+ Verint products. Zero hardcoded values in the system. Product teams that once waited days for a color fix now merge it themselves in under a minute - no ticket, no developer, no delay.</p>
-      <p>Dark mode shipped on day one - the first in Verint's history. The motion library gave every product team a shared language for animation that hadn't existed before. For the first time, every interaction across the platform follows the same timing, the same easing, the same spec.</p>
+      <p>LUX 2.0 is live across 40+ Verint products, with every value tokenized. A color fix that used to wait days for a developer now reaches production code in under a minute, with no ticket.</p>
+      <p>Dark mode shipped on day one, a first for Verint. The motion library gave product teams a shared spec for animation, so interactions across the platform now follow the same timing and easing.</p>
 
     </div>
 
@@ -963,11 +963,11 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
       </div>
       <div class="stat-card">
         <div class="stat-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
         </div>
-        <div class="stat-num">10K+</div>
-        <div class="stat-title">Daily Users</div>
-        <div class="stat-desc">working with LUX 2.0 components every day</div>
+        <div class="stat-num">1,573</div>
+        <div class="stat-title">Variables</div>
+        <div class="stat-desc">in the LUX 2.0 Figma library, browsable in full above</div>
       </div>
       <div class="stat-card">
         <div class="stat-icon">
@@ -986,7 +986,7 @@ if(window.self!==window.top){var _s=document.createElement('style');_s.textConte
       </div>
       <div class="ai-card-body">
         <div class="ai-card-label">AI use on this project</div>
-        <p class="ai-card-text">AI ran through the whole project - token architecture brainstorming, building all four Figma plugins from scratch (token sync, icon picker, table generator, layout creator), and QA passes to catch drift between design and code. The plugins alone saved weeks of manual implementation. Without AI in the loop, none of it would have shipped anywhere near as fast.</p>
+        <p class="ai-card-text">AI ran through the whole project: brainstorming the token architecture, building all four Figma plugins from scratch (token sync, icon picker, table generator, layout creator), and QA passes that caught drift between design and code. The plugins alone saved weeks of manual work. Without AI in the loop, none of it would have shipped this fast.</p>
       </div>
     </div>
 
